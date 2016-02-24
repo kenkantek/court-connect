@@ -1,0 +1,523 @@
+@font-face {
+    font-family: RobotoLight;
+    src: url('../fonts/Roboto/Roboto-Light.ttf');
+}
+@font-face {
+    font-family: RobotoBlackItalic;
+    src: url('../fonts/Roboto/Roboto-BlackItalic.ttf');
+}
+
+@font-face {
+    font-family: RobotoRegular;
+    src: url('../fonts/Roboto/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: RobotoThin;
+    src: url('../fonts/Roboto/Roboto-Thin.ttf');
+}
+
+@font-face {
+    font-family: RobotoMedium;
+    src: url('../fonts/Roboto/Roboto-Medium.ttf');
+}
+
+@font-face {
+    font-family: RobotoBold;
+    src: url('../fonts/Roboto/Roboto-Bold.ttf');
+}
+
+.header{
+    background: url("../images/header-bg.jpg") no-repeat center top;
+    height: 681px;
+    background-size: cover;
+}
+
+.logo{
+    max-width: 254px;
+    max-height: 142px;
+}
+
+.navbar-default{
+    background-color: transparent;
+    border-color: transparent;
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    color: #ffffff;
+}
+
+.navbar-default .navbar-nav>li>a{
+    color: #ffffff;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
+    color: #ffffff;
+    background-color: transparent;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover{
+    color: #ffffff;
+}
+
+.dropdown-wg{
+    width: 300px;
+    padding: 26px;
+}
+
+.arrow-up {
+    width: 0px;
+    height: 0px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid #fff;
+    position: absolute;
+    top: -10px;
+    right: 10px
+}
+
+
+.form-control{
+    border: 1px solid #f2f2f2;
+    border-radius: 0px;
+}
+
+label.form-label{
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #63ac1e;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+label.form-label:hover{
+    cursor: pointer;
+}
+
+button.btn.btn-login{
+    border-radius: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: #63ac1d;
+}
+
+ul.nav.navbar-nav.navbar-right{
+    margin-top: 15px;
+}
+
+div.modal-dialog{
+    margin-top: 135px;
+    width: 630px;
+}
+
+div.modal-body{
+    text-align: center;
+}
+
+.btn-login-facebook{
+    background: url("../images/signin-with-facebook.png") no-repeat;
+    background-size: contain;
+    width: 197px;
+    height: 43px;
+    border: none;
+}
+
+.line-label span{
+    padding: 0 22px 0 22px;
+    background: white;
+}
+
+.line-label{
+    clear: both;
+    color: #cbcbcb;
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: normal;
+    position: relative;
+    width: 100%;
+}
+
+.line-label:before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    border-top: 2px solid #f2f2f2;
+    left: 0;
+    top: 10px;
+    z-index: -1
+}
+
+.app-bar{
+    background-color: #2c2c2c;
+    /*height: 71px;*/
+}
+
+.app-bar .col-md-6{
+    min-height:49px;
+    color: white;
+    font-size: 25px;
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    line-height: 2em;
+}
+
+.app-bar .col-md-6 span{
+    font-family: RobotoRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #63ac1e;
+}
+
+h2{
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 55px;
+    color: #082e31;
+    margin-bottom: 60px;
+}
+
+.container.content{
+    text-align: center;
+}
+
+.container.content span{
+    color: #63ac1e;
+}
+
+.caption{
+    width: 255px;
+    margin: 0 auto;
+    font-family: RobotoThin, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 21px;
+    line-height: 1em;
+    color: #082e31;
+    margin-top: 10px;
+}
+
+.caption.title{
+    font-size: 48px;
+    font-family: RobotoBlackItalic, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-top: 11px;
+    width: 45%;
+    background: white;
+}
+
+.thumbnail{
+    min-height: 139px;
+    border: none;
+    padding: 0;
+}
+
+.footer{
+    background-color: #131101;
+    min-height: 254px;
+    background: url("../images/footer-bg.png") no-repeat center;
+    background-size: cover;
+    text-align: center;
+    color: white;
+    font-family: RobotoRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    padding-top: 40px;
+}
+
+.line-content{
+    position: relative;
+    width: 100%;
+}
+
+.line-content:before{
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 4px;
+    border-top: 4px solid #63ac1d;
+    left: 20%;
+    top: 185px;
+    z-index: -1
+}
+
+.ball{
+    background: white;
+    width: 100px;
+    margin: 0 auto;
+}
+
+.line-ball{
+    margin-top: 70px;
+    position: relative;
+    width: 100%;
+}
+
+.line-ball:before{
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 3px;
+    border-top: 3px solid #ececec;
+    left: 25%;
+    top: 13px;
+    z-index: -1
+}
+
+.img-carousel img{
+    border-radius: 50%;
+}
+
+.carousel-control.right{
+    background-image: none;
+}
+
+span.glyphicon.glyphicon-chevron-right{
+    color: #e7ebe4;
+}
+
+.carousel-control.left{
+    background-image: none;
+}
+
+span.glyphicon.glyphicon-chevron-left{
+    color: #e7ebe4;
+}
+
+.title-carousel{
+    font-family: RobotoMedium, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: #002c2c;
+}
+
+.location-carousel{
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #5f5f5f;
+}
+
+.carousel-control{
+    width: 5%;
+    top:-45%;
+}
+
+hr{
+    margin: 0 auto;
+    margin-top: 6px;
+    margin-bottom: 15px;
+    border-top: 2px solid #63ac1d;
+    width: 25%
+}
+
+.datetime-carousel{
+    font-size: 14px;
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.datetime-carousel i{
+    color: #63ac1e;
+}
+
+.price-carousel{
+    color: #63ac1e;
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 36px;
+    margin-top: 15px;
+    margin-bottom: 40px;
+}
+
+.club{
+    min-height: 124px;
+    background-color: #547535;
+    padding-top: 22px;
+}
+
+.btn-club{
+    background-color: #333333;
+    min-width: 160px;
+    height:44px;
+    color: white;
+    font-size: 14px;
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding-top: 11.5px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+
+}
+
+.copyright{
+    text-align: center;
+    color: #d9d9d9;
+    font-family: RobotoThin, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-club:hover{
+    color: white;
+}
+
+.footer span{
+    font-family: RobotoBold, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #63ac1e;
+    font-weight: normal;
+    font-size: 25px;
+}
+
+.social [class*="fa fa-"] {
+    background-color: #333;
+    border-radius: 70px;
+    color: #fff;
+    display: inline-block;
+    height: 70px;
+    line-height: 70px;
+    margin: auto 3px;
+    width: 70px;
+    font-size: 40px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.footer li a{
+    color: white;
+    font-family: RobotoRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+.footer ul{
+    margin-top: 15px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.footer li{
+    list-style: none;
+    height: 30px;
+}
+
+h1{
+    font-family: RobotoLight, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 70px;
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 100px;
+    margin-bottom: 30px;
+}
+
+.btn-search{
+    background-color: #63ac1e;
+    height: 38px;
+    padding-left: 47px;
+    padding-right: 47px;
+    color: white;
+    border-radius: 0;
+}
+
+.form-icon{
+    position: relative;
+}
+
+.form-icon i{
+    position: absolute;
+    color: #63ac1e;
+    font-size: 20px;
+    top: 7px;
+    left: 25px;
+}
+
+.form-icon input,select{
+    padding-left: 35px;
+    font-family: RobotoRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 38px;
+}
+div.ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all{
+    background: none;
+    border: none;
+}
+
+div#ui-datepicker-div,.ui-datepicker-title{
+    color: #63ac1e !important;
+}
+
+a.ui-state-default{
+    background-color: #f4faf0 !important;
+    color: #63ac1e !important;
+}
+
+span.ui-slider-handle.ui-state-default.ui-corner-all{
+    background-image: url("/images/balltime_05.png");
+    border: none;
+    top:-7px;
+}
+
+span.ui-slider-handle.ui-state-default.ui-corner-all.ui-state-hover{
+    background-image: url("/images/balltime_05.png");
+    border: none;
+    top:-7px;
+}
+
+.ui-datepicker-today a{
+    background-color: #70c13d !important;
+}
+
+div.ui_tpicker_hour_slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all{
+    border: none;
+    height: 6px;
+    background-color: #cbcbcb;
+    background-image: none;
+}
+
+a.ui-state-default.ui-state-hover{
+    background-color: #8dce64 !important;
+    color: white !important;
+}
+
+a.ui-state-default.ui-state-highlight{
+    color: white !important;
+}
+
+.divine-appbar-r{
+    border-right: 1px solid #101010;
+}
+
+.divine-appbar-l{
+    border-left: 1px solid #4d4d4d;
+}
+
+.ui-widget-header .ui-state-highlight {
+    background: none !important;
+}
+
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+    background: #70c13d !important;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+    background: none;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    background: none;
+}
+
+.ui-widget-overlay,.ui-widget-shadow{
+    background: none;
+}
+
+@media (max-width: 768px){
+    .logo{
+        max-height: 80px;
+    }
+    .divine-appbar-r{
+        border-right: none;
+    }
+
+    .divine-appbar-l{
+        border-left: none;
+    }
+
+}
+
