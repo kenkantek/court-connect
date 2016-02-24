@@ -3,25 +3,23 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUsersTable extends Migration {
+class CreatePaymentsTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('users', function (Blueprint $table) {
+		Schema::create('payments', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('email')->unique();
-			$table->string('password', 60);
-			$table->string('phone', 15);
+			$table->integer('user_id')->unsigned()->references('id')->on('users');
 			$table->string('first_name', 30);
 			$table->string('last_name', 30);
 			$table->string('zip_code', 5);
-			$table->string('facebook', 120);
-			$table->string('google', 120);
-			$table->tinyInteger('gender');
-			$table->rememberToken();
+			$table->integer('payment_type')->unsigned();
+			$table->string('card_number', 20);
+			$table->tinyInteger('expiration_month')->unsigned();
+			$table->tinyInteger('expiration_year')->unsigned();
 			$table->timestamps();
 		});
 	}
@@ -32,6 +30,6 @@ class CreateUsersTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::drop('users');
+		Schema::drop('payments');
 	}
 }
