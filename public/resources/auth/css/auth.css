@@ -1,0 +1,14 @@
+.login-box-body{padding: 0;}
+.login-box-body>div{padding: 20px;}
+.login-box-body h3{  box-shadow: inset 0px -3px 0px rgba(0, 0, 0, 0.2);padding: 20px 10px;text-align: center;font-size: 26px;color: #fff;background: #00c0ef;border-top-left-radius: 4px;border-top-right-radius: 4px;}
+.login-box-body .btn-info{width: 100%;}
+.login-box-body span.fa.form-control-feedback{line-height: 33px;}
+
+.dev_info{color: #fff;}
+.dev_info a{color: #fff;text-decoration: none;}
+.dev_info .btn{-webkit-border-radius: 50%;-moz-border-radius: 50%;-ms-border-radius: 50%;-o-border-radius: 50%;border-radius: 50%;width: 30px;height: 30px;line-height: 30px;padding: 0;}
+.info-box-icon{font-size: 30px;height: 55px;width: 50px;line-height: 50px; color: #fff;}
+.info-box{min-height: 50px;}
+.info-box-content{margin-left: 50px;}
+.info-box-text{text-transform: none;font-size: 13px;}
+.info-box:hover i{color:#3c8dbc;}

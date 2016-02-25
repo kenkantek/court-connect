@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -9,13 +13,20 @@
 | you a convenient way to create models for testing and seeding your
 | database. Just tell the factory how a default model should look.
 |
-*/
+ */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
-        'password' => bcrypt(str_random(10)),
-        'remember_token' => str_random(10),
+		'first_name'     => $faker->firstName,
+		'last_name'      => $faker->lastName,
+		'username'       => $faker->username,
+		'email'          => $faker->email,
+		'password'       => bcrypt(12345678),
+		'remember_token' => str_random(40),
+		'phone'          => $faker->phoneNumber,
+		'zip_code'       => '700000',
+		'gender'         => rand(1, 2),
+		'facebook'       => "http://" . $faker->domainName,
+		'google'         => "http://" . $faker->domainName
     ];
 });

@@ -14,8 +14,35 @@ return [
         'javascript' => [
             'jquery',
             'csrf',
+            'bootstrap',
+            'adminlte',
+            'iCheck',
+            'admin',
         ],
         'stylesheets' => [
+            'bootstrap',
+            'font-awesome',
+            'ionicons',
+            'iCheck',
+            'select2',
+            'AdminLTE',
+            'admin',
+        ],
+    ],
+    'auth' => [
+        'javascript' => [
+            'jquery',
+            'bootstrap',
+            'adminlte',
+            'iCheck',
+            'auth',
+        ],
+        'stylesheets' => [
+            'bootstrap',
+            'font-awesome',
+            'iCheck',
+            'AdminLTE',
+            'auth',
         ],
     ],
     'home' => [
@@ -98,6 +125,65 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'iCheck' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/iCheck/icheck.min.js',
+                    'cdn' => '',
+                ],
+            ],
+            'select2' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/select2/select2.full.min.js',
+                    'cdn' => '',
+                ],
+            ],
+            'datetimepicker' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                    'cdn' => '',
+                ],
+            ],
+            'moment' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/moment/min/moment.min.js',
+                    'cdn' => '',
+                ],
+            ],
+            'adminlte' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => [
+                        '/resources/vendor/adminlte/js/AdminLTE.js',
+                        '/resources/vendor/adminlte/js/layout.js',
+                    ],
+                    'cdn' => '',
+                ],
+            ],
+            'admin' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/admin/js/admin.js',
+                    'cdn' => '',
+                ],
+            ],
+            'auth' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/auth/js/auth.js',
+                    'cdn' => '',
+                ],
+            ],
             // End JS
         ],
         /* -- STYLESHEET ASSETS -- */
@@ -136,6 +222,72 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/home/css/custom.css',
+                ],
+            ],
+            'font-awesome' => [
+                'use_cdn' => true,
+                'location' => 'top',
+                'src' => [
+                    'local' => '',
+                    'cdn' => 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css',
+                ],
+            ],
+            'ionicons' => [
+                'use_cdn' => true,
+                'location' => 'top',
+                'src' => [
+                    'local' => '',
+                    'cdn' => 'http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css',
+                ],
+            ],
+            'AdminLTE' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => [
+                        '/resources/vendor/adminlte/css/AdminLTE.min.css',
+                        '/resources/vendor/adminlte/css/skins/_all-skins.min.css',
+                    ],
+                    'cdn' => '',
+                ],
+            ],
+            'iCheck' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/iCheck/all.css',
+                    'cdn' => '',
+                ],
+            ],
+            'select2' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/select2/select2.min.css',
+                    'cdn' => '',
+                ],
+            ],
+            'datetimepicker' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+                    'cdn' => '',
+                ],
+            ],
+            'admin' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/admin/css/admin.css',
+                    'cdn' => '',
+                ],
+            ],
+            'auth' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/auth/css/auth.css',
                 ],
             ],
         ],

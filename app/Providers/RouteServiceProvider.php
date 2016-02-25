@@ -33,5 +33,15 @@ class RouteServiceProvider extends ServiceProvider
             require app_path('Http/Composers/Home/assets.php');
             require app_path('Http/Endpoints/Home/routes.php');
         });
+
+        $router->group(['namespace' => 'App\Http\Controllers\Admin'], function ($router) {
+            require app_path('Http/Composers/Admin/assets.php');
+            require app_path('Http/Endpoints/Admin/routes.php');
+        });
+
+        $router->group(['namespace' => 'App\Http\Controllers\Auth'], function ($router) {
+            require app_path('Http/Composers/Auth/assets.php');
+            require app_path('Http/Endpoints/Auth/routes.php');
+        });
     }
 }

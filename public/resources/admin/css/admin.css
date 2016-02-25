@@ -1,0 +1,19 @@
+
+.table th, .table td {text-align: center; font-size: 14px;font-weight: normal;}
+.table td {vertical-align: middle !important;}
+.table th{background: #3c8dbc; color: #fff; border-bottom: none;}
+.content-header>.breadcrumb{top: 5px;}
+.content-header>.breadcrumb>li+li:before {content: "\f105";font-family: 'FontAwesome';display: inline-block;padding-right: 8px;color: #999;}
+form textarea{resize: vertical;}
+
+.help-ts * {color: #31708f;}
+.help-ts {display: block;margin-top: 5px;margin-bottom: 10px;background-color: #d9edf7;border: 1px solid #bce8f1;padding: 5px;border-radius: 4px;font-style: italic;font-size: .9em;cursor: help;}
+.skin-blue .treeview-menu>li>a.active{color: #fff;}
+.input-group .input-group-addon {border-radius: 0;background-color: #f4f4f4;}
+.required:after{content: ' *';color:red;}
+
+label.checkbox{font-weight: normal;}
+.main-footer{font-size: 13px;}
+@media (max-width: 991px){
+	.content-header>.breadcrumb{padding-left: 0;background: #fff;}
+}
