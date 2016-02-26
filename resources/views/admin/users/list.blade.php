@@ -32,6 +32,7 @@
 			</table>
 			<div data-section='users.datatables'></div>
 			<div data-route-create='users.create'></div>
+			<div data-route-delete-many='users.delete.many'></div>
 		</div>
 	</div>
 </div>

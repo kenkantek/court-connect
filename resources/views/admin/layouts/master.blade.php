@@ -5,6 +5,7 @@
         <title>Admin Dashboard</title>
         <link rel="shortcut icon" href="/resources/admin/img/favicon.png">
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         @foreach ($stylesheets as $style)
             {!! HTML::style($style) !!}
         @endforeach
