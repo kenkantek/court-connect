@@ -14,19 +14,19 @@ return [
         'javascript' => [
             'jquery',
             'csrf',
+            'laroute',
             'bootstrap',
             'adminlte',
-            'iCheck',
-            'admin',
+            'toastr',
+            'pace',
+            'admin'
         ],
         'stylesheets' => [
             'bootstrap',
             'font-awesome',
             'ionicons',
-            'iCheck',
-            'select2',
-            'AdminLTE',
-            'admin',
+            'pace',
+            'toastr'
         ],
     ],
     'auth' => [
@@ -34,14 +34,14 @@ return [
             'jquery',
             'bootstrap',
             'adminlte',
-            'iCheck',
+            'uniform',
             'auth',
         ],
         'stylesheets' => [
             'bootstrap',
             'font-awesome',
-            'iCheck',
-            'AdminLTE',
+            'uniform',
+            'adminlte',
             'auth',
         ],
     ],
@@ -82,6 +82,13 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'laroute' => [
+                'use_cdn'  => false,
+                'location' => 'top',
+                'src'      => [
+                    'local' => '/resources/vendor/routes.js'
+                ]
+            ],
             'bootstrap' => [
                 'use_cdn' => false,
                 'location' => 'bottom',
@@ -121,15 +128,7 @@ return [
                 'use_cdn' => false,
                 'location' => 'bottom',
                 'src' => [
-                    'local' => '/resources/home/js/custom.js',
-                    'cdn' => '',
-                ],
-            ],
-            'iCheck' => [
-                'use_cdn' => false,
-                'location' => 'bottom',
-                'src' => [
-                    'local' => '/resources/vendor/iCheck/icheck.min.js',
+                    'local' => '/resources/home/js/home.js',
                     'cdn' => '',
                 ],
             ],
@@ -184,6 +183,42 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'toastr'       => [
+                'use_cdn'  => false,
+                'location' => 'bottom',
+                'src'      => [
+                    'local' => ['/resources/vendor/bootstrap-toastr/toastr.js'],
+                    'cdn'   => ['']
+                ]
+            ],
+            'pace'       => [
+                'use_cdn'  => false, 
+                'location' => 'bottom',
+                'src'      => [
+                    'local' => ['/resources/vendor/pace/pace.min.js'],
+                    'cdn'   => ['']
+                ]
+            ],
+            'uniform'       => [
+                'use_cdn'  => false, 
+                'location' => 'bottom',
+                'src'      => [
+                    'local' => ['/resources/vendor/uniform/jquery.uniform.min.js'],
+                    'cdn'   => ['']
+                ]
+            ],
+            'datatables'       => [
+                'use_cdn'  => false,
+                'location' => 'bottom',
+                'src'      => [
+                    'local' => [
+                            '/resources/vendor/datatables/media/js/jquery.dataTables.min.js',
+                            '/resources/vendor/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js',
+                            '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.js'
+                        ],
+                    'cdn'   => ['']
+                ]
+            ],
             // End JS
         ],
         /* -- STYLESHEET ASSETS -- */
@@ -221,7 +256,7 @@ return [
                 'use_cdn' => false,
                 'location' => 'top',
                 'src' => [
-                    'local' => '/resources/home/css/custom.css',
+                    'local' => '/resources/home/css/home.css',
                 ],
             ],
             'font-awesome' => [
@@ -240,7 +275,7 @@ return [
                     'cdn' => 'http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css',
                 ],
             ],
-            'AdminLTE' => [
+            'adminlte' => [
                 'use_cdn' => false,
                 'location' => 'top',
                 'src' => [
@@ -248,14 +283,6 @@ return [
                         '/resources/vendor/adminlte/css/AdminLTE.min.css',
                         '/resources/vendor/adminlte/css/skins/_all-skins.min.css',
                     ],
-                    'cdn' => '',
-                ],
-            ],
-            'iCheck' => [
-                'use_cdn' => false,
-                'location' => 'top',
-                'src' => [
-                    'local' => '/resources/vendor/iCheck/all.css',
                     'cdn' => '',
                 ],
             ],
@@ -289,6 +316,42 @@ return [
                 'src' => [
                     'local' => '/resources/auth/css/auth.css',
                 ],
+            ],
+            'toastr'  => [
+                'use_cdn'  => false,
+                'location' => 'top',
+                'src'      => [
+                    'local' => ['/resources/vendor/bootstrap-toastr/toastr.min.css'],
+                    'cdn'   => []
+                ]
+            ],
+            'pace'  => [
+                'use_cdn'  => false,
+                'location' => 'top',
+                'src'      => [
+                    'local' => ['/resources/vendor/pace/themes/pace-theme-minimal.css'],
+                    'cdn'   => []
+                ]
+            ],
+            'uniform'  => [
+                'use_cdn'  => false,
+                'location' => 'top',
+                'src'      => [
+                    'local' => ['/resources/vendor/uniform/css/uniform.default.min.css'],
+                    'cdn'   => []
+                ]
+            ],
+            'datatables'  => [
+                'use_cdn'  => false,
+                'location' => 'top',
+                'src'      => [
+                    'local' => [
+                            '/resources/vendor/datatables/extensions/Scroller/css/dataTables.scroller.min.css',
+                            '/resources/vendor/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css',
+                            '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.css'
+                        ],
+                    'cdn'   => []
+                ]
             ],
         ],
     ],

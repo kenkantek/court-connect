@@ -163,10 +163,13 @@ class Assets
     /**
      *
      */
-    public function getStylesheets()
+    public function getStylesheets($lastModules = [])
     {
         $stylesheets = [];
         if (!empty($this->stylesheets)) {
+            if (!empty($lastModules)) {
+                $this->stylesheets = array_merge($this->stylesheets, $lastModules);
+            }
             // get the final scripts need for page
             $this->stylesheets = array_unique($this->stylesheets);
             foreach ($this->stylesheets as $style) {

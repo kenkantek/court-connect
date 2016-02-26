@@ -30,7 +30,7 @@
             <div class="form-group">
                 <div class="checkbox icheck">
                   <label>
-                    <input type="checkbox" name="remember" value="1" id="remember"> Remember me?
+                    <input type="checkbox" class="styled" name="remember" value="1" id="remember"> Remember me?
                   </label>
                 </div>
               </div>

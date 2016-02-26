@@ -1,0 +1,22 @@
+.login-box-body {
+	padding: 0;
+	> div {
+		padding: 20px;
+	}
+	h3 {
+		box-shadow: inset 0px -3px 0px rgba(0, 0, 0, 0.2);
+		padding: 20px 10px;
+		text-align: center;
+		font-size: 26px;
+		color: #fff;
+		background: #00c0ef;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
+	.btn-info {
+		width: 100%;
+	}
+	span.fa.form-control-feedback {
+		line-height: 33px;
+	}
+}
