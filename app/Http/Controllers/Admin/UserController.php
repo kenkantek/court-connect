@@ -42,7 +42,7 @@ class UserController extends Controller
         return response()->json($response, $response['response_code']);
     }
 
-    public function getDeleteMany(ActionRequest $request)
+    public function postDeleteMany(ActionRequest $request)
     {
         $ids = $request->input('ids');
         if (empty($ids)) {

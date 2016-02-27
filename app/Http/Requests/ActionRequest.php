@@ -25,7 +25,7 @@ class ActionRequest extends Request
     {
         return [
             'action' => 'required',
-            'ids'    => 'required'
+            //'ids'    => 'required'
         ];
     }
 }

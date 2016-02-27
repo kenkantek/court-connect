@@ -1,15 +1,16 @@
 $(document).ready(function() {
-
-    var table        = $('#datatables');
-
-    var pageLength   = 10;
-    var processing   = true;
-    var serverSide   = true;
-    var requestType  = 'GET';
-
-    var section      = $('div[data-section]').data('section');
-    var baseURL      = $('div[data-base-url]').data('base-url');
-    var route_create = $('div[data-route-create]').data('route-create');
+    
+    var table         = $('#datatables');
+    
+    var pageLength    = 10;
+    var processing    = true;
+    var serverSide    = true;
+    var requestType   = 'GET';
+    
+    var section       = $('div[data-section]').data('section');
+    var baseURL       = $('div[data-base-url]').data('base-url');
+    var route_create  = $('div[data-route-create]').data('route-create');
+    var deleteManyURL = $('div[data-route-delete-many]').data('route-delete-many');
 
     window.oTable = table.DataTable({
 
@@ -180,16 +181,11 @@ $(document).ready(function() {
         $('#delete-many-modal').modal('hide');
 
         var action = $(this).data('action');
-        var deleteManyURL = $('div[data-route-delete-many]').data('route-delete-many');
-        console.log($('div[data-route-delete-many]').data('route-delete-many'));
-        console.log(laroute.route(deleteManyURL));
-        return false;
 
         var ids = [];
         $('.checkboxes:checked').each(function(i){
             ids[i] = $(this).val();
         });
-
 
         $.ajax({
             url: laroute.route(deleteManyURL),
@@ -198,8 +194,10 @@ $(document).ready(function() {
             success: function(data, textStatus) {
                 if (data.error) {
                     showNotice('error', data.message, 'Error!');
-                } else {                  
-                    window.oTable.row($('a[data-section="'+ deleteURL +'"]').closest('tr')).remove().draw();
+                } else {
+                    $.each(ids, function (index, item) {
+                        window.oTable.row($('.checkboxes[value="'+ item +'"]').closest('tr')).remove().draw();
+                    });                  
                     showNotice('success', data.message, 'Success!');
                 }
             },
