@@ -171,7 +171,6 @@ $(document).ready(function() {
         var action = $(this).data('action');
         if (action == 'delete') {
             $('#delete-many-modal').modal('show');
-            $('#delete-many-entry').data('action', action);
         }
         
     });
@@ -179,8 +178,6 @@ $(document).ready(function() {
     $('#delete-many-entry').on('click', function (event) {
         event.preventDefault();
         $('#delete-many-modal').modal('hide');
-
-        var action = $(this).data('action');
 
         var ids = [];
         $('.checkboxes:checked').each(function(i){
@@ -190,7 +187,7 @@ $(document).ready(function() {
         $.ajax({
             url: laroute.route(deleteManyURL),
             type: 'POST',
-            data: {'action': action, 'ids': ids},
+            data: {'ids': ids},
             success: function(data, textStatus) {
                 if (data.error) {
                     showNotice('error', data.message, 'Error!');

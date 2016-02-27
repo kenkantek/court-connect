@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\Auth\UserInterface;
 use App\Models\Auth\User;
-use App\Http\Requests\ActionRequest;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -42,22 +42,20 @@ class UserController extends Controller
         return response()->json($response, $response['response_code']);
     }
 
-    public function postDeleteMany(ActionRequest $request)
+    public function postDeleteMany(Request $request)
     {
         $ids = $request->input('ids');
         if (empty($ids)) {
-            return response()->json(['error' => true, 'message' => 'Please select record to take action!']);
+            return response()->json(['error' => true, 'message' => 'Please select at least one record to delete!']);
         }
 
-        if ($request->input('action') == 'delete') {
-            foreach ($ids as $id) {
-                if (\Auth::user()->id == $id) {
-                    return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
-                }
-                $response = $this->userRepository->delete($id);
+        foreach ($ids as $id) {
+            if (\Auth::user()->id == $id) {
+                return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
             }
-            return response()->json($response, $response['response_code']);
+            $response = $this->userRepository->delete($id);
         }
+        return response()->json($response, $response['response_code']);
     }
 
     public function getCreate()
