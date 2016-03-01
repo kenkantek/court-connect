@@ -9,7 +9,8 @@
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "5.2.*",
         "yajra/laravel-datatables-oracle": "~6.1",
-        "lord/laroute" : "2.*"
+        "lord/laroute" : "2.*",
+        "spatie/laravel-permission": "^1.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

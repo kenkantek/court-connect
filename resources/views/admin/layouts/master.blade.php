@@ -6,6 +6,7 @@
         <link rel="shortcut icon" href="/resources/admin/img/favicon.png">
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto">
         @foreach ($stylesheets as $style)
             {!! HTML::style($style) !!}
         @endforeach
@@ -27,7 +28,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body class="skin-blue sidebar-mini">
+    <body class="skin-blue sidebar-mini  pace-done sidebar-collapse">
         <div class="wrapper">
             <header class="main-header">
                 <!-- Logo -->
@@ -39,41 +40,39 @@
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
-                    <!-- Sidebar toggle button-->
-                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                        <span class="sr-only">Toggle navigation</span>
-                    </a>
-                    <div class="navbar-custom-menu">
-                        <ul class="nav navbar-nav">
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown user user-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="{{ url(Auth::user()->avatar) }}" class="user-image" alt="User Image"/>
-                                    <span class="hidden-xs">{{ Auth::user()->getFullName() }}</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <!-- User image -->
-                                    <li class="user-header">
-                                        <img src="{{ url(Auth::user()->avatar) }}" class="img-circle" alt="User Image" />
-                                        <p>
-                                            {{ Auth::user()->getFullName() }}
-                                        </p>
-                                    </li>
-                                    <!-- Menu Footer-->
-                                    <li class="user-footer">
-                                        <div class="pull-left">
-                                            <a href="#" class="btn btn-primary btn-flat"><i class="fa fa-user"></i> View profile</a>
-                                        </div>
-                                        <div class="pull-right">
-                                            <a href="{{ route('auth.logout') }}" class="btn btn-danger btn-flat"><i class="fa fa-power-off"></i> Logout</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                            </li>
-                        </ul>
+                    <div class="navbar-header-menu">
+                        <div class="header-block col-md-3">
+                            <div class="info-box-img">
+                            <img src="{{ asset('uploads/images/tiger-raquest.jpeg') }}" class="club-thump-image" alt="Club Image"/>
+                            </div>
+
+                            <div class="info-box-content text-center">
+                              <span class="info-box-text">Managing</span>
+                              <select name="club" id="club">
+                                  <option>Tiger Raquest Club</option>
+                              </select>
+                            </div>
+                            <!-- /.info-box-content -->
+                          </div>
+                          <div class="col-md-6 text-center">
+                              <h1>Club Settting</h1>
+                          </div>
+                          <div class="col-md-3">
+                              <ul class="nav navbar-nav pull-right">
+                                <li class="pull-right">
+                                    <a href="{{ route('auth.logout') }}" style="font-size: 35px"><i class="fa fa-sign-out"></i></a>
+                                </li>
+                                <li class="user user-menu pull-right">
+                                    <a href="#">
+                                        <label class="hidden-xs">Login</label>
+                                        <img src="{{ url(Auth::user()->avatar) }}" class="user-image" alt="User Image"/>
+                                        <span class="hidden-xs">{{ Auth::user()->getFullName() }}</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                          </div>
+
                     </div>
                 </nav>
             </header>
@@ -81,33 +80,23 @@
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="{{ url(Auth::user()->avatar) }}" class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>{{ Auth::user()->getFullName() }}</p>
-                            <p><a target="_blank" href="{{ route('home.index') }}"><i class="fa fa-home text-success"></i><small> View Website</small></a></p>
-                        </div>
-                    </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header"><strong>Content Management</strong></li>
-                        <li><a href="/sadmin"><i class="fa fa-home"></i> <span>Dashboard</span></a>
+                        <li><a href="/sadmin"><i class="fa fa-home"></i></a>
                     </li>
-                    <li class="treeview">
+                    <li>
+                        <a href="#"><i class="fa fa-area-chart"></i></a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('users.list') }}"><i class="fa fa-users"></i></a>
+                    </li>
+                    <li>
                         <a href="#">
-                            <i class="fa fa-users"></i>
-                            <span>Users</span>
-                            <i class="fa fa-angle-left pull-right"></i>
+                            <i class="fa fa-cogs"></i>
+
                         </a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="{{ route('users.create') }}"><i class="fa fa-plus-circle"></i> Create New User</a>
-                                <a href="{{ route('users.list') }}"><i class="fa fa-list-alt"></i> All Users</a>
-                            </li>
-                        </ul>
                     </li>
                 </ul>
             </section>
@@ -141,7 +130,7 @@
         </div><!-- ./wrapper -->
 
         <div data-base-url="{{ url('/') }}"></div>
-        
+
         @include('admin.elements.notice')
 
         @foreach ($bodyScripts as $script)

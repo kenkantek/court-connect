@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Auth\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,16 +15,16 @@ use Illuminate\Support\Facades\DB;
 
 $factory->define(User::class, function (Faker\Generator $faker) {
     return [
-		'first_name'     => $faker->firstName,
-		'last_name'      => $faker->lastName,
-		'username'       => $faker->username,
-		'email'          => $faker->email,
-		'password'       => bcrypt(12345678),
-		'remember_token' => str_random(40),
-		'phone'          => $faker->phoneNumber,
-		'zip_code'       => '700000',
-		'gender'         => rand(1, 2),
-		'facebook'       => "http://" . $faker->domainName,
-		'google'         => "http://" . $faker->domainName
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
+        'username' => $faker->username,
+        'email' => $faker->email,
+        'password' => bcrypt(12345678),
+        'remember_token' => str_random(40),
+        'phone' => $faker->phoneNumber,
+        'zip_code' => '700000',
+        'gender' => rand(1, 2),
+        'facebook' => "http://" . $faker->domainName,
+        'google' => "http://" . $faker->domainName,
     ];
 });

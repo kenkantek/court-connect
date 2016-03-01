@@ -13,17 +13,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
-class Role extends Model
+class Role extends \Spatie\Permission\Models\Role
 {
     protected $table = 'roles';
 
     /**
-    * The date fields for the model.clear
-    *
-    * @var array
-    */
-    protected $dates    = ['created_at', 'updated_at'];
-
-    protected $fillable = [];
+     * The date fields for the model.clear
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'label'];
+    public $timestamp = false;
 
 }

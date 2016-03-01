@@ -8,7 +8,7 @@ class UserRepository implements UserInterface
 {
     public function getDatatableData()
     {
-        $users = User::select(['updated_at', 'id', 'username', 'first_name', 'last_name', 'email', 'created_at']);
+        $users = User::select(['users.updated_at', 'users.id', 'username', 'first_name', 'last_name', 'email', 'roles.label'])->join('role_user', 'users.id', '=', 'role_user.user_id')->join('roles', 'roles.id', '=', 'role_user.role_id');
 
         $datatables = \Datatables::of($users)
             ->edit_column('username', function ($user) {
@@ -23,10 +23,7 @@ class UserRepository implements UserInterface
             })
             ->remove_column('last_name')
             ->edit_column('updated_at', function ($user) {
-                return '<input type="checkbox" class="checkboxes" name="id[]" value="' . $user->id .'"/>';
-            })
-            ->edit_column('created_at', function ($user) {
-                return date_from_database($user->created_at, 'd-m-Y');
+                return '<input type="checkbox" class="checkboxes" name="id[]" value="' . $user->id . '"/>';
             });
         return $datatables->make();
     }

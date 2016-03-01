@@ -20,7 +20,7 @@
 						<th class="text-left">Username</th>
 						<th>Fullname</th>
 						<th>Email</th>
-						<th>Created At</th>
+						<th>Role</th>
 						<th class="no-sort no-search">Operations</th>
 					</tr>
 				</thead>
