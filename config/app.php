@@ -168,6 +168,8 @@ return [
         App\Providers\Auth\UserProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
+        Intervention\Image\ImageServiceProvider::class,
+
     ],
 
     /*
@@ -220,6 +222,7 @@ return [
         /*=================== CUSTOM COMPONENTS ALIAS ====================*/
 
         'Assets' => App\Components\Assets\Facade\AssetsFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

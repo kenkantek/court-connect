@@ -56,6 +56,11 @@ gulp.task('admin', function() {
             path.dist + 'js/app_modules/datatables.js'
         );
 
+        mix.scripts(
+            path.src + 'js/app_modules/avatar.js',
+            path.dist + 'js/app_modules/avatar.js'
+        );
+
     });
 });
 

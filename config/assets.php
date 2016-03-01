@@ -19,14 +19,15 @@ return [
             'adminlte',
             'toastr',
             'pace',
-            'admin'
+            'uniform',
+            'admin',
         ],
         'stylesheets' => [
             'bootstrap',
             'font-awesome',
             'ionicons',
             'pace',
-            'toastr'
+            'toastr',
         ],
     ],
     'auth' => [
@@ -74,6 +75,18 @@ return [
                     'cdn' => 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
                 ],
             ],
+            'bootstrap-fileinput' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' =>
+                    [
+                        '/resources/vendor/bootstrap-fileinput/js/fileinput.min.js',
+                        '/resources/vendor/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
+                    ],
+                    'cdn' => '',
+                ],
+            ],
             'csrf' => [
                 'use_cdn' => false,
                 'location' => 'top',
@@ -83,11 +96,11 @@ return [
                 ],
             ],
             'laroute' => [
-                'use_cdn'  => false,
+                'use_cdn' => false,
                 'location' => 'top',
-                'src'      => [
-                    'local' => '/resources/vendor/routes.js'
-                ]
+                'src' => [
+                    'local' => '/resources/vendor/routes.js',
+                ],
             ],
             'bootstrap' => [
                 'use_cdn' => false,
@@ -183,41 +196,41 @@ return [
                     'cdn' => '',
                 ],
             ],
-            'toastr'       => [
-                'use_cdn'  => false,
+            'toastr' => [
+                'use_cdn' => false,
                 'location' => 'bottom',
-                'src'      => [
+                'src' => [
                     'local' => ['/resources/vendor/bootstrap-toastr/toastr.js'],
-                    'cdn'   => ['']
-                ]
+                    'cdn' => [''],
+                ],
             ],
-            'pace'       => [
-                'use_cdn'  => false, 
+            'pace' => [
+                'use_cdn' => false,
                 'location' => 'bottom',
-                'src'      => [
+                'src' => [
                     'local' => ['/resources/vendor/pace/pace.min.js'],
-                    'cdn'   => ['']
-                ]
+                    'cdn' => [''],
+                ],
             ],
-            'uniform'       => [
-                'use_cdn'  => false, 
+            'uniform' => [
+                'use_cdn' => false,
                 'location' => 'bottom',
-                'src'      => [
+                'src' => [
                     'local' => ['/resources/vendor/uniform/jquery.uniform.min.js'],
-                    'cdn'   => ['']
-                ]
+                    'cdn' => [''],
+                ],
             ],
-            'datatables'       => [
-                'use_cdn'  => false,
+            'datatables' => [
+                'use_cdn' => false,
                 'location' => 'bottom',
-                'src'      => [
+                'src' => [
                     'local' => [
-                            '/resources/vendor/datatables/media/js/jquery.dataTables.min.js',
-                            '/resources/vendor/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js',
-                            '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.js'
-                        ],
-                    'cdn'   => ['']
-                ]
+                        '/resources/vendor/datatables/media/js/jquery.dataTables.min.js',
+                        '/resources/vendor/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js',
+                        '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.js',
+                    ],
+                    'cdn' => [''],
+                ],
             ],
             // End JS
         ],
@@ -317,41 +330,49 @@ return [
                     'local' => '/resources/auth/css/auth.css',
                 ],
             ],
-            'toastr'  => [
-                'use_cdn'  => false,
+            'toastr' => [
+                'use_cdn' => false,
                 'location' => 'top',
-                'src'      => [
+                'src' => [
                     'local' => ['/resources/vendor/bootstrap-toastr/toastr.min.css'],
-                    'cdn'   => []
-                ]
+                    'cdn' => [],
+                ],
             ],
-            'pace'  => [
-                'use_cdn'  => false,
+            'pace' => [
+                'use_cdn' => false,
                 'location' => 'top',
-                'src'      => [
+                'src' => [
                     'local' => ['/resources/vendor/pace/themes/pace-theme-minimal.css'],
-                    'cdn'   => []
-                ]
+                    'cdn' => [],
+                ],
             ],
-            'uniform'  => [
-                'use_cdn'  => false,
+            'uniform' => [
+                'use_cdn' => false,
                 'location' => 'top',
-                'src'      => [
+                'src' => [
                     'local' => ['/resources/vendor/uniform/css/uniform.default.min.css'],
-                    'cdn'   => []
-                ]
+                    'cdn' => [],
+                ],
             ],
-            'datatables'  => [
-                'use_cdn'  => false,
+            'bootstrap-fileinput' => [
+                'use_cdn' => false,
                 'location' => 'top',
-                'src'      => [
+                'src' => [
+                    'local' => ['/resources/vendor/bootstrap-fileinput/css/fileinput.min.css'],
+                    'cdn' => [],
+                ],
+            ],
+            'datatables' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
                     'local' => [
-                            '/resources/vendor/datatables/extensions/Scroller/css/dataTables.scroller.min.css',
-                            '/resources/vendor/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css',
-                            '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.css'
-                        ],
-                    'cdn'   => []
-                ]
+                        '/resources/vendor/datatables/extensions/Scroller/css/dataTables.scroller.min.css',
+                        '/resources/vendor/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css',
+                        '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.css',
+                    ],
+                    'cdn' => [],
+                ],
             ],
         ],
     ],

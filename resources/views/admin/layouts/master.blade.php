@@ -55,7 +55,9 @@
                             <!-- /.info-box-content -->
                           </div>
                           <div class="col-md-6 text-center">
-                              <h1>Club Settting</h1>
+                              <h1>
+                                    @yield('title_heading')
+                              </h1>
                           </div>
                           <div class="col-md-3">
                               <ul class="nav navbar-nav pull-right">

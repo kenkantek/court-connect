@@ -1,13 +1,17 @@
-@if ($errors->has())
-<div class="alert alert-danger">
-    @foreach ($errors->all() as $error)
-        {{ $error }}<br>
-    @endforeach
-</div>
-@endif
-@if(session()->has('error_msg'))
-    <div class="alert alert-danger">{{ session('error_msg') }}</div>
-@endif
-@if(session()->has('success_msg'))
-    <div class="alert alert-success">{{ session('success_msg') }}</div>
+@if(session()->has('success_msg') || session()->has('error_msg') || $errors->has())
+<script type="text/javascript">
+	$(document).ready(function() {
+		@if (session()->has('success_msg'))
+			showNotice('success', '{{ session('success_msg') }}', 'Success!');
+        @endif
+        @if (session()->has('error_msg'))
+			showNotice('error', '{{ session('error_msg') }}', 'Error!');
+        @endif
+        @if ($errors->has())
+            @foreach ($errors->all() as $error)
+               showNotice('error', '{{ $error }}', 'Error!');
+            @endforeach
+        @endif
+	});
+</script>
 @endif

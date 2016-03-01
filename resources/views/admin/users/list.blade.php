@@ -1,4 +1,7 @@
 @extends('admin.layouts.master')
+@section('title_heading')
+User Manager
+@stop
 @section('content')
 <div class="box box-primary">
 	<div class="box-header with-border content-header">

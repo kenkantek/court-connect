@@ -5,32 +5,32 @@ User Manager
 @section('content')
 <div class="box box-primary">
 	<div class="box-header with-border content-header">
-		<h3 class="box-title"><i class="fa fa-users"></i> Create New User</h3>
+		<h3 class="box-title"><i class="fa fa-users"></i> Edit User </h3>
 		<ol class="breadcrumb">
 			<li><a href="{{ route('admin.index') }}"><i class="fa fa-home"></i> Home</a></li>
-			<li class="active">Create New User</li>
+			<li class="active">Edit User</li>
 		</ol>
 	</div>
 	<div class="box-body">
 		<div class="col-xs-12">
-			{!! Form::open(['route' => 'users.create.post', 'method' => 'POST','files' => true]) !!}
+			{!! Form::open(['route' => ['users.edit.post',$user->id], 'method' => 'POST','files' => true]) !!}
 				<div class="row">
 					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 						<div class="form-group">
 		          {{ Form::label('first_name', 'First name') }}
-		          {{ Form::text('first_name', old('first_name'),['class'=>'form-control','placeholder'=>'Enter First name']) }}
+		          {{ Form::text('first_name', $user->first_name,['class'=>'form-control','placeholder'=>'Enter First name']) }}
 		        </div>
 		        <div class="form-group">
 		          {{ Form::label('last_name', 'Last name') }}
-		          {{ Form::text('last_name', old('last_name'),['class'=>'form-control','placeholder'=>'Enter Last name']) }}
+		          {{ Form::text('last_name', $user->last_name,['class'=>'form-control','placeholder'=>'Enter Last name']) }}
 		        </div>
 						<div class="form-group">
 		          {{ Form::label('username', 'User name') }}
-		          {{ Form::text('username', old('username'),['class'=>'form-control','placeholder'=>'Enter user name']) }}
+		          {{ Form::text('username', $user->username,['class'=>'form-control','placeholder'=>'Enter user name']) }}
 		        </div>
 						<div class="form-group">
 		          {{ Form::label('email', 'E-Mail address') }}
-		          {{ Form::email('email', old('email'),['class'=>'form-control','placeholder'=>'Enter email']) }}
+		          {{ Form::email('email', $user->email,['class'=>'form-control','placeholder'=>'Enter email']) }}
 		        </div>
 		        <div class="form-group">
 		          {{ Form::label('password', 'Password') }}
@@ -42,11 +42,11 @@ User Manager
 		        	<div>
 		        	<span>
 		        		{!! Form::label('gender', 'Male') !!}
-		        		{!! Form::radio('gender', '1', true, ['class' => 'field']) !!}
+		        		{!! Form::radio('gender', '1', $user->gender, ['class' => 'field']) !!}
 		        	</span>
 		        	<span>
 		        	{!! Form::label('gender', 'Female') !!}
-		        	{!! Form::radio('gender', '0', false,['class' => 'field']) !!}
+		        	{!! Form::radio('gender', '0', $user->gender,['class' => 'field']) !!}
 							</span>
 							</div>
 		        </div>
@@ -65,20 +65,20 @@ User Manager
 							</div>
 							<div class="form-group">
 			          {{ Form::label('phone', 'Phone') }}
-			          {{ Form::text('phone', old('phone'),['class'=>'form-control','placeholder'=>'Enter number phone']) }}
+			          {{ Form::text('phone', $user->phone,['class'=>'form-control','placeholder'=>'Enter number phone']) }}
 			        </div>
 
 			        <div class="form-group">
 			          {{ Form::label('facebook', 'Facebook') }}
-			          {{ Form::text('facebook', old('facebook'),['class'=>'form-control','placeholder'=>'Enter facebook']) }}
+			          {{ Form::text('facebook', $user->facebook,['class'=>'form-control','placeholder'=>'Enter facebook']) }}
 			        </div>
 			        <div class="form-group">
 			          {{ Form::label('google', 'Google') }}
-			          {{ Form::text('google', old('google'),['class'=>'form-control','placeholder'=>'Enter google']) }}
+			          {{ Form::text('google', $user->google,['class'=>'form-control','placeholder'=>'Enter google']) }}
 			        </div>
 			        <div class="form-group">
 			          {{ Form::label('zipcode', 'Zipcode') }}
-			          {{ Form::number('zipcode', old('zipcode'),['class'=>'form-control','placeholder'=>'Enter zipcode']) }}
+			          {{ Form::number('zipcode', $user->zipcode,['class'=>'form-control','placeholder'=>'Enter zipcode']) }}
 			        </div>
 					</div>
 				</div>
@@ -87,7 +87,7 @@ User Manager
 	<div class="box-footer">
 		<div class="form-group">
 			<button type="submit" class="btn btn-flat btn-default pull-right">Cancel</button>
-      <button type="submit" class="btn btn-flat btn-primary pull-right">Add user</button>
+      <button type="submit" class="btn btn-flat btn-primary pull-right">Update user</button>
 		</div>
   </div>
 			{!! Form::close() !!}
