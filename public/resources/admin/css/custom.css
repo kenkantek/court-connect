@@ -1,0 +1,105 @@
+.btn-new-court{
+    margin-top: 17px;
+}
+.courtbox{
+    padding: 10px 0px;
+}
+.court_new table{
+    width: 100%;
+}
+.court_new table td{
+    padding-bottom: 10px;
+}
+.court_new table label{
+    font-weight: normal;
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+    padding-right: 10px;
+}
+#form_search_rate input.price{
+    width: 120px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+#form_search_rate .daterange_rate{
+    display: inline-block;
+    width: auto;
+    height: 30px;
+    margin-left: 5px;
+}
+table .td_field_label{
+    font-weight: 400;
+    background: #f2f2f2;
+    color: #000;
+}
+.form-box{
+    margin-right: 15px;
+}
+.btn{
+    border-radius: 0;
+    outline: none;
+    border: 0;
+}
+.contacttime, .contacttimeperiod{
+    margin-top: 50px;
+}
+.contacttimeperiod table{
+    width: 100%;
+}
+.contacttimeperiod table td{
+    padding-bottom: 10px;
+}
+.contacttimeperiod table label{
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+    padding-right: 10px;
+}
+.contacttimerate input.price_contract_rate{
+    width: 120px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+form.form-court{
+    margin: 10px 0px;
+}
+.table-th th{
+    background: #f2f2f2;
+    color: #000;
+}
+
+/*calendar-box*/
+.calendar-box{
+    clear: both;
+    width: 100%;
+    position: relative;
+    border-top: 1px solid #000;
+    margin: 20px 0px;
+}
+.calendar-box .day{
+    width: 14.28%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-right: 0px;
+    height: 70px;
+    float: left;
+    text-align: center;
+    position: relative;
+}
+.calendar-box .day:nth-of-type(7n){
+    border-right: 1px solid #ddd;
+}
+.calendar-box .day .day-hour{
+    line-height: 70px;
+}
+.calendar-box .day .day-number{
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+.calendar-box .day.day-disable{
+    background: #f4f4f4;
+}

@@ -157,7 +157,18 @@ return [
                 'use_cdn' => false,
                 'location' => 'bottom',
                 'src' => [
-                    'local' => '/resources/vendor/datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                    'local' => '/resources/vendor/datetimepicker/js/bootstrap-timepicker.js',
+                    'cdn' => '',
+                ],
+            ],
+            'daterangepicker' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => [
+                        '/resources/vendor/daterangepicker/daterangepicker.js',
+                        '/resources/vendor/daterangepicker/moment.min.js'
+                    ],
                     'cdn' => '',
                 ],
             ],
@@ -230,6 +241,14 @@ return [
                         '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.js',
                     ],
                     'cdn' => [''],
+                ],
+            ],
+            'bootstrap-multiselect' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/bootstrap-multiselect/bootstrap-multiselect.js',
+                    'cdn' => '',
                 ],
             ],
             // End JS
@@ -311,7 +330,15 @@ return [
                 'use_cdn' => false,
                 'location' => 'top',
                 'src' => [
-                    'local' => '/resources/vendor/datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+                    'local' => '/resources/vendor/datetimepicker/css/bootstrap-timepicker.css',
+                    'cdn' => '',
+                ],
+            ],
+            'daterangepicker' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/daterangepicker/daterangepicker-bs3.css',
                     'cdn' => '',
                 ],
             ],
@@ -320,6 +347,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/admin/css/admin.css',
+                    'cdn' => '',
+                ],
+            ],
+            'custom' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/admin/css/custom.css',
                     'cdn' => '',
                 ],
             ],
@@ -372,6 +407,14 @@ return [
                         '/resources/vendor/datatables/plugins/bootstrap/dataTables.bootstrap.css',
                     ],
                     'cdn' => [],
+                ],
+            ],
+            'bootstrap-multiselect' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/bootstrap-multiselect/bootstrap-multiselect.css',
+                    'cdn' => '',
                 ],
             ],
         ],

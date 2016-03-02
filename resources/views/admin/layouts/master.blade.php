@@ -95,9 +95,8 @@
                         <a href="{{ route('users.list') }}"><i class="fa fa-users"></i></a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ route('clubs.setting') }}">
                             <i class="fa fa-cogs"></i>
-
                         </a>
                     </li>
                 </ul>
