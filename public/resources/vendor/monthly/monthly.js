@@ -94,13 +94,17 @@
 			}
 			*/
 
+
 			// Reset button
 			if (setMonth == currentMonth && setYear == currentYear) {
 				$('#' + uniqueId + ' .monthly-header-title').html(monthNames[m - 1] +' '+ y);
-			} else {
+			}
+			/*
+			else {
 				$('#' + uniqueId + ' .monthly-header-title').html(monthNames[m - 1] +' '+ y +'<a href="#" class="monthly-reset"></a> ');
 			}
-			
+			*/
+
 
 			// Account for empty days at start
 			if(options.weekStart == 'Sun' && firstDay != 7) {
