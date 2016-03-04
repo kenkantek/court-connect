@@ -1,73 +1,51 @@
-Timepicker for Twitter Bootstrap
-=======
-[![Build Status](https://travis-ci.org/jdewit/bootstrap-timepicker.svg?branch=gh-pages)](https://travis-ci.org/jdewit/bootstrap-timepicker)
+# Bootstrap 3 Date/Time Picker
 
-A simple timepicker component for Twitter Bootstrap.
+[![Join the chat at https://gitter.im/Eonasdan/bootstrap-datetimepicker](https://badges.gitter.im/Eonasdan/bootstrap-datetimepicker.svg)](https://gitter.im/Eonasdan/bootstrap-datetimepicker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![GitHub version](https://badge.fury.io/gh/Eonasdan%2Fbootstrap-datetimepicker.png)&nbsp;&nbsp;&nbsp;![Travis](https://travis-ci.org/Eonasdan/bootstrap-datetimepicker.svg?branch=development)&nbsp;&nbsp;&nbsp;[![Stories in Ready](https://badge.waffle.io/Eonasdan/bootstrap-datetimepicker.png?label=ready&title=Ready)](https://waffle.io/Eonasdan/bootstrap-datetimepicker)
 
-Status
-======
-Please take a look at the `CHANGELOG.md` and the issues tab for issues we're
-working on and their relative priorities.
+![DateTimePicker](http://i.imgur.com/nfnvh5g.png)
 
-Installation
-============
+## [View the manual and demos](http://eonasdan.github.io/bootstrap-datetimepicker/)
 
-This project is registered as a <a href="http://bower.io">Bower</a> package,
-and can be installed with the following command:
+#Notice
+It's a new year and a new start. The issue tracker is open again.
+The issue tracker is now soley for bug reports.
 
-```bash
-bower install bootstrap-timepicker
-```
+Discussion: https://groups.google.com/d/forum/eonasdan-bootstrap-datetimepicker
 
-You can also download our latest release (and any previous release) 
-<a href="https://github.com/jdewit/bootstrap-timepicker/releases">here</a>.
+IM: https://gitter.im/Eonasdan/bootstrap-datetimepicker
 
-Demos & Documentation
-=====================
+SO: http://stackoverflow.com/tags/eonasdan-datetimepicker
 
-View <a href="http://jdewit.github.com/bootstrap-timepicker">demos & documentation</a>.
+New issues that are requests for "how do I.." will be closed and redirected to Stack Overflow.
 
-Support
-=======
+# v4.17.37
 
-If you make money using this timepicker, please consider 
-supporting its development.
+Is the current stable release. The latest and greatest changes are available from the [development branch](https://github.com/Eonasdan/bootstrap-datetimepicker/tree/development)
 
-<a href="http://www.pledgie.com/campaigns/19125"><img alt="Click here to support bootstrap-timepicker!" src="http://www.pledgie.com/campaigns/19125.png?skin_name=chrome" border="0" target="_blank"/></a> <a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://jdewit.github.com/bootstrap-timepicker"></a> <noscript><a href="http://flattr.com/thing/1116513/Bootstrap-Timepicker" target="_blank"> <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+# Version 5
 
-Contributing
-============
+IMPORANT! The Nuget packages will be depreciated in this release. Moving forward, Asp.Net/Nuget will **NOT** be delivering content packages like this one and you will need to use bower. See [this issue for more]( https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1128)
 
-1. Install <a href="www.nodejs.org">NodeJS</a> and <a href="www.npmjs.org">Node Package Manager</a>.
+v5 is [in planning](https://github.com/Eonasdan/bootstrap-datetimepicker/issues/841). We welcome your suggestions.
 
-2. Install packages
+A major update is a great time to make be able to make breaking changes.
 
-```bash
-npm install
-```
+## Submitting Issues
+If you have issues, please check the following first:
+* Have you read the docs? 
+* Do you have the latest version of momentjs?
+* Do you have the latest version of jQuery?
+* Please test and/or fork [this jsfiddle](http://jsfiddle.net/Eonasdan/0Ltv25o8/) with an example of your issue before you post an issue here. 
+* Please indicate which version of the picker you are using (this can be found at the top of any included file)
 
-3. Use <a href="https://github.com/twitter/bower">Bower</a> to get the dev dependencies.
+## Where do you use this?
+I'd love to know if your public site is using this plugin and list your logo on the documentation site. Please email me `me at eonasdan dot com`.
 
-```bash 
-bower install
-```
+##Priority support is available at an hourly rate. 
 
-4. Use <a href="www.gruntjs.com">Grunt</a> to run tests, compress assets, etc. 
+If you have an urgent request, bug or need installation help, please contact me at `me at eonasdan dot com` for a quote.
 
-```bash 
-grunt test // run jshint and jasmine tests
-grunt watch // run jsHint and Jasmine tests whenever a file is changed
-grunt compile // minify the js and css files
-```
+## [Installation instructions](http://eonasdan.github.io/bootstrap-datetimepicker/Installing/)
 
-- Please make it easy on me by covering any new features or issues 
-  with <a href="http://pivotal.github.com/jasmine">Jasmine</a> tests.
-- If your changes need documentation, please take the time to update the docs.
-
-Acknowledgements
-================
-
-Thanks to everyone who have given feedback and submitted pull requests. A 
-list of all the contributors can be found <a href="https://github.com/jdewit/bootstrap-timepicker/graphs/contributors">here</a>.
-
-Special thanks to @eternicode and his <a href="https://github.com/eternicode/bootstrap-datepicker">Twitter Datepicker</a> for inspiration.
+## [Change Log](http://eonasdan.github.io/bootstrap-datetimepicker/Changelog/)

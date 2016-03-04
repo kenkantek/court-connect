@@ -14,8 +14,14 @@ class ClubController extends Controller
      */
     public function getSetting()
     {
-        \Assets::addJavascript(['select2', 'uniform','moment','datetimepicker','daterangepicker','bootstrap-multiselect']);
-        \Assets::addStylesheets(['select2', 'uniform','datetimepicker', 'daterangepicker','bootstrap-multiselect']);
+        \Assets::addJavascript(['select2', 'uniform','monthly','moment','timepicker','datetimepicker','daterangepicker','bootstrap-multiselect']);
+        \Assets::addStylesheets(['select2', 'uniform','monthly','timepicker','datetimepicker', 'daterangepicker','bootstrap-multiselect']);
         return view('admin.clubs.setting');
+    }
+    public function getManagerBookings()
+    {
+        \Assets::addJavascript(['select2', 'uniform','monthly','moment','ionslider','timepicker','datetimepicker','daterangepicker','bootstrap-multiselect']);
+        \Assets::addStylesheets(['select2', 'uniform','monthly','ionslider','timepicker','datetimepicker', 'daterangepicker','bootstrap-multiselect']);
+        return view('admin.clubs.manager_bookings');
     }
 }

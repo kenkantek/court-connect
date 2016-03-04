@@ -153,11 +153,19 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'timepicker' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/timepicker/js/bootstrap-timepicker.js',
+                    'cdn' => '',
+                ],
+            ],
             'datetimepicker' => [
                 'use_cdn' => false,
                 'location' => 'bottom',
                 'src' => [
-                    'local' => '/resources/vendor/datetimepicker/js/bootstrap-timepicker.js',
+                    'local' => '/resources/vendor/datetimepicker/build/js/bootstrap-datetimepicker.min.js',
                     'cdn' => '',
                 ],
             ],
@@ -177,6 +185,14 @@ return [
                 'location' => 'bottom',
                 'src' => [
                     'local' => '/resources/vendor/moment/min/moment.min.js',
+                    'cdn' => '',
+                ],
+            ],
+            'monthly' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/monthly/monthly.js',
                     'cdn' => '',
                 ],
             ],
@@ -248,6 +264,14 @@ return [
                 'location' => 'bottom',
                 'src' => [
                     'local' => '/resources/vendor/bootstrap-multiselect/bootstrap-multiselect.js',
+                    'cdn' => '',
+                ],
+            ],
+            'ionslider' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/ionslider/ion.rangeSlider.min.js',
                     'cdn' => '',
                 ],
             ],
@@ -326,11 +350,19 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'timepicker' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/timepicker/css/bootstrap-timepicker.css',
+                    'cdn' => '',
+                ],
+            ],
             'datetimepicker' => [
                 'use_cdn' => false,
                 'location' => 'top',
                 'src' => [
-                    'local' => '/resources/vendor/datetimepicker/css/bootstrap-timepicker.css',
+                    'local' => '/resources/vendor/datetimepicker/build/css/bootstrap-datetimepicker.min.css',
                     'cdn' => '',
                 ],
             ],
@@ -339,6 +371,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/vendor/daterangepicker/daterangepicker-bs3.css',
+                    'cdn' => '',
+                ],
+            ],
+            'monthly' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/monthly/monthly.css',
                     'cdn' => '',
                 ],
             ],
@@ -414,6 +454,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/vendor/bootstrap-multiselect/bootstrap-multiselect.css',
+                    'cdn' => '',
+                ],
+            ],
+            'ionslider' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => ['/resources/vendor/ionslider/ion.rangeSlider.css','/resources/vendor/ionslider/ion.rangeSlider.skinNice.css'],
                     'cdn' => '',
                 ],
             ],

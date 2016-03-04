@@ -2,65 +2,72 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7d05a77-8567-49da-acd3-e97095586265" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/blade.xml" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\.gitattributes" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\.jscs.json" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\.npmignore" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\CONTRIBUTING.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\Gruntfile.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\build\css\bootstrap-datetimepicker-standalone.css" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\build\css\bootstrap-datetimepicker.css" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\build\css\bootstrap-datetimepicker.min.css" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\build\js\bootstrap-datetimepicker.min.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\component.json" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\ChangeLog.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\ContributorsGuide.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\Events.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\Extras.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\FAQ.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\Functions.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\Installing.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\Options.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\Version 4 Changelog.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\Version 4 Contributors guide.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\docs\index.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\mkdocs.yml" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\js\bootstrap-datetimepicker.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\less\_bootstrap-datetimepicker.less" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\less\bootstrap-datetimepicker-build.less" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\nuget\Bootstrap.v3.Datetimepicker.CSS.nuspec" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\nuget\Bootstrap.v3.Datetimepicker.nuspec" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\nuget\NuGet.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\nuget\install.ps1" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\sass\_bootstrap-datetimepicker.scss" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\src\sass\bootstrap-datetimepicker-build.scss" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\tasks\bump_version.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\publicApiSpec.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\base.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\compile.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\index.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\out\.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\pic\.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\t1.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\t2.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\t3.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\t4.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\test\screen-capture\t5.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\.gitattributes" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\.jscs.json" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\.npmignore" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\CONTRIBUTING.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\Gruntfile.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\README.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\bower.json" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\build\css\bootstrap-datetimepicker-standalone.css" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\build\css\bootstrap-datetimepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\build\css\bootstrap-datetimepicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\build\js\bootstrap-datetimepicker.min.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\component.json" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\composer.json" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\ChangeLog.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\ContributorsGuide.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\Events.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\Extras.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\FAQ.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\Functions.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\Installing.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\Options.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\Version 4 Changelog.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\Version 4 Contributors guide.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\docs\index.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\mkdocs.yml" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\package.json" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\js\bootstrap-datetimepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\less\_bootstrap-datetimepicker.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\less\bootstrap-datetimepicker-build.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\nuget\Bootstrap.v3.Datetimepicker.CSS.nuspec" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\nuget\Bootstrap.v3.Datetimepicker.nuspec" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\nuget\NuGet.exe" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\nuget\install.ps1" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\sass\_bootstrap-datetimepicker.scss" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\src\sass\bootstrap-datetimepicker-build.scss" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\tasks\bump_version.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\publicApiSpec.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\base.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\compile.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\index.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\out\.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\pic\.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\t1.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\t2.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\t3.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\t4.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker1\test\screen-capture\t5.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\CHANGELOG.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\css\bootstrap-timepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\css\bootstrap-timepicker.min.css" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\css\timepicker.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\js\bootstrap-timepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\kantek\courtconnect\public\resources\vendor\datetimepicker\js\bootstrap-timepicker.min.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/ClubController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/ClubController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/README.md" afterPath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/sass/_variables.scss" afterPath="$PROJECT_DIR$/resources/assets/admin/sass/_variables.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/sass/admin.scss" afterPath="$PROJECT_DIR$/resources/assets/admin/sass/admin.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Composers/Admin/assets.php" afterPath="$PROJECT_DIR$/app/Http/Composers/Admin/assets.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/assets.php" afterPath="$PROJECT_DIR$/config/assets.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/bower.json" afterPath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/bower.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/composer.json" afterPath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/sass/datatables/datatables.scss" afterPath="$PROJECT_DIR$/resources/assets/admin/sass/datatables/datatables.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/layouts/master.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/layouts/master.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/admin/css/custom.css" afterPath="$PROJECT_DIR$/public/resources/admin/css/custom.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/package.json" afterPath="$PROJECT_DIR$/public/resources/vendor/datetimepicker/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/vendor/routes.js" afterPath="$PROJECT_DIR$/public/resources/vendor/routes.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" afterPath="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/clubs/setting.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/clubs/setting.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="courtconnect.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -85,31 +92,9 @@
       <file leaf-file-name="ClubController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ClubController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.115385">
-              <caret line="17" column="72" selection-start-line="17" selection-start-column="72" selection-end-line="17" selection-end-column="72" />
+            <state vertical-scroll-proportion="-14.923077">
+              <caret line="23" column="74" selection-start-line="23" selection-start-column="65" selection-end-line="23" selection-end-column="74" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="setting.blade.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/admin/clubs/setting.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.62749004">
-              <caret line="245" column="24" selection-start-line="245" selection-start-column="24" selection-end-line="245" selection-end-column="24" />
-              <folding>
-                <element signature="e#4566#4590#0#HTML" expanded="true" />
-                <element signature="e#9165#9189#0#HTML" expanded="true" />
-                <element signature="e#11003#11027#0#HTML" expanded="true" />
-                <element signature="e#11062#11087#0#HTML" expanded="true" />
-                <marker date="1456916673452" expanded="true" signature="2146:2308" placeholder="..." />
-                <marker date="1456916673452" expanded="true" signature="2427:2559" placeholder="..." />
-                <marker date="1456916673452" expanded="true" signature="2669:2815" placeholder="..." />
-                <marker date="1456916673452" expanded="true" signature="6243:6554" placeholder="..." />
-                <marker date="1456916673452" expanded="true" signature="6257:6269" placeholder="..." />
-                <marker date="1456916673452" expanded="true" signature="6257:6552" placeholder="..." />
-                <marker date="1456916673452" expanded="true" signature="6275:6458" placeholder="..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -117,18 +102,68 @@
       <file leaf-file-name="assets.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/assets.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.1153846">
-              <caret line="332" column="89" selection-start-line="332" selection-start-column="89" selection-end-line="332" selection-end-column="89" />
+            <state vertical-scroll-proportion="-5.6">
+              <caret line="463" column="139" selection-start-line="463" selection-start-column="139" selection-end-line="463" selection-end-column="139" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="datatables.scss" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/admin/sass/datatables/datatables.scss">
+      <file leaf-file-name="manager_bookings.blade.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9622642">
-              <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.6478343">
+              <caret line="574" column="31" selection-start-line="574" selection-start-column="31" selection-end-line="574" selection-end-column="31" />
+              <folding>
+                <element signature="e#564#591#0#HTML" expanded="true" />
+                <element signature="e#699#726#0#HTML" expanded="true" />
+                <element signature="e#2682#18411#0#HTML" expanded="false" />
+                <element signature="e#3454#3498#0#HTML" expanded="true" />
+                <element signature="e#14744#18386#0#HTML" expanded="false" />
+                <element signature="e#18522#18543#0#HTML" expanded="true" />
+                <element signature="e#18577#19346#0#HTML" expanded="false" />
+                <element signature="e#20070#20095#0#HTML" expanded="true" />
+                <element signature="e#20762#21217#0#HTML" expanded="false" />
+                <element signature="e#21222#21677#0#HTML" expanded="false" />
+                <element signature="e#24889#24913#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setting.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/admin/clubs/setting.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="60.81818">
+              <caret line="212" column="81" selection-start-line="212" selection-start-column="81" selection-end-line="212" selection-end-column="81" />
+              <folding>
+                <marker date="1457079708646" expanded="true" signature="2183:2345" placeholder="..." />
+                <marker date="1457079708646" expanded="true" signature="2469:2601" placeholder="..." />
+                <marker date="1457079708646" expanded="true" signature="2715:2861" placeholder="..." />
+                <marker date="1457079708646" expanded="true" signature="7258:7745" placeholder="..." />
+                <marker date="1457079708646" expanded="true" signature="7272:7743" placeholder="..." />
+                <marker date="1457079708646" expanded="true" signature="7290:7649" placeholder="..." />
+                <marker date="1457079708646" expanded="true" signature="13404:13612" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="monthly.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/resources/vendor/monthly/monthly.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="78" column="26" selection-start-line="78" selection-start-column="11" selection-end-line="78" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="monthly.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/resources/vendor/monthly/monthly.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="25" column="9" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -137,38 +172,8 @@
       <file leaf-file-name="custom.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/resources/admin/css/custom.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.103448">
-              <caret line="95" column="18" selection-start-line="95" selection-start-column="18" selection-end-line="95" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.5384617">
-              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="list.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/admin/users/list.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.115385">
-              <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="master.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/admin/layouts/master.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.8846154">
-              <caret line="9" column="30" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="392" column="53" selection-start-line="392" selection-start-column="53" selection-end-line="392" selection-end-column="53" />
               <folding />
             </state>
           </provider>
@@ -191,15 +196,18 @@
         <option value="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/layouts/master.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/clubs/list.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" />
         <option value="$PROJECT_DIR$/app/Http/Composers/Admin/assets.php" />
         <option value="$PROJECT_DIR$/resources/assets/admin/sass/_variables.scss" />
         <option value="$PROJECT_DIR$/resources/assets/admin/sass/admin.scss" />
         <option value="$PROJECT_DIR$/resources/assets/admin/sass/datatables/datatables.scss" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/ClubController.php" />
-        <option value="$PROJECT_DIR$/config/assets.php" />
-        <option value="$PROJECT_DIR$/public/resources/admin/css/custom.css" />
+        <option value="$PROJECT_DIR$/public/resources/vendor/monthly/monthly.js" />
+        <option value="$PROJECT_DIR$/public/resources/vendor/monthly/monthly.css" />
+        <option value="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/clubs/setting.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/ClubController.php" />
+        <option value="$PROJECT_DIR$/public/resources/admin/css/custom.css" />
+        <option value="$PROJECT_DIR$/config/assets.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php" />
       </list>
     </option>
   </component>
@@ -248,6 +256,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -414,72 +423,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vendor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vendor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="datetimepicker" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -534,7 +477,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Controllers" />
+              <option name="myItemId" value="Endpoints" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -556,7 +499,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Controllers" />
+              <option name="myItemId" value="Endpoints" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -582,46 +525,47 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Composers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="courtconnect" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Http" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Composers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Admin" />
+              <option name="myItemId" value="Controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="FullScreen" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
+      <method />
+    </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="SvnConfiguration">
@@ -642,7 +586,7 @@
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25718608" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19288956" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -700,11 +644,26 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/users/list.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/layouts/master.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="30" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="29" column="5" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -712,7 +671,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -720,7 +678,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="28" column="10" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -728,7 +685,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -736,7 +692,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="37" column="2" selection-start-line="37" selection-start-column="2" selection-end-line="37" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -744,7 +699,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -752,7 +706,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -760,7 +713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="28" column="10" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -768,7 +720,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -776,7 +727,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="37" column="2" selection-start-line="37" selection-start-column="2" selection-end-line="37" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -784,7 +734,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -827,7 +776,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -849,7 +797,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -878,7 +825,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="28" column="10" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -886,15 +832,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17741935">
           <caret line="37" column="2" selection-start-line="37" selection-start-column="2" selection-end-line="37" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51792115">
-          <caret line="17" column="45" selection-start-line="17" selection-start-column="45" selection-end-line="17" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -902,7 +839,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -926,31 +862,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/users/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45698926">
-          <caret line="57" column="22" selection-start-line="52" selection-start-column="16" selection-end-line="57" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/users/list.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.115385">
-          <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/admin/sass/datatables/datatables.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9622642">
-          <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -966,7 +877,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.45698926">
           <caret line="32" column="46" selection-start-line="30" selection-start-column="8" selection-end-line="32" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -974,7 +884,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.8461537">
           <caret line="12" column="82" selection-start-line="12" selection-start-column="82" selection-end-line="12" selection-end-column="82" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -988,60 +897,144 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/admin/layouts/master.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.8846154">
-          <caret line="9" column="30" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="30" />
+        <state vertical-scroll-proportion="-2.4121864">
+          <caret line="36" column="92" selection-start-line="36" selection-start-column="60" selection-end-line="36" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/users/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4784946">
+          <caret line="57" column="22" selection-start-line="52" selection-start-column="16" selection-end-line="57" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/users/list.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.29928315">
+          <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.5384617">
+        <state vertical-scroll-proportion="0.3046595">
           <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/resources/vendor/monthly/monthly.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="9" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/assets.php">
+    <entry file="file://$PROJECT_DIR$/resources/assets/admin/sass/datatables/datatables.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.1153846">
-          <caret line="332" column="89" selection-start-line="332" selection-start-column="89" selection-end-line="332" selection-end-column="89" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/resources/admin/css/custom.css">
+    <entry file="file://$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.103448">
-          <caret line="95" column="18" selection-start-line="95" selection-start-column="18" selection-end-line="95" selection-end-column="18" />
+        <state vertical-scroll-proportion="-12.423077">
+          <caret line="19" column="55" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/resources/vendor/datetimepicker/build/js/bootstrap-datetimepicker.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30520648">
+          <caret line="7" column="1366" selection-start-line="7" selection-start-column="1366" selection-end-line="7" selection-end-column="1366" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/resources/vendor/datetimepicker/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21364452">
+          <caret line="7" column="81" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/resources/vendor/monthly/monthly.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="78" column="26" selection-start-line="78" selection-start-column="11" selection-end-line="78" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ClubController.php">
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/Core_d.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.115385">
-          <caret line="17" column="72" selection-start-line="17" selection-start-column="72" selection-end-line="17" selection-end-column="72" />
+        <state vertical-scroll-proportion="0.3327032">
+          <caret line="305" column="37" selection-start-line="305" selection-start-column="33" selection-end-line="305" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/admin/clubs/setting.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.62749004">
-          <caret line="245" column="24" selection-start-line="245" selection-start-column="24" selection-end-line="245" selection-end-column="24" />
+        <state vertical-scroll-proportion="60.81818">
+          <caret line="212" column="81" selection-start-line="212" selection-start-column="81" selection-end-line="212" selection-end-column="81" />
           <folding>
-            <element signature="e#4566#4590#0#HTML" expanded="true" />
-            <element signature="e#9165#9189#0#HTML" expanded="true" />
-            <element signature="e#11003#11027#0#HTML" expanded="true" />
-            <element signature="e#11062#11087#0#HTML" expanded="true" />
-            <marker date="1456916673452" expanded="true" signature="2146:2308" placeholder="..." />
-            <marker date="1456916673452" expanded="true" signature="2427:2559" placeholder="..." />
-            <marker date="1456916673452" expanded="true" signature="2669:2815" placeholder="..." />
-            <marker date="1456916673452" expanded="true" signature="6243:6554" placeholder="..." />
-            <marker date="1456916673452" expanded="true" signature="6257:6269" placeholder="..." />
-            <marker date="1456916673452" expanded="true" signature="6257:6552" placeholder="..." />
-            <marker date="1456916673452" expanded="true" signature="6275:6458" placeholder="..." />
+            <marker date="1457079708646" expanded="true" signature="2183:2345" placeholder="..." />
+            <marker date="1457079708646" expanded="true" signature="2469:2601" placeholder="..." />
+            <marker date="1457079708646" expanded="true" signature="2715:2861" placeholder="..." />
+            <marker date="1457079708646" expanded="true" signature="7258:7745" placeholder="..." />
+            <marker date="1457079708646" expanded="true" signature="7272:7743" placeholder="..." />
+            <marker date="1457079708646" expanded="true" signature="7290:7649" placeholder="..." />
+            <marker date="1457079708646" expanded="true" signature="13404:13612" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/resources/admin/css/custom.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="392" column="53" selection-start-line="392" selection-start-column="53" selection-end-line="392" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ClubController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.923077">
+          <caret line="23" column="74" selection-start-line="23" selection-start-column="65" selection-end-line="23" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/assets.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.6">
+          <caret line="463" column="139" selection-start-line="463" selection-start-column="139" selection-end-line="463" selection-end-column="139" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6478343">
+          <caret line="574" column="31" selection-start-line="574" selection-start-column="31" selection-end-line="574" selection-end-column="31" />
+          <folding>
+            <element signature="e#564#591#0#HTML" expanded="true" />
+            <element signature="e#699#726#0#HTML" expanded="true" />
+            <element signature="e#2682#18411#0#HTML" expanded="false" />
+            <element signature="e#3454#3498#0#HTML" expanded="true" />
+            <element signature="e#14744#18386#0#HTML" expanded="false" />
+            <element signature="e#18522#18543#0#HTML" expanded="true" />
+            <element signature="e#18577#19346#0#HTML" expanded="false" />
+            <element signature="e#20070#20095#0#HTML" expanded="true" />
+            <element signature="e#20762#21217#0#HTML" expanded="false" />
+            <element signature="e#21222#21677#0#HTML" expanded="false" />
+            <element signature="e#24889#24913#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
