@@ -10,5 +10,5 @@ View::composer('admin.layouts.master', function ($view) {
 
     $view->with('headScripts', $headScripts);
     $view->with('bodyScripts', $groupedBodyScripts);
-    $view->with('stylesheets', Assets::getStylesheets(['adminlte', 'admin']));
+    $view->with('stylesheets', Assets::getStylesheets(['adminlte', 'admin','custom']));
 });

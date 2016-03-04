@@ -12,4 +12,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postEdit' => 'users.edit.post',
     ]);
 
+    Route::controller('clubs', ClubController::class, [
+        'getSetting' => 'clubs.setting',
+        'getManagerBookings' => 'clubs.manager-bookings',
+    ]);
 });

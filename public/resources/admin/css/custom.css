@@ -1,0 +1,398 @@
+.btn-new-court{
+    margin-top: 17px;
+}
+.courtbox{
+    padding: 10px 0px;
+}
+.court_new table{
+    width: 100%;
+}
+.court_new table td{
+    padding-bottom: 10px;
+}
+.court_new table label{
+    font-weight: normal;
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+    padding-right: 10px;
+}
+#form_search_rate input.price{
+    width: 120px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+#form_search_rate .daterange_rate{
+    display: inline-block;
+    width: auto;
+    height: 30px;
+    margin-left: 5px;
+}
+table .td_field_label{
+    font-weight: 400;
+    background: #f2f2f2;
+    color: #000;
+}
+.form-box{
+    margin-right: 15px;
+}
+.btn{
+    border-radius: 0;
+    outline: none;
+    border: 0;
+}
+.contacttime, .contacttimeperiod{
+    margin-top: 50px;
+}
+.contacttimeperiod table{
+    width: 100%;
+}
+.contacttimeperiod table td{
+    padding-bottom: 10px;
+}
+.contacttimeperiod table label{
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+    padding-right: 10px;
+}
+.contacttimerate input.price_contract_rate{
+    width: 120px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+form.form-court{
+    margin: 10px 0px;
+}
+.table-th th{
+    background: #f2f2f2;
+    color: #000;
+}
+
+/*calendar-box*/
+.calendar-box{
+    padding: 20px 0px;
+    clear: both;
+}
+.monthly-day{
+    border-bottom: 1px solid #EBEBEB;
+}
+.monthly-day:nth-of-type(7n){
+    border-right: 1px solid #EBEBEB;
+}
+.monthly-day:nth-of-type(7n+1){
+    border-left: 1px solid #EBEBEB;
+}
+.monthly-header{
+    width: 200px;
+    font-size: 22px;
+}
+.monthly-day.day_close{
+    background: #1b1b1b;
+    text-transform: uppercase;
+    color: #fff;
+    padding-top: 20px;
+}
+.monthly-day.day_holiday{
+    background: #930101;
+    color: #fff;
+    padding-top: 20px;
+}
+.monthly-day .action {
+    display: inline-block;
+}
+.monthly-day .overflow{
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    line-height: 70px;
+    display: none;
+    transition: all 0.1s linear;
+}
+.monthly-day:hover .overflow{
+    display: block;
+}
+
+.add_new_date_period{
+    position: relative;
+}
+.add_new_date_period .tooltip {
+    top: 20px;
+    padding: 0px 10px;
+    opacity: 0;
+    position:absolute;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition:  opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition:  opacity 0.5s;
+    transition:  opacity 0.5s;
+    right: 0px;
+    height: 80px;
+    width: 400px;
+    background: #fff;
+    border: 1px solid #d8d8d8;
+}
+.add_new_date_period .tooltip:before{
+    border: solid;
+    border-color: #d8d8d8 transparent;
+    border-width: 0px 6px 6px 6px;
+    top: 20px;
+    content: "";
+    left: 90%;
+    position: absolute;
+    top: -6px;
+    /* z-index: 99; */
+}
+.add_new_date_period:hover .tooltip {
+    opacity:1;
+}
+
+#tabRate{
+    margin-top: 25px;
+}
+#tabRate li{
+    list-style: none;
+    display: inline-block;
+    padding-left: 10px;
+    opacity: 0.5;
+    cursor: pointer;
+}
+#tabRate li.active{
+    opacity: 1;
+}
+
+/* PAGE MANAGER BOOKINGS */
+#form_search_booking{
+    background: #f2f2f2;
+    padding: 20px 0px;
+}
+#result_search table{
+    width: 80%;
+    margin: 0px auto;
+}
+#result_search table th, #result_search table td{
+    line-height: 3em;
+}
+.manage_multi_times, .create_new_book{
+    margin-bottom: 10px;
+}
+.day-view-content{
+    overflow-x: scroll;
+}
+.datetimepicker{
+    outline: none;
+    text-indent: 5px;
+}
+.day-view-content table th, .day-view-content table td{
+    border-color: #aaa !important;
+}
+.day-view-content .day-grid {
+    height: 35px;
+}
+.day-grid.available{
+    background: #fff;
+    color: #ddd;
+    cursor: pointer;
+}
+.day-grid.unavailable{
+    background: #ddd;
+}
+
+.day-view-content .grid-null{
+    width: 100px;
+    background: #f2f2f2;
+}
+.day-grid.contracttime{
+    background: #c0e39e;
+    color: #40780b;
+}
+.day-grid.opentime{
+    background: #63ac1d;
+    color: #fff;
+}
+.day-grid.lesson{
+    background: #1d5aac;
+    color: #fff;
+}
+.grid-row{
+    position: relative;
+    height: 35px !important;
+}
+.day-grid.grid-haft-top{
+    border-bottom: 0px;
+}
+.day-grid.grid-haft-bottom{
+    border-top: 0px;
+}
+#content-expand{
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid #d8d8d8;
+    background: #fff;
+    padding: 20px;
+}
+.available-slot-expanded{
+    background: #f9f9f9;
+    overflow: hidden;
+}
+.available-slot-expanded table{
+    background: none !important;
+}
+.available-slot-expanded table th{
+    background: none;
+    color: #000;
+    font-weight: bold;
+}
+.available-slot-expanded table td{
+    color: #000;
+}
+.available-slot-expanded table tr, .available-slot-expanded table th, .available-slot-expanded table td{
+    border: 0px !important;
+}
+.btn-mb-ex {
+    width: 240px;
+    display: block;
+    margin-top: 20px;
+    position: relative;
+}
+.icon-fa-make-unavailable, .icon-fa-angle-down, .icon-fa-star{
+    position: relative;
+}
+.icon-fa-angle-down:after{
+     font-family: FontAwesome;
+     content: "\f107";
+     display: inline-block;
+     padding-right: 3px;
+     vertical-align: middle;
+     right: 10px;
+     position: absolute;
+ }
+.icon-fa-star:before{
+    font-family: FontAwesome;
+    content: "\f006";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    left: 10px;
+    position: absolute;
+}
+.icon-fa-make-unavailable:before{
+    font-family: FontAwesome;
+    content: "\f05e";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    left: 10px;
+    position: absolute;
+}
+.icon-fa-print:before{
+    font-family: FontAwesome;
+    content: "\f02f";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    left: 10px;
+    position: absolute;
+}
+.icon-fa-accept:before{
+    font-family: FontAwesome;
+    content: "\f09d";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    left: 10px;
+    position: absolute;
+}
+.icon-fa-edit:before{
+    font-family: FontAwesome;
+    content: "\f044";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    left: 10px;
+    position: absolute;
+}
+.icon-fa-cancel:before{
+    font-family: FontAwesome;
+    content: "\f00d";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    left: 10px;
+    position: absolute;
+}
+.icon-fa-check:before{
+    font-family: FontAwesome;
+    content: "\f00c";
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle;
+    left: 10px;
+    position: absolute;
+}
+#form_make_unavailable{
+    width: 240px;
+    background: #fff;
+    margin-left: 20px;
+    box-shadow: 3px 0px 5px rgba(0,0,0,0.2);
+}
+.form-center label{
+    display: block;
+    color: #000;
+}
+.form-center input[type=submit]{
+    display: block;
+    margin: 5px auto;
+}
+#form_make_unavailable .show-expand{
+    padding: 10px;
+    display: none;
+}
+.court-booking-expanded table tr td:nth-of-type(n){
+    padding-right: 5px;
+}
+.court-booking-expanded table tr td:nth-of-type(2n){
+    padding-left: 5px;
+}
+.court-booking-expanded .title-part{
+    font-weight: bold;
+}
+
+/*tabs*/
+.mb-model .modal-body{
+    padding: 0px 15px;
+}
+.mb-model h4.modal-title{
+    text-align: center;
+    font-size: 22px;
+}
+.mb-tabs > li{
+    width: 25%;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    background: #0f484d;
+    color: #fff;
+}
+.mb-tabs > li.active{
+    border-bottom: 4px solid #63ac1d;
+    background: #082e31;
+}
+.mb-title-h4-modal{
+    padding: 10px 0px;
+}
+#mb-booking-detail-content .slc-type{
+    padding: 10px 0px;
+    border-bottom: 2px solid #ddd;
+    overflow: hidden;
+}
+#mb-booking-detail-content .slc-member, .slc-day-hour{
+    padding: 10px 0px;
+    border-bottom: 2px solid #ddd;
+    overflow: hidden;
+    text-align: center;
+}
