@@ -24,11 +24,16 @@ class Court extends Model
     protected $table = 'courts';
 
     /**
-    * The date fields for the model.clear
-    *
-    * @var array
-    */
-    protected $dates    = ['created_at', 'updated_at'];
+     * The date fields for the model.clear
+     *
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at'];
 
     protected $fillable = [];
+
+    public function club()
+    {
+        return $this->belongsTo('App\Models\Clubs');
+    }
 }

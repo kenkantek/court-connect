@@ -8,31 +8,21 @@ class UserRepository implements UserInterface
 {
     public function getDatatableData()
     {
-        $users = User::select(['users.updated_at', 'users.id', 'username', 'first_name', 'last_name', 'email', 'phone'])->orderBy('users.id', 'DESC');
+        $users = User::select(['id', 'fullname', 'email'])->orderBy('users.id', 'DESC');
 
         $datatables = \Datatables::of($users)
-            ->edit_column('username', function ($user) {
-                return '<a class="ellipsis" href="#">' . $user->username . '</a>';
+            ->editColumn('email', function ($user) {
+                return '<span class="hidden-id" data-id="' . $user->id . '">' . $user->email . '</span>';
             })
-            ->edit_column('phone', function ($user) {
-                $temp = null;
-                foreach ($user->roles()->get() as $role) {
-                    $temp .= $role->label . ', ';
+            ->addColumn('Is Admin?', function ($user) {
+                $temp = 'No';
+                if ($user->hasRole('admin')) {
+                    $temp = 'Yes';
                 }
-                $temp = trim($temp, ', ');
                 return $temp;
             })
-            ->addColumn('operations', function ($user) {
-                return '<a href="' . route('users.edit', $user->id) . '" class="btn btn-icon btn-primary tip" data-original-title="Edit"><i class="fa fa-edit"></i></a>&nbsp;'
-                . '<a class="btn btn-icon btn-danger deleteDialog tip" data-toggle="modal" data-section="' . route('users.delete', $user->id) . '" role="button" data-original-title="Delete Entry" ><i class="fa fa-trash-o"></i></a>';
-            })
-            ->edit_column('first_name', function ($user) {
-                return $user->getFullName();
-            })
-            ->remove_column('last_name')
-            ->edit_column('updated_at', function ($user) {
-                return '<input type="checkbox" class="checkboxes" name="id[]" value="' . $user->id . '"/>';
-            });
+            ->removeColumn('id');
+
         return $datatables->make();
     }
 

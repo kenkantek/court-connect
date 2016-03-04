@@ -7,10 +7,8 @@ $(document).ready(function() {
     var serverSide    = true;
     var requestType   = 'GET';
     
-    var section       = $('div[data-section]').data('section');
-    var baseURL       = $('div[data-base-url]').data('base-url');
-    var route_create  = $('div[data-route-create]').data('route-create');
-    var deleteManyURL = $('div[data-route-delete-many]').data('route-delete-many');
+       var links       = $('div[data-links]').data('links');
+
 
     window.oTable = table.DataTable({
 
@@ -54,7 +52,7 @@ $(document).ready(function() {
         'bDeferRender': true,
         'bProcessing': true,
         ajax: {
-            url: laroute.route(section),
+            url: laroute.route(links.datatables),
             type: requestType,
             data: function (d) {
                 d.groupFilter = window.groupFilter;
@@ -85,16 +83,34 @@ $(document).ready(function() {
         $(set).each(function () {
             if (checked) {
                 $(this).prop('checked', true);
+                $(this).closest('tr').addClass('selected');
             } else {
                 $(this).prop('checked', false);
+                $(this).closest('tr').removeClass('selected');
             }
         });
         $.uniform.update(set);
     });
+    table.on( 'click', 'tr', function () {
 
+        var checkbox = table.find('.checkboxes');
+        checkbox.prop('checked', false);
+        $.uniform.update(checkbox);
+
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.find('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+            $(this).find('.checkboxes').prop('checked', true);
+            $.uniform.update($(this).find('.checkboxes'));
+        }
+         
+    } );
     /* modify datatable control inputs */
     tableWrapper.find('.dataTables_length select').select2({
-    	minimumResultsForSearch: Infinity,
+        minimumResultsForSearch: Infinity,
         width: 85
     }); // initialize select2 dropdown
 
@@ -117,91 +133,6 @@ $(document).ready(function() {
         }
     });
 
-    $('div.dataTables_filter').append(
-        '<a class="btn btn-primary pull-right" href="' + laroute.route(route_create) + '"><i class="fa fa-plus-circle"></i> Add New</a>' +
-        '<div class="actions">' +
-            '<div class="btn-group">' +
-                '<a class="btn btn-primary" href="javascript:;" data-toggle="dropdown">' +
-                '<span>Action <span class="caret"></span></span>' +
-                '</a>' +
-                '<ul class="dropdown-menu">' +
-                    '<li>' +
-                        '<a href="javascript:;" class="task-item" data-action="delete">' +
-                        '<i class="fa fa-trash-o"></i> Delete </a>' +
-                    '</li>' +
-                '</ul>' +
-            '</div>' +
-        '</div>'
-    );
-
-
-    $(document).on('click', '.deleteDialog', function (event) {
-        event.preventDefault();
-
-        $('#delete-crud-entry').data('section', $(this).data('section'));
-        $('#delete-crud-modal').modal('show');
-    });
-
-    $('#delete-crud-entry').on('click', function (event) {
-        event.preventDefault();
-        $('#delete-crud-modal').modal('hide');
-
-        var deleteURL = $(this).data('section');
-
-        $.ajax({
-            url: deleteURL,
-            type: 'GET',
-            success: function(data, textStatus) {
-                if (data.error) {
-                    showNotice('error', data.message, 'Error!');
-                } else {                    // no error proceed
-                    window.oTable.row($('a[data-section="'+ deleteURL +'"]').closest('tr')).remove().draw();
-                    showNotice('success', data.message, 'Success!');
-                }
-            },
-            error: function(data) {
-               showNotice('error', data.responseJSON.message, 'Error!');
-            }
-        });
-    });
-
-    $(document).on('click', '.task-item', function(event) {
-        event.preventDefault();
-
-        var action = $(this).data('action');
-        if (action == 'delete') {
-            $('#delete-many-modal').modal('show');
-        }
-        
-    });
-
-    $('#delete-many-entry').on('click', function (event) {
-        event.preventDefault();
-        $('#delete-many-modal').modal('hide');
-
-        var ids = [];
-        $('.checkboxes:checked').each(function(i){
-            ids[i] = $(this).val();
-        });
-
-        $.ajax({
-            url: laroute.route(deleteManyURL),
-            type: 'POST',
-            data: {'ids': ids},
-            success: function(data, textStatus) {
-                if (data.error) {
-                    showNotice('error', data.message, 'Error!');
-                } else {
-                    $.each(ids, function (index, item) {
-                        window.oTable.row($('.checkboxes[value="'+ item +'"]').closest('tr')).remove().draw();
-                    });                  
-                    showNotice('success', data.message, 'Success!');
-                }
-            },
-            error: function(data) {
-               showNotice('error', data.responseJSON.message, 'Error!');
-            }
-        });
-    });
-
+    
+   
 });

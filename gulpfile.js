@@ -60,6 +60,10 @@ gulp.task('admin', function() {
             path.src + 'js/app_modules/avatar.js',
             path.dist + 'js/app_modules/avatar.js'
         );
+        mix.scripts(
+            path.src + 'js/app_modules/user.js',
+            path.dist + 'js/app_modules/user.js'
+        );
 
     });
 });

@@ -5,13 +5,13 @@
         <form role="form" method="POST" action="{{ route('auth.login') }}">
             {!! csrf_field() !!}
 
-            <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }} has-feedback">
-                <input type="text" class="form-control" name="username" value="{{ old('username') }}" placeholder="Username">
+            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback">
+                <input type="text" class="form-control" name="email" value="{{ old('email') }}" placeholder="Please enter your email!">
                 <span class="fa fa-user form-control-feedback"></span>
 
-                @if ($errors->has('username'))
+                @if ($errors->has('email'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('username') }}</strong>
+                        <strong>{{ $errors->first('email') }}</strong>
                     </span>
                 @endif
             </div>
@@ -42,4 +42,5 @@
         </form>
     </div>
 </div>
+@include('admin.elements.notice')
 @endsection

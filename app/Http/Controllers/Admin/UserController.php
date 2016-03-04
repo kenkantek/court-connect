@@ -6,7 +6,6 @@ use App\Http\Requests\UserRequest;
 use App\Models\Auth\User;
 use App\Repositories\Interfaces\Auth\UserInterface;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -30,7 +29,7 @@ class UserController extends Controller
     {
         \Assets::addJavascript(['datatables', 'select2', 'uniform']);
         \Assets::addStylesheets(['datatables', 'select2', 'uniform']);
-        \Assets::addAppModule(['datatables']);
+        \Assets::addAppModule(['datatables', 'user']);
 
         return view('admin.users.list');
     }
@@ -41,75 +40,44 @@ class UserController extends Controller
             return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
         }
         $response = $this->userRepository->delete($id);
-        return response()->json($response, $response['response_code']);
-    }
-
-    public function postDeleteMany(Request $request)
-    {
-        $ids = $request->input('ids');
-        if (empty($ids)) {
-            return response()->json(['error' => true, 'message' => 'Please select at least one record to delete!']);
-        }
-
-        foreach ($ids as $id) {
-            if (\Auth::user()->id == $id) {
-                return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
-            }
-            $response = $this->userRepository->delete($id);
-        }
-        return response()->json($response, $response['response_code']);
-    }
-
-    public function getCreate()
-    {
-        \Assets::addJavascript(['bootstrap-fileinput']);
-        \Assets::addStylesheets(['bootstrap-fileinput']);
-        \Assets::addAppModule(['avatar']);
-        return view('admin.users.create');
+        return response()->json([
+            'error' => false, 'message' => 'Deleted user successfully!',
+        ]);
     }
     public function postCreate(UserRequest $request)
     {
         $user = new User;
         $user->fill($request->all());
         $user = $this->userRepository->createOrUpdate($user);
-        $destinationPath = 'uploads/images/users/';
-        if ($request->hasFile('avatar')) {
-            $img_avatar = $request->file('avatar');
-            $avatarName_db = $destinationPath . $request->input('username') . '.' . $img_avatar->getClientOriginalExtension();
-            Image::make($img_avatar)->resize(200, 200)->save($avatarName_db);
-            $user->avatar = $avatarName_db;
-            $user->save();
+        if ($request->input('is_admin') == '1') {
+            $user->assignRole('admin', 'clubs', 1);
+        } else {
+            $user->assignRole('user', 'clubs', 1);
         }
-        $user->assignRole($request->input('role'), 'clubs', 1);
-        return redirect()->route('users.list')->with('success_msg', 'User created successfully!');
+        return response()->json([
+            'error' => false, 'message' => 'User created successfully!',
+        ]);
     }
-    public function getEdit($id)
-    {
-        \Assets::addJavascript(['bootstrap-fileinput']);
-        \Assets::addStylesheets(['bootstrap-fileinput']);
-        \Assets::addAppModule(['avatar']);
-        $user = $this->userRepository->findById($id);
-        return view('admin.users.edit', compact('user'));
-    }
-    public function postEdit(Request $request, $id)
-    {
-        $user = $this->userRepository->findById($id);
-        $user->fill($request->all());
-        $user->id = $id;
-        $user = $this->userRepository->createOrUpdate($user);
-        $destinationPath = 'uploads/images/users/';
-        if ($request->hasFile('avatar')) {
-            $img_avatar = $request->file('avatar');
-            $avatarName_db = $destinationPath . $request->input('username') . '.' . $img_avatar->getClientOriginalExtension();
-            Image::make($img_avatar)->resize(200, 200)->save($avatarName_db);
-            $user->avatar = $avatarName_db;
-            $user->save();
-        }
-        if (!$user->hasRole($request->input('role'))) {
-            $user->assignRole($request->input('role'), 'clubs', 1);
-        }
 
-        return redirect()->route('users.list')->with('success_msg', 'User updated successfully!');
+    public function postEdit(Request $request)
+    {
+        $user = $this->userRepository->findById($request->input('id'));
+        $user->fill($request->all());
+        if ($request->input('password') != null && strlen($request->input('password')) > 8) {
+            $user->password = bcrypt($request->input('password'));
+        }
+        $user = $this->userRepository->createOrUpdate($user);
+        if ($request->input('is_admin') == '1' && !$user->hasRole('admin')) {
+            $user->removeRole('user');
+            $user->assignRole('admin', 'clubs', 1);
+        }
+        if ($request->input('is_admin') == null && !$user->hasRole('user')) {
+            $user->removeRole('admin');
+            $user->assignRole('user', 'clubs', 1);
+        }
+        return response()->json([
+            'error' => false, 'message' => 'User updated successfully!',
+        ]);
     }
 
 }

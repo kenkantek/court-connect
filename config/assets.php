@@ -36,6 +36,7 @@ return [
             'bootstrap',
             'adminlte',
             'uniform',
+            'toastr',
             'auth',
         ],
         'stylesheets' => [
@@ -43,6 +44,7 @@ return [
             'font-awesome',
             'uniform',
             'adminlte',
+            'toastr',
             'auth',
         ],
     ],

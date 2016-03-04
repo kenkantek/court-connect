@@ -1,1 +1,1 @@
-$(document).ready(function(){$(".styled").uniform()});
+function showNotice(t,o,e){toastr.options={closeButton:!0,positionClass:"toast-bottom-right",onclick:null,showDuration:1e3,hideDuration:1e3,timeOut:1e4,extendedTimeOut:1e3,showEasing:"swing",hideEasing:"linear",showMethod:"fadeIn",hideMethod:"fadeOut"};toastr[t](o,e)}$(document).ready(function(){$(".styled").uniform()});

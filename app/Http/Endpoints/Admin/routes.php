@@ -8,10 +8,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getList' => 'users.list',
         'getDatatables' => 'users.datatables',
         'getDelete' => 'users.delete',
-        'postDeleteMany' => 'users.delete.many',
-        'getCreate' => 'users.create',
         'postCreate' => 'users.create.post',
-        'getEdit' => 'users.edit',
         'postEdit' => 'users.edit.post',
     ]);
 
