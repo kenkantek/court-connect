@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7d05a77-8567-49da-acd3-e97095586265" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/admin/css/custom.css" afterPath="$PROJECT_DIR$/public/resources/admin/css/custom.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="courtconnect.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,8 +47,8 @@
       <file leaf-file-name="manager_bookings.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7763158">
-              <caret line="872" column="33" selection-start-line="872" selection-start-column="33" selection-end-line="872" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.36090225">
+              <caret line="865" column="33" selection-start-line="865" selection-start-column="33" selection-end-line="865" selection-end-column="33" />
               <folding>
                 <element signature="e#28160#31912#0#HTML" expanded="false" />
                 <element signature="e#28575#28594#0#HTML" expanded="true" />
@@ -946,8 +944,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7763158">
-          <caret line="872" column="33" selection-start-line="872" selection-start-column="33" selection-end-line="872" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.36090225">
+          <caret line="865" column="33" selection-start-line="865" selection-start-column="33" selection-end-line="865" selection-end-column="33" />
           <folding>
             <element signature="e#28160#31912#0#HTML" expanded="false" />
             <element signature="e#28575#28594#0#HTML" expanded="true" />

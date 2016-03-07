@@ -861,17 +861,19 @@
 			$('#calendar_bookings .days-in-month-wrap .days').css({'width':w_grid * $('#calendar_bookings .days .day-item').length,'margin-left':0});
 
 			$("body").on('click','#next-day-in-month',function(){
-				var w_left = parseInt($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));
+				var w_left = parseFloat($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));
 				w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
 				w_left -= w_grid;
+				if(Math.abs(w_left) > parseInt($('#calendar_bookings .days-in-month-wrap .days').css('width')) - w_grid *6 )
+					return;
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
 			});
 
 			$("body").on('click','#prev-day-in-month',function(){
-				var w_left = parseInt($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));
+				var w_left = parseFloat($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));
 				w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
 				w_left += w_grid;
-				if(w_left > 3 )
+				if(w_left > 1 )
 					return;
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
 			});
