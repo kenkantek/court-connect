@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7d05a77-8567-49da-acd3-e97095586265" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/clubs/manager_bookings.blade.php" />
-    </list>
+    <list default="true" id="e7d05a77-8567-49da-acd3-e97095586265" name="Default" comment="" />
     <ignored path="courtconnect.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
