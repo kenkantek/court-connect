@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Contexts;
 
+use App\Models\Surface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -34,6 +35,10 @@ class Court extends Model
 
     public function club()
     {
-        return $this->belongsTo('App\Models\Clubs');
+        return $this->belongsTo('App\Models\Contexts\Clubs');
+    }
+    public function surface()
+    {
+        return $this->belongsTo(Surface::class);
     }
 }

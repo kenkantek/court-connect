@@ -1,6 +1,6 @@
 var elixir = require('laravel-elixir');
 var gulp   = require('gulp');
-
+require('laravel-elixir-vueify');
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -16,75 +16,33 @@ elixir.config.sourcemaps = false;
 elixir.config.production = true;
 
 gulp.task('auth', function() {
-
-    var path = {'src': './resources/assets/auth/', 'dist': './public/resources/auth/'};
-
+    elixir.config.assetsPath = 'resources/assets/auth/';
+    elixir.config.publicPath = 'public/resources/auth/';
+    var dist = './public/resources/auth/';
     elixir(function(mix) {
-
-        mix.sass(
-            path.src + 'sass/auth.scss',
-            path.dist + 'css/auth.css'
-        );
-
-        mix.scripts(
-            path.src + 'js/auth.js',
-            path.dist + 'js/auth.js'
-        );
-
+        mix.sass('auth.scss');
+        mix.scripts('auth.js');
     });
 });
-
-
 gulp.task('admin', function() {
-
-    var path = {'src': './resources/assets/admin/', 'dist': './public/resources/admin/'};
-
+    elixir.config.assetsPath = 'resources/assets/admin/';
+    elixir.config.publicPath = 'public/resources/admin/';
     elixir(function(mix) {
-
-        mix.sass(
-            path.src + 'sass/admin.scss',
-            path.dist + 'css/admin.css'
-        );
-
-        mix.scripts(
-            path.src + 'js/admin.js',
-            path.dist + 'js/admin.js'
-        );
-
-        mix.scripts(
-            path.src + 'js/app_modules/datatables.js',
-            path.dist + 'js/app_modules/datatables.js'
-        );
-
-        mix.scripts(
-            path.src + 'js/app_modules/avatar.js',
-            path.dist + 'js/app_modules/avatar.js'
-        );
-        mix.scripts(
-            path.src + 'js/app_modules/user.js',
-            path.dist + 'js/app_modules/user.js'
-        );
-
+        // mix.sass('admin.scss');
+        // mix.scripts('admin.js');
+         mix.browserify('app_modules/app.js','public/resources/admin/js/app_modules/app.js');
+        // mix.scripts('app_modules/datatables.js');
+        // mix.scripts('app_modules/avatar.js');
+        // mix.scripts('app_modules/user.js');
     });
 });
 
 gulp.task('home', function() {
-
-    var path = {'src': './resources/assets/home/', 'dist': './public/resources/home/'};
-
+    elixir.config.assetsPath = 'resources/assets/home/';
+    elixir.config.publicPath = 'public/resources/home/';
     elixir(function(mix) {
-
-        mix.styles(
-            path.src + 'css/home.css',
-            path.dist + 'css/home.css'
-        );
-
-        mix.scripts(
-            path.src + 'js/home.js',
-            path.dist + 'js/home.js'
-        );
-
+        mix.styles('home.css');
+        mix.scripts('home.js');
     });
 });
-
-gulp.task('default', ['auth', 'admin', 'home']);
+gulp.task('default', [ 'admin']);

@@ -19,11 +19,15 @@ class Club extends Model
     protected $table = 'clubs';
 
     /**
-    * The date fields for the model.clear
-    *
-    * @var array
-    */
-    protected $dates    = ['created_at', 'updated_at'];
+     * The date fields for the model.clear
+     *
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at'];
 
-    protected $fillable = [];
+    protected $fillable = ['name', 'phone'];
+    public function courts()
+    {
+        return $this->hasMany('App\Models\Court');
+    }
 }

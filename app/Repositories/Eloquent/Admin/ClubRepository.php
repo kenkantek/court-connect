@@ -1,10 +1,10 @@
 <?php
-namespace App\Repositories\Eloquent\Auth;
+namespace App\Repositories\Eloquent\Admin;
 
 use App\Models\Contexts\Club;
-use App\Repositories\Interfaces\Auth\UserInterface;
+use App\Repositories\Interfaces\Admin\ClubInterface;
 
-class ClubRepository implements UserInterface
+class ClubRepository implements ClubInterface
 {
     public function getDatatableData()
     {
@@ -12,6 +12,7 @@ class ClubRepository implements UserInterface
 
     public function findById($id)
     {
+        return Club::where('id', $id)->first();
     }
 
     public function delete($id)

@@ -390,9 +390,77 @@ form.form-court{
     border-bottom: 2px solid #ddd;
     overflow: hidden;
 }
-#mb-booking-detail-content .slc-member, .slc-day-hour{
+.mb-group-sl{
     padding: 10px 0px;
     border-bottom: 2px solid #ddd;
     overflow: hidden;
     text-align: center;
+}
+.mb-title-h4-modal-boder{
+    padding: 10px 0px;
+    border-bottom: 2px solid #ddd;
+    overflow: hidden;
+}
+.tbl-info-booking-details tr{
+    vertical-align: text-top;
+}
+.bold{
+    font-weight: bold;
+}
+.payment-item{
+    text-align: center;
+    padding: 10px 0px;
+    width: 17%;
+}
+.payment-item .img-wrap{
+    height: 35px;
+}
+.payment-item img{
+    margin: auto;
+    display: block;
+}
+.days-in-month-wrap{
+    background: #0f484d;
+    color: #fff;
+    height: 45px;
+    position: relative;
+    overflow: hidden;
+}
+.days-in-month-wrap .days{
+    transition: all 0.3s linear;
+}
+.days-in-month-wrap .day-item{
+    height: 45px;
+    padding: 5px 0px;
+    text-align: center;
+    width: 200px;
+    float: left;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.days-in-month-wrap .day-item.active, .days-in-month-wrap .day-item:hover{
+    background: #082e31;
+    border-bottom: 4px solid #63ac1d;
+}
+.days-in-month-control{
+    position: relative;
+}
+.days-in-month-control > div {
+    height: 45px;
+    width: 20px;
+    background: #082e31;
+    line-height: 45px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 20px;
+}
+#next-day-in-month{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+#prev-day-in-month{
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }

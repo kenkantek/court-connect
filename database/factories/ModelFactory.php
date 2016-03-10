@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Auth\User;
+use App\Models\Contexts\Club;
+use App\Models\Contexts\Court;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +25,24 @@ $factory->define(User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(40),
         'phone' => $faker->phoneNumber,
         'gender' => rand(1, 2),
+    ];
+});
+$factory->define(Club::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+        'address' => $faker->address,
+        'city' => $faker->city,
+        'state' => $faker->state,
+        'phone' => $faker->phoneNumber,
+    ];
+});
+
+$factory->define(Court::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+        'status' => 1,
+        'indoor_outdoor' => rand(1, 2),
+        'surface_id' => rand(1, 2),
+        'club_id' => rand(1, 10),
     ];
 });
