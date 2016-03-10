@@ -15,5 +15,12 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     Route::controller('clubs', ClubController::class, [
         'getSetting' => 'clubs.setting',
         'getManagerBookings' => 'clubs.manager-bookings',
+        'getCourts' => 'clubs.courts.list',
+    ]);
+    Route::controller('courts', CourtController::class, [
+
+    ]);
+    Route::controller('surface', SurfaceController::class, [
+        'getList' => 'surface.list',
     ]);
 });

@@ -177,7 +177,7 @@ return [
                 'src' => [
                     'local' => [
                         '/resources/vendor/daterangepicker/daterangepicker.js',
-                        '/resources/vendor/daterangepicker/moment.min.js'
+                        '/resources/vendor/daterangepicker/moment.min.js',
                     ],
                     'cdn' => '',
                 ],
@@ -463,7 +463,7 @@ return [
                 'use_cdn' => false,
                 'location' => 'top',
                 'src' => [
-                    'local' => ['/resources/vendor/ionslider/ion.rangeSlider.css','/resources/vendor/ionslider/ion.rangeSlider.skinNice.css'],
+                    'local' => ['/resources/vendor/ionslider/ion.rangeSlider.css', '/resources/vendor/ionslider/ion.rangeSlider.skinNice.css'],
                     'cdn' => '',
                 ],
             ],

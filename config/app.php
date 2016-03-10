@@ -166,6 +166,7 @@ return [
 
         /*======================= CUSTOM SERVICES =========================*/
         App\Providers\Auth\UserProvider::class,
+        App\Providers\Admin\AdminProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
         Intervention\Image\ImageServiceProvider::class,

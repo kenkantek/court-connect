@@ -1,10 +1,10 @@
 <?php
-namespace App\Repositories\Eloquent\Auth;
+namespace App\Repositories\Eloquent\Admin;
 
-use App\Models\Court;
-use App\Repositories\Interfaces\Auth\UserInterface;
+use App\Models\Contexts\Court;
+use App\Repositories\Interfaces\Admin\CourtInterface;
 
-class CourtRepository implements UserInterface
+class CourtRepository implements CourtInterface
 {
     public function getDatatableData()
     {

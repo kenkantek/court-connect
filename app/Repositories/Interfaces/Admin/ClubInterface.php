@@ -1,7 +1,7 @@
 <?php
-namespace App\Repositories\Interfaces\Auth;
+namespace App\Repositories\Interfaces\Admin;
 
-use App\Models\Club;
+use App\Models\Contexts\Club;
 
 interface ClubInterface
 {
