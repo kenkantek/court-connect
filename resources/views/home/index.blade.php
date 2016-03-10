@@ -5,7 +5,7 @@
     <div class="row line-content">
         <div class="col-md-4">
             <div class="thumbnail">
-                <img src="/resources/home/images/search_07.png" alt="">
+                <img src="resources/home/images/search_07.png" alt="">
             </div>
 
             <div class="caption title">Search</div>
@@ -13,7 +13,7 @@
         </div>
         <div class="col-md-4">
             <div class="thumbnail">
-                <img src="/resources/home/images/book_09.png" alt="">
+                <img src="resources/home/images/book_09.png" alt="">
             </div>
 
             <div class="caption title">Book</div>
@@ -23,7 +23,7 @@
         </div>
         <div class="col-md-4">
             <div class="thumbnail">
-                <img src="/resources/home/images/play_13.png" alt="">
+                <img src="resources/home/images/play_13.png" alt="">
             </div>
 
             <div class="caption title">Play</div>
@@ -34,7 +34,7 @@
     </div>
     <div class="row line-ball">
         <div class="ball">
-            <img src="/resources/home/images/ball_05.png">
+            <img src="resources/home/images/ball_05.png">
         </div>
     </div>
     <div class="row">
@@ -47,7 +47,7 @@
                 <div class="item active">
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro1_08.jpg" alt="Chania">
+                            <img src="resources/home/images/pro1_08.jpg" alt="Chania">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club
@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro2_14.jpg" alt="Chania">
+                            <img src="resources/home/images/pro2_14.jpg" alt="Chania">
                         </div>
                         <div class="caption title-carousel">
                             Clifton Racquet Club
@@ -85,7 +85,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro3_20.jpg" alt="Flower">
+                            <img src="resources/home/images/pro3_20.jpg" alt="Flower">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club
@@ -107,7 +107,7 @@
                 <div class="item">
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro2_14.jpg" alt="Chania">
+                            <img src="resources/home/images/pro2_14.jpg" alt="Chania">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club
@@ -126,7 +126,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro1_08.jpg" alt="Chania">
+                            <img src="resources/home/images/pro1_08.jpg" alt="Chania">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club
@@ -145,7 +145,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro3_20.jpg" alt="Flower">
+                            <img src="resources/home/images/pro3_20.jpg" alt="Flower">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club
@@ -167,7 +167,7 @@
                 <div class="item">
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro1_08.jpg" alt="Chania">
+                            <img src="resources/home/images/pro1_08.jpg" alt="Chania">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club
@@ -186,7 +186,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro3_20.jpg" alt="Flower">
+                            <img src="resources/home/images/pro3_20.jpg" alt="Flower">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club
@@ -205,7 +205,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="img-carousel">
-                            <img src="/resources/home/images/pro2_14.jpg" alt="Chania">
+                            <img src="resources/home/images/pro2_14.jpg" alt="Chania">
                         </div>
                         <div class="caption title-carousel">
                             Tiger Racquet Club

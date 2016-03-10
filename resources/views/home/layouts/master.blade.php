@@ -46,7 +46,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="#" class="logo"><img src="/resources/home/images/logo_02.png" class="img-responsive logo" alt="logo"></a>
+                    <a href="#" class="logo"><img src="resources/home/images/logo_02.png" class="img-responsive logo" alt="logo"></a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -138,7 +138,7 @@
                                 <input type="text" class="form-control" name="" id="timepicker" placeholder="Time">
                             </div>
                             <div class="form-group col-md-2 form-icon">
-                                <i style="background-image: url('/resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
+                                <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
                                 <!--<select name="court" id="inputID" class="form-control">-->
                                 <!--<option value=""> # Courts </option>-->
                                 <!--</select>-->
@@ -167,10 +167,10 @@
                     <span style="color: #63ac1e">Court Connect</span> App
                 </div>
                 <div class="col-md-4">
-                    <a href=""><img src="/resources/home/images/app-store_05.png"></a>
+                    <a href=""><img src="resources/home/images/app-store_05.png"></a>
                 </div>
                 <div class="col-md-4">
-                    <a href=""><img src="/resources/home/images/play-store_09.png"></a>
+                    <a href=""><img src="resources/home/images/play-store_09.png"></a>
                 </div>
             </div>
         </div>
@@ -250,7 +250,7 @@
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <img style="margin: 0 auto" src="/resources/home/images/logo-color_05.png" class="img-responsive" alt="Image">
+                    <img style="margin: 0 auto" src="resources/home/images/logo-color_05.png" class="img-responsive" alt="Image">
 
                     <p style="margin-bottom:20px;margin-top: 34px;color: #082e31;font-family: RobotoBlackItalic, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px">
                         Club Owners - Request an Account</p>
