@@ -42,7 +42,7 @@ class SuperAdminController extends Controller
             $name = str_slug($request->input('name'), "_");
             $image_club_name = $destinationPath . $name . '_' . time() . '.jpg';
 
-            Image::make($request->input('image'))->save($image_club_name);
+            Image::make($request->input('image'))->save(public_path($image_club_name));
             $club->image = $image_club_name;
         } else {
             $club->image = '/uploads/images/clubs/no-image.jpg';
