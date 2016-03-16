@@ -34,6 +34,7 @@ $factory->define(Club::class, function (Faker\Generator $faker) {
         'city' => $faker->city,
         'state' => $faker->state,
         'phone' => $faker->phoneNumber,
+        'image' => '/uploads/images/clubs/no-image.jpg',
     ];
 });
 

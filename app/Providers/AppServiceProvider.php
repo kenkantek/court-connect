@@ -13,7 +13,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        //return auth()->user()->roles()->get();
+        view()->composer('admin.layouts.master', function ($view) {
+            if (auth()->check()) {
+                $view->with('userLogin', auth()->user());
+            }
+
+        });
     }
 
     /**

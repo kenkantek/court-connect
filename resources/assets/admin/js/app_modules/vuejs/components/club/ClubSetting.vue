@@ -4,7 +4,7 @@
 				<div class="court_list courtbox">
 					<h3 class="title-box pull-left">Courts</h3>
 					<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Add New Court</a>
-					<list-court :club-id="clubId" :courts_choice.sync="courts_choice"></list-court>
+					<list-court :club-setting-id="clubSettingId" :courts_choice.sync="courts_choice"></list-court>
 				</div>			
 				<form-edit-court 
 				v-if="courts_choice.length < 2" 
@@ -409,7 +409,7 @@
 		 let _ = require('lodash'),
      deferred = require('deferred');
 	export default {
-		props:['clubId'],
+		props:['clubSettingId'],
 		data(){
 			return {
 				courts_choice:[],

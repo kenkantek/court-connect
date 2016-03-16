@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Models\Contexts\Club;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -52,7 +53,23 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    public function roles()
+    {
+        return $this->belongsToMany(
+            config('laravel-permission.models.role'),
+            config('laravel-permission.table_names.user_has_roles')
+        )->withPivot('context', 'context_id');
+    }
+    public function clubs()
+    {
+        if ($this->is_super) {
+            return Club::orderBy('id', 'ASC');
+        } else {
+            $roles = $this->roles()->where('context', 'clubs')->lists('context_id');
+            return Club::whereIn('id', $roles)->orderBy('id', 'ASC');
+        }
 
+    }
     /**
      * Always capitalize the first name when we retrieve it
      */
@@ -79,5 +96,9 @@ class User extends Authenticatable
             'context' => $context,
             'context_id' => $context_id,
         ));
+    }
+    public function isSuper()
+    {
+        return $this->is_super;
     }
 }

@@ -24,14 +24,17 @@
 	 var _ = require('lodash'),
      deferred = require('deferred');
 	export default {
-		props:['clubId','courts_choice'],
+		props:['clubSettingId','courts_choice'],
 		data(){
 			return {
 				courts:null,
 			}
 		},
+		watch: {
+	    clubSettingId: 'reloadAsyncData',	    
+	  },
 		asyncData(resolve, reject) {
-         this.fetchCourts(this.courts).done((courts) => {
+         this.fetchCourts().done((courts) => {
              resolve({courts});
          }, (error) => {
              console.log(error);
@@ -39,9 +42,9 @@
 
     },
 		methods: {
-				 fetchCourts(courts) {
+				 fetchCourts() {
                 let def = deferred(),
-                url = laroute.route('clubs.courts.list', {one:this.clubId});
+                url = laroute.route('clubs.courts.list', {one:this.clubSettingId});
                 this.$http.get(url).then(res => {
                 	def.resolve(res.data);
                 }, res => {

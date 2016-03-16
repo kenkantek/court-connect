@@ -28,55 +28,21 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
+    <?php if (!isset($title)) {
+    $title = "Admin Manager";
+}
+?>
     <body class="skin-blue sidebar-mini  pace-done sidebar-collapse">
         <div class="wrapper">
             <header class="main-header">
-                <!-- Logo -->
-                <a href="{{ route('admin.index') }}" class="logo">
-                    <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b><img src="{{ url('/uploads/images/logo.png') }}" width="40"></b></span>
-                    <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b><img src="{{ url('/uploads/images/logo.png') }}" width="70"></b></span>
-                </a>
-                <!-- Header Navbar: style can be found in header.less -->
-                <nav class="navbar navbar-static-top" role="navigation">
-                    <div class="navbar-header-menu">
-                        <div class="header-block col-md-3">
-                            <div class="info-box-img">
-                            <img src="{{ asset('uploads/images/tiger-raquest.jpeg') }}" class="club-thump-image" alt="Club Image"/>
-                            </div>
+                <header-main
+                :club-setting-id.sync="clubSettingId"
+                :clubs.sync="clubs"
+                :delete_club.sync = "delete_club"
+                :title="'{!! $title !!}'"
+                :user="user"
+                ></header-main>
 
-                            <div class="info-box-content text-center">
-                              <span class="info-box-text">Managing</span>
-                              <select name="club" id="club">
-                                  <option>Tiger Raquest Club</option>
-                              </select>
-                            </div>
-                            <!-- /.info-box-content -->
-                          </div>
-                          <div class="col-md-6 text-center">
-                              <h1>
-                                    @yield('title_heading')
-                              </h1>
-                          </div>
-                          <div class="col-md-3">
-                              <ul class="nav navbar-nav pull-right">
-                                <li class="pull-right">
-                                    <a href="{{ route('auth.logout') }}" style="font-size: 35px"><i class="fa fa-sign-out"></i></a>
-                                </li>
-                                <li class="user user-menu pull-right">
-                                    <a href="#">
-                                        <label class="hidden-xs">Login</label>
-                                        <img src="{{ url(Auth::user()->avatar) }}" class="user-image" alt="User Image"/>
-                                        <span class="hidden-xs">{{ Auth::user()->getFullName() }}</span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                          </div>
-
-                    </div>
-                </nav>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="main-sidebar">
@@ -99,12 +65,22 @@
                             <i class="fa fa-cogs"></i>
                         </a>
                     </li>
+                    @if (Auth::user()->is_super)
+                    <li>
+                        <a href="{{ route('super.index') }}">
+                            <i class="fa fa-user"></i>
+                        </a>
+                    </li>
+                    @endif
+
+
                 </ul>
             </section>
             <!-- /.sidebar -->
         </aside>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper" style="min-height: auto">
+
             <!-- Main content -->
             <section class="content">
                 @yield('content')
@@ -134,7 +110,38 @@
 
         @include('admin.elements.notice')
 
-        @foreach ($bodyScripts as $script)
+
+        <script type="text/javascript">
+            var userLogin = {
+                fullname: '{!! $userLogin->fullname !!}',
+                email: '{!! $userLogin->email !!}',
+                avatar: '{!! $userLogin->avatar !!}',
+                id: {!! $userLogin->id !!},
+            };
+            jQuery(document).ready(function($) {
+                $('#club').change(function(event) {
+                    var club_id = $(this).val();
+                    var csrf_token = $('meta[name=csrf-token]').attr('content');
+                    url = laroute.route('dashboard.context');
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {csrf_token: csrf_token,club_id:club_id},
+                    })
+                    .done(function(data) {
+                        console.log("success");
+                        console.log(data);
+                    })
+                    .fail(function(data) {
+                        console.log("error");
+                    })
+
+
+                });
+            });
+        </script>
+         @foreach ($bodyScripts as $script)
             {!! HTML::script($script) !!}
         @endforeach
         @yield('javascript')
