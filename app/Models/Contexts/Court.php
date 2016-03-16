@@ -31,7 +31,7 @@ class Court extends Model
      */
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $fillable = [];
+    protected $fillable = ['name', 'indoor_outdoor', 'club_id', 'surface_id'];
 
     public function club()
     {

@@ -28,8 +28,10 @@
 				</td>
 			</tr>
 			<tr>
+				<td><input class="btn btn-danger" value="Delete Court"></td>
 				<td>
-					<input class="btn btn-primary pull-right" type="submit" value="Edit Court">
+					<input class="btn btn-primary" value="Edit Court">
+
 				</td>
 			</tr>
 		</tbody></table>
@@ -37,7 +39,6 @@
 </template>
 <script>
 	export default {
-		props:['courts_choice','surface']
-
+		props:['courts_choice','surface','courts','clubSettingId','reloadCourts']		
 	}
 </script>

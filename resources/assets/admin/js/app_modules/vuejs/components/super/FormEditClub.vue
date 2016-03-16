@@ -93,7 +93,7 @@
         const club = this.club;
         this.$http.delete(laroute.route('super.clubs.delete'), club).then(res => {
           showNotice('success', res.data.success_msg, 'Success!');
-          this.delete_club =  Math.floor(Math.random() * 10000)
+          this.delete_club =  Math.floor(Math.random() * 10000);
           this.$set('clubs_choice', null);
         },(res) => {
           showNotice('error', 'Error', 'Error!');

@@ -47,7 +47,7 @@
 </template>
 <script>
 	export default {
-		props:['surface'],
+		props:['surface','courts','clubSettingId','reloadCourts'],
 		data() {
 			return {
 								court : {
@@ -55,11 +55,25 @@
 										indoor_outdoor:null,
 										surface_id:null,
 										base_price:null,
+										club_id:null,
 									},
 							}
 		},
 		methods: {
-
+			addCourt(){
+				this.$set('court.club_id', this.clubSettingId);
+				const court = this.court;
+				this.$http.post(laroute.route('courts.create'), court).then(res => {
+          this.reloadCourts =  Math.floor(Math.random() * 10000);
+					this.$set('court.name', null);
+					this.$set('court.indoor_outdoor', null);
+					this.$set('court.surface_id', null);
+					this.$set('court.base_price', null);
+          showNotice('success', res.data.success_msg, 'Success!');
+        }, (res) => {
+                showNotice('error', 'Error', 'Error!');
+            });
+			}
 		}
 	}
 </script>

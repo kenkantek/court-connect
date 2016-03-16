@@ -18,7 +18,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getCourts' => 'clubs.courts.list',
     ]);
     Route::controller('courts', CourtController::class, [
-
+        'postCreateCourt' => 'courts.create',
     ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',
