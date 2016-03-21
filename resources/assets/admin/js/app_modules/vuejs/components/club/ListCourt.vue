@@ -42,7 +42,7 @@
                 let def = deferred(),
                 url = laroute.route('clubs.courts.list', {one:this.clubSettingId});
                 this.$http.get(url).then(res => {
-                	def.resolve(res.data);
+                	def.resolve(res.data.data);
                 }, res => {
                 	def.reject(res);
                 });

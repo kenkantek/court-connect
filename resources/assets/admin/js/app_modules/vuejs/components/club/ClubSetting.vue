@@ -20,6 +20,7 @@
 				:courts.sync="courts"
 				:club-setting-id="clubSettingId"
 				:reload-courts.sync="reloadCourts"
+				:data-rates.sync="dataRates"
 				>
 						<span slot="temp">When creating a new court you can set the initial prices to match a previously created court. Select the court you'd like to copy the prices from.
 						</span>
@@ -28,7 +29,7 @@
 			</section>
 
 			<section class="col-xs-12 col-md-7">
-				<court-rate></court-rate>
+				<court-rate :club-setting-id.sync="clubSettingId" :data-rates.sync="dataRates"></court-rate>
 			</section>
 
 			<section class="col-xs-12 col-md-12">
@@ -418,6 +419,7 @@
 		props:['clubSettingId'],
 		data(){
 			return {
+				dataRates:[],
 				courts_choice:[],
 				surface:null,
 				courts:[],

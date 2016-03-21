@@ -41,4 +41,8 @@ class Court extends Model
     {
         return $this->belongsTo(Surface::class);
     }
+    public function rates()
+    {
+        return $this->hasMany('App\Models\CourtRate', 'court_id');
+    }
 }

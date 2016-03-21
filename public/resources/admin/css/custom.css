@@ -118,10 +118,10 @@ form.form-court{
 .add_new_date_period{
     position: relative;
 }
-.add_new_date_period .tooltip {
+.add_new_date_period .tooltip1 {
+    opacity: 1;
     top: 20px;
     padding: 0px 10px;
-    opacity: 0;
     position:absolute;
     -webkit-transition: opacity 0.5s;
     -moz-transition:  opacity 0.5s;
@@ -134,7 +134,7 @@ form.form-court{
     background: #fff;
     border: 1px solid #d8d8d8;
 }
-.add_new_date_period .tooltip:before{
+.add_new_date_period .tooltip1:before{
     border: solid;
     border-color: #d8d8d8 transparent;
     border-width: 0px 6px 6px 6px;
@@ -145,9 +145,7 @@ form.form-court{
     top: -6px;
     /* z-index: 99; */
 }
-.add_new_date_period:hover .tooltip {
-    opacity:1;
-}
+
 
 #tabRate{
     margin-top: 25px;
