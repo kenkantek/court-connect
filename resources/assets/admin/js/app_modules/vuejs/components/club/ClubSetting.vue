@@ -4,16 +4,23 @@
 				<div class="court_list courtbox">
 					<h3 class="title-box pull-left">Courts</h3>
 					<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Add New Court</a>
-					<list-court :club-id="clubId" :courts_choice.sync="courts_choice"></list-court>
+					<list-court :club-setting-id="clubSettingId" :courts_choice.sync="courts_choice" :courts.sync="courts" :reload-courts.sync="reloadCourts"></list-court>
 				</div>			
 				<form-edit-court 
 				v-if="courts_choice.length < 2" 
 				:courts_choice="courts_choice"
 				:surface="surface"
+				:courts.sync="courts"
+				:club-setting-id="clubSettingId"
+				:reload-courts.sync="reloadCourts"
 				></form-edit-court>
 				<form-new-court 
 				v-if="!courts_choice.length"
 				:surface="surface" 
+				:courts.sync="courts"
+				:club-setting-id="clubSettingId"
+				:reload-courts.sync="reloadCourts"
+				:data-rates.sync="dataRates"
 				>
 						<span slot="temp">When creating a new court you can set the initial prices to match a previously created court. Select the court you'd like to copy the prices from.
 						</span>
@@ -22,7 +29,7 @@
 			</section>
 
 			<section class="col-xs-12 col-md-7">
-				<court-rate></court-rate>
+				<court-rate :club-setting-id.sync="clubSettingId" :data-rates.sync="dataRates"></court-rate>
 			</section>
 
 			<section class="col-xs-12 col-md-12">
@@ -409,11 +416,14 @@
 		 let _ = require('lodash'),
      deferred = require('deferred');
 	export default {
-		props:['clubId'],
+		props:['clubSettingId'],
 		data(){
 			return {
+				dataRates:[],
 				courts_choice:[],
 				surface:null,
+				courts:[],
+				reloadCourts:1,
 			}
 		},
 		asyncData(resolve, reject) {

@@ -30,8 +30,8 @@ class UserController extends Controller
         \Assets::addJavascript(['datatables', 'select2', 'uniform']);
         \Assets::addStylesheets(['datatables', 'select2', 'uniform']);
         \Assets::addAppModule(['datatables', 'user']);
-
-        return view('admin.users.list');
+        $title = 'User Manager';
+        return view('admin.users.list', compact('title'));
     }
 
     public function getDelete($id)

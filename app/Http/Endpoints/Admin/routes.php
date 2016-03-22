@@ -18,9 +18,20 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getCourts' => 'clubs.courts.list',
     ]);
     Route::controller('courts', CourtController::class, [
-
+        'postCreateCourt' => 'courts.create',
     ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',
+    ]);
+    Route::controller('dashboard', DashboardController::class, [
+        'getAddContext' => 'dashboard.context',
+        'getClubs' => 'dashboard.clubs.list',
+    ]);
+    Route::controller('super', SuperAdminController::class, [
+        'getIndex' => 'super.index',
+        'getClubs' => 'super.clubs.list',
+        'postCreateClub' => 'super.clubs.create',
+        'deleteClub' => 'super.clubs.delete',
+        'putEditClub' => 'super.clubs.edit',
     ]);
 });

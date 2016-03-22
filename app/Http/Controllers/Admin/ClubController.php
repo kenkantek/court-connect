@@ -12,18 +12,18 @@ class ClubController extends Controller
         $this->clubRepository = $clubRepository;
     }
 
-    public function getSetting($id)
+    public function getSetting()
     {
-        \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
-        \Assets::addStylesheets(['select2', 'uniform', 'monthly', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
-        \Assets::addAppModule(['app']);
-        $club = $this->clubRepository->findById($id);
-        return view('admin.clubs.setting', compact('club'));
+        \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
+        \Assets::addStylesheets(['select2', 'uniform', 'monthly', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
+        $title = 'Club Setting';
+        return view('admin.clubs.setting', compact('title'));
     }
-    public function getCourts($id)
+    public function getCourts($club_id)
     {
-        $clubs = Court::where('club_id', $id)->with('surface')->get();
-        return $clubs;
+
+        $courts = Court::where('club_id', $club_id)->with('surface')->paginate(50);
+        return $courts;
     }
     public function getManagerBookings()
     {

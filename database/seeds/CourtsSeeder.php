@@ -13,6 +13,6 @@ class CourtsSeeder extends Seeder
     public function run()
     {
         DB::table('courts')->delete();
-        factory(Court::class, 100)->create();
+        factory(Court::class, 200)->create();
     }
 }

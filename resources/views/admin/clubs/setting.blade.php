@@ -13,7 +13,9 @@
 			</ol>
 		</div>
 		<div class="box-body">
-			<club-setting club-id="{!! $club->id !!}"></club-setting>
+			<club-setting
+				:club-setting-id = "clubSettingId"
+			></club-setting>
 		</div>
 	</div>
 	<script type="text/javascript">

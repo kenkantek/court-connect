@@ -31,7 +31,7 @@ class Court extends Model
      */
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $fillable = [];
+    protected $fillable = ['name', 'indoor_outdoor', 'club_id', 'surface_id'];
 
     public function club()
     {
@@ -40,5 +40,9 @@ class Court extends Model
     public function surface()
     {
         return $this->belongsTo(Surface::class);
+    }
+    public function rates()
+    {
+        return $this->hasMany('App\Models\CourtRate', 'court_id');
     }
 }

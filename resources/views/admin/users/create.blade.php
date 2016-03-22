@@ -86,7 +86,6 @@ User Manager
 	</div>
 	<div class="box-footer">
 		<div class="form-group">
-			<button type="submit" class="btn btn-flat btn-default pull-right">Cancel</button>
       <button type="submit" class="btn btn-flat btn-primary pull-right">Add user</button>
 		</div>
   </div>

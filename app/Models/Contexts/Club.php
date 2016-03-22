@@ -25,7 +25,7 @@ class Club extends Model
      */
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $fillable = ['name', 'phone'];
+    protected $fillable = ['name', 'phone', 'address', 'city', 'state', 'zipcode'];
     public function courts()
     {
         return $this->hasMany('App\Models\Court');
