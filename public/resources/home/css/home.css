@@ -539,6 +539,7 @@ a.ui-state-default.ui-state-highlight {
     display: none;
     padding: 20px 0;
     box-sizing: border-box;
+    border: 1px solid #aaaaaa;
     border-radius: 4px;
     position: absolute;
     top: 88px;left: 356.828px;

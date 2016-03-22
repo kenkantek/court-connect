@@ -48,6 +48,50 @@
                 </div>
             </div>          
         </div>  
+  <div id="calendar-switch">
+    <span id="calendar-switch-header">Select the days of the week<br/>you'd like to book</span>
+    <div id="day-of-week">
+        <div class="checkbox">
+            <div class="col-md-6">
+                <label class="checkbox-inline"><input type="checkbox" value="" id="mondays">Mondays</label>
+            </div>
+            <div class="col-md-6">
+                <label class="checkbox-inline"><input type="checkbox" value="" id="saturdays">Saturdays</label>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="checkbox">
+            <div class="col-md-6">
+                <label class="checkbox-inline"><input type="checkbox" value="" id="tuesdays">Tuesday</label>
+            </div>
+            <div class="col-md-6">
+                <label class="checkbox-inline"><input type="checkbox" value="" id="sundays">Sundays</label>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="checkbox">
+            <div class="col-md-6">
+                <label><input type="checkbox" value="" id="wednesdays">Wednesdays</label>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="checkbox">
+            <div class="col-md-6">
+                <label><input type="checkbox" value="" id="thursdays">Thursdays</label>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="checkbox">
+            <div class="col-md-6">
+                <label><input type="checkbox" value="" id="fridays">Fridays</label>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div style="padding: 20px 15px 10px 15px;">
+            <button class="btn btn-search" id="calendar-switch-button" type="button">Switch To Open Time Bookings</button>
+        </div>
+    </div>
+</div>
 </div>
 @stop
 @section('content')
