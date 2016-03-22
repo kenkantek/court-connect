@@ -1,27 +1,27 @@
 @extends('home.layouts.master')
 @include('home.layouts.header')
 @section('banner')
-    <div class="row header-1-bg"></div> 
+    <div class="row header-1-bg"></div>
 @stop
 @section('content')
     <div class="row">
         <div class="container content">
             <div class="instruction">
-                <h2><span>Your Account</span></h2>     
+                <h2><span>Your Account</span></h2>
                  <div class="container">
-                     @if (Session::has('flash_message'))                                  
+                     @if (Session::has('flash_message'))
                         <div class="alert alert-{!! Session::get('flash_level') !!}">
                             {!! Session::get('flash_message') !!}
-                        </div>     
-                    @endif         
-                    @include('home.blocks.error')        
+                        </div>
+                    @endif
+                    @include('home.blocks.error')
                     <div class="page-header">
-                        <h3 class="text-left">Your Bookings</h3> 
-                    </div>      
-                  <div class="table-responsive">          
+                        <h3 class="text-left">Your Bookings</h3>
+                    </div>
+                  <div class="table-responsive">
                       <table class="table">
                         <thead>
-                          <tr>               
+                          <tr>
                             <th class="col-md-3">Club</th>
                             <th class="col-md-2">Reservation#</th>
                             <th class="col-md-3">Date/Time</th>
@@ -31,37 +31,30 @@
                         </thead>
                         <tbody>
                         @foreach($booking as $item)
-                        <?php 
-                        // var_dump($item);die();
-                            $court  = DB::table('courts')->where('id', $item['court_id'])->first();
-                            $club   = DB::table('clubs')->where('id', $court->club_id)->first();                            
-                            $player = DB::table('players')->where('id', $item['player_id'])->first();  
-                            $user   = DB::table('users')->where('id', $player->user_id)->first();                            
-                        ?>
-                          <tr>                
+                          <tr>
                             <td>
                                 <div class="col-md-4">
-                                    <img src="{{ asset('resources/home/images/club-avatar.jpg') }}" class="img-circle" alt="{!! $club->name !!}" width="58" height="58">     
+                                    <img src="{{ asset('resources/home/images/club-avatar.jpg') }}" class="img-circle" alt="{!! $item->name !!}" width="58" height="58">
                                 </div>
                                 <div class="col-md-8">
                                     <p>
-                                        <b>{!! $club->name !!}</b>
+                                        <b>{!! $item->name !!}</b>
                                         <br/>
-                                        <span>{!! $club->address !!}</span>
-                                    </p>                               
-                                    <span>Court #{!! $item['court_id'] !!}</span>
-                                </div>   
+                                        <span>{!! $item->address !!}</span>
+                                    </p>
+                                    <span>Court #{!! $item->court_id !!}</span>
+                                </div>
                             </td>
                             <td>
-                                <b>{!! $item['id'] !!}</b>
+                                <b>{!! $item->id !!}</b>
                             </td>
                             <td>
-                                <b><?php echo date('l jS F Y', strtotime($item['created_at'])) ?></b>                                
+                                <b><?php echo date('l jS F Y', strtotime($item->created_at)) ?></b>
                             </td>
                             <td>
                                 <div>
                                     <b>{!! $user->first_name." ".$user->last_name !!}</b>
-                                </div>                               
+                                </div>
                             </td>
                             <td>
                                 <div class="dropdown yr-booking">
@@ -72,13 +65,13 @@
                                   <ul class="dropdown-menu" aria-labelledby="">
                                     <li><a href="#">Change Booking</a></li>
                                     <li><a href="#">Cancel Booking</a></li>
-                                    <li><a href="#">Print Confirmation</a></li>                       
-                                    <li><a href="#">Export to Outlook</a></li>                     
+                                    <li><a href="#">Print Confirmation</a></li>
+                                    <li><a href="#">Export to Outlook</a></li>
                                   </ul>
                                 </div>
                             </td>
-                          </tr>    
-                          @endforeach                      
+                          </tr>
+                          @endforeach
                         </tbody>
                       </table>
                   </div>
@@ -86,20 +79,20 @@
 
                 <div class="container">
                     <div class="page-header">
-                        <h3 class="text-left">Settings</h3>                        
+                        <h3 class="text-left">Settings</h3>
                     </div>
 
                     <div class="form-blocks">
                         <h4 class="text-left">Pasword</h4>
                         <form class="form-horizontal" role="form" method="POST" action="{{ route('home.account.setting.password', $user->id)}}">
-                            {!! csrf_field() !!}                            
-                            <div class="form-group">                                
+                            {!! csrf_field() !!}
+                            <div class="form-group">
                                 <label for="password" class="control-label col-sm-3">New Password</label>
                                 <div class="col-sm-5">
                                     <input class="form-control" type="password" id="password" name="password" placeholder="******" value="" />
                                 </div>
                             </div>
-                            <div class="form-group">                                
+                            <div class="form-group">
                                 <label for="cfrpassword" class="control-label col-sm-3">New Password Confirmation</label>
                                 <div class="col-sm-5">
                                     <input class="form-control" type="password" id="cfrpassword" name="password" placeholder="******" value="" />
@@ -116,12 +109,12 @@
                             </div>
                         </form>
                     </div>
-                     
+
                     <div class="form-blocks">
                         <h4 class="text-left">Contact Details</h4>
                         <form class="form-horizontal" role="form" method="POST" action="{{ route('home.account.setting.contact', $user->id)}}">
-                            {!! csrf_field() !!}                            
-                            <div class="form-group">                                
+                            {!! csrf_field() !!}
+                            <div class="form-group">
                                 <label for="email" class="control-label col-sm-3">Email Address</label>
                                 <div class="col-sm-5">
                                     <input class="form-control" type="email" id="email" name="email" placeholder="Enter Email Address" value="{!! old('email', isset($user) ? $user->email : null)!!}" />
@@ -138,10 +131,11 @@
                             </div>
                         </form>
                     </div>
+                    @if ($player != null)
                     <div class="form-blocks">
                         <h4 class="text-left">Address</h4>
                         <form class="form-horizontal" role="form" method="POST" action="{{ route('home.account.setting.address', $player->id)}}">
-                            {!! csrf_field() !!}     
+                            {!! csrf_field() !!}
                             <div class="form-group">
                                 <label for="zipcode" class="control-label col-sm-3">Zipcode</label>
                                 <div class="col-sm-2">
@@ -180,6 +174,7 @@
                             </div>
                         </form>
                     </div>
+                    @endif
                     <div class="form-blocks">
                         <h4 class="text-left">Others</h4>
                         <form class="form-horizontal" role="form">
@@ -193,11 +188,11 @@
                                       </button>
                                       <ul class="dropdown-menu" aria-labelledby="tennis-level">
                                         <li><a href="#">Beginner</a></li>
-                                        <li><a href="#">Professional</a></li>                                                                          
+                                        <li><a href="#">Professional</a></li>
                                       </ul>
                                     </div>
-                                </div>                               
-                            </div>            
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="cb_offers" class="control-label col-sm-3">Receive Special Offers?</label>
                                 <div class="col-sm-5">

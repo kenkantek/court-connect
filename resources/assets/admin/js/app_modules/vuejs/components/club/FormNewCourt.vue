@@ -95,7 +95,8 @@
 	          showNotice('success', res.data.success_msg, 'Success!');
 	          this.submit = false;
 	        }, (res) => {
-	                showNotice('error', 'Error', 'Error!');
+	                showNotice('error', 'Court Name is required!', 'Error!');
+	                
 	            });
 				}
 				

@@ -62,6 +62,7 @@
 					court.dataRates = _.cloneDeep(this.dataRates);
 					console.log(court.dataRates);
 					this.$http.post(laroute.route('courts.update'), court).then(res => {
+						this.dataRates = [];
 	          this.reloadCourts =  Math.floor(Math.random() * 10000);
 						this.$set('courts_choice', null);
 	          showNotice('success', res.data.success_msg, 'Update Success!');

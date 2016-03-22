@@ -192,14 +192,21 @@
 					},
 			watch: {
 				indexDataRates: function () {
-					var index = this.indexDataRates ;
-					this.dataRate = this.dataRates[index];
+					if (this.dataRates.length >0 ) {
+						var index = this.indexDataRates ;
+						this.dataRate = this.dataRates[index];
+					}
 				},
 				courts_choice: function () {
 					if (this.courts_choice.length > 1) {
 						this.showNotice = true;
 					}else{
 						this.showNotice = false;
+					}
+					
+					if (this.dataRates.length >0 ) {
+						var index = this.indexDataRates ;
+						this.dataRate = this.dataRates[index];
 					}
 				}
 			},		
