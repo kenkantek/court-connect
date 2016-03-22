@@ -1,40 +1,7 @@
 @extends('home.layouts.master')
-@section('header')
-<div class="row header-1">
-    <div class="container">
-        <nav class="navbar navbar-default" role="navigation">
-
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="#" class="logo"><img src="resources/home/images/logo_02.png" class="img-responsive logo" alt="logo"></a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav navbar-right">                   
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Anthony Cooper <b
-                                class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Your Account</a></li>
-                            <li><a href="#">Your Bookings</a></li>
-                            <li><a href="#">Logout</a></li>   
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </nav>        
-    </div>
-</div>
-<div class="row header-1-bg"></div> 
-
+@include('home.layouts.header')
+@section('banner')
+    <div class="row header-1-bg"></div> 
 @stop
 @section('content')
     <div class="row">
@@ -42,9 +9,15 @@
             <div class="instruction">
                 <h2><span>Your Account</span></h2>     
                  <div class="container">
+                     @if (Session::has('flash_message'))                                  
+                        <div class="alert alert-{!! Session::get('flash_level') !!}">
+                            {!! Session::get('flash_message') !!}
+                        </div>     
+                    @endif         
+                    @include('home.blocks.error')        
                     <div class="page-header">
                         <h3 class="text-left">Your Bookings</h3> 
-                      </div>                                          
+                    </div>      
                   <div class="table-responsive">          
                       <table class="table">
                         <thead>
@@ -57,33 +30,38 @@
                           </tr>
                         </thead>
                         <tbody>
+                        @foreach($booking as $item)
+                        <?php 
+                        // var_dump($item);die();
+                            $court  = DB::table('courts')->where('id', $item['court_id'])->first();
+                            $club   = DB::table('clubs')->where('id', $court->club_id)->first();                            
+                            $player = DB::table('players')->where('id', $item['player_id'])->first();  
+                            $user   = DB::table('users')->where('id', $player->user_id)->first();                            
+                        ?>
                           <tr>                
                             <td>
                                 <div class="col-md-4">
-                                    <img src="resources/home/images/club-avatar.jpg" class="img-circle" alt="Club Avatar" width="58" height="58">     
+                                    <img src="{{ asset('resources/home/images/club-avatar.jpg') }}" class="img-circle" alt="{!! $club->name !!}" width="58" height="58">     
                                 </div>
                                 <div class="col-md-8">
                                     <p>
-                                        <b>Entout Cas</b>
+                                        <b>{!! $club->name !!}</b>
                                         <br/>
-                                        <span>135 Tennis Avanue</span>
+                                        <span>{!! $club->address !!}</span>
                                     </p>                               
-                                    <span>Court #5</span>
+                                    <span>Court #{!! $item['court_id'] !!}</span>
                                 </div>   
                             </td>
                             <td>
-                                <b>123456798</b>
+                                <b>{!! $item['id'] !!}</b>
                             </td>
                             <td>
-                                <b>Friday 19th June 2016</b>
+                                <b><?php echo date('l jS F Y', strtotime($item['created_at'])) ?></b>                                
                             </td>
                             <td>
                                 <div>
-                                    <b>Brian Brendell</b>
-                                </div>
-                                <div>
-                                    <b>Ray Kaplan</b>
-                                </div>
+                                    <b>{!! $user->first_name." ".$user->last_name !!}</b>
+                                </div>                               
                             </td>
                             <td>
                                 <div class="dropdown yr-booking">
@@ -92,94 +70,15 @@
                                     <span class="glyphicon glyphicon-menu-down"></span>
                                   </button>
                                   <ul class="dropdown-menu" aria-labelledby="">
-                                    <li><a href="#">Modify</a></li>
-                                    <li><a href="#">Delete</a></li>                                                                          
+                                    <li><a href="#">Change Booking</a></li>
+                                    <li><a href="#">Cancel Booking</a></li>
+                                    <li><a href="#">Print Confirmation</a></li>                       
+                                    <li><a href="#">Export to Outlook</a></li>                     
                                   </ul>
                                 </div>
                             </td>
-                          </tr>
-                          <tr>                
-                            <td>
-                                <div class="col-md-4">
-                                    <img src="resources/home/images/club-avatar.jpg" class="img-circle" alt="Club Avatar" width="58" height="58">     
-                                </div>
-                                <div class="col-md-8">
-                                    <p>
-                                        <b>Entout Cas</b>
-                                        <br/>
-                                        <span>135 Tennis Avanue</span>
-                                    </p>                               
-                                    <span>Court #5</span>
-                                </div>   
-                            </td>
-                            <td>
-                                <b>123456798</b>
-                            </td>
-                            <td>
-                                <b>Friday 19th June 2016</b>
-                            </td>
-                            <td>
-                                <div>
-                                    <b>Brian Brendell</b>
-                                </div>
-                                <div>
-                                    <b>Ray Kaplan</b>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="dropdown yr-booking">
-                                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    Modify
-                                    <span class="glyphicon glyphicon-menu-down"></span>
-                                  </button>
-                                  <ul class="dropdown-menu" aria-labelledby="">
-                                    <li><a href="#">Modify</a></li>
-                                    <li><a href="#">Delete</a></li>                                                                          
-                                  </ul>
-                                </div>
-                            </td>
-                          </tr>
-                          <tr>                
-                            <td>
-                                <div class="col-md-4">
-                                    <img src="resources/home/images/club-avatar.jpg" class="img-circle" alt="Club Avatar" width="58" height="58">     
-                                </div>
-                                <div class="col-md-8">
-                                    <p>
-                                        <b>Entout Cas</b>
-                                        <br/>
-                                        <span>135 Tennis Avanue</span>
-                                    </p>                               
-                                    <span>Court #5</span>
-                                </div>   
-                            </td>
-                            <td>
-                                <b>123456798</b>
-                            </td>
-                            <td>
-                                <b>Friday 19th June 2016</b>
-                            </td>
-                            <td>
-                                <div>
-                                    <b>Brian Brendell</b>
-                                </div>
-                                <div>
-                                    <b>Ray Kaplan</b>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="dropdown yr-booking">
-                                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    Modify
-                                    <span class="glyphicon glyphicon-menu-down"></span>
-                                  </button>
-                                  <ul class="dropdown-menu" aria-labelledby="">
-                                    <li><a href="#">Modify</a></li>
-                                    <li><a href="#">Delete</a></li>                                                                          
-                                  </ul>
-                                </div>
-                            </td>
-                          </tr>
+                          </tr>    
+                          @endforeach                      
                         </tbody>
                       </table>
                   </div>
@@ -187,22 +86,51 @@
 
                 <div class="container">
                     <div class="page-header">
-                        <h3 class="text-left">Settings</h3>
+                        <h3 class="text-left">Settings</h3>                        
+                    </div>
+
+                    <div class="form-blocks">
+                        <h4 class="text-left">Pasword</h4>
+                        <form class="form-horizontal" role="form" method="POST" action="{{ route('home.account.setting.password', $user->id)}}">
+                            {!! csrf_field() !!}                            
+                            <div class="form-group">                                
+                                <label for="password" class="control-label col-sm-3">New Password</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" type="password" id="password" name="password" placeholder="******" value="" />
+                                </div>
+                            </div>
+                            <div class="form-group">                                
+                                <label for="cfrpassword" class="control-label col-sm-3">New Password Confirmation</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" type="password" id="cfrpassword" name="password" placeholder="******" value="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="old-password" class="control-label col-sm-3">Old Password</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" type="password" id="old_password" name="old_password" placeholder="******" value=""/>
+                                </div>
+                                <div class="col-sm-2 col-sm-offset-2">
+                                    <button type="submit" class="btn-sub">Update</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                      
                     <div class="form-blocks">
                         <h4 class="text-left">Contact Details</h4>
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ route('home.account.setting.contact', $user->id)}}">
+                            {!! csrf_field() !!}                            
+                            <div class="form-group">                                
                                 <label for="email" class="control-label col-sm-3">Email Address</label>
                                 <div class="col-sm-5">
-                                    <input class="form-control" type="email" id="email" placeholder="Enter Email Address" value="AntonCooper@gmail.com" />
+                                    <input class="form-control" type="email" id="email" name="email" placeholder="Enter Email Address" value="{!! old('email', isset($user) ? $user->email : null)!!}" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="phone" class="control-label col-sm-3">Phone</label>
                                 <div class="col-sm-5">
-                                    <input class="form-control" type="text" id="phone" placeholder="Enter Phone Number" value="07791105194"/>
+                                    <input class="form-control" type="text" id="phone" name="phone" placeholder="Enter Phone Number" value="{!! old('phone', isset($user) ? $user->phone : null)!!}"/>
                                 </div>
                                 <div class="col-sm-2 col-sm-offset-2">
                                     <button type="submit" class="btn-sub">Update</button>
@@ -212,11 +140,12 @@
                     </div>
                     <div class="form-blocks">
                         <h4 class="text-left">Address</h4>
-                        <form class="form-horizontal" role="form">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ route('home.account.setting.address', $player->id)}}">
+                            {!! csrf_field() !!}     
                             <div class="form-group">
                                 <label for="zipcode" class="control-label col-sm-3">Zipcode</label>
                                 <div class="col-sm-2">
-                                    <input class="form-control" type="text" id="zipcode" placeholder="Enter Zipcode" value="123456" />
+                                    <input class="form-control" type="text" id="zipcode" name="zipcode" placeholder="Enter Zipcode" value="{!! old('zipcode', isset($player) ? $player->zipcode : null)!!}" />
                                 </div>
                                 <div class="col-sm-2">
                                     <button class="btn-sub" type="button" style="padding: 9px;"> Address Lookup</button>
@@ -225,25 +154,25 @@
                             <div class="form-group">
                                 <label for="address1" class="control-label col-sm-3">Address 1</label>
                                 <div class="col-sm-5">
-                                    <input class="form-control" type="text" id="address1" placeholder="Enter Address 1" value="Flat 1"/>
+                                    <input class="form-control" type="text" id="address1" name="address1" placeholder="Enter Address 1" value="{!! old('address1', isset($player) ? $player->address1 : null)!!}"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="address2" class="control-label col-sm-3">Address 2</label>
                                 <div class="col-sm-5">
-                                    <input class="form-control" type="text" id="address2" placeholder="Enter Address 2" value="49 Craven Avanue"/>
+                                    <input class="form-control" type="text" id="address2" name="address2" placeholder="Enter Address 2" value="{!! old('address2', isset($player) ? $player->address2 : null)!!}"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="city" class="control-label col-sm-3">City</label>
                                 <div class="col-sm-5">
-                                    <input class="form-control" type="text" id="city" placeholder="Enter City" value="London"/>
+                                    <input class="form-control" type="text" id="city" name="city" placeholder="Enter City" value="{!! old('city', isset($player) ? $player->city : null)!!}"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="state" class="control-label col-sm-3">State</label>
                                 <div class="col-sm-5">
-                                    <input class="form-control" type="text" id="state" placeholder="Enter State" value="GREATER LONDON"/>
+                                    <input class="form-control" type="text" id="state" name="state" placeholder="Enter State" value="{!! old('state', isset($player) ? $player->state : null)!!}"/>
                                 </div>
                                 <div class="col-sm-2 col-sm-offset-2">
                                     <button type="submit" class="btn-sub">Update</button>

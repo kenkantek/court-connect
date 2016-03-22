@@ -534,6 +534,46 @@ a.ui-state-default.ui-state-highlight {
 }
 
 
+/* Calendar Switch */
+#calendar-switch{
+    display: none;
+    padding: 20px 0;
+    box-sizing: border-box;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+    position: absolute;
+    top: 88px;left: 356.828px;
+    z-index: 1;
+    background:#ffffff url('images/ui-bg_flat_75_ffffff_40x100.png') 50% 50% repeat-x;
+    font-family: Verdana,Arial,sans-serif;
+}
+#calendar-switch-header{
+    text-align: center;
+    display: block;
+    color:#63ac1e
+}
+#calendar-switch-button{
+    width:100%;
+    font-size:12px;
+    padding: 0;
+}
+#calendar-switch-button:hover{
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
+}
+#day-of-week{
+    width: 260px;
+    height:180px;
+    margin-top: 20px;
+}
+#day-of-week label{
+    color: #aaaaaa;
+}
+#day-of-week input[type="checkbox"]{
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+}
+/* End Calendar Switch */
+
 /* Sign Up page */
 .content .instruction{
 	color: #0f484d;
@@ -705,3 +745,170 @@ a.ui-state-default.ui-state-highlight {
 }
 
 /*end Checkout page*/
+
+
+/* Search page */
+#find-your-court{
+    height: 192px;
+    background-color: #373737;
+    padding-top: 1px;
+}
+#find-your-court h3{
+    color: #63ac1e;
+}
+
+.content #featured-courts{
+    color: #0f484d;
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 10px;
+}
+.content .featured-blocks .price span{
+    color: #63ac1e;
+    font-size: 26px;
+    line-height: 51px;
+}
+
+.content .featured-blocks .club-image{
+    padding: 0;
+}
+
+.content .information h4.club-name{    
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.content .information small.club-address{
+    color: #a0a0a0;
+    font-size: 14px;    
+}
+
+.content .information p{
+    margin-bottom: 5px;
+}
+
+.content .featured-blocks .btn p{
+    width: 100%;
+    margin-top: 5px;
+}
+
+.content .featured-blocks .btn-sub{
+    width: 100%;
+    margin-top: 5px;
+}
+
+.content .featured-blocks .dropdown li{
+    text-align: center;
+    font-size: 15px;    
+    padding: 0 10px;
+}
+
+.content .featured-blocks .dropdown li span{
+    color: #0f484d;
+}
+
+.content .featured-blocks .dropdown li span.price{
+    color: #63ac1e;
+}
+
+.content .featured-blocks .dropdown li.unvailable span:first-child{
+    padding-top:3px;
+}
+
+.content .featured-blocks .dropdown li.unvailable span{
+    color: #d2d2d2;
+}
+
+.content .featured-blocks .dropdown li.unvailable span.price{
+
+    font-size: 10px;
+}
+
+
+
+.content #show-results{
+    padding-top: 35px;
+    padding-bottom: 22px;
+    font-size: 14px;
+    color: #d7d7d7;
+}
+
+.content #show-results span{
+    color: #0f484d;
+    font-weight: bold;
+}
+
+.content #search-results .club-block {
+    background-color: #f2f2f2;
+    margin-bottom: 30px;
+}
+
+
+.content #search-results .thumbnail{
+    position:relative;
+    margin-bottom: 0;
+}
+.content #search-results img{
+    padding: 0;
+}
+
+.content #search-results .caption {
+    background: url(../images/text-overlay.png);    
+    width: 100%;
+    color: #fff;
+    font-size: 12px;
+    bottom:0;
+    position: absolute;
+}
+.content #search-results .club-time {
+    background-color: #dfdfdf;
+}
+
+.content #search-results{
+    color: #0f484d;
+}
+
+.content #search-results .information{
+    margin-bottom: 25px;
+}
+
+.content #search-results .distance{
+    padding: 10px;
+}
+
+.content #search-results .club-time {
+    padding: 8px 20px;
+}
+
+.content #search-results .club-time .col-md-2{
+    width: 20%;
+}
+
+.content #search-results .club-time .price {
+    text-align: center;
+    color: #fff;
+    border-radius: 0;
+    background-color: #0f484d;
+    font-size: 14px;
+    padding: 8px 15px;
+}
+
+.content #search-results .club-time .active span {
+    font-weight: bold;
+}
+
+
+.content #search-results .club-time .active .price {
+    background-color: #63ac1e;
+}
+
+.content #search-results .club-time .unvailable .price {
+    background-color: #cbcbcb;
+    font-size: 10px;
+    padding: 4px 5px;
+}
+
+
+
+
+    

@@ -14,8 +14,8 @@ class AddColoumsPlayersTable extends Migration
     {
         Schema::table('players', function (Blueprint $table) {
             $table->string('zipcode', 6);
-            $table->string('andress1')->nullable();
-            $table->string('andress2')->nullable();
+            $table->string('address1')->nullable();
+            $table->string('address2')->nullable();
             $table->string('city', 60)->nullable();
             $table->string('state', 60)->nullable();
         });

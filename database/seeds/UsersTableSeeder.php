@@ -13,6 +13,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->delete();
         factory(User::class, 100)->create()->each(function ($user) {
             $role_id = Role::all('id')->random(1);
             $context = 'clubs';
