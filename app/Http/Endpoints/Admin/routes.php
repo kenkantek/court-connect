@@ -19,6 +19,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     ]);
     Route::controller('courts', CourtController::class, [
         'postCreateCourt' => 'courts.create',
+        'postUpdateCourt' => 'courts.update',
+        'postUpdateCourts' => 'courts.update.multi',
     ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',

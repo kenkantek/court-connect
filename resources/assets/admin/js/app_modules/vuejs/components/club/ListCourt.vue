@@ -24,10 +24,11 @@
 	 var _ = require('lodash'),
      deferred = require('deferred');
 	export default {
-		props:['clubSettingId','courts_choice','courts','reloadCourts'],
+		props:['clubSettingId','courts_choice','courts','reloadCourts','dataRates'],
 		watch: {
 	    clubSettingId: 'reloadAsyncData',
-	    reloadCourts:'reloadAsyncData',	    
+	    reloadCourts:'reloadAsyncData',
+	    	    
 	  },
 		asyncData(resolve, reject) {
          this.fetchCourts().done((courts) => {

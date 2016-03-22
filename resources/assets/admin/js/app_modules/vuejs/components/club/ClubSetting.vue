@@ -3,8 +3,13 @@
 			<section class="col-xs-12 col-md-5">
 				<div class="court_list courtbox">
 					<h3 class="title-box pull-left">Courts</h3>
-					<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Add New Court</a>
-					<list-court :club-setting-id="clubSettingId" :courts_choice.sync="courts_choice" :courts.sync="courts" :reload-courts.sync="reloadCourts"></list-court>
+					<a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
+					<list-court 
+					:club-setting-id="clubSettingId" 
+					:courts_choice.sync="courts_choice" 
+					:courts.sync="courts" 
+					:reload-courts.sync="reloadCourts"
+					></list-court>
 				</div>			
 				<form-edit-court 
 				v-if="courts_choice.length < 2" 
@@ -13,6 +18,7 @@
 				:courts.sync="courts"
 				:club-setting-id="clubSettingId"
 				:reload-courts.sync="reloadCourts"
+				:data-rates.sync="dataRates"
 				></form-edit-court>
 				<form-new-court 
 				v-if="!courts_choice.length"
@@ -29,7 +35,7 @@
 			</section>
 
 			<section class="col-xs-12 col-md-7">
-				<court-rate :club-setting-id.sync="clubSettingId" :data-rates.sync="dataRates"></court-rate>
+				<court-rate :club-setting-id.sync="clubSettingId" :data-rates.sync="dataRates" :courts_choice.sync="courts_choice"></court-rate>
 			</section>
 
 			<section class="col-xs-12 col-md-12">
@@ -426,6 +432,24 @@
 				reloadCourts:1,
 			}
 		},
+		watch: {
+			courts_choice : function () {
+					if(this.courts_choice.length > 0) {
+						//this.dataRates = _.cloneDeep(this.courts_choice[0].rates);
+						this.dataRates = [];	
+						for (var index in this.courts_choice) {    // don't actually do this
+							
+							for (var i in this.courts_choice[index].rates) {
+								const temp = _.cloneDeep(this.courts_choice[index].rates[i]);
+								this.dataRates.push(temp);
+							}
+						  
+						}
+					}else{
+						this.dataRates = [];
+					}
+				}
+		},
 		asyncData(resolve, reject) {
          this.fetchSurface(this.surface).done((surface) => {
              resolve({surface});
@@ -435,6 +459,9 @@
          
     },
 		methods:{
+			scrollAddnewCourt(){
+				$('html, body').animate({ scrollTop: $('#btnAddnewCourt').position().top }, 500);
+			},
 			fetchSurface(surface) {
 	        let def = deferred(),
 	        url =laroute.route('surface.list');

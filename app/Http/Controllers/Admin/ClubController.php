@@ -22,7 +22,7 @@ class ClubController extends Controller
     public function getCourts($club_id)
     {
 
-        $courts = Court::where('club_id', $club_id)->with('surface')->paginate(50);
+        $courts = Court::where('club_id', $club_id)->with('surface', 'rates')->paginate(50);
         return $courts;
     }
     public function getManagerBookings()

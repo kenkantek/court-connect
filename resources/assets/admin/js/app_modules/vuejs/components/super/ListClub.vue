@@ -22,26 +22,7 @@
      deferred = require('deferred');
 	export default {
 		props:['clubs_choice','clubs','delete_club'],
-			
-		// asyncData(resolve, reject) {
-  //        this.fetchclubs(0,40).done((clubs) => {
-  //            resolve({clubs});
-  //        }, (error) => {
-  //            console.log(error);
-  //        });
-
-  //   },
 		methods: {
-				// fetchclubs(skip,limit) {
-    //             let def = deferred(),
-    //             url = laroute.route('super.clubs.list', {one : skip, two : limit});
-    //             this.$http.get(url).then(res => {
-    //             	def.resolve(res.data);
-    //             }, res => {
-    //             	def.reject(res);
-    //             });
-    //              return def.promise;
-    //         },
         addClubs(index){
         	
         	var check = $('.club-item-check:eq('+index+')');
