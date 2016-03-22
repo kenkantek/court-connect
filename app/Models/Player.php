@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Player extends Model
 {
-    protected $table = 'player';
+    protected $table = 'players';
 
     /**
     * The date fields for the model.clear
@@ -19,5 +19,12 @@ class Player extends Model
     */
     protected $dates    = ['created_at', 'updated_at'];
 
-    protected $fillable = [];
+    protected $fillable = ['user_id', 'receive_discount_offers', 'tenis_level', 'is_recive_notification', 'zipcode', 'address1', 'address2', 'city', 'state'];
+
+
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\Auth\User');
+    }
 }

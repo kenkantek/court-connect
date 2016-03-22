@@ -32,10 +32,9 @@
 </head>
 <body>
 <div class="container-fluid">    
-    @yield('header')   
-    @yield('content')
-    
-
+    @yield('header')  
+    @yield('banner')
+    @yield('content')        
     <div class="row footer">
         <div class="container">
             <div class="row">
@@ -84,7 +83,7 @@
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <img style="margin: 0 auto" src="resources/home/images/logo-color_05.png" class="img-responsive" alt="Image">
+                    <img style="margin: 0 auto" src="{{ asset('resources/home/images/logo-color_05.png') }}" class="img-responsive" alt="Image">
 
                     <p style="margin-bottom:20px;margin-top: 34px;color: #082e31;font-family: RobotoBlackItalic, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px">
                         Club Owners - Request an Account</p>

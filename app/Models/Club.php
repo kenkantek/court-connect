@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
-class Deal extends Model
+class Club extends Model
 {
-    protected $table = 'deals';
+    protected $table = 'clubs';
 
     /**
     * The date fields for the model.clear
@@ -29,12 +29,14 @@ class Deal extends Model
     */
     protected $dates    = ['created_at', 'updated_at'];
 
-    protected $fillable = ['user_id','player_id','court_id','price','time','payment_id','status'];
-
-    public $timestamps = true;
+    protected $fillable = ['name', 'phone', 'image', 'address', 'city', 'state', 'zipcode'];
 
     public function club()
     {
         return $this->belongsTo('App\Models\Club');
+    }
+    public function deal()
+    {
+        return $this->hasMany('App\Models\Deal');
     }
 }
