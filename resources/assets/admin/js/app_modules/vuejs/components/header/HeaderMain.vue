@@ -1,6 +1,6 @@
 <template>
 <!-- Logo -->
-<a href="http://courtconnect.local/sadmin" class="logo">
+<a href="/sadmin" class="logo">
 	<!-- mini logo for sidebar mini 50x50 pixels -->
 	<span class="logo-mini"><b><img src="/uploads/images/logo.png" width="40"></b></span>
 	<!-- logo for regular state and mobile devices -->
@@ -11,7 +11,7 @@
 	<div class="navbar-header-menu">
 		<div class="header-block col-md-4">
 			<div class="info-box-img">
-				<img src="http://courtconnect.local/uploads/images/tiger-raquest.jpeg" class="club-thump-image" alt="Club Image">
+				<img src="/uploads/images/tiger-raquest.jpeg" class="club-thump-image" alt="Club Image">
 			</div>
 			<div class="info-box-content text-center">
 				<span class="info-box-text">Managing</span>
@@ -29,7 +29,7 @@
 		<div class="col-md-3">
 			<ul class="nav navbar-nav pull-right">
 				<li class="pull-right">
-					<a href="http://courtconnect.local/sadmin/logout" style="font-size: 35px"><i class="fa fa-sign-out"></i></a>
+					<a href="/sadmin/logout" style="font-size: 35px"><i class="fa fa-sign-out"></i></a>
 				</li>
 				<li class="user user-menu pull-right">
 					<a href="#">
