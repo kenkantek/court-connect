@@ -58,7 +58,7 @@
 
     },
     watch: {
-	    delete_club: 'reloadAsyncData',	    
+	    delete_club: 'reloadAsyncData',
 	  },
 		methods: {
 			fetchclubsOf() {

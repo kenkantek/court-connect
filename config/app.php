@@ -170,6 +170,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
 
         Intervention\Image\ImageServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
     ],
 
@@ -224,6 +225,7 @@ return [
 
         'Assets' => App\Components\Assets\Facade\AssetsFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 
     ],
 

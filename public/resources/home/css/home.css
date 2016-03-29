@@ -140,14 +140,18 @@ div.modal-body {
     background-size: contain;
     width: 197px;
     height: 43px;
-    border: none
+    border: none;
+    display: block;
+    margin: 0px auto;
 }
 
 .line-label span {
     padding: 0 22px;
     background: #fff
 }
-
+.hidden{
+    display: none;
+}
 .line-label {
     clear: both;
     color: #cbcbcb;
@@ -171,6 +175,9 @@ div.modal-body {
 
 .app-bar {
     background-color: #2c2c2c
+}
+.err{
+    color: red;
 }
 
 .app-bar .col-md-6 {
@@ -907,8 +914,26 @@ a.ui-state-default.ui-state-highlight {
     font-size: 10px;
     padding: 4px 5px;
 }
-
-
+.login-box, .register-box {
+    width: 480px;
+    margin: 7% auto;
+}
+.login-box-body{
+    padding: 0;
+    border: 1px solid #ddd;
+}
+.login-box-body form{
+    padding: 5px 10px;
+    text-align: left;
+}
+.fa.form-control-feedback{
+    line-height: 34px;
+    color: #000;
+}
+.login-box-body>div{padding:20px}
+.login-box-body h3{box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);
+    margin: 0px;
+    padding:20px 10px;text-align:center;font-size:26px;color:#fff;background:#00c0ef;border-top-left-radius:4px;border-top-right-radius:4px}.login-box-body .btn-info{width:100%}.login-box-body span.fa.form-control-feedback{line-height:33px}
 
 
     

@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin']], function () {
 
     Route::get('/', ['as' => 'admin.index', 'uses' => 'DashboardController@getIndex']);
 
@@ -10,12 +10,15 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getDelete' => 'users.delete',
         'postCreate' => 'users.create.post',
         'postEdit' => 'users.edit.post',
+        'getUsers' => 'users.listdata',
+        'postUpdateUser' => 'users.update',
     ]);
 
     Route::controller('clubs', ClubController::class, [
         'getSetting' => 'clubs.setting',
         'getManagerBookings' => 'clubs.manager-bookings',
         'getCourts' => 'clubs.courts.list',
+        'postSetOpenDay' => 'clubs.courts.setOpenDay',
     ]);
     Route::controller('courts', CourtController::class, [
         'postCreateCourt' => 'courts.create',

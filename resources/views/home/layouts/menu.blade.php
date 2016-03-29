@@ -9,7 +9,7 @@
             <ul class="dropdown-menu ">
                 <span class="arrow-up"></span>
                 <li class="text-center"><a href="{{ route('home.account', Auth::user()->id) }}">Manage Account</a></li>
-                <li class="text-center"><a href="{{ route('auth.logout') }}">Log out</a></li>
+                <li class="text-center"><a href="{{ route('auth.logout-home') }}">Log out</a></li>
             </ul>
         </li>
     </ul>
@@ -23,7 +23,7 @@
             <ul class="dropdown-menu">
                 <span class="arrow-up"></span>
 
-                <form action="{{ route('auth.login') }}" class="dropdown-wg" method="post" role="form">
+                <form action="{{ route('auth.login-home') }}" class="cc-loginFormUser dropdown-wg" method="post" role="form">
                     {!! csrf_field() !!}
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback">
                         <input type="text" class="form-control" name="email" value="{{ old('email') }}"
@@ -45,16 +45,18 @@
                             </span>
                         @endif
                     </div>
-                    <button type="submit" class="btn btn-login">Login</button>
+                    <button type="submit" class="btn btn-login"><i class="fa fa-circle-o-notch fa-spin hidden" style="text-align: left; float: left; line-height: 20px;"></i>Login</button>
+                    <div class="form-group" style="margin-top: 10px">
+                        <a href="{{ url("/password/reset") }}"><label class="form-label">Forgot Password?</label></a>
+                    </div>
+
+                    <div class="msg-login"></div>
+
                     <div class="form-group">
-                        <a href=""><label class="form-label">Forgot Password?</label></a>
+                        <h3 class="caption title" style="font-size: 21px; width: 100%; margin-top: 20px; margin-bottom: 5px;">Manage a Tennis Club?</h3>
+                        <a href="#" id="cc-request-acount"><label class="form-label">Request an account</label></a>
                     </div>
-                    <div class="form-group" style="text-align: center">
-                        <label class="line-label"><span>OR</span></label>
-                    </div>
-                    <div class="form-group" style="text-align: center; margin-bottom: 0px">
-                        <button type="submit" name="facebook-sigin" class="btn-login-facebook"></button>
-                    </div>
+
                 </form>
             </ul>
         </li>
@@ -65,7 +67,7 @@
             <ul class="dropdown-menu">
                 <span class="arrow-up"></span>
 
-                <form action="{{ route('auth.login') }}" class="dropdown-wg" method="post" role="form">
+                <form action="{{ route('auth.login-home') }}" class="cc-loginFormUser dropdown-wg" method="post" role="form">
                     {!! csrf_field() !!}
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback">
                         <input type="text" class="form-control" name="email" value="{{ old('email') }}"
@@ -87,19 +89,40 @@
                             </span>
                         @endif
                     </div>
-                    <button type="submit" class="btn btn-login">Login</button>
-                    <div class="form-group">
-                        <a href=""><label class="form-label">Forgot Password?</label></a>
+                    <button type="submit" class="btn btn-login"><i class="fa fa-circle-o-notch fa-spin hidden" style="text-align: left; float: left; line-height: 20px;"></i>Login</button>
+                    <div class="form-group" style="margin-top: 10px">
+                        <a href="{{ url("/password/reset") }}"><label class="form-label">Forgot Password?</label></a>
                     </div>
+
+                    <div class="msg-login"></div>
+
                     <div class="form-group" style="text-align: center">
                         <label class="line-label"><span>OR</span></label>
                     </div>
                     <div class="form-group" style="text-align: center; margin-bottom: 0px">
-                        <button type="submit" name="facebook-sigin" class="btn-login-facebook"></button>
+                        <a href="{{ route('auth.facebook') }}" class="btn-login-facebook"></a>
                     </div>
                 </form>
             </ul>
         </li>
     </ul>
 </div><!-- /.navbar-collapse -->
+
+<div id="cc-modal-request-account" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img style="margin: auto; width: 180px;" src="{{ asset('resources/home/images/logo-color_05.png') }}" class="img-responsive logo" alt="logo">
+                <h4 class="caption title" style="width: 100%; font-size: 22px; margin: 20px 0px;">Clubs Owners - Request an Account</h4>
+                <p style="color:#000">Court Connect is a complete schedualing solution to connect your club with tennis fans. Call us now to discuss how managing and taking bookings can be made easy using Court-Connect.com</p>
+                <div class="md-phone" style="font-size: 26px; color: #000; padding-top: 25px;">Call <strong>123456789</strong></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 @endif

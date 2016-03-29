@@ -1,5 +1,36 @@
 $(function () {
-        function loadDayOfWeek(){
+
+    //login
+    $(".cc-loginFormUser").submit(function(e){
+        e.preventDefault();
+        var formData = $(this).serialize();
+        var loginForm = $(this);
+        $.ajax({
+            url:'login',
+            type:'post',
+            data:formData,
+            beforeSend: function(){
+                loginForm.find("button[type=submit] i").removeClass('hidden');
+                loginForm.find(".msg-login").html('');
+            },
+            success: function(data) {
+                loginForm.find("button[type=submit] i").addClass('hidden');
+                console.log(data);
+                if(!data.error){
+                    $(location).attr('href', data.redirect)
+                }else{
+                    loginForm.find(".msg-login").html('<div class="err">Your email or password does not match!</div>');
+                }
+            }
+        });
+    });
+
+    $("#cc-request-acount").click(function(e){
+        e.preventDefault();
+        $('#cc-modal-request-account').modal()
+    })
+
+    function loadDayOfWeek(){
             var today = new Date();
             var mondayOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay()+1);
             var tuesdayOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay()+2);

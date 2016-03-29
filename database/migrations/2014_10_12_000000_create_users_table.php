@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('facebook', 120);
             $table->string('google', 120);
             $table->tinyInteger('gender');
+            $table->string('facebook_id')->nullable();
             $table->string('avatar')->default('uploads/images/users/no-avatar.png');
             $table->rememberToken();
             $table->timestamps();

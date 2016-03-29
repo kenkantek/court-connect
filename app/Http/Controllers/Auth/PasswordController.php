@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Password;
 
 class PasswordController extends Controller
 {
@@ -31,4 +34,26 @@ class PasswordController extends Controller
     {
         $this->middleware('guest');
     }
+
+    public function forgetpassword(){
+        return view('home.user.passwords.email');
+    }
+    public function userresetpassword(Request $request, $token = null)
+    {
+        if (is_null($token)) {
+            return $this->getEmail();
+        }
+        $email = $request->input('email');
+
+        if (property_exists($this, 'resetView')) {
+            return view($this->resetView)->with(compact('token', 'email'));
+        }
+
+        if (view()->exists('home.user.passwords.reset')) {
+            return view('home.user.passwords.reset')->with(compact('token', 'email'));
+        }
+
+        return view('home.user.reset')->with(compact('token', 'email'));
+    }
+
 }

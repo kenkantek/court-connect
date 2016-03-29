@@ -90,15 +90,35 @@ class User extends Authenticatable
     {
         return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
     }
-    public function assignRole($role, $context, $context_id)
+    public function assignRole($role, $context = NULL, $context_id = NULL)
     {
-        $this->roles()->attach($this->getStoredRole($role), array(
-            'context' => $context,
-            'context_id' => $context_id,
-        ));
+        $pivot = array();
+        if($pivot != NULL)
+            $priot['context'] = $context;
+        if($context_id != NULL)
+            $pivot['context_id'] = $context_id;
+        $this->roles()->attach($this->getStoredRole($role), $pivot);
     }
     public function isSuper()
     {
         return $this->is_super;
     }
+    public function getContextID(){
+        $arr = array();
+        foreach ($this->roles as $role)
+        {
+            $arr[] = $role->pivot->context_id;
+        }
+        return $arr[0];
+    }
+    public function scopeInfoClub(){
+        $arr = array();
+        foreach ($this->roles as $k=>$role)
+        {
+            $arr[$k]['content'] = $role->pivot->context;
+            $arr[$k]['content_id'] = $role->pivot->context_id;
+        }
+        return $arr[0];
+    }
+
 }

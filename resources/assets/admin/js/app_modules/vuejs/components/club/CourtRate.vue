@@ -242,13 +242,13 @@
 					const dataRates = _.cloneDeep(this.dataRates);
 					console.log(courts);
 					this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates}).then(res => {
-	           this.reloadCourts =  Math.floor(Math.random() * 10000);
-						 this.courts_choice = [];
-						 this.dataRates = [];
-	          showNotice('success', res.data.success_msg, 'Update Multi Success!');
-	        }, (res) => {
-	                showNotice('error', 'Error', 'Error!');
-	            });
+				    this.reloadCourts =  Math.floor(Math.random() * 10000);
+							 this.courts_choice = [];
+							 this.dataRates = [];
+					  showNotice('success', res.data.success_msg, 'Update Multi Success!');
+					}, (res) => {
+							showNotice('error', 'Error', 'Error!');
+						});
 				},
 				continueRate() {
 					this.showNotice = false;

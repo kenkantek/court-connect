@@ -43,6 +43,7 @@
 	margin:-5px 0 0 -5px;
 	transform:rotate(45deg) ;
 }
+
 /* wrapper for right button to make the clickable area bigger */
 .monthly-next {
 	position: absolute;
@@ -301,4 +302,17 @@ a > .monthly-day-number {
 		white-space: nowrap;
 		box-sizing: border-box;
 	}
+}
+.btn-monthly-reset{
+	position: absolute;
+	top: 0;
+	right: -60px;
+	opacity: 1;
+	width: auto;
+	height: auto;
+	right: -120px;
+	margin-top: 10px;
+}
+.btn-monthly-reset:before, .btn-monthly-reset:after{
+	display: none;
 }

@@ -15,10 +15,18 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->user()->isSuper()) {
-
-            return redirect()->route('clubs.setting');
+        if (!$request->user()->hasRole('admin')) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->route('home.index');
+            }
         }
+
+//        if (!$request->user()->isSuper()) {
+//
+//            return redirect()->route('clubs.setting');
+//        }
         return $next($request);
     }
 }

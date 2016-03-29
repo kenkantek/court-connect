@@ -52,7 +52,7 @@
 			console.log('Incorrect entry for weekStart variable.')
 		}
 
-		$('#' + uniqueId).prepend('<div class="monthly-header"><div class="monthly-header-title"></div><a href="#" class="monthly-prev"></a><a href="#" class="monthly-next"></a></div>').append('<div class="monthly-event-list"></div>');
+		$('#' + uniqueId).prepend('<div class="monthly-header"><div class="monthly-header-title"></div><a href="#" class="monthly-prev"></a><a href="#" class="monthly-next"></a><a href="#" class="btn btn-primary btn-monthly-reset monthly-reset">Month current</a></div>').append('<div class="monthly-event-list"></div>');
 
 		function daysInMonth(m, y){
 			return m===2?y&3||!(y%25)&&y&15?28:29:30+(m+(m>>3)&1);
@@ -99,11 +99,11 @@
 			if (setMonth == currentMonth && setYear == currentYear) {
 				$('#' + uniqueId + ' .monthly-header-title').html(monthNames[m - 1] +' '+ y);
 			}
-			/*
+
 			else {
-				$('#' + uniqueId + ' .monthly-header-title').html(monthNames[m - 1] +' '+ y +'<a href="#" class="monthly-reset"></a> ');
+				$('#' + uniqueId + ' .monthly-header-title').html(monthNames[m - 1] +' '+ y);
 			}
-			*/
+
 
 
 			// Account for empty days at start
