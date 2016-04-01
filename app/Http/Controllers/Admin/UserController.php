@@ -27,19 +27,19 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function getList11()
+    public function getList1()
     {
         \Assets::addJavascript(['datatables', 'select2', 'uniform']);
         \Assets::addStylesheets(['datatables', 'select2', 'uniform']);
         \Assets::addAppModule(['datatables', 'user']);
         $title = 'User Manager';
-        return view('admin.users.list', compact('title'));
+        return view('admin.users.list1', compact('title'));
     }
 
     public function getList()
     {
         $title = 'User Manager';
-        return view('admin.users.list1', compact('title'));
+        return view('admin.users.list', compact('title'));
     }
 
     public function getUsers($club_id = 1)
