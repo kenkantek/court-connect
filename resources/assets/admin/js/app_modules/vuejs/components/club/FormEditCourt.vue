@@ -67,6 +67,7 @@
 				this.$set('courts_choice', null);
 				showNotice('success', res.data.success, 'Update Success!');
 				this.submit = false;
+				$('.unSelected').click();
 			}, (res) => {
 				showNotice('error', 'Error', 'Error!');
 			});

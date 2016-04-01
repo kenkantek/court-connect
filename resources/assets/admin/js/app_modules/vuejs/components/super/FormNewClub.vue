@@ -109,9 +109,13 @@
             showNotice('success', res.data.success_msg, 'Success!');
 
         }, (res) => {
+            var msg = "";
+            $.each(res.data,function(k,v){
+                msg += "<div>"+v+"</div>";
+            });
+            showNotice('error', msg, 'Error!');
             this.formErrors = res.data;
             this.submiting = false;
-            showNotice('error', 'Error', 'Error!');
         });
     }
     }

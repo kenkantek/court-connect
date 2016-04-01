@@ -22,4 +22,5 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('checkout', ['as' => 'home.checkout', 'uses' => 'HomeController@showCheckout']);
 	Route::post('checkout', ['as' => 'home.checkout', 'uses' => 'HomeController@postCheckout']);
 
+	Route::get('search/autocomplete', 'SearchController@autocomplete');
 });

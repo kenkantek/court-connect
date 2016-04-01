@@ -94,6 +94,7 @@
 				this.$set('court.base_price', 0);
 				showNotice('success', res.data.success_msg, 'Success!');
 				this.submit = false;
+				$('.unSelected').click();
 			}, (res) => {
 				showNotice('error', 'Court Name is required!', 'Error!');
 

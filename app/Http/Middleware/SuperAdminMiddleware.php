@@ -1,10 +1,15 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: HieuLuongCong
+ * Date: 31-03-02016
+ * Time: 2:42 PM
+ */
 namespace App\Http\Middleware;
 
 use Closure;
 
-class AdminMiddleware
+class SuperAdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,18 +20,13 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->user()->hasRole('admin') && !$request->user()->hasRole('user')) {
+        if (!$request->user()->isSuper()) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->route('home.index');
+                return redirect()->route('admin.index');
             }
         }
-
-//        if (!$request->user()->isSuper()) {
-//
-//            return redirect()->route('clubs.setting');
-//        }
         return $next($request);
     }
 }

@@ -16,45 +16,45 @@
 			<td v-else>Outdoor</td>
 			<td>{{ court.surface.label }}</td>
 		</tr>
-		
+
 		</tbody>
 	</table>
 </template>
 <script>
-	 var _ = require('lodash'),
-     deferred = require('deferred');
+	var _ = require('lodash'),
+		deferred = require('deferred');
 	export default {
 		props:['clubSettingId','courts_choice','courts','reloadCourts','dataRates'],
 		watch: {
-	    clubSettingId: 'reloadAsyncData',
-	    reloadCourts:'reloadAsyncData',
-	    	    
-	  },
-		asyncData(resolve, reject) {
-         this.fetchCourts().done((courts) => {
-             resolve({courts});
-         }, (error) => {
-             console.log(error);
-         });
+			clubSettingId: 'reloadAsyncData',
+			reloadCourts:'reloadAsyncData',
 
-    },
-		methods: {
-				 fetchCourts() {
-                let def = deferred(),
-                url = laroute.route('clubs.courts.list', {one:this.clubSettingId});
-                this.$http.get(url).then(res => {
-                	def.resolve(res.data.data);
-                }, res => {
-                	def.reject(res);
-                });
-                 return def.promise;
-            },
-        addCourts(index){
-        	this.courts_choice = [];
-          $('.court-item-check:checked').each(function(index, el) {
-          		this.courts_choice.push(this.courts[$(el).val()]);      	         	
-          }.bind(this));
-        }
+		},
+		asyncData(resolve, reject) {
+		this.fetchCourts().done((courts) => {
+			resolve({courts});
+	}, (error) => {
+		console.log(error);
+	});
+
+	},
+	methods: {
+		fetchCourts() {
+			let def = deferred(),
+				url = laroute.route('clubs.courts.list', {one:this.clubSettingId});
+			this.$http.get(url).then(res => {
+				def.resolve(res.data.data);
+			}, res => {
+				def.reject(res);
+			});
+			return def.promise;
+		},
+		addCourts(index){
+			this.courts_choice = [];
+			$('.court-item-check:checked').each(function(index, el) {
+				this.courts_choice.push(this.courts[$(el).val()]);
+			}.bind(this));
+		}
 		}
 	}
 </script>

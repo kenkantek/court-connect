@@ -462,3 +462,25 @@ form.form-court{
     top: 0px;
     left: 0px;
 }
+#box-set-open-days:before{
+    content:'';
+    display: none;
+}
+.loading{
+    position: ABSOLUTE;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    text-align: Center;
+    margin: 0px auto;
+    display: block;
+    font-size: 3em;
+    color: #fff;
+}
+.loading i{
+    text-align: Center;
+    top: 50%;
+    position: ABSOLUTE;
+}

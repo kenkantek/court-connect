@@ -898,7 +898,7 @@
 			});
 
 			//test model open
-			//$(".create_new_book").click();
+			$(".create_new_book").click();
 
 			$('#mb-book-day-open').datetimepicker({
 				inline: true,

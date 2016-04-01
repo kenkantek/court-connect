@@ -6,6 +6,7 @@ use App\Models\Contexts\Court;
 use App\Models\SetOpenDay;
 use App\Repositories\Interfaces\Admin\ClubInterface;
 use DateTime;
+use Illuminate\Http\Request;
 
 class ClubController extends Controller
 {
@@ -32,41 +33,49 @@ class ClubController extends Controller
         $courts = Court::where('club_id', $club_id)->with('surface', 'rates')->paginate(50);
         return $courts;
     }
-    public function postSetOpenDay(Request $request){
-        $errors = [];
-        $dayOfWeekTitle = ['mon','tue','wed','thur','fri','sat','sun'];
-        if(empty($request->input('days')) || empty($request->input('hours')) || empty($request->input('end_date'))
-            || empty($request->input('start_date')) || empty($request->input('club_id'))){
-            $errors[] = "Data invalid.";
-        }
-        if(count($errors) > 0)
-        {
-            return response()->json(['error' => true,"messages"=>$errors]);
-        }
-
-        $dates = $this->createDateRange($request->input('start_date'), $request->input('end_date'));
-        foreach($dates as $date){
-            $tmp = SetOpenDay::whereDate($date);
-            if(!isset($tmp)) {
-                $item = new SetOpenDay();
-                $item['date'] = $date;
-                $item['hours'] = $request->input('hours');
-                $item['club_id'] = $request->input('club_id');
-                $item->save();
-            }else{
-                $tmp['hours'] = $request->input('hours');
-                $tmp->update();
-            }
-        }
+    public function getListDays(Request $request){
+        $tmp = date_format(date_create($request->input('year')."-".$request->input('month')),"Y-m");
+        $data = SetOpenDay::where('club_id',$request->input('club_id'))->where('date','LIKE', "%".$tmp."%")->get();
+        if(empty($data))
+            return response()->json(['error' => true,"messages"=>['Data invalid']]);
         return response()->json([
             'error' => false,
-            'success' => 'Set Set Opening Hours/Holiday Days successfully!',
+            'data' => $data
         ]);
     }
-    public function getSetOpenDay(Request $request){
+    public function getSetEventDay(Request $request){
+        if(empty($request->input('date')) || empty($request->input('is_event'))){
+            return response()->json(['error' => true,"messages"=>['Data invalid']]);
+        }
+        else{
+            $date = date_format(date_create($request->input('date')),"Y-m-d");
+            $tmp = SetOpenDay::where('date',$date)->first();
+            if(!isset($tmp)) {
+                return response()->json(['error' => true,"messages"=>['Can\'t find date valid']]);
+            }else{
+                $is_event = $request->input('is_event');
+                if($is_event == 'holiday')
+                    $tmp['is_holiday'] = $tmp['is_holiday'] == 1 ? 0 : 1;
+                if($is_event == 'close')
+                    $tmp['is_close'] = $tmp['is_close'] == 1 ? 0 : 1;
+                if($is_event == 'sethours'){
+                    if(empty($request->input('hours_open')) || empty($request->input('hours_close'))){
+                        return response()->json(['error' => true,"messages"=>['Data hours invalid']]);
+                    }
+                    $tmp['hours'] = $request->input('hours_open')." - ".$request->input('hours_close');
+                    $tmp['is_close'] = 0;
+                }
+                $tmp->update();
+            }
+            return response()->json([
+                'error' => false,
+                'success' => 'Set Opening Hours/Holiday Days successfully!',
+            ]);
+        }
+    }
+    public function postSetOpenDay(Request $request){
         $errors = [];
-        $dayOfWeekTitle = ['mon','tue','wed','thur','fri','sat','sun'];
-        if(empty($request->input('days')) || empty($request->input('hours')) || empty($request->input('end_date'))
+        if(empty($request->input('hours')) || empty($request->input('end_date'))
             || empty($request->input('start_date')) || empty($request->input('club_id'))){
             $errors[] = "Data invalid.";
         }
@@ -77,7 +86,9 @@ class ClubController extends Controller
 
         $dates = $this->createDateRange($request->input('start_date'), $request->input('end_date'));
         foreach($dates as $date){
-            $tmp = SetOpenDay::whereDate($date);
+            if(is_array($request->input('days')) && count($request->input('days')) > 0 && !in_array(date("N",strtotime($date)), $request->input('days')))
+                continue;
+            $tmp = SetOpenDay::where('club_id',$request->input('club_id'))->where('date',$date)->first();
             if(!isset($tmp)) {
                 $item = new SetOpenDay();
                 $item['date'] = $date;
@@ -85,13 +96,14 @@ class ClubController extends Controller
                 $item['club_id'] = $request->input('club_id');
                 $item->save();
             }else{
+                //var_dump($tmp);
                 $tmp['hours'] = $request->input('hours');
                 $tmp->update();
             }
         }
         return response()->json([
             'error' => false,
-            'success' => 'Set Set Opening Hours/Holiday Days successfully!',
+            'success' => 'Set Opening Hours/Holiday Days successfully!',
         ]);
     }
     function createDateRange($startDate, $endDate)

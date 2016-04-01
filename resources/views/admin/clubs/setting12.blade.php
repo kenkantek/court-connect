@@ -22,8 +22,12 @@
 		$(function() {
 			$('.daterange').daterangepicker();
 			$('#date_open').multiselect();
-			$(".timepicker").timepicker();
+			$("#opentime, #closetime").timepicker();
 			$('#monthly_opendays').monthly();
+			$('#monthly_opendays .monthly-day[data-number="16"] .monthly-indicator-wrap').html("close").parent().addClass('day_close');
+			$('#monthly_opendays .monthly-day[data-number="23"] .monthly-indicator-wrap').html("Holiday<br>6am-8pm").parent().addClass('day_holiday');
+			$('#monthly_opendays .monthly-day[data-number="1"] .monthly-indicator-wrap')
+					.html('<div class="overflow"><div class="btn-close action"><img src="{{url('/resources/admin/img/close_icon.png') }}" alt=""></div> <div class="btn-plane action"><img src="{{url('/resources/admin/img/plane_icon.png') }}" alt=""></div> <div class="btn-clock action"><img src="{{url('/resources/admin/img/clock_icon.png') }}" alt=""></div> </div> ');
 
 			$("#tabRate li").click(function(){
 				$("#tabRate li").removeClass('active');

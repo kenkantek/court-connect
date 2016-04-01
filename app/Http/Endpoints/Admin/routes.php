@@ -19,6 +19,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getManagerBookings' => 'clubs.manager-bookings',
         'getCourts' => 'clubs.courts.list',
         'postSetOpenDay' => 'clubs.courts.setOpenDay',
+        'getListDays' => 'clubs.courts.listdays',
+        'getSetEventDay' => 'clubs.courts.setEventDay',
     ]);
     Route::controller('courts', CourtController::class, [
         'postCreateCourt' => 'courts.create',
@@ -32,6 +34,10 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getAddContext' => 'dashboard.context',
         'getClubs' => 'dashboard.clubs.list',
     ]);
+
+});
+
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin','super']], function () {
     Route::controller('super', SuperAdminController::class, [
         'getIndex' => 'super.index',
         'getClubs' => 'super.clubs.list',
