@@ -7,26 +7,80 @@
             <div class="container">
                 <div class="col-md-12">
                     <form action="" method="post" role="form">
+                        {!! csrf_field() !!}
                       <div class="row">
                         <div class="form-group col-md-4 form-icon">
                             <i class="fa fa-map-marker"></i>
-                            <input type="text" class="form-control" name="" id=""
-                                   placeholder="Seach by Zip/Address or Club Name">
+                            <input type="text" class="form-control" name="s_name" id="q" value="{{$request->s_name}}"
+                                   placeholder="Seach by Zip/Address or Club Name" autocomplete="off" data-country="us">
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i class="fa fa-calendar"></i>
-                            <input type="text" class="form-control" name="" id="datepicker" placeholder="Date">
+                            <input type="text" class="form-control" name="date" value="{{$request->date}}" id="datepicker" placeholder="Date">
+                            <div id="calendar-switch">
+                                <span id="calendar-switch-header">Select the days of the week<br/>you'd like to book</span>
+                                <div id="day-of-week">
+                                    <div class="checkbox">
+                                        <div class="col-md-6">
+                                            <label class="checkbox-inline"><input type="checkbox" value="" id="mondays">Mondays</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="checkbox-inline"><input type="checkbox" value="" id="saturdays">Saturdays</label>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="checkbox">
+                                        <div class="col-md-6">
+                                            <label class="checkbox-inline"><input type="checkbox" value="" id="tuesdays">Tuesday</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="checkbox-inline"><input type="checkbox" value="" id="sundays">Sundays</label>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="checkbox">
+                                        <div class="col-md-6">
+                                            <label><input type="checkbox" value="" id="wednesdays">Wednesdays</label>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="checkbox">
+                                        <div class="col-md-6">
+                                            <label><input type="checkbox" value="" id="thursdays">Thursdays</label>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="checkbox">
+                                        <div class="col-md-6">
+                                            <label><input type="checkbox" value="" id="fridays">Fridays</label>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div style="padding: 20px 15px 10px 15px;">
+                                        <button class="btn btn-search" id="calendar-switch-button" type="button">Switch To Open Time Bookings</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i class="glyphicon glyphicon-time"></i>
-                            <input type="text" class="form-control" name="" id="timepicker" placeholder="Time">
+                            <input type="text" class="form-control" name="s_time" value="{{ $request->s_time }}" id="search-timepicker" placeholder="Time">
+                            <div class="search-tooltip hidden">
+                                <div class="tooltiptext">
+                                    <div >
+                                        <label for="opentime">Start Time</label>
+                                        <input class="form-control search-time" name="search-time" value="{{ $request->s_time }}" type="time">
+                                    </div>
+                                    <div>
+                                        <label for="opentime">Length</label>
+                                        <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" value="">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                            <!--<select name="court" id="inputID" class="form-control">-->
-                            <!--<option value=""> # Courts </option>-->
-                            <!--</select>-->
-                            <input type="text" class="form-control" name="" id="" placeholder="# Courts">
+                            {!! Form::select('court',[1,2,3,4],$request->court,['id'=>'inputID','class' => 'form-control','style'=>'text-align-last:center; ']) !!}
                         </div>
                         <div class="form-group col-md-2">
                             <button type="submit" class="btn btn-search">SEARCH</button>
@@ -48,50 +102,7 @@
                 </div>
             </div>          
         </div>  
-  <div id="calendar-switch">
-    <span id="calendar-switch-header">Select the days of the week<br/>you'd like to book</span>
-    <div id="day-of-week">
-        <div class="checkbox">
-            <div class="col-md-6">
-                <label class="checkbox-inline"><input type="checkbox" value="" id="mondays">Mondays</label>
-            </div>
-            <div class="col-md-6">
-                <label class="checkbox-inline"><input type="checkbox" value="" id="saturdays">Saturdays</label>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="checkbox">
-            <div class="col-md-6">
-                <label class="checkbox-inline"><input type="checkbox" value="" id="tuesdays">Tuesday</label>
-            </div>
-            <div class="col-md-6">
-                <label class="checkbox-inline"><input type="checkbox" value="" id="sundays">Sundays</label>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="checkbox">
-            <div class="col-md-6">
-                <label><input type="checkbox" value="" id="wednesdays">Wednesdays</label>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="checkbox">
-            <div class="col-md-6">
-                <label><input type="checkbox" value="" id="thursdays">Thursdays</label>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="checkbox">
-            <div class="col-md-6">
-                <label><input type="checkbox" value="" id="fridays">Fridays</label>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div style="padding: 20px 15px 10px 15px;">
-            <button class="btn btn-search" id="calendar-switch-button" type="button">Switch To Open Time Bookings</button>
-        </div>
-    </div>
-</div>
+
 </div>
 @stop
 @section('content')

@@ -30,8 +30,8 @@
 	import ListClub from './ListClub.vue';
 	import FormNewClub from './FormNewClub.vue';
 	import FormEditClub from './FormEditClub.vue';
-		 let _ = require('lodash'),
-     deferred = require('deferred');
+	let _ = require('lodash'),
+    deferred = require('deferred');
 	export default {
 		props: ['clubs','clubSettingId','delete_club'],
 		data(){

@@ -1,5 +1,5 @@
 <template>
-	<div class="box-body">
+	<li class="box-body">
 		<section class="col-xs-12 col-md-5">
 			<div class="court_list courtbox">
 				<h3 class="title-box pull-left">Courts</h3>
@@ -49,6 +49,20 @@
 				:club-setting-id="clubSettingId"
 				>
 			</date-time>
+			<ul>
+				<li>
+					<img src="/uploads/images/config/close_icon.png" alt="">
+					<span>: Club closed</span>
+				</li>
+				<li>
+					<img src="/uploads/images/config/plane_icon.png" alt="">
+					<span>: Vacation but club open</span>
+				</li>
+				<li>
+					<img src="/uploads/images/config/clock_icon.png" alt="">
+					<span>: Set operating hours by day</span>
+				</li>
+			</ul>
 		</section>
 
 		<section class="col-xs-12 col-md-7">

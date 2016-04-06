@@ -1,6 +1,6 @@
 $(function () {
 
-    $( "#q" ).autocomplete({
+    $( "#q1" ).autocomplete({
         source: function( request, response ) {
             $.ajax({
                 url: "search/autocomplete?term=" + request.term,
@@ -101,6 +101,12 @@ $(function () {
             //$("#calendar-switch").hide();
         }
     });
+    //set time search time
+    $("#search-timepicker").val($(".search-time").val());
+    $(".search-time").change(function(){
+        $("#search-timepicker").val($(this).val());
+    })
+
     $("#calendar-switch").click(function(e){
         e.stopPropagation();
     });

@@ -59,6 +59,7 @@ return [
             'jquery-ui-multidatespicker',
             'ionslider',
             'home',
+            'city-autocomplete',
         ],
         'stylesheets' => [
             'bootstrap',
@@ -66,7 +67,8 @@ return [
             'jquery-ui',
             'jquery-ui-timepicker',
             'home',
-            'ionslider'
+            'ionslider',
+            'autocomplete'
         ],
     ],
     'resources' => [
@@ -105,6 +107,13 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/vendor/routes.js',
+                ],
+            ],
+            'city-autocomplete' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/home/js/jquery.city-autocomplete.js',
                 ],
             ],
             'bootstrap' => [
@@ -326,6 +335,13 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/home/css/home.css',
+                ],
+            ],
+            'autocomplete' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/home/css/autocomplete.css',
                 ],
             ],
             'font-awesome' => [

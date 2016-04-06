@@ -30,4 +30,20 @@ class Club extends Model
     {
         return $this->hasMany('App\Models\Court');
     }
+    public function state()
+    {
+        return $this->belongsTo('App\Models\State', 'state');
+    }
+    public function city()
+    {
+        return $this->belongsTo('App\Models\City', 'city');
+    }
+    public function state_info()
+    {
+        return $this->belongsTo('App\Models\State', 'state');
+    }
+    public function city_info()
+    {
+        return $this->belongsTo('App\Models\City', 'city');
+    }
 }
