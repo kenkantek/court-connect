@@ -1,0 +1,1 @@
+[01-Apr-2016 04:35:00 UTC] PHP Fatal error:  Class 'Laravel\Socialite\SocialiteServiceProvider' not found in /home/tekvietnam/public_html/projects/laravel/court-connect/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php on line 146
