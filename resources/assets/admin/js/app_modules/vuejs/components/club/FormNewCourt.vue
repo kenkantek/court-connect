@@ -66,8 +66,8 @@
 	},
 	methods: {
 		updateDataRates(){
+
 			for (var index in this.courts) {
-				console.log(this.courts[index].id);
 				if (this.court.base_price == this.courts[index].id) {
 					const temp = _.cloneDeep(this.courts[index].rates);
 					this.dataRates = temp;

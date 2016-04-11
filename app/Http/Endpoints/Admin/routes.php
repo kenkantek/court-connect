@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin']], function () {
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth']], function () {
 
     Route::get('/', ['as' => 'admin.index', 'uses' => 'DashboardController@getIndex']);
 
@@ -24,6 +24,12 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postCreateCourt' => 'courts.create',
         'postUpdateCourt' => 'courts.update',
         'postUpdateCourts' => 'courts.update.multi',
+    ]);
+    Route::controller('contracts', ContractController::class, [
+        'postCreateContract' => 'contracts.create',
+        'postUpdateContract' => 'contracts.update',
+        'postDeleteContract' => 'contracts.delete',
+        'getListContract' => 'contracts.list',
     ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',

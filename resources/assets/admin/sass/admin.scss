@@ -234,6 +234,10 @@ table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc {
 .box.box-primary {
     border-top-color: #0F494D;
 }
+.bg-primary {
+    color: #fff;
+    background-color: #0F494D !important;
+}
 select#club {
 	  border: none;
     font-size: 16px;

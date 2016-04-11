@@ -33,7 +33,7 @@
 				</div>
 				<div class="pull-left">
 					<strong>Date Period</strong>
-					<div class="row">
+					<div>
 						<div>
 							<select name="list-period" id="inputList-Period" class="form-control" required="required" v-model="indexDataRates">
 								<option v-for="(index,d) in dataRates" v-text = "d.name" track-by="$index" value="{{index}}"></option>
