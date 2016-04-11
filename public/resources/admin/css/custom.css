@@ -186,8 +186,12 @@ form.form-court{
 .day-view-content table th, .day-view-content table td{
     border-color: #aaa !important;
 }
+.grid-row .td_field_label{
+    min-width: 80px;
+}
 .day-view-content .day-grid {
     height: 35px;
+    min-width: 120px;
 }
 .day-grid.available{
     background: #fff;
@@ -436,7 +440,7 @@ form.form-court{
     cursor: pointer;
     box-sizing: border-box;
 }
-.days-in-month-wrap .day-item.active, .days-in-month-wrap .day-item:hover{
+.days-in-month-wrap .day-item.date-current, .days-in-month-wrap .day-item:hover{
     background: #082e31;
     border-bottom: 4px solid #63ac1d;
 }

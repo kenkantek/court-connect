@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin']], function () {
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth']], function () {
 
     Route::get('/', ['as' => 'admin.index', 'uses' => 'DashboardController@getIndex']);
 
@@ -36,7 +36,10 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getAddContext' => 'dashboard.context',
         'getClubs' => 'dashboard.clubs.list',
     ]);
-
+    Route::controller('booking', ManageBookingController::class, [
+        'getManageBooking' => 'booking.index',
+        'getDataOfDateOfClub' => 'booking.dataOfDateOfClub',
+    ]);
 });
 
 Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin','super']], function () {

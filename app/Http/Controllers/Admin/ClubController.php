@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contexts\Court;
+use App\Models\CourtRateDetail;
+use App\Models\DateClub;
 use App\Models\SetOpenDay;
 use App\Repositories\Interfaces\Admin\ClubInterface;
 use DateTime;
@@ -23,12 +25,7 @@ class ClubController extends Controller
         $title = 'Club Setting';
         return view('admin.clubs.setting', compact('title'));
     }
-    public function getSetting1(){
-        \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
-        \Assets::addStylesheets(['select2', 'uniform', 'monthly', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
-        $title = 'CLub Setting';
-        return view('admin.clubs.setting1', compact('title'));
-    }
+
     public function getCourts($club_id)
     {
         $courts = Court::where('club_id', $club_id)->with('surface', 'rates')->paginate(50);
@@ -36,7 +33,7 @@ class ClubController extends Controller
     }
     public function getListDays(Request $request){
         $tmp = date_format(date_create($request->input('year')."-".$request->input('month')),"Y-m");
-        $data = SetOpenDay::where('club_id',$request->input('club_id'))->where('date','LIKE', "%".$tmp."%")->get();
+        $data = DateClub::where('club_id',$request->input('club_id'))->where('date','LIKE', "%".$tmp."%")->get();
         if(empty($data))
             return response()->json(['error' => true,"messages"=>['Data invalid']]);
         return response()->json([
@@ -50,11 +47,12 @@ class ClubController extends Controller
         }
         else{
             $date = date_format(date_create($request->input('date')),"Y-m-d");
-            $tmp = SetOpenDay::where('date',$date)->where('club_id',$request->input('club_id'))->first();
+            $tmp = DateClub::where('date',$date)->where('club_id',$request->input('club_id'))->first();
             if(!isset($tmp)) {
                 $tmp = new SetOpenDay();
                 $tmp['date'] = $date;
-                $tmp['hours'] = "";
+                $tmp['open_time'] = "";
+                $tmp['close_time'] = "";
                 $tmp['club_id'] = $request->input('club_id');
                 $tmp->save();
             }
@@ -71,7 +69,8 @@ class ClubController extends Controller
                     if(empty($request->input('hours_open')) || empty($request->input('hours_close'))){
                         return response()->json(['error' => true,"messages"=>['Data hours invalid']]);
                     }
-                    $tmp['hours'] = $request->input('hours_open')." - ".$request->input('hours_close');
+                    $tmp['open_time'] = $request->input('open_time');
+                    $tmp['close_time'] = $request->input('close_time');
                     $tmp['is_close'] = 0;
                 }
                 $tmp->update();
@@ -84,7 +83,7 @@ class ClubController extends Controller
     }
     public function postSetOpenDay(Request $request){
         $errors = [];
-        if(empty($request->input('hours')) || empty($request->input('end_date'))
+        if(empty($request->input('open_time')) || empty($request->input('close_time'))  || empty($request->input('end_date'))
             || empty($request->input('start_date')) || empty($request->input('club_id'))){
             $errors[] = "Data invalid.";
         }
@@ -97,16 +96,17 @@ class ClubController extends Controller
         foreach($dates as $date){
             if(is_array($request->input('days')) && count($request->input('days')) > 0 && !in_array(date("N",strtotime($date)), $request->input('days')))
                 continue;
-            $tmp = SetOpenDay::where('club_id',$request->input('club_id'))->where('date',$date)->first();
+            $tmp = DateClub::where('club_id',$request->input('club_id'))->where('date',$date)->first();
             if(!isset($tmp)) {
                 $item = new SetOpenDay();
                 $item['date'] = $date;
-                $item['hours'] = $request->input('hours');
+                $item['open_time'] = $request->input('open_time');
+                $item['close_time'] = $request->input('close_time');
                 $item['club_id'] = $request->input('club_id');
                 $item->save();
             }else{
-                //var_dump($tmp);
-                $tmp['hours'] = $request->input('hours');
+                $tmp['open_time'] = $request->input('open_time');
+                $tmp['close_time'] = $request->input('close_time');
                 $tmp->update();
             }
         }

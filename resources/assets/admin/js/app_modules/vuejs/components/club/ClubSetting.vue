@@ -1,42 +1,43 @@
 <template>
-	<li class="box-body">
-		<section class="col-xs-12 col-md-5">
-			<div class="court_list courtbox">
-				<h3 class="title-box pull-left">Courts</h3>
-				<a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
-				<list-court
-					:club-setting-id="clubSettingId"
-					:courts_choice.sync="courts_choice"
+	<div class="box-body">
+		<div id="clubSetting-wrapper" style="position: relative; overflow: hidden">
+			<section class="col-xs-12 col-md-5">
+				<div class="court_list courtbox">
+					<h3 class="title-box pull-left">Courts</h3>
+					<a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
+					<list-court
+						:club-setting-id="clubSettingId"
+						:courts_choice.sync="courts_choice"
+						:courts.sync="courts"
+						:reload-courts.sync="reloadCourts"
+						></list-court>
+				</div>
+				<form-edit-court
+					v-if="courts_choice.length < 2"
+					:courts_choice="courts_choice"
+					:surface="surface"
 					:courts.sync="courts"
+					:club-setting-id="clubSettingId"
 					:reload-courts.sync="reloadCourts"
-					></list-court>
-			</div>
-			<form-edit-court
-				v-if="courts_choice.length < 2"
-				:courts_choice="courts_choice"
-				:surface="surface"
-				:courts.sync="courts"
-				:club-setting-id="clubSettingId"
-				:reload-courts.sync="reloadCourts"
-				:data-rates.sync="dataRates"
-				></form-edit-court>
-			<form-new-court
-				v-if="!courts_choice.length"
-				:surface="surface"
-				:courts.sync="courts"
-				:club-setting-id="clubSettingId"
-				:reload-courts.sync="reloadCourts"
-				:data-rates.sync="dataRates"
-				>
+					:data-rates.sync="dataRates"
+					></form-edit-court>
+				<form-new-court
+					v-if="!courts_choice.length"
+					:surface="surface"
+					:courts.sync="courts"
+					:club-setting-id="clubSettingId"
+					:reload-courts.sync="reloadCourts"
+					:data-rates.sync="dataRates"
+					>
 						<span slot="temp">When creating a new court you can set the initial prices to match a previously created court. Select the court you'd like to copy the prices from.
 						</span>
-			</form-new-court>
+				</form-new-court>
 
-		</section>
-
-		<section class="col-xs-12 col-md-7">
-			<court-rate :club-setting-id.sync="clubSettingId" :data-rates.sync="dataRates" :courts_choice.sync="courts_choice"></court-rate>
-		</section>
+			</section>
+			<section class="col-xs-12 col-md-7">
+				<court-rate :club-setting-id.sync="clubSettingId" :data-rates.sync="dataRates" :courts_choice.sync="courts_choice"></court-rate>
+			</section>
+		</div>
 
 		<section class="col-xs-12 col-md-12" id="box-set-open-days">
 			<h3 class="title-box">Set Opening Hours/Holiday Days</h3>
@@ -457,11 +458,11 @@
 				url =laroute.route('surface.list');
 			this.$http.get(url).then(res => {
 				def.resolve(res.data);
-			}, res => {
-				def.reject(res);
-			});
-			return def.promise;
-		},
+		}, res => {
+			def.reject(res);
+		});
+		return def.promise;
+	},
 	},
 	components: {
 		ListCourt,

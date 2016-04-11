@@ -53,6 +53,9 @@
                         <li class="header"><strong>Content Management</strong></li>
                         <li><a href="/sadmin"><i class="fa fa-home"></i></a>
                     </li>
+                        <li>
+                            <a href="{{ route('booking.index') }}"><i class="fa fa-book"></i></a>
+                        </li>
                     <li>
                         <a href="#"><i class="fa fa-area-chart"></i></a>
 

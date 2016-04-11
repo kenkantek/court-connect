@@ -35,6 +35,10 @@ class Club extends Model
     {
         return $this->hasMany('App\Models\Court');
     }
+    public function date_clubs()
+    {
+        return $this->hasMany('App\Models\DateClub');
+    }
     public function deal()
     {
         return $this->hasMany('App\Models\Deal');

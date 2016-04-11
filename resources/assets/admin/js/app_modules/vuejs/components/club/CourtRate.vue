@@ -253,13 +253,16 @@
 			const courts = _.cloneDeep(this.courts_choice);
 			const dataRates = _.cloneDeep(this.dataRates);
 			console.log(courts);
+			$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
 			this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates}).then(res => {
 				this.reloadCourts =  Math.floor(Math.random() * 10000);
 			this.courts_choice = [];
 			this.dataRates = [];
 			showNotice('success', res.data.success_msg, 'Update Multi Success!');
+			$("#clubSetting-wrapper .loading").remove();
 		}, (res) => {
 			showNotice('error', 'Error', 'Error!');
+			$("#clubSetting-wrapper .loading").remove();
 		});
 	},
 	continueRate() {
