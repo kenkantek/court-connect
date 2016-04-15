@@ -29,6 +29,12 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postUpdateCourt' => 'courts.update',
         'postUpdateCourts' => 'courts.update.multi',
     ]);
+    Route::controller('contracts', ContractController::class, [
+        'postCreateContract' => 'contracts.create',
+        'postUpdateContract' => 'contracts.update',
+        'deleteContract' => 'contracts.delete',
+        'getListContract' => 'contracts.list',
+    ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',
     ]);
