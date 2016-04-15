@@ -2,9 +2,9 @@
     <section class="col-xs-12 col-md-12" id="calendar_bookings">
         <div class="days-in-month-wrap">
             <div class="days">
-                <div v-for="i in date.length" class="day-item {{date[i].status}}"  data-value="{{ date[i].day + '-' + date[i].month + 1 + '-' + date[i].year }}">
-                    {{ days[date[i].day_of_week] }} <br>
-                    <span>{{ date[i].day + " " + months[date[i].month] + " " + date[i].year % 100 }} </span>
+                <div v-for="(index,date) in dates" @click="changeDay('cal_day'+index,date.dayFullFormat)" id="cal_day{{index}}" class="day-item {{date.status}}"  data-value="{{ date.dayFullFormat}}">
+                    {{ days[date.day_of_week] }} <br>
+                    <span>{{ date.day + " " + months[date.month] + " " + date.year % 100 }} </span>
                 </div>
             </div>
             <div class="days-in-month-control">
@@ -123,23 +123,23 @@
                             <h3 class="title-part">Customer Details</h3>
                             <table>
                                 <tr>
-                                    <td align="right">Name {{(JSON.parse(this.booking_detail['user_info']))['firstname']}}</td>
+                                    <td align="right">Name</td>
                                     <td>
-                                        <span class="editable_" v-model="user_info.firstname">{{user_info['firstname']}}</span>
-                                        <span class="editable_" v-model="user_info.lastname">{{user_info['lastname']}}</span>
+                                        <div class="editable_" v-model="user_info.firstname">{{user_info['firstname']}}</div>
+                                        <div class="editable_" v-model="user_info.lastname">{{user_info['lastname']}}</div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="right">Email</td>
-                                    <td class="editable_" v-model="user_info.email">{{user_info['email']}}</td>
+                                    <td><div class="editable_" v-model="user_info.email">{{user_info['email']}}</div></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Phone</td>
-                                    <td class="editable_" v-model="user_info.phone">{{user_info['phone']}}</td>
+                                    <td><div class="editable_" v-model="user_info.phone">{{user_info['phone']}}</div></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Address</td>
-                                    <td class="editable_" v-model="user_info.address1">{{user_info['address1']}}</td>
+                                    <td><div class="editable_" v-model="user_info.address1">{{user_info['address1']}}</div></td>
                                 </tr>
                             </table>
                         </div>
@@ -215,6 +215,7 @@
         props: {
             clubSettingId: {default: false},
             dateChooise: {default: false},
+            watchNewBooking: {default: false},
             readonly: {type: Boolean, default: false},
             value: {type: String, default: ''},
             format: {type: String, default: 'YYYY-MM-DD'}
@@ -228,7 +229,7 @@
                 hours: ['5am','5:30am','6am','6:30am','7am','7:30am','8am','8:30am','9am','9:30am','10am','10:30am','11am',
                     '11:30am','12pm','12:30pm','1pm','1:30pm','2pm','2:30pm','3pm','3:30pm','4pm','4:30pm',
                     '5pm','5:30pm','6pm','6:30pm','7pm','7:30pm','8pm','8:30pm','9pm','9:30pm','10pm','10:30pm'],
-                date: [],
+                dates: [],
                 now: new Date(),
                 courts: [],
                 dataOfClub: [],
@@ -254,6 +255,7 @@
         },
         clubSettingId: 'reloadAsyncData',
         dateChooise: 'reloadAsyncData',
+        watchNewBooking: 'reloadAsyncData'
     },
     asyncData(resolve, reject) {
         this.fetchCourts().done((courts) => {
@@ -293,10 +295,10 @@
                     status = 'date-current';
                     index_date_current = index;
                 }
-                arr.push({day: date.getDate(),day_of_week: date.getDay(), month: date.getMonth(), year: date.getFullYear(), status: status})
+                arr.push({dayFullFormat: (date.getMonth() + 1) + '/'+ date.getDate() + '/' + date.getFullYear(), day: date.getDate(),day_of_week: date.getDay(), month: date.getMonth(), year: date.getFullYear(), status: status})
                 status = 'date-notcurrent';
             });
-            this.date = arr;
+            this.dates = arr;
             //set margin left
             var w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
             if(index_date_current >= 3) {
@@ -320,6 +322,7 @@
         },
         fetchDataOfClub(){
             let def = deferred();
+            $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.dataOfClub'), {date: this.dateChooise, club_id: this.clubSettingId,}).then(
                 res => {
                     console.log(res)
@@ -328,9 +331,11 @@
                         def.resolve(res.data.data);
                     }
                     this.submit = false;
+                    $("#day-view-content .loading").remove();
                 }, (res) => {
                     console.log(res);
                     def.reject(res);
+                    $("#day-view-content .loading").remove();
                 });
                 return def.promise;
             },
@@ -370,6 +375,11 @@
         },
         editBooking(booking_id){
             $("#md-booking-content-expand .editable_").removeClass('editable_').addClass('editable');
+        },
+        changeDay(element,day){
+            $(".days-in-month-wrap .days .date-current ").removeClass('date-current').addClass('date-notcurrent');
+            $("#"+element).addClass('date-current').removeClass('date-notcurrent');
+            this.$dispatch('child-change-dateChooise', day);
         }
     },
     ready () {

@@ -542,16 +542,19 @@ form.form-court{
     text-align: left;
     padding-left: 20px;
     border: 1px solid #ccc;
+    border-top: 0px;
+    border-right: 0px;
     height: 30px;
 }
 .grid-row.col-hour .grid-null{
     width: 100px;
-    height: 60px;
+    height: 61px;
 }
 .grid-content-wap .grid-row .grid{
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     height: 30px;
+    box-sizing: border-box;
 }
 .grid-content-wap .grid-row .grid.g2{
     height: 60px;
@@ -573,6 +576,7 @@ form.form-court{
 }
 .grid-content-wap .grid-row .grid.gn ~ .gend{
     height: 0px;
+    border: 0px;
 }
 .grid-content-wap .grid-row .grid:last-child{
     height: 30px;
@@ -618,4 +622,15 @@ form.form-court{
 }
 .select2-dropdown, .select2-selection{
     width: 200px !important;
+}
+.grid-row.col-hour .court-name:nth-of-type(2n){
+    height: 60px;
+}
+.grid-row.col-hour .court-name:nth-of-type(2n+1){
+    height: 0px;
+    opacity: 0;
+    border: 0px;
+}
+.grid-content-wap .grid-row .day-grid:last-child{
+    border-bottom: 1px solid #ccc;
 }
