@@ -14,11 +14,10 @@ class DateClub extends Model
 //    }
     public function club()
     {
-        return $this->belongsTo('App\Models\Club', 'club_id');
-
+        return $this->belongsTo('App\Models\Contexts\Club','club_id');
     }
-    public function court_rate_details()
-    {
-        return $this->hasMany('App\Models\CourtRateDetail');
-    }
+//    public function court_rate_details()
+//    {
+//        return $this->hasMany('App\Models\CourtRateDetail');
+//    }
 }

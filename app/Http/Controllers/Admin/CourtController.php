@@ -78,7 +78,7 @@ class CourtController extends Controller
             $rate->is_member = $inputRate['is_member'];
             $rate->court_id = $court['id'];
             $rate->save();
-            $this->setDateRateOfCourt($rate['id'],$court, $inputRate);
+            //$this->setDateRateOfCourt($rate['id'],$court, $inputRate);
         }
 
     }

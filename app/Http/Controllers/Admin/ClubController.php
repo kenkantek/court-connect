@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contexts\Court;
 use App\Models\CourtRateDetail;
-use App\Models\DateClub;
 use App\Models\SetOpenDay;
 use App\Repositories\Interfaces\Admin\ClubInterface;
 use DateTime;
@@ -33,7 +32,7 @@ class ClubController extends Controller
     }
     public function getListDays(Request $request){
         $tmp = date_format(date_create($request->input('year')."-".$request->input('month')),"Y-m");
-        $data = DateClub::where('club_id',$request->input('club_id'))->where('date','LIKE', "%".$tmp."%")->get();
+        $data = SetOpenDay::where('club_id',$request->input('club_id'))->where('date','LIKE', "%".$tmp."%")->get();
         if(empty($data))
             return response()->json(['error' => true,"messages"=>['Data invalid']]);
         return response()->json([
@@ -47,7 +46,7 @@ class ClubController extends Controller
         }
         else{
             $date = date_format(date_create($request->input('date')),"Y-m-d");
-            $tmp = DateClub::where('date',$date)->where('club_id',$request->input('club_id'))->first();
+            $tmp = SetOpenDay::where('date',$date)->where('club_id',$request->input('club_id'))->first();
             if(!isset($tmp)) {
                 $tmp = new SetOpenDay();
                 $tmp['date'] = $date;
@@ -96,7 +95,7 @@ class ClubController extends Controller
         foreach($dates as $date){
             if(is_array($request->input('days')) && count($request->input('days')) > 0 && !in_array(date("N",strtotime($date)), $request->input('days')))
                 continue;
-            $tmp = DateClub::where('club_id',$request->input('club_id'))->where('date',$date)->first();
+            $tmp = SetOpenDay::where('club_id',$request->input('club_id'))->where('date',$date)->first();
             if(!isset($tmp)) {
                 $item = new SetOpenDay();
                 $item['date'] = $date;

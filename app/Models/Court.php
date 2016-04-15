@@ -47,4 +47,8 @@ class Court extends Model
     {
         return $this->hasMany('App\Models\CourtRate');
     }
+    public function court_rate_detailes()
+    {
+        return $this->hasMany('App\Models\CourtRateDetail');
+    }
 }

@@ -3,6 +3,7 @@
 use App\Models\Auth\User;
 use App\Models\Contexts\Club;
 use App\Models\Contexts\Court;
+use App\Models\Player;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,25 @@ $factory->define(User::class, function (Faker\Generator $faker) {
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
         'fullname' => $faker->name,
+        'email' => $faker->email,
+        'password' => bcrypt(12345678),
+        'remember_token' => str_random(40),
+        'phone' => $faker->phoneNumber,
+        'gender' => rand(1, 2),
+    ];
+});
+
+$factory->define(Player::class, function (Faker\Generator $faker) {
+    return [
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
+        'username' => str_random(40),
+        'state' => $faker->state,
+        'city' => $faker->city,
+        'zip_code' => $faker->postcode,
+        'address1' => $faker->address,
+        'address2' => $faker->secondaryAddress,
+        'surname' => str_random(40),
         'email' => $faker->email,
         'password' => bcrypt(12345678),
         'remember_token' => str_random(40),

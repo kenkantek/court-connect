@@ -8,6 +8,7 @@ import SuperSetting from './vuejs/components/super/SuperSetting.vue';
 import HeaderMain from './vuejs/components/header/HeaderMain.vue';
 import UserSetting from './vuejs/components/user/UserSetting.vue';
 import ManageBooking from './vuejs/components/booking/ManageBooking.vue';
+import NewBooking from './vuejs/components/booking/NewBooking.vue';
  var _ = require('lodash'),
      deferred = require('deferred');
 new Vue({
@@ -25,7 +26,8 @@ new Vue({
         SuperSetting,
         HeaderMain,
 		UserSetting,
-		ManageBooking
+		ManageBooking,
+		NewBooking
     },
 });
 

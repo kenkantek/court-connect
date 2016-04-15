@@ -109,6 +109,13 @@ return [
                     'local' => '/resources/vendor/routes.js',
                 ],
             ],
+            'jquery-slider' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/jquery-slider/jquery.slider.min.js',
+                ],
+            ],
             'city-autocomplete' => [
                 'use_cdn' => false,
                 'location' => 'bottom',
@@ -358,6 +365,14 @@ return [
                 'src' => [
                     'local' => '',
                     'cdn' => 'http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css',
+                ],
+            ],
+            'jquery-slider' => [
+                'use_cdn' => true,
+                'location' => 'top',
+                'src' => [
+                    'local' => '',
+                    'cdn' => '/resources/vendor/jquery-slider/jquery.slider.min.css',
                 ],
             ],
             'adminlte' => [

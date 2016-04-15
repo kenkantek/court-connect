@@ -11,17 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class Player extends Model
 {
     protected $table = 'players';
-
-    /**
-    * The date fields for the model.clear
-    *
-    * @var array
-    */
-    protected $dates    = ['created_at', 'updated_at'];
-
-    protected $fillable = ['user_id', 'receive_discount_offers', 'tenis_level', 'is_recive_notification', 'zipcode', 'address1', 'address2', 'city', 'state'];
-
-
+    //protected $guarded = array();
+    protected $fillable = ['username','email', 'password', 'phone', 'first_name', 'last_name', 'zip_code','city','state','address1','address2','surname', 'facebook', 'google', 'gender', 'fullname'];
 
     public function user()
     {

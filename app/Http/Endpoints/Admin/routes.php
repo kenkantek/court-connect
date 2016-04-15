@@ -38,7 +38,14 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     ]);
     Route::controller('booking', ManageBookingController::class, [
         'getManageBooking' => 'booking.index',
-        'getDataOfDateOfClub' => 'booking.dataOfDateOfClub',
+        'getDataOfClub' => 'booking.dataOfClub',
+        'getViewPriceOrder' =>'booking.viewPriceOrder',
+        'getCheckInputBooking' =>'booking.checkInputBooking',
+        'getCheckInputCustomer' =>'booking.checkInputCustomer',
+        'postCheckInputPayment' =>'booking.checkInputPayment',
+        'getView' =>'booking.view',
+        'getAcceptPayment' =>'booking.acceptPayment',
+        'getSearchPlayers' =>'booking.players'
     ]);
 });
 

@@ -11,6 +11,7 @@
 				<li class="active">Manager Bookings</li>
 			</ol>
 		</div>
+
 		<div class="box-body">
 			<manage-booking
 				:club-setting-id.sync="clubSettingId"
@@ -19,388 +20,62 @@
 	</div>
 
 
-	<!-- Modal -->
-	<div class="modal fade mb-modal" style="display: none" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Modal title</h4>
-				</div>
-				<div class="modal-body">
-					<div id="mb-create-new-booking">
-						<!-- Nav tabs -->
-						<ul class="nav nav-tabs mb-tabs" role="tablist">
-							<li id="mb-booking-detail" role="presentation" class="active">Booking detail</li>
-							<li id="mb-customer-details" role="presentation">Profile</li>
-							<li id="mb-payment-details" role="presentation">Messages</li>
-							<li id="mb-confirmation"role="presentation">Settings</li>
-						</ul>
-						<!-- Tab panes -->
-						<div class=" mb-tab-content tab-content">
-							<div role="tabpanel" class="tab-pane active" id="mb-tab-content-view">
-								<div id="mb-booking-detail-content">
-									<form action="">
-										<div class="slc-type mb-group-sl">
-											<h4 class="mb-title-h4-modal text-center">Select a Booking Type</h4>
-											<div class="col-xs-12 col-md-4">
-												<input type="radio" name="book-type" value="open" id="book-type-open">
-												<label for="book-type-opentime">Open Time</label>
-											</div>
-											<div class="col-xs-12 col-md-4">
-												<input type="radio" name="book-type" value="contract" id="book-type-contract">
-												<label for="book-type-contract">Contract Time</label>
-											</div>
-											<div class="col-xs-12 col-md-4">
-												<input type="radio" name="book-type" value="lesson" id="book-type-lesson">
-												<label for="book-type-lesson">Lesson</label>
-											</div>
-										</div>
-										<div class="slc-member mb-group-sl">
-											<h4 class="mb-title-h4-modal text-center">Member?</h4>
-											<div class="col-xs-12 col-md-6">
-												<input type="radio" name="book-member" id="book-member-yes">
-												<label for="book-member-yes">Yes</label>
-											</div>
-											<div class="col-xs-12 col-md-6">
-												<input type="radio" name="book-member" id="book-member-no">
-												<label for="book-member-no">No</label>
-											</div>
-										</div>
-										<div class="slc-day-hour">
-											<div class="col-xs-12 col-md-6">
-												<div class="slc-type-open slc-type-lesson slc-type-group">
-													<h4 class="mb-title-h4-modal text-center">Select a Date</h4>
-													<input type="text" class="form-control" name="mb-book-day-open" id="mb-book-day-open">
-												</div>
-												<div class="slc-type-contract slc-type-group">
-													<h4 class="mb-title-h4-modal text-center">Select a Date Period</h4>
-													<input type="text" class="form-control" name="mb-book-day-contract" id="mb-book-day-contract">
-													<h4 class="mb-title-h4-modal text-center">Start Day</h4>
-													<select name="mb-book-start-day-contract" class="form-control">
-														<option value="mon">Monday</option>
-														<option value="tue">Tuesday</option>
-														<option value="web">Wednesday</option>
-														<option value="thu">Thursday</option>
-														<option value="fri">Friday</option>
-														<option value="sat">Saturday</option>
-														<option value="sun">Sunday</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-xs-12 col-md-6">
-												<h4 class="mb-title-h4-modal text-center">Select a Time</h4>
-												<select name="mb-book-hour" class="form-control">
-													@for($i=5; $i<13; $i++)
-														<option value="{{$i}}am">{{$i}}AM</option>
-													@endfor
-													@for($i=1; $i<12; $i++)
-														<option value="{{$i}}pm">{{$i}}PM</option>
-													@endfor
-												</select>
-												<h4 class="mb-title-h4-modal text-center">length</h4>
-												<input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" value="">
-											</div>
-										</div>
-
-										<div class="clearfix"></div>
-										<div class="mb-group-sl slc-type-contract slc-type-group">
-											<div class="col-xs-12 col-md-12">
-												<span>Total day: 35</span>
-											</div>
-										</div>
-
-										<div class="mb-group-sl">
-											<div class="col-xs-12 col-md-12" style="margin: 20px 0px">
-												<h4 class="mb-title-h4-modal text-center">Select a Court</h4>
-												<select name="mb-book-court" class="form-control">
-													@for($i=1; $i<110; $i++)
-														<option value="{{$i}}">Court #{{$i}}</option>
-													@endfor
-												</select>
-											</div>
-										</div>
-										<div class="mb-group-sl slc-type-contracttime slc-type-group">
-											<div class="col-xs-12 col-md-12">
-												<h4 class="mb-title-h4-modal text-center">Extras</h4>
-												<input type="checkbox" class="styled">
-												<label for="">Balls($10</label>
-											</div>
-										</div>
-										<div class="mb-group-sl slc-type-lesson slc-type-group">
-											<div class="col-xs-12 col-md-12">
-												<h4 class="mb-title-h4-modal text-center">Choose a Teacher</h4>
-												<select name="mb-book-teacher" class="form-control">
-													@for($i=1; $i<110; $i++)
-														<option value="{{$i}}">Teacher #{{$i}}</option>
-													@endfor
-												</select>
-											</div>
-										</div>
-
-										<div class="clearfix"></div>
-										<div class="mb-group-sl">
-											<div class="col-xs-12 col-md-12">
-												<h4 class="mb-title-h4-modal text-center">Order Total: <strong>$45</strong></h4>
-											</div>
-										</div>
-
-										<div class="clearfix"></div>
-										<div class="mb-group-sl">
-											<div class="col-xs-12 col-md-12">
-												<div class="pull-right">
-													<input type="submit" value="Submit" class="btn btn-primary">
-												</div>
-											</div>
-										</div>
-									</form>
-								</div>
-
-								<div class="clearfix"></div>
-								<div id="mb-customer-details-content">
-									<div class="info-booking-details">
-										<h4 class="bold pull-left">Booking Details</h4>
-										<a href="" id="mb-edit-booking-details" class="btn btn-primary pull-right">Edit</a>
-										<hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
-									</div>
-									<div class="clearfix"></div>
-									<table class="tbl-info-booking-details" style="width: 100%">
-										<tr>
-											<td>
-												<div>Booking Type: <b>Open Court</b></div>
-												<div>Member: <b>Yes</b></div>
-											</td>
-
-											<td>
-												<div>Date: <b>Friday </b></div>
-												<div>Time: <b>9:00am</b></div>
-												<div>Length: <b>1 Hour</b></div>
-											</td>
-
-											<td>
-												<div>Court: <b>Court#1</b></div>
-											</td>
-											<td>
-												<div>Cost: <b>$45</b></div>
-											</td>
-										</tr>
-									</table>
-									<div class="info-customers-details">
-										<h4 class="pull-left bold">Customer Details</h4>
-										<hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
-										{!! Form::open(['method' => 'POST','files' => true]) !!}
-										<div class="form-group">
-											{!! Form::label('surname','Customer Lookup') !!}
-											{!! Form::text('surname','',['class'=>'form-control','placeholder'=>'Surname']) !!}
-										</div>
-										<div class="form-group pull-left">
-											{!! Form::label('title','Title *') !!}
-											{!! Form::text('title','',['class'=>'form-control','placeholder'=>'Title']) !!}
-										</div>
-										<div class="form-group pull-left">
-											{!! Form::label('firstname','Fist Name *') !!}
-											{!! Form::text('firstname','',['class'=>'form-control','placeholder'=>'First name']) !!}
-										</div>
-										<div class="form-group pull-left">
-											{!! Form::label('lastname','Last Name *') !!}
-											{!! Form::text('lastname','',['class'=>'form-control','placeholder'=>'Lastname']) !!}
-										</div>
-										<div class="form-group clearfix">
-											{!! Form::label('zipcode','Zipcode *') !!}
-											{!! Form::text('title','',['class'=>'form-control','placeholder'=>'Enter Zip Code','style'=>'width: 50%; margin-right: 10px;']) !!}
-											{!! Form::button('Address Lookup',['class'=>'btn btn-primary']) !!}
-										</div>
-										<div class="form-group">
-											{!! Form::label('address1','Address 1 *') !!}
-											{!! Form::text('address1','',['class'=>'form-control','placeholder'=>'Address Line 1']) !!}
-										</div>
-										<div class="form-group">
-											{!! Form::label('address2','Address 2 *') !!}
-											{!! Form::text('address2','',['class'=>'form-control','placeholder'=>'Address Line 2']) !!}
-										</div>
-										<div class="form-group">
-											{!! Form::label('city','City *') !!}
-											{!! Form::text('city','',['class'=>'form-control','placeholder'=>'City']) !!}
-										</div>
-										<div class="form-group">
-											{!! Form::label('state','State *') !!}
-											{!! Form::text('state','',['class'=>'form-control','placeholder'=>'State']) !!}
-										</div>
-										<div class="form-group">
-											{!! Form::label('email','Email *') !!}
-											{!! Form::text('email','',['class'=>'form-control','placeholder'=>'State']) !!}
-										</div>
-										<div class="form-group">
-											{!! Form::label('phone','Phone *') !!}
-											{!! Form::text('phone','',['class'=>'form-control','placeholder'=>'Phone']) !!}
-										</div>
-										<div class="form-group">
-											{!! Form::submit('Next',['class'=>'btn btn-primary pull-right']) !!}
-										</div>
-
-										{!! Form::close() !!}
-									</div>
-								</div>
-
-								<div class="clearfix"></div>
-								<div id="mb-payment-details-content">
-									<div class="info-booking-details">
-										<h4 class="bold pull-left">Booking Details</h4>
-										<a href="" id="mb-edit-booking-details" class="btn btn-primary pull-right">Edit</a>
-										<hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
-									</div>
-
-									<div class="clearfix"></div>
-									<table class="tbl-info-booking-details" style="width: 100%">
-										<tr>
-											<td>
-												<div>Booking Type: <b>Open Court</b></div>
-												<div>Member: <b>Yes</b></div>
-											</td>
-
-											<td>
-												<div>Date: <b>Friday </b></div>
-												<div>Time: <b>9:00am</b></div>
-												<div>Length: <b>1 Hour</b></div>
-											</td>
-
-											<td>
-												<div>Court: <b>Court#1</b></div>
-											</td>
-											<td>
-												<div>Cost: <b>$45</b></div>
-											</td>
-										</tr>
-									</table>
-									<div class="info-customers-details">
-										<div class="info-booking-details">
-											<h4 class="bold pull-left">Booking Details</h4>
-											<a href="" id="mb-edit-booking-details" class="btn btn-primary pull-right">Edit</a>
-											<hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
-										</div>
-										<div class="clearfix"></div>
-										<table style="width: 100%">
-											<tr>
-												<td>Name: </td>
-												<td>Mr Anthony Cooper</td>
-											</tr>
-											<tr>
-												<td>Address: </td>
-												<td>ABC</td>
-											</tr>
-											<tr>
-												<td>Email: </td>
-												<td>abc@gmail.com</td>
-											</tr>
-											<tr>
-												<td>Tel: </td>
-												<td>0123456789</td>
-											</tr>
-										</table>
-									</div>
-
-									<div class="info-payment-details">
-										<h4 class="bold pull-left">Payment Details</h4>
-										<hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
-										<div class="clearfix"></div>
-										{!! Form::open(['method' => 'POST','files' => true]) !!}
-										<div class="form-group">
-											<div class="col-xs-12 col-md-3">
-												{!! Form::label('cost-adjustment','Cost Adjustment') !!}
-												{!! Form::text('cost-adjustment','',['class'=>'form-control','placeholder'=>'-$10']) !!}
-											</div>
-											<div class="col-xs-12 col-md-9">
-												{!! Form::label('adjustment-reason','Adjustment Reason') !!}
-												{!! Form::text('adjustment-reason','',['class'=>'form-control','placeholder'=>'eg. Manager Discount']) !!}
-											</div>
-										</div>
-										<div class="clearfix"></div>
-										<div class="form-group">
-											<div class="pull-left payment-item">
-												<div class="img-wrap">
-													<img src="{{url('/resources/admin/img/icon_payment_mastercard.png') }}" alt="mastercard">
-												</div>
-												<input name="payment" type="radio" value="mastercard" id="mastercard">
-												<label for="mastercard">Mastercard</label>
-											</div>
-											<div class="pull-left payment-item">
-												<div class="img-wrap">
-												<img src="{{url('/resources/admin/img/icon_payment_visa.png') }}" alt="visa">
-												</div>
-												<input name="payment" type="radio" value="visa" id="visa">
-												<label for="visa">Visa</label>
-											</div>
-											<div class="pull-left payment-item" style="width: 32%">
-												<div class="img-wrap">
-													<img src="{{url('/resources/admin/img/icon_payment_emerican_express.png') }}" alt="american-express">
-												</div>
-												<input name="payment" type="radio" value="american-express" id="american-express">
-												<label for="mastercard">American Express</label>
-											</div>
-											<div class="pull-left payment-item">
-												<div class="img-wrap">
-													<img src="{{url('/resources/admin/img/icon_payment_discover.png') }}" alt="discover">
-												</div>
-												<input name="payment" type="radio" value="discover" id="discover">
-												<label for="discover">Discover</label>
-											</div>
-											<div class="pull-left payment-item">
-												<div class="img-wrap">
-													<img src="{{url('/resources/admin/img/icon_payment_cash.png') }}" alt="cash">
-												</div>
-												<input name="cash" type="radio" value="cash" id="cash">
-												<label for="mastercard">Cash</label>
-											</div>
-										</div>
-										<div class="clearfix"></div>
-										<div class="form-group">
-											<div class="pull-left">
-												<label for="card-number">Card Number</label>
-												<input type="text" name="card-number" class="form-control" id="card-number" placeholder="12345672234566" style="width: 240px;">
-											</div>
-											<div class="pull-left">
-												<label for="card-expiry">Expiry</label>
-												<input type="text" name="card-expiry" class="form-control" id="card-expiry" placeholder="06/17" style="width: 120px; margin: 0px 10px;">
-											</div>
-											<div class="pull-left">
-												<label for="card-cvv">CVV*</label>
-												<input type="text" name="card-cvv" class="form-control" id="card-expiry" placeholder="123" style="width: 100px; margin-right: 10px;">
-											</div>
-											<div class="pull-right">
-												<img src="{{url('/resources/admin/img/icon_payment-cart.png') }}" alt="card" style="margin-top: 25px;" >
-											</div>
-										</div>
-										<div class="clearfix"></div>
-										<div class="">
-											<input type="submit" value="Next" class="btn btn-primary pull-right">
-										</div>
-										{!! Form::close() !!}
-									</div>
-									<div class="clearfix"></div>
-								</div>
-
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<style>
 		#myModal{
-			z-index: 9999;
+			z-index: 3000;
 		}
 		.modal-content{
 			color: #000;
+			text-align: left;
+		}
+		#myModalLabel{
+			text-align: center;
+			font-size: 2em;;
 		}
 		.modal.in .modal-dialog{
 			background: #fff;;
 		}
+		#day-view-content table {
+			table-layout: fixed;
+			width: 100%;
+			*margin-left: -100px;/*ie7*/
+		}
+		#day-view-content td, #day-view-content th {
+			vertical-align: top;
+			border-top: 1px solid #ccc;
+			padding:10px;
+			width:100px;
+		}
+		#day-view-content tbody tr{
+			min-height: 40px;
+			height: 40px;
+		}
+		#day-view-content tbody tr th {
+			position: absolute;
+			width: 100px;
+		}
+		#day-view-content {
+			overflow-x:scroll;
+			overflow-y:visible;
+		}
+		#mb-create-new-booking .mb-tab-content{
+			padding-top: 20px;
+			overflow: hidden;
+		}
+		.btn-md-cpl{
+			clear: both;
+			margin: 10px auto;
+			display: block;
+			width: 240px;
+		}
+		.btn-md-cpl i{
+			padding-right: 20px;
+		}
 	</style>
 	<script type="text/javascript">
 		$(function() {
+
+			$("#myModal .modal-dialog").css('max-height',$(window).height() -100);
 			//calendar
 			function getDaysInMonth(month, year) {
 				// Since no month has fewer than 28 days
@@ -413,24 +88,14 @@
 				return days;
 			}
 
-//			var daysInMonth = getDaysInMonth(3,2016);
-//			var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-//			var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-//			daysInMonth.forEach(function(date, index){
-//				var month = date.getMonth();
-//				var day = date.getDate();
-//				var year = date.getFullYear();
-//				$("#calendar_bookings .days-in-month-wrap .days").append('<div class="day-item" data-value="'+day+'/'+month+'/'+year+'">'+weekday[date.getDay()]+'<br><span>'+day+' '+ monthNames[month-1] + ' '+year+ ' </span></div>');
-//			});
 			var w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
 			$('#calendar_bookings .days .day-item').css('width',w_grid);
-			//$('#calendar_bookings .days-in-month-wrap .days').css({'width':w_grid * $('#calendar_bookings .days .day-item').length,'margin-left':0});
 
 			$("body").on('click','#next-day-in-month',function(){
 				var w_left = parseFloat($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));
 				w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
 				w_left -= w_grid;
-				if(Math.abs(w_left) > parseInt($('#calendar_bookings .days-in-month-wrap .days').css('width')) - w_grid *6 )
+				if(Math.abs(w_left) < parseInt($('#calendar_bookings .days-in-month-wrap .days').css('width')) - w_grid *6 )
 					return;
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
 			});
@@ -444,18 +109,35 @@
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
 			});
 
-
+			//drag
+			//$( "#day-view-content > table" ).draggable();
 			// end calendar
 
+			//$(".create_new_book").click();
+
+
 			$('.datetimepicker').datetimepicker({defaultDate: new Date(), format: 'MM/DD/YYYY'});
-			var w_grid = ($('.days-wrap').width() - 100)/8;
-			$('.day-view-content .day-grid').css('width',w_grid);
-			$('.day-view-content .grid-wrap').css('width', w_grid * $('.day-view-content .court-name-wrap .grid-header').length);
+
 			$('.daterange').daterangepicker();
-			$(".day-view-content .day-grid.available").click(function(){
-				$("#content-expand").remove();
-				$(this).append('<div id="content-expand"><div class="available-slot-expanded">'+$('.available-slot-expanded').html()+'</div></div>');
-				$("#content-expand").css('width',$(".day-view-content").width());
+			$("body").on('click',".day-view-content .day-grid.available",function(event){
+				$("#md-available-content-expand").css({'display':'block','width': $(".day-view-content").width() - 100});
+				var tooltipX =  110;
+				var tooltipY = event.pageY + 8 - $("#day-view-content").offset().top + 40;
+				$("#md-available-content-expand").css({top: tooltipY, left: tooltipX});
+			});
+
+			$("body").on('click',".day-view-content .day-grid.open, .day-view-content .day-grid.contract, .day-view-content .day-grid.lesson",function(event){
+				$("#md-booking-content-expand").css({'display':'block','width': $(".day-view-content").width() - 100});
+				var tooltipX =  110;
+				var tooltipY = event.pageY + 8 - $("#day-view-content").offset().top + 40;
+				$("#md-booking-content-expand").css({top: tooltipY, left: tooltipX});
+			});
+
+			$("body").on('click','#md-available-content-expand .close',function(){
+				$("#md-available-content-expand").hide();
+			})
+			$("body").on('click','#md-booking-content-expand .close, #mb-cancel-booking',function(){
+				$("#md-booking-content-expand").hide();
 			})
 
 			$(document).on("click",'.btn-in-expand',function(){ console.log("test");
@@ -463,36 +145,75 @@
 				$('.show-expand').slideToggle();
 			});
 
-			//test model open
-			//$(".create_new_book").click();
-
 			$('#mb-book-day-open').datetimepicker({
 				inline: true,
 				sideBySide: false,
-				format: 'DD/MM',
+				format: 'MM/DD/YYYY',
 			});
 			$('#card-expiry').datetimepicker({
-				format: 'YYYY-MM-DD',
+				format: 'MM/YY',
 			})
 			$('#mb-book-day-contract').daterangepicker()
-			$("#mb-book-in-hour").ionRangeSlider({
-				min: 1,
-				max: 7,
-				type: 'single',
-				step: 1,
-				postfix: " Hour",
-				prettify: false,
-				hasGrid: true,
-				hideMinMax: true,
-			});
+
 			$(".irs-slider.single").css('background',"abc");
 
 			$("input[name='book-type']").on('change',function(){
 				$(".slc-type-group").addClass('hidden');
 				$(".slc-type-" + $(this).val()).removeClass('hidden');
 			});
-			//$("#book-type-open").prop("checked", true);
+
 			$("#book-type-open").click();
+
+
+			$(".js-data-user-ajax").select2({
+				ajax: {
+					url: "{{route('booking.players')}}",
+					dataType: 'json',
+					delay: 250,
+					data: function (params) {
+						return {
+							q: params.term, // search term
+							page: params.page
+						};
+					},
+					processResults: function (data, params) {
+						// parse the results into the format expected by Select2
+						// since we are using custom formatting functions we do not need to
+						// alter the remote JSON data, except to indicate that infinite
+						// scrolling can be used
+						params.page = params.page || 1;
+
+						return {
+							results: data,
+							pagination: {
+								more: (params.page * 30) < data.total_count
+							}
+						};
+					},
+					cache: true
+				},
+				escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+				minimumInputLength: 1,
+				templateResult: formatRepo, // omitted for brevity, see the source of this page
+				templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+			});
+
+			function formatRepo (repo) {
+				if (repo.loading) return repo.text;
+
+				var markup = "<div class='select2-result-repository clearfix'>" +
+						"<div class='select2-result-repository__title'>Email: " + repo.email + "</div>";
+
+				if (repo.address1) {
+					markup += "<div class='select2-result-repository__description'>Address: " + repo.address1 + "</div>";
+				}
+
+				return markup;
+			}
+
+			function formatRepoSelection (repo) {
+				return repo.email || repo.address1;
+			}
 		});
 	</script>
 @stop
