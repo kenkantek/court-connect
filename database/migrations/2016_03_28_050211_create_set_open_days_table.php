@@ -15,7 +15,8 @@ class CreateSetOpenDaysTable extends Migration
         Schema::create('set_open_days', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
-            $table->char('hours');
+            $table->char('open_time');
+            $table->char('close_time');
             $table->boolean('is_holiday')->default(false);
             $table->boolean('is_close')->default(false);
             $table->integer('club_id')->unsigned();
