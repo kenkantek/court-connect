@@ -20,7 +20,8 @@
 
     <calendar-booking
         :club-setting-id="clubSettingId",
-        :date-chooise="dateChooise"
+        :date-chooise="dateChooise",
+        :watch-new-booking="watchNewBooking"
         ></calendar-booking>
 
     <div class="clearfix"></div>
@@ -29,6 +30,7 @@
     <new-booking
             :club-setting-id.sync="clubSettingId",
             :click-new-booking.sync="clickNewBooking"
+            :watch-new-booking="watchNewBooking"
             ></new-booking>
     <!-- Modal -->
 
@@ -44,7 +46,8 @@
         data(){
             return {
                 dateChooise: (new Date()).getMonth()+1+"/"+(new Date()).getDate()+"/"+(new Date()).getFullYear(),
-                clickNewBooking: null
+                clickNewBooking: null,
+                watchNewBooking: Math.random()
             }
         },
         watch: {
@@ -56,9 +59,9 @@
         asyncData(resolve, reject) {
 
         },
-    computed: {
+        computed: {
 
-    },
+        },
         methods:{
             openModalNewBooking(){
                 $("#myModal").modal('show');
@@ -67,6 +70,11 @@
         },
         components: {
             SearchBooking , CalendarBooking, NewBooking
+        },
+        events: {
+            'child-change-dateChooise': function (day) {
+                this.dateChooise = day;
+            }
         }
     }
 </script>

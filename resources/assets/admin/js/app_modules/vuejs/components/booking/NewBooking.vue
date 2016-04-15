@@ -478,7 +478,7 @@
     var _ = require('lodash'),
             deferred = require('deferred');
     export default {
-        props: ['clubSettingId','clickNewBooking'],
+        props: ['clubSettingId','clickNewBooking','watchNewBooking'],
         data (){
         return {
             courts: [],
@@ -715,7 +715,6 @@
             this.total_price = '';
         }
     },ready () {
-
         //test model open
         //$(".create_new_book").click();
 
