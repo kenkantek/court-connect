@@ -33,7 +33,6 @@
 			</div>
 			<div class="pull-left">
 				<strong>Date Period</strong>
-				<div class="row">
 					<div>
 						<select name="list-period" id="inputList-Period" class="form-control" required="required" v-model="indexDataRates">
 							<option v-for="(index,d) in dataRates" v-text = "d.name" track-by="$index" value="{{index}}"></option>
@@ -43,21 +42,20 @@
 						<button v-if="dataRates.length > 0" class="btn btn-danger" style="margin-right:30px" @click="deleteDataRate()">Delete</button>
 						<button class="btn btn-primary" v-show="courts_choice.length > 1" @click="updateMulti">Update Rates</button>
 					</div>
-				</div>
 			</div>
 			<div class="clearfix"></div>
 			<br>
-			<div>
-				<div class="pull-left">
+			<div class="row">
+				<div class="col-md-5">
 					<strong>Enter Price</strong>
 					<input class="price form-control" placeholder="Enter Price" name="price" type="number" v-model="priceSet">
 					<span>Select hours from grid and press apply to adjust hours</span>
+				</div>				
+				<div class="col-md-4">
+					<button class="btn btn-primary"  @click="setPrice()" style="margin-top: 20px;">Apply</button>
 				</div>
-				<div class="pull-left">
-					<button class="btn btn-primary unSelected hidden" style="margin-top: 20px; margin-left: 20px">Remove all select</button>
-				</div>
-				<div class="pull-right">
-					<button class="btn btn-primary"  @click="setPrice()">Apply</button>
+				<div class="col-md-3 text-right">
+					<button class="btn btn-primary unSelected hidden" style="margin-top: 20px; margin-left: 20px" @click="removeSelect()">Remove all select</button>
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -234,13 +232,6 @@
 				this.selected = _.reject(this.selected, {x, y});
 			}
 		});
-		$('.unSelected').click(function(event){
-			//var s = $('#table-rate').selectable( "option" , "unselected");
-			//s();
-			$("#table-rate .ui-selected").removeClass("ui-selected").addClass("ui-unselecting");
-			this.selected  = [];
-			$(".unSelected").addClass('hidden');
-		});
 		$('.daterange').daterangepicker(
 			{
 				showDropdowns: true,
@@ -249,17 +240,24 @@
 		});
 	},
 	methods: {
+		removeSelect(){
+			$("#table-rate .ui-selected").removeClass("ui-selected").addClass("ui-unselecting");
+			this.selected  = [];
+			$(".unSelected").addClass('hidden');
+		},
 		updateMulti(){
 			const courts = _.cloneDeep(this.courts_choice);
 			const dataRates = _.cloneDeep(this.dataRates);
-			console.log(courts);
+			$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
 			this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates}).then(res => {
 				this.reloadCourts =  Math.floor(Math.random() * 10000);
 			this.courts_choice = [];
 			this.dataRates = [];
 			showNotice('success', res.data.success_msg, 'Update Multi Success!');
+			$("#clubSetting-wrapper .loading").remove();
 		}, (res) => {
 			showNotice('error', 'Error', 'Error!');
+			$("#clubSetting-wrapper .loading").remove();
 		});
 	},
 	continueRate() {

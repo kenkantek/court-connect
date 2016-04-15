@@ -35,6 +35,10 @@ class Court extends Model
     {
         return $this->belongsTo('App\Models\Club', 'club_id');
     }
+    public function club_courts()
+    {
+        return $this->hasMany('App\Models\ClubCourt');
+    }
     public function deal()
     {
         return $this->hasMany('App\Models\Deal');
@@ -42,5 +46,9 @@ class Court extends Model
     public function court_rates()
     {
         return $this->hasMany('App\Models\CourtRate');
+    }
+    public function court_rate_detailes()
+    {
+        return $this->hasMany('App\Models\CourtRateDetail');
     }
 }

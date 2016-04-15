@@ -35,7 +35,7 @@ class Court extends Model
 
     public function club()
     {
-        return $this->belongsTo('App\Models\Contexts\Club');
+        return $this->belongsTo('App\Models\Contexts\Club','club_id');
     }
     public function surface()
     {
@@ -44,5 +44,13 @@ class Court extends Model
     public function rates()
     {
         return $this->hasMany('App\Models\CourtRate', 'court_id');
+    }
+    public function court_rate_details()
+    {
+        return $this->hasMany('App\Models\CourtRateDetail');
+    }
+    public function bookings()
+    {
+        return $this->hasMany('App\Models\Booking');
     }
 }

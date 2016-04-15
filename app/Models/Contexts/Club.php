@@ -46,4 +46,8 @@ class Club extends Model
     {
         return $this->belongsTo('App\Models\City', 'city');
     }
+    public function date_clubs()
+    {
+        return $this->hasMany('App\Models\DateClub');
+    }
 }

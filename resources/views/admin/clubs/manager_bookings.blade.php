@@ -29,8 +29,8 @@
 				</div>
 				<div class="pull-left col-xs-12 col-md-3">
 					<div class="col-xs-12 col-md-10">
-					{!! Form::label('reference_number', "Reference Number") !!}
-					{!! Form::text('reference_number', old('reference_number'),['class'=>'form-control','name'=>'reference_number']) !!}
+						{!! Form::label('reference_number', "Reference Number") !!}
+						{!! Form::text('reference_number', old('reference_number'),['class'=>'form-control','name'=>'reference_number']) !!}
 					</div>
 					<div class="col-xs-12 col-md-2"><br><br> Or</div>
 				</div>
@@ -82,169 +82,169 @@
 				<div id="day-view-content" class="day-view-content">
 					<table class="grid-wrap table table-bordered table-th clearfix" style="margin-top: 20px; position: relative">
 						<thead>
-							<tr class="court-name-wrap">
-								<th class="grid-header"></th>
-								@for($i=1; $i<12; $i++)
-									<th rowspan="2" class="grid-header">Court#{{$i}}</th>
-								@endfor
-							</tr>
+						<tr class="court-name-wrap">
+							<th class="grid-header"></th>
+							@for($i=1; $i<12; $i++)
+								<th rowspan="2" class="grid-header">Court#{{$i}}</th>
+							@endfor
+						</tr>
 						</thead>
 						<tbody>
-							<tr class="grid-row" data-row-hour="5am">
-								<td rowspan="2" width="100" class="td_field_label">5am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="5:30am">
-							</tr>
+						<tr class="grid-row" data-row-hour="5am">
+							<td rowspan="2" width="100" class="td_field_label">5am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="5:30am">
+						</tr>
 
-							<tr class="grid-row" data-row-hour="6am">
-								<td rowspan="2" width="100" class="td_field_label">6am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="5:30am">
-							</tr>
+						<tr class="grid-row" data-row-hour="6am">
+							<td rowspan="2" width="100" class="td_field_label">6am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="5:30am">
+						</tr>
 
-							<tr class="grid-row" data-row-hour="7am">
-								<td rowspan="2" width="100" class="td_field_label">7am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="5:30am">
-							</tr>
+						<tr class="grid-row" data-row-hour="7am">
+							<td rowspan="2" width="100" class="td_field_label">7am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="5:30am">
+						</tr>
 
-							<tr class="grid-row" data-row-hour="8am">
-								<td rowspan="2" width="100" class="td_field_label">8am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="5:30am">
-							</tr>
+						<tr class="grid-row" data-row-hour="8am">
+							<td rowspan="2" width="100" class="td_field_label">8am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="5:30am">
+						</tr>
 
-							<tr class="grid-row" data-row-hour="9am">
-								<td rowspan="2" width="100" class="td_field_label">9am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
-								<td rowspan="2" class="day-grid lesson" data-hours="5am" data-court="1">Lesson
-								</td>
-								<td rowspan="1" class="day-grid grid-null" data-hours="5am" data-court="1"></td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="5:30am">
-								<td rowspan="1" class="day-grid grid-haft-top contracttime" data-hours="5am" data-court="1">Contract time1</td>
-							</tr>
+						<tr class="grid-row" data-row-hour="9am">
+							<td rowspan="2" width="100" class="td_field_label">9am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Open Time Booking</td>
+							<td rowspan="2" class="day-grid lesson" data-hours="5am" data-court="1">Lesson
+							</td>
+							<td rowspan="1" class="day-grid grid-null" data-hours="5am" data-court="1"></td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="5:30am">
+							<td rowspan="1" class="day-grid grid-haft-top contracttime" data-hours="5am" data-court="1">Contract time1</td>
+						</tr>
 
-							<tr class="grid-row" data-row-hour="10am">
-								<td rowspan="2" width="100" class="td_field_label">10am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="1" class="day-grid grid-haft-bottom contracttime" data-hours="5am" data-court="1">Contract time1</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="5:30am">
-								<td></td>
-							</tr>
+						<tr class="grid-row" data-row-hour="10am">
+							<td rowspan="2" width="100" class="td_field_label">10am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="1" class="day-grid grid-haft-bottom contracttime" data-hours="5am" data-court="1">Contract time1</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="5:30am">
+							<td></td>
+						</tr>
 
-							<tr class="grid-row" data-row-hour="11am">
-								<td rowspan="2" width="100" class="td_field_label">11am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
-								<td rowspan="1" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid lesson" data-hours="5am" data-court="1">Lesson</td>
-								<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="11:30am">
-								<td class="day-grid grid-null"></td>
-							</tr>
+						<tr class="grid-row" data-row-hour="11am">
+							<td rowspan="2" width="100" class="td_field_label">11am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
+							<td rowspan="1" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid lesson" data-hours="5am" data-court="1">Lesson</td>
+							<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="11:30am">
+							<td class="day-grid grid-null"></td>
+						</tr>
 
-							<tr class="grid-row" data-row-hour="12am">
-								<td rowspan="2" width="100" class="td_field_label">12am</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
-									<br> Court Maintinance
-								</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Opentime</td>
-								<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Opentime</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Opentime</td>
-								<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-								<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
-							</tr>
-							<tr class="grid-row" data-row-hour="5:30am">
-							</tr>
+						<tr class="grid-row" data-row-hour="12am">
+							<td rowspan="2" width="100" class="td_field_label">12am</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid unavailable" data-hours="5am" data-court="1"><strong>Unavailable</strong>
+								<br> Court Maintinance
+							</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Opentime</td>
+							<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Opentime</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid opentime" data-hours="5am" data-court="1">Opentime</td>
+							<td rowspan="2" class="day-grid contracttime" data-hours="5am" data-court="1">Contract time</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+							<td rowspan="2" class="day-grid available" data-hours="5am" data-court="1">Available</td>
+						</tr>
+						<tr class="grid-row" data-row-hour="5:30am">
+						</tr>
 						</tbody>
 					</table>
 
@@ -253,74 +253,74 @@
 						<div class="court-name-wrap">
 							<div class="grid grid-null"></div>
 							@for($i=1; $i<10; $i++)
-								<div class="grid court-name">Court#{{$i}}</div>
+							<div class="grid court-name">Court#{{$i}}</div>
 							@endfor
-						</div>
-						<div class="grid-content-wap">
-							<div class="grid-row">
-								<div class="grid grid-hour grid-hour-text">5am</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available opentime">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
 							</div>
-							<div class="grid-row">
-								<div class="grid grid-hour grid-hour-text">6am</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available leasson">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available opentime">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available opentime">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-							</div>
-							<div class="grid-row">
-								<div class="grid grid-hour grid-hour-text">7am</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour half"></div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-							</div>
-							<div class="grid-row">
-								<div class="grid grid-hour grid-hour-text">8am</div>
-								<div class="grid grid-hour unvailable">Unvailable</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour contracttime">Contract time</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-							</div>
-							<div class="grid-row">
-								<div class="grid grid-hour grid-hour-text">8am</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour half_contracttime"></div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-								<div class="grid grid-hour available">Available</div>
-							</div>
+                            <div class="grid-content-wap">
+                                <div class="grid-row">
+                                    <div class="grid grid-hour grid-hour-text">5am</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available opentime">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid grid-hour grid-hour-text">6am</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available leasson">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available opentime">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available opentime">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid grid-hour grid-hour-text">7am</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour half"></div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid grid-hour grid-hour-text">8am</div>
+                                    <div class="grid grid-hour unvailable">Unvailable</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour contracttime">Contract time</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid grid-hour grid-hour-text">8am</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour half_contracttime"></div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                    <div class="grid grid-hour available">Available</div>
+                                </div>
 
-						</div>
-					</div>
-					-->
+                            </div>
+                        </div>
+                        -->
 				</div>
 			</section>
 
@@ -329,8 +329,9 @@
 			<!-- available-slot-expanded -->
 			<div class="available-slot-expanded" style="display: none">
 				<div class="col-xs-8">
+					<button type="button" class="close" aria-label="Close"><span aria-hidden="true">X</span></button>
 					<table class="table">
-					<thead>
+						<thead>
 						<tr>
 							<th>Quick Quotes</th>
 							<th>8am-9pm <br> (1hour)</th>
@@ -339,8 +340,8 @@
 							<th>8am-9pm <br> (1hour)</th>
 							<th>8am-9pm <br> (1hour)</th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 						<tr>
 							<td>Member: </td>
 							<td>$35</td>
@@ -365,8 +366,8 @@
 							<td>$35</td>
 							<td>$35</td>
 						</tr>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
 				</div>
 				<div class="col-xs-4">
 					<div id="mb-make-time-unavailable">
@@ -768,7 +769,7 @@
 											</div>
 											<div class="pull-left payment-item">
 												<div class="img-wrap">
-												<img src="{{url('/resources/admin/img/icon_payment_visa.png') }}" alt="visa">
+													<img src="{{url('/resources/admin/img/icon_payment_visa.png') }}" alt="visa">
 												</div>
 												<input name="payment" type="radio" value="visa" id="visa">
 												<label for="visa">Visa</label>
@@ -898,7 +899,7 @@
 			});
 
 			//test model open
-			$(".create_new_book").click();
+			//$(".create_new_book").click();
 
 			$('#mb-book-day-open').datetimepicker({
 				inline: true,

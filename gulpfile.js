@@ -1,5 +1,7 @@
 var elixir = require('laravel-elixir');
 var gulp   = require('gulp');
+ watch = require('gulp-watch');
+
 require('laravel-elixir-vueify');
 /*
  |--------------------------------------------------------------------------
@@ -28,7 +30,8 @@ gulp.task('admin', function() {
     elixir.config.assetsPath = 'resources/assets/admin/';
     elixir.config.publicPath = 'public/resources/admin/';
     elixir(function(mix) {
-        //mix.sass('admin.scss');
+
+        mix.sass('admin.scss');
         //mix.scripts('admin.js');
         mix.browserify('app_modules/app.js','public/resources/admin/js/app_modules/app.js');
         //mix.scripts('app_modules/datatables.js');

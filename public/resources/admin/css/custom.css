@@ -186,12 +186,18 @@ form.form-court{
 .day-view-content table th, .day-view-content table td{
     border-color: #aaa !important;
 }
+.grid-row .td_field_label{
+    min-width: 80px;
+}
 .day-view-content .day-grid {
     height: 35px;
+    min-width: 120px;
+    max-height: 60px;
+    cursor: pointer;
 }
 .day-grid.available{
     background: #fff;
-    color: #ddd;
+    color: #c7c7c7;
     cursor: pointer;
 }
 .day-grid.unavailable{
@@ -202,11 +208,11 @@ form.form-court{
     width: 100px;
     background: #f2f2f2;
 }
-.day-grid.contracttime{
+.day-grid.contract{
     background: #c0e39e;
     color: #40780b;
 }
-.day-grid.opentime{
+.day-grid.open{
     background: #63ac1d;
     color: #fff;
 }
@@ -224,7 +230,7 @@ form.form-court{
 .day-grid.grid-haft-bottom{
     border-top: 0px;
 }
-#content-expand{
+#md-available-content-expand, #md-booking-content-expand{
     position: absolute;
     left: 0px;
     width: 100%;
@@ -232,6 +238,12 @@ form.form-court{
     border: 1px solid #d8d8d8;
     background: #fff;
     padding: 20px;
+}
+#md-booking-content-expand tr td:first-child{
+    width: 35%;
+}
+#md-booking-content-expand tr td:last-child{
+    width: 65%;
 }
 .available-slot-expanded{
     background: #f9f9f9;
@@ -376,9 +388,23 @@ form.form-court{
     background: #0f484d;
     color: #fff;
 }
-.mb-tabs > li.active{
+.mb-tabs > li a{
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    background: #0f484d;
+    color: #fff;
+    border-radius: 0;
+    padding: 0;
+}
+.tbl-info-booking-details{
+    text-align: left;
+}
+.mb-tabs > li.active a, .mb-tabs > li:active a .mb-tabs > li:hover a{
+    border: 0px;
     border-bottom: 4px solid #63ac1d;
     background: #082e31;
+    color: #fff;
 }
 .mb-title-h4-modal{
     padding: 10px 0px;
@@ -436,7 +462,7 @@ form.form-court{
     cursor: pointer;
     box-sizing: border-box;
 }
-.days-in-month-wrap .day-item.active, .days-in-month-wrap .day-item:hover{
+.days-in-month-wrap .day-item.date-current, .days-in-month-wrap .day-item:hover{
     background: #082e31;
     border-bottom: 4px solid #63ac1d;
 }
@@ -483,4 +509,113 @@ form.form-court{
     text-align: Center;
     top: 50%;
     position: ABSOLUTE;
+}
+@media print {
+    .notprint{
+        display: none;
+    }
+}
+.court-name-wrap .grid{
+    float: left;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 150px;
+    background: #f2f2f2;
+    color: #000;
+    text-align: center;
+    height: 60px;
+}
+.grid-content-wap .grid-row{
+    float: left;
+    width: 150px;
+    text-align: center;
+}
+.grid-row.col-hour{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 999;
+}
+.grid-row.col-hour .grid{
+    background: #f2f2f2;
+    width: 100px;
+    text-align: left;
+    padding-left: 20px;
+    border: 1px solid #ccc;
+    height: 30px;
+}
+.grid-row.col-hour .grid-null{
+    width: 100px;
+    height: 60px;
+}
+.grid-content-wap .grid-row .grid{
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    height: 30px;
+}
+.grid-content-wap .grid-row .grid.g2{
+    height: 60px;
+}
+.grid-content-wap .grid-row .grid.g0{
+    height: 0px;
+    padding: 0;
+    opacity: 0;
+}
+.grid-content-wap .grid-row .grid.gn{
+    height: 30px;
+    opacity: 0;
+}
+.grid-content-wap .grid-row .grid.g1{
+    height: 30px;
+}
+.grid-content-wap .grid-row .grid.gn ~ .gstart{
+    height: 60px;
+}
+.grid-content-wap .grid-row .grid.gn ~ .gend{
+    height: 0px;
+}
+.grid-content-wap .grid-row .grid:last-child{
+    height: 30px;
+}
+.grid-content-wap{
+    min-height: 500px;
+}
+.grid-wrap{
+    margin-left: 100px;
+}
+.day-view-content{
+    position: relative;
+}
+.day-view-content .day-grid .title-grid{
+    font-weight: bold;
+    display: block;
+    text-transform: capitalize;
+}
+.day-view-content .grid-row .day-grid:nth-of-type(2n){
+    border-top: 0px;
+}
+.day-view-content .day-grid.available .title-grid{
+    font-weight: normal;
+}
+.day-view-content .day-grid.open.gstart{
+    /*border-bottom: 1px solid #fff;*/
+}
+#myModal .modal-dialog{
+    overflow: scroll;
+}
+.close-md {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    color: #000;
+}
+.editable{
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+}
+.select2-container{
+    z-index: 9999;
+}
+.select2-dropdown, .select2-selection{
+    width: 200px !important;
 }

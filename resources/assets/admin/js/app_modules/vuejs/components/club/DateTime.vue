@@ -295,9 +295,9 @@
         this.fetchDataDates().done((list_infoday) => {
             resolve({list_infoday});
         this.processData();
-    }, (error) => {
-        console.log(error);
-    });
+        }, (error) => {
+            console.log(error);
+        });
     },
     methods: {
         setCloseClick(index){
@@ -344,8 +344,8 @@
         },
         setTimeClick(index){
             d_s = this.now.getFullYear() + "-" + (this.now.getMonth()+1) + "-" + this.date[index].text;
-            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, hours_open: this.covertHour24to12(this.date[index].hours_open), hours_close: this.covertHour24to12(this.date[index].hours_close), club_id: this.clubSettingId, is_event: 'sethours'}).then(res => {
-                console.log(res)
+            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, open_time: this.covertHour24to12(this.date[index].hours_open), close_time: this.covertHour24to12(this.date[index].hours_close), club_id: this.clubSettingId, is_event: 'sethours'}).then(res => {
+
                 if(res.data.error)
                 {
                     var msg = "";
@@ -367,14 +367,14 @@
         addOpenHours(){
             const d = {};
             d.days = $("#form_set_openday select[name=date_open]").val();
-            d.hours = $("#form_set_openday input[name=opentime]").val() + " - "
-                + $("#form_set_openday input[name=closetime]").val();
+            d.open_time = $("#form_set_openday input[name=opentime]").val();
+            d.close_time = $("#form_set_openday input[name=closetime]").val();
             d.end_date =  $("#daterange_open").data('daterangepicker').endDate.format('YYYY/MM/DD');
             d.start_date =  $("#daterange_open").data('daterangepicker').startDate.format('YYYY/MM/DD');
             d.club_id = this.clubSettingId;
             $("#box-set-open-days").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(laroute.route('clubs.courts.setOpenDay'), d).then(res => {
-                console.log(res)
+
                 if(res.data.error)
                 {
                     var msg = "";
@@ -422,14 +422,14 @@
             $.each(this.list_infoday,function(k,item){
                 var  d = item.date.split("-");
                 if(item.is_close == 0 && item.is_holiday == 0 ) {
-                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(item.hours);
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(item.open_time != '' ?item.open_time + " - " + item.close_time: '' );
                 }
                 else if(item.is_close == 1) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_close');
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('close');
                 }else if(item.is_holiday == 1) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_holiday');
-                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('Holiday<br>'+item.hours);
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('Holiday<br>' + item.open_time != '' ?item.open_time + " - " + item.close_time: '' );
                 }else{
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap');
                 }

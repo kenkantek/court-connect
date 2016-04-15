@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin']], function () {
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth']], function () {
 
     Route::get('/', ['as' => 'admin.index', 'uses' => 'DashboardController@getIndex']);
 
@@ -29,6 +29,12 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postUpdateCourt' => 'courts.update',
         'postUpdateCourts' => 'courts.update.multi',
     ]);
+    Route::controller('contracts', ContractController::class, [
+        'postCreateContract' => 'contracts.create',
+        'postUpdateContract' => 'contracts.update',
+        'deleteContract' => 'contracts.delete',
+        'getListContract' => 'contracts.list',
+    ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',
     ]);
@@ -36,7 +42,17 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getAddContext' => 'dashboard.context',
         'getClubs' => 'dashboard.clubs.list',
     ]);
-
+    Route::controller('booking', ManageBookingController::class, [
+        'getManageBooking' => 'booking.index',
+        'getDataOfClub' => 'booking.dataOfClub',
+        'getViewPriceOrder' =>'booking.viewPriceOrder',
+        'getCheckInputBooking' =>'booking.checkInputBooking',
+        'getCheckInputCustomer' =>'booking.checkInputCustomer',
+        'postCheckInputPayment' =>'booking.checkInputPayment',
+        'getView' =>'booking.view',
+        'getAcceptPayment' =>'booking.acceptPayment',
+        'getSearchPlayers' =>'booking.players'
+    ]);
 });
 
 Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin','super']], function () {
