@@ -982,8 +982,13 @@ a.ui-state-default.ui-state-highlight {
 .city-autocomplete{
     padding: 10px;
 }
-.city-autocomplete:before{
-    content: 'Location:';
+.city-autocomplete .citys:before{
+    content: 'Location';
     font-weight: bold;
 }
+.city-autocomplete .clubs:before{
+    content: 'Tennis Clubs';
+    font-weight: bold;
+}
+
     

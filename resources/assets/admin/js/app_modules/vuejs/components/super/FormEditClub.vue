@@ -24,17 +24,23 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="city" class="col-sm-2 control-label">City</label>
-
+                <label for="state" class="col-sm-2 control-label">State</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="city" placeholder="Enter city club" v-model="club.city">
+                    <select class="form-control" name="state" id="state" v-model="club.state" @change="fetchCitys()">
+                        <option v-for="option in states" :value="option.id">
+                            {{ option.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
-                <label for="state" maxlength="2" class="col-sm-2 control-label">State</label>
-
+                <label for="city" class="col-sm-2 control-label">City</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="state" placeholder="Enter state club" v-model="club.state">
+                    <select class="form-control" name="city" id="city" v-model="club.city">
+                        <option v-for="option in citys" v-bind:value="option.id">
+                            {{ option.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
@@ -61,21 +67,63 @@
     </div>
 </template>
 <script>
+    var _ = require('lodash'),
+        deferred = require('deferred');
     export default {
         props: ['clubs','clubs_choice','delete_club'],
         data() {
         return {
             submiting:false,
             formErrors: {},
-
+            states: [],
+            citys: [],
         }
+    },
+    asyncData(resolve, reject) {
+        this.fetchStates().done((states) => {
+            resolve({states});
+        }, (error) => {
+            console.log(error);
+        });
+        this.fetchCitys().done((citys) => {
+            resolve({citys});
+        }, (error) => {
+            console.log(error);
+        });
     },
     computed: {
         club: function () {
             return this.clubs_choice;
+        },
+    },
+    watch: {
+        clubs_choice: function(){
+            this.fetchCitys();
         }
     },
     methods: {
+        fetchStates() {
+            let def = deferred(),
+                url = laroute.route('clubs.states');
+            this.$http.get(url).then(res => {
+                def.resolve(res.data.data);
+            }, res => {
+                def.reject(res);
+            });
+            return def.promise;
+        },
+        fetchCitys(){
+            let def = deferred(),
+                url = laroute.route('clubs.citys', {state_id: this.club.state});
+            this.$http.get(url).then(res => {
+                this.citys = res.data.data;
+            def.resolve(res.data.data);
+        }, res => {
+            def.reject(res);
+        });
+
+        return def.promise;
+        },
         getFilePathFromDialog(event){
             this.$els.inputImage.click();
         },
@@ -100,6 +148,8 @@
         });
     },
     onSubmit(){
+        this.$set('club.state',this.club.state);
+        this.$set('club.city',this.club.city);
         const club = this.club;
         this.submiting = true;
         this.$http.put(laroute.route('super.clubs.edit'), club).then(res => {

@@ -29,9 +29,6 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-                <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&language=en"></script>
-                <link rel="stylesheet" type="text/css" href="http://www.jqueryscript.net/demo/City-Autocomplete-Plugin-with-jQuery-Google-Places-API/city-autocomplete.css"/>
-                <script src="http://www.jqueryscript.net/demo/City-Autocomplete-Plugin-with-jQuery-Google-Places-API/jquery.city-autocomplete.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="container-fluid">    

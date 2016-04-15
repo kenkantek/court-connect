@@ -302,7 +302,7 @@
     methods: {
         setCloseClick(index){
             d_s = this.now.getFullYear() + "-" + (this.now.getMonth()+1) + "-" + index;
-            this.$http.get(laroute.route('clubs.courts.setEventDay'), {date: d_s, club_id: this.clubSettingId, is_event: 'close'}).then(res => {
+            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, club_id: this.clubSettingId, is_event: 'close'}).then(res => {
                 if(res.data.error)
                 {
                     var msg = "";
@@ -322,7 +322,7 @@
         },
         setHolidayClick(index){
             d_s = this.now.getFullYear() + "-" + (this.now.getMonth()+1) + "-" + index;
-            this.$http.get(laroute.route('clubs.courts.setEventDay'), {date: d_s, club_id: this.clubSettingId, is_event: 'holiday'}).then(res => {
+            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, club_id: this.clubSettingId, is_event: 'holiday'}).then(res => {
                 console.log(res)
             if(res.data.error)
             {
@@ -344,7 +344,7 @@
         },
         setTimeClick(index){
             d_s = this.now.getFullYear() + "-" + (this.now.getMonth()+1) + "-" + this.date[index].text;
-            this.$http.get(laroute.route('clubs.courts.setEventDay'), {date: d_s, hours_open: this.covertHour24to12(this.date[index].hours_open), hours_close: this.covertHour24to12(this.date[index].hours_close), club_id: this.clubSettingId, is_event: 'sethours'}).then(res => {
+            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, hours_open: this.covertHour24to12(this.date[index].hours_open), hours_close: this.covertHour24to12(this.date[index].hours_close), club_id: this.clubSettingId, is_event: 'sethours'}).then(res => {
                 console.log(res)
                 if(res.data.error)
                 {

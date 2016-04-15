@@ -24,24 +24,30 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="city" class="col-sm-2 control-label">City</label>
-
+                <label for="state" class="col-sm-2 control-label">State</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="city" placeholder="Enter city club" v-model="club.city">
+                    <select class="form-control" name="state" id="state" v-model="club.state" @change="fetchCitys()">
+                        <option value="" selected>--Select--</option>
+                        <option v-for="option in states" :value="option.id">
+                            {{ option.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
-                <label for="state" class="col-sm-2 control-label">State</label>
-
+                <label for="city" class="col-sm-2 control-label">City</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" maxlength="2" id="state" placeholder="Enter state club" v-model="club.state">
+                    <select class="form-control" name="city" id="city" v-model="club.city">
+                        <option value="" selected>--Select--</option>
+                        <option v-for="option in citys" v-bind:value="option.id">
+                            {{ option.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
                 <label for="zipcode" class="col-sm-2 control-label">Zipcode</label>
-
                 <div class="col-sm-10">
-
                     <input type="text" class="form-control" id="zipcode" placeholder="Enter zipcode club" v-model="club.zipcode">
                 </div>
             </div>
@@ -59,6 +65,8 @@
     </div>
 </template>
 <script>
+    var _ = require('lodash'),
+        deferred = require('deferred');
     export default {
         props: ['clubs'],
         data() {
@@ -74,12 +82,50 @@
             },
             submiting:false,
             formErrors: {},
-
+            states: [],
+            citys: [],
         }
     },
+    watch: {
+        clubSettingId: 'reloadAsyncData',
+    },
+    asyncData(resolve, reject) {
+        this.fetchStates().done((states) => {
+            resolve({states});
+        }, (error) => {
+            console.log(error);
+        });
+        this.fetchCitys().done((citys) => {
+            resolve({citys});
+        }, (error) => {
+            console.log(error);
+        });
+    },
     methods: {
+        fetchStates() {
+            let def = deferred(),
+                url = laroute.route('clubs.states');
+            this.$http.get(url).then(res => {
+                def.resolve(res.data.data);
+            }, res => {
+                def.reject(res);
+            });
+            return def.promise;
+        },
         getFilePathFromDialog(event){
             this.$els.inputImage.click();
+        },
+        fetchCitys(){
+            let def = deferred(),
+                url = laroute.route('clubs.citys', {state_id: this.club.state});
+            this.$http.get(url).then(res => {
+                this.citys = res.data.data;
+                def.resolve(res.data.data);
+            }, res => {
+                def.reject(res);
+            });
+
+            return def.promise;
         },
         onChangeImage(event) {
             const images = event.target.files[0];

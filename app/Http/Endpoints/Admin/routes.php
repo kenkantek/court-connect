@@ -20,7 +20,9 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getCourts' => 'clubs.courts.list',
         'postSetOpenDay' => 'clubs.courts.setOpenDay',
         'getListDays' => 'clubs.courts.listdays',
-        'getSetEventDay' => 'clubs.courts.setEventDay',
+        'postSetEventDay' => 'clubs.courts.setEventDay',
+        'getStates' => 'clubs.states',
+        'getCitys' =>'clubs.citys'
     ]);
     Route::controller('courts', CourtController::class, [
         'postCreateCourt' => 'courts.create',

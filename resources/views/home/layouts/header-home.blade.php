@@ -10,7 +10,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>                    
+                </button>
                 <a href="{{ route('home.index') }}" class="logo"><img src="resources/home/images/logo_02.png" class="img-responsive logo" alt="logo"></a>
             </div>
             @include('home.layouts.menu')
@@ -24,13 +24,12 @@
                         {{ csrf_field() }}
                         <div class="form-group col-md-4 form-icon">
                             <i class="fa fa-map-marker"></i>
-                            <input type="text" class="form-control" name="" id="q"
+                            <input type="text" class="form-control" name="s_name" id="q"
                                    placeholder="Seach by Zip/Address or Club Name" autocomplete="off" data-country="us">
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i class="fa fa-calendar"></i>
-                            <input type="text" class="form-control" name="" id="datepicker" placeholder="Date">
-
+                            <input type="text" class="form-control" name="date" id="datepicker" placeholder="Date">
                             <p align="center"
                                style="color: white; font-family: RobotoLight, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 13px; margin-top: 5px">
                                 Contract Time Booking</p>
@@ -81,7 +80,7 @@
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i class="glyphicon glyphicon-time"></i>
-                            <input type="text" class="form-control" name="" id="search-timepicker" placeholder="Time">
+                            <input type="time" class="form-control" name="s_time" id="search-timepicker" placeholder="Time">
                             <div class="search-tooltip hidden">
                                 <div class="tooltiptext">
                                     <div >
@@ -97,10 +96,8 @@
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                            <!--<select name="court" id="inputID" class="form-control">-->
-                            <!--<option value=""> # Courts </option>-->
-                            <!--</select>-->
-                            <input type="text" class="form-control" name="" id="" placeholder="# Courts">
+                            {!! Form::select('court',[1,2,3,4],null,['id'=>'inputID','class' => 'form-control','style'=>'text-align-last:center; ']) !!}
+                            <!-- <input type="text" class="form-control" name="" id="" placeholder="# Courts"> -->
                         </div>
                         <div class="form-group col-md-2">
                             <button type="submit" class="btn btn-search">SEARCH</button>

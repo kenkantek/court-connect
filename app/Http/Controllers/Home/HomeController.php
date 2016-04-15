@@ -18,12 +18,6 @@ class HomeController extends Controller
         return view('home.index');
     }
 
-    public function getSsearch(Request $request)
-    {
-
-        return view('home.search');
-    }
-
     public function getSignUp()
     {
         return view('home.signup');
@@ -102,16 +96,6 @@ class HomeController extends Controller
         $user->state = $request->state;
         $user->save();
         return back()->withInput()->with(['flash_level' => 'success', 'flash_message' => 'Success! Complete Update Address!']);
-    }
-
-    public function showSearch()
-    {
-        return view('home.search');
-    }
-
-    public function postSearch()
-    {
-        return view('home.search');
     }
 
     public function showCheckout()

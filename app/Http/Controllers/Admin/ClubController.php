@@ -6,6 +6,7 @@ use App\Models\Contexts\Court;
 use App\Models\SetOpenDay;
 use App\Repositories\Interfaces\Admin\ClubInterface;
 use DateTime;
+use DB;
 use Illuminate\Http\Request;
 
 class ClubController extends Controller
@@ -43,16 +44,24 @@ class ClubController extends Controller
             'data' => $data
         ]);
     }
-    public function getSetEventDay(Request $request){
-        if(empty($request->input('date')) || empty($request->input('is_event'))){
+    public function postSetEventDay(Request $request){
+        if(empty($request->input('club_id')) || empty($request->input('date')) || empty($request->input('is_event'))){
             return response()->json(['error' => true,"messages"=>['Data invalid']]);
         }
         else{
             $date = date_format(date_create($request->input('date')),"Y-m-d");
-            $tmp = SetOpenDay::where('date',$date)->first();
+            $tmp = SetOpenDay::where('date',$date)->where('club_id',$request->input('club_id'))->first();
             if(!isset($tmp)) {
+                $tmp = new SetOpenDay();
+                $tmp['date'] = $date;
+                $tmp['hours'] = "";
+                $tmp['club_id'] = $request->input('club_id');
+                $tmp->save();
+            }
+            if(!isset($tmp)){
                 return response()->json(['error' => true,"messages"=>['Can\'t find date valid']]);
-            }else{
+            }
+            else{
                 $is_event = $request->input('is_event');
                 if($is_event == 'holiday')
                     $tmp['is_holiday'] = $tmp['is_holiday'] == 1 ? 0 : 1;
@@ -123,6 +132,21 @@ class ClubController extends Controller
         \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
         \Assets::addStylesheets(['select2', 'uniform', 'monthly', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
         return view('admin.clubs.manager_bookings');
+    }
+    public function getStates(){
+        $data = DB::table('states')->get();
+        return response()->json([
+            'error' => false,
+            'data' => $data
+        ]);
+    }
+
+    public function getCitys(Request $request){
+        $data = DB::table('citys')->where('state_id',$request->input('state_id'))->orderBy('name')->get();
+        return response()->json([
+            'error' => false,
+            'data' => $data
+        ]);
     }
 
 }
