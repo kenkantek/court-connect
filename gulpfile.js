@@ -30,12 +30,13 @@ gulp.task('admin', function() {
     elixir.config.assetsPath = 'resources/assets/admin/';
     elixir.config.publicPath = 'public/resources/admin/';
     elixir(function(mix) {
-         mix.sass('admin.scss');
-        // mix.scripts('admin.js');
-         mix.browserify('app_modules/app.js','public/resources/admin/js/app_modules/app.js');
-        // mix.scripts('app_modules/datatables.js');
-        // mix.scripts('app_modules/avatar.js');
-        // mix.scripts('app_modules/user.js');
+
+        mix.sass('admin.scss');
+        //mix.scripts('admin.js');
+        mix.browserify('app_modules/app.js','public/resources/admin/js/app_modules/app.js');
+        //mix.scripts('app_modules/datatables.js');
+        //mix.scripts('app_modules/avatar.js');
+        //mix.scripts('app_modules/user.js');
     });
 });
 

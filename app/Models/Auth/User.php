@@ -63,10 +63,10 @@ class User extends Authenticatable
     public function clubs()
     {
         if ($this->is_super) {
-            return Club::orderBy('id', 'ASC');
+            return Club::with('state_info','city_info')->orderBy('id', 'ASC');
         } else {
             $roles = $this->roles()->where('context', 'clubs')->lists('context_id');
-            return Club::whereIn('id', $roles)->orderBy('id', 'ASC');
+            return Club::whereIn('id', $roles)->with('state_info','city_info')->orderBy('id', 'ASC');
         }
 
     }

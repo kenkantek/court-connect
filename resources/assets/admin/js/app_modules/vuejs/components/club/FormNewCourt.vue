@@ -86,6 +86,7 @@
 				const court = this.court;
 				court.dataRates = _.cloneDeep(this.dataRates);
 				this.submit = true;
+				$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
 				this.$http.post(laroute.route('courts.create'), court).then(res => {
 					this.reloadCourts =  Math.floor(Math.random() * 10000);
 				this.$set('court.name', null);
@@ -94,9 +95,11 @@
 				this.$set('court.base_price', 0);
 				showNotice('success', res.data.success_msg, 'Success!');
 				this.submit = false;
+				$('.unSelected').click();
+				$("#clubSetting-wrapper .loading").remove();
 			}, (res) => {
 				showNotice('error', 'Court Name is required!', 'Error!');
-
+				$("#clubSetting-wrapper .loading").remove();
 			});
 		}
 

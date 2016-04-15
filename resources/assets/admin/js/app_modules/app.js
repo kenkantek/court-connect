@@ -7,6 +7,7 @@ import ClubSetting from './vuejs/components/club/ClubSetting.vue';
 import SuperSetting from './vuejs/components/super/SuperSetting.vue';
 import HeaderMain from './vuejs/components/header/HeaderMain.vue';
 import UserSetting from './vuejs/components/user/UserSetting.vue';
+
  var _ = require('lodash'),
      deferred = require('deferred');
 new Vue({
@@ -23,7 +24,7 @@ new Vue({
 		ClubSetting,
         SuperSetting,
         HeaderMain,
-		UserSetting
+		UserSetting,
     },
 });
 

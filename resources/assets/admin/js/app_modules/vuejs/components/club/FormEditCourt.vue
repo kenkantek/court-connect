@@ -61,15 +61,19 @@
 				const court = this.court;
 				court.dataRates = _.cloneDeep(this.dataRates);
 				console.log(court);
+				$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
 				this.$http.post(laroute.route('courts.update'), court).then(res => {
 					this.dataRates = [];
-				this.reloadCourts =  Math.floor(Math.random() * 10000);
-				this.$set('courts_choice', null);
-				showNotice('success', res.data.success, 'Update Success!');
-				this.submit = false;
-			}, (res) => {
-				showNotice('error', 'Error', 'Error!');
-			});
+					this.reloadCourts =  Math.floor(Math.random() * 10000);
+					this.$set('courts_choice', null);
+					showNotice('success', res.data.success_msg, 'Update Success!');
+					this.submit = false;
+					$('.unSelected').click();
+					$("#clubSetting-wrapper .loading").remove();
+				}, (res) => {
+					showNotice('error', 'Error', 'Error!');
+					$("#clubSetting-wrapper .loading").remove();
+				});
 		}else if(this.dataRates == null) {
 			showNotice('error', 'Please add new rate for court', 'Error!');
 			$('.new_date_preiod').removeClass('hidden');

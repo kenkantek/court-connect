@@ -30,7 +30,7 @@ class SuperAdminController extends Controller
     }
     public function getClubs($skip, $limit)
     {
-        return Club::where('status', 1)->skip($skip)->take($limit)->orderBy('updated_at', 'desc')->get();
+        return Club::with('state')->where('status', 1)->skip($skip)->take($limit)->orderBy('updated_at', 'desc')->get();
     }
     public function postCreateClub(CreateClubRequest $request)
     {

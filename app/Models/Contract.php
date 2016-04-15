@@ -29,7 +29,7 @@ class Contract extends Model
     */
     protected $dates    = ['created_at', 'updated_at'];
 
-    protected $fillable = ['club_id', 'start_date', 'end_date', 'note'];
+    protected $fillable = ['club_id', 'start_date', 'end_date', 'note','total_week','rates','extras'];
 
     public function club()
     {
@@ -50,5 +50,21 @@ class Contract extends Model
     public function getEndDateAttribute($value)
     {
         return date('m/d/y', strtotime($value));
+    }
+    public function getRatesAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+    public function setRatesAttribute($value)
+    {
+         $this->attributes['rates'] =  json_encode($value);
+    }
+    public function getExtrasAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+    public function setExtrasAttribute($value)
+    {
+         $this->attributes['extras'] =  json_encode($value);
     }
 }

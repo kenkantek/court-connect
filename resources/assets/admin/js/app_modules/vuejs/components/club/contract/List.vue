@@ -9,7 +9,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr class="item_contract" v-for="contract in contracts">
+		<tr class="item_contract" v-for="(index,contract) in contracts" @click="selectContract(index,contract)">
 			<td>{{ contract.start_date }}</td>
 			<td>{{ contract.end_date }}</td>
 			<td>{{ contract.total_week }}</td>
@@ -22,10 +22,10 @@
 let _ = require('lodash'),
 		deferred = require('deferred');
 	export default {
-		props:['clubSettingId','contracts','reloadContracts'],
+		props:['clubSettingId','contracts','reloadContracts','contractSelect'],
 		data() {
 			return {
-				reloadContracts:null,
+				contractSelectId:0,
 			}
 		},
 		watch: {
@@ -39,14 +39,26 @@ let _ = require('lodash'),
              console.log(error);
          });
     },
-    ready() {
-    	$( "table" ).on('click', 'tr.item_contract', function(event) {
-    		event.preventDefault();
-    		$('#list_contract').find('tr').removeClass('bg-primary');
-    		$(this).toggleClass('bg-primary');
-    	});
-    },
  		methods: {
+ 					selectContract(index,contract){
+ 						var index = index + 1;
+ 						if(this.contractSelect == null){
+	 						$('#list_contract').find('tr:eq('+index+')').addClass('bg-primary');
+	 						this.contractSelect = contract;
+	 						this.contractSelectId = this.contractSelect.id
+ 						}else{
+ 							this.contractSelect = contract;
+ 							if (this.contractSelectId == this.contractSelect.id) {
+ 								this.contractSelectId = 0;
+	 							this.contractSelect = null;
+	 							$('#list_contract').find('tr:eq('+index+')').removeClass('bg-primary');
+ 							}else{
+ 								$('#list_contract').find('tr').removeClass('bg-primary');
+		 						$('#list_contract').find('tr:eq('+index+')').addClass('bg-primary');
+		 						this.contractSelectId = this.contractSelect.id
+ 							}
+ 						}
+ 					},
 				 fetchContracts() {
                 let def = deferred(),
                 url = laroute.route('contracts.list', {one:this.clubSettingId});

@@ -35,7 +35,7 @@ class Court extends Model
 
     public function club()
     {
-        return $this->belongsTo('App\Models\Contexts\Clubs');
+        return $this->belongsTo('App\Models\Contexts\Club');
     }
     public function surface()
     {

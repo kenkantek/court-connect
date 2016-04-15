@@ -19,6 +19,10 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getManagerBookings' => 'clubs.manager-bookings',
         'getCourts' => 'clubs.courts.list',
         'postSetOpenDay' => 'clubs.courts.setOpenDay',
+        'getListDays' => 'clubs.courts.listdays',
+        'postSetEventDay' => 'clubs.courts.setEventDay',
+        'getStates' => 'clubs.states',
+        'getCitys' =>'clubs.citys'
     ]);
     Route::controller('courts', CourtController::class, [
         'postCreateCourt' => 'courts.create',
@@ -28,7 +32,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     Route::controller('contracts', ContractController::class, [
         'postCreateContract' => 'contracts.create',
         'postUpdateContract' => 'contracts.update',
-        'postDeleteContract' => 'contracts.delete',
+        'deleteContract' => 'contracts.delete',
         'getListContract' => 'contracts.list',
     ]);
     Route::controller('surface', SurfaceController::class, [
@@ -38,6 +42,13 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getAddContext' => 'dashboard.context',
         'getClubs' => 'dashboard.clubs.list',
     ]);
+    Route::controller('booking', ManageBookingController::class, [
+        'getManageBooking' => 'booking.index',
+        'getDataOfDateOfClub' => 'booking.dataOfDateOfClub',
+    ]);
+});
+
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin','super']], function () {
     Route::controller('super', SuperAdminController::class, [
         'getIndex' => 'super.index',
         'getClubs' => 'super.clubs.list',

@@ -124,16 +124,68 @@
         line-height: 70px;
         display: none;
         transition: all 0.1s linear;
+        position: absolute;
+        top: 0;
     }
-    .monthly-indicator-wrap .action {
-        display: inline-block;
+    .overflow .action {
+        display: inline;
     }
-    .datetime-picker td:not(.date-pass, .date-future):hover .monthly-indicator-wrap .overflow{
+    .datetime-picker td:not(.date-future):hover .monthly-indicator-wrap .overflow{
         display: block;
+    }
+    .date-pass .monthly-indicator-wrap .time{
+        line-height: 70px;
+    }
+    .datetime-picker td.date-pass:hover .monthly-indicator-wrap .overflow{
+        display: none;
+    }
+    .date-pass .monthly-indicator-wrap, .date-future .monthly-indicator-wrap{
+        display: none;
+    }
+    .dlg-setopenday{
+        position: absolute;
+        left: 0px;
+        z-index: 999;
+        top: 70px;
+        background: #e2e2e2;
+        border: 1px solid #ccc;
     }
 </style>
 
 <template>
+    <div >
+        <form method="POST" action="" accept-charset="UTF-8" id="form_set_openday" enctype="multipart/form-data"><input name="_token" type="hidden" value="My7S1d0Ttnzpw9U0SEC5sYIUh7zCUiHqDy93EJHA">
+            <div class="pull-left form-box">
+                <label for="date">Select day(s) of the week</label>
+                <br>
+                <select class="form-control" name="date_open" id="date_open" v-model="dataOpenHour.daysOfWeek" multiple="multiple" style="display: none;">
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                    <option value="7">Sunday</option>
+                </select>
+            </div>
+            <div class="pull-left form-box">
+                <label for="daterange_open">Date range</label>
+                <input class="daterange form-control" name="daterange_open" type="text" id="daterange_open">
+            </div>
+            <div class="pull-left form-box">
+                <label for="opentime">Open Time</label>
+                <input id="opentime" class="timepicker opentime form-control" placeholder=""  name="opentime" type="text">
+            </div>
+            <div class="pull-left form-box">
+                <label for="closetime">Closing Time</label>
+                <input class="timepicker closetime form-control" placeholder="" name="closetime" type="text" id="closetime">
+            </div>
+            <div class="pull-left">
+                <br>
+                <input class="btn btn-primary" style="margin-top: 6px;" type="submit" value="Apply" @click.prevent="addOpenHours()">
+            </div>
+        </form>
+    </div>
     <div class="datetime-picker">
         <div class="picker-wrap" v-show="show">
             <table class="date-picker">
@@ -152,36 +204,68 @@
                     <th v-for="day in days">{{day}}</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr v-for="i in 5">
+                <tbody id="tbody-wrapper-main">
+
+                <tr v-for="i in 6">
                     <td v-for="j in 7"
                         :class="date[i * 7 + j] && date[i * 7 + j].status"
                         :date="date[i * 7 + j] && date[i * 7 + j].date"
-                        ">
-                        <div class="monthly-day-number">{{date[i * 7 + j] && date[i * 7 + j].text}}</div>
-                        <div class="monthly-indicator-wrap">
+                        data-x = "{{i}}" data-y = "{{j}}"
+                        data-id= "{{date[i * 7 + j] && date[i * 7 + j].status == 'date-current' && date[i * 7 + j].text }}">
+                        <div class="monthly-day-number" A11>{{date[i * 7 + j] && date[i * 7 + j].text}}</div>
+                        <div class="monthly-indicator-wrap" v-if="date[i * 7 + j] && date[i * 7 + j].status == 'date-current'">
+                            <div class="time"></div>
                             <div class="overflow">
-                                <div class="btn-close action">
-                                    <img src="/uploads/images/config/close_icon.png" alt="">
-                                </div>
-                                <div class="btn-plane action">
-                                    <img src="/uploads/images/config/plane_icon.png" alt=""></div>
-                                <div class="btn-clock action">
-                                    <img src="/uploads/images/config/clock_icon.png" alt="">
+                                <div class="btn-close action" @click="setCloseClick(date[i * 7 + j].text)"><img src="/uploads/images/config/close_icon.png" alt=""></div>
+                                <div class="btn-plane action" @click="setHolidayClick(date[i * 7 + j].text)"><img src="/uploads/images/config/plane_icon.png" alt=""></div>
+                                <div class="btn-clock action"><img src="/uploads/images/config/clock_icon.png" alt=""> </div>
+                                <div class="dlg-setopenday hidden">
+                                    <div style="width: 50%; float: left">
+                                        <label for="opentime" >Open Time</label>
+                                        <input class="form-control" name="opentime" type="time" v-model="date[i*7+j].hours_open">
+                                    </div>
+                                    <div style="width: 50%; float: left">
+                                        <label for="closetime" >Closing Time</label>
+                                        <input class="form-control" name="closetime" type="time" v-model="date[i*7+j].hours_close" >
+                                    </div>
+                                    <div >
+                                        <input class="btn btn-primary" style="margin-top: 6px; width: auto;" type="button" @click="setTimeClick(i * 7 + j)" value="Apply" >
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <style>
+        .overflow .action {
+            display: inline;
+            padding-right: 5px;
+        }
+        .monthly-indicator-wrap.day_close{
+            background: #1b1b1b;
+            text-transform: uppercase;
+            color: #fff;
+            line-height: 70px;
+            font-weight: bold;
+        }
+        .monthly-indicator-wrap.day_holiday{
+            background: #930101;
+            color: #fff;
+        }
+    </style>
 </template>
 
 <script>
+    var _ = require('lodash'),
+        deferred = require('deferred');
     export default {
         props: {
+            clubSettingId: { default: false },
             readonly: { type: Boolean, default: false },
             value: { type: String, default: '' },
             format: { type: String, default: 'YYYY-MM-DD' }
@@ -192,7 +276,10 @@
             days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             date: [],
-            now: new Date()
+            now: new Date(),
+            list_infoday:[],
+            dataOpenHour: [],
+            day_chooice: null
         };
     },
     watch: {
@@ -201,9 +288,153 @@
         },
         show () {
             this.update();
-        }
+        },
+        clubSettingId: 'reloadAsyncData',
+    },
+    asyncData(resolve, reject) {
+        this.fetchDataDates().done((list_infoday) => {
+            resolve({list_infoday});
+        this.processData();
+        }, (error) => {
+            console.log(error);
+        });
     },
     methods: {
+        setCloseClick(index){
+            d_s = this.now.getFullYear() + "-" + (this.now.getMonth()+1) + "-" + index;
+            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, club_id: this.clubSettingId, is_event: 'close'}).then(res => {
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }else
+                {
+                    showNotice('success', res.data.success, 'Success!');
+                    this.fetchDataDates();
+                }
+                this.submit = false;
+            }, (res) => {
+                showNotice('error', "Error. Try again!", 'Error!');
+            });
+        },
+        setHolidayClick(index){
+            d_s = this.now.getFullYear() + "-" + (this.now.getMonth()+1) + "-" + index;
+            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, club_id: this.clubSettingId, is_event: 'holiday'}).then(res => {
+                console.log(res)
+            if(res.data.error)
+            {
+                var msg = "";
+                $.each(res.data.messages,function(k,v){
+                    msg += "<div>"+v+"</div>";
+                });
+                showNotice('error', msg, 'Error!');
+            }else
+            {
+                showNotice('success', res.data.success, 'Success!');
+                this.fetchDataDates();
+            }
+            this.submit = false;
+        }, (res) => {
+            console.log(res);
+            showNotice('error', "Error. Try again!", 'Error!');
+        });
+        },
+        setTimeClick(index){
+            d_s = this.now.getFullYear() + "-" + (this.now.getMonth()+1) + "-" + this.date[index].text;
+            this.$http.post(laroute.route('clubs.courts.setEventDay'), {date: d_s, open_time: this.covertHour24to12(this.date[index].hours_open), close_time: this.covertHour24to12(this.date[index].hours_close), club_id: this.clubSettingId, is_event: 'sethours'}).then(res => {
+
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }else
+                {
+                    showNotice('success', res.data.success, 'Success!');
+                    this.fetchDataDates();
+                }
+                this.submit = false;
+                }, (res) => {
+                    console.log(res);
+                    showNotice('error', "Error. Try again!", 'Error!');
+                });
+        },
+        addOpenHours(){
+            const d = {};
+            d.days = $("#form_set_openday select[name=date_open]").val();
+            d.open_time = $("#form_set_openday input[name=opentime]").val();
+            d.close_time = $("#form_set_openday input[name=closetime]").val();
+            d.end_date =  $("#daterange_open").data('daterangepicker').endDate.format('YYYY/MM/DD');
+            d.start_date =  $("#daterange_open").data('daterangepicker').startDate.format('YYYY/MM/DD');
+            d.club_id = this.clubSettingId;
+            $("#box-set-open-days").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+            this.$http.post(laroute.route('clubs.courts.setOpenDay'), d).then(res => {
+
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }else
+                {
+                    showNotice('success', res.data.success, 'Success!');
+                    this.fetchDataDates();
+                }
+                this.submit = false;
+                $("#box-set-open-days .loading").remove();
+             }, (res) => {
+                    console.log(res);
+                    showNotice('error', "Error. Try again!", 'Error!');
+                    $("#box-set-open-days .loading").remove();
+                }
+            );
+        },
+        covertHour24to12($hour){
+            var hourEnd = $hour.indexOf(":");
+            var H = +$hour.substr(0, hourEnd);
+            var h = H % 12 || 12;
+            var ampm = H < 12 ? "AM" : "PM";
+            $data = h + $hour.substr(hourEnd, 3) + " "+ ampm;
+            return $data;
+        },
+        fetchDataDates() {
+            let def = deferred(),
+            url = laroute.route('clubs.courts.listdays', {club_id: this.clubSettingId, month: this.now.getMonth() + 1, year: this.now.getFullYear()});
+            this.$http.get(url).then(res => {
+                def.resolve(res.data.data);
+                this.list_infoday = res.data.data;
+                $("#tbody-wrapper-main td .monthly-indicator-wrap").attr('class','monthly-indicator-wrap')
+                $("#tbody-wrapper-main td .monthly-indicator-wrap .time").html('');
+                this.processData();
+            }, res => {
+                def.reject(res);
+            });
+            return def.promise;
+        },
+        processData(){
+            $.each(this.list_infoday,function(k,item){
+                var  d = item.date.split("-");
+                if(item.is_close == 0 && item.is_holiday == 0 ) {
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(item.open_time != '' ?item.open_time + " - " + item.close_time: '' );
+                }
+                else if(item.is_close == 1) {
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_close');
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('close');
+                }else if(item.is_holiday == 1) {
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_holiday');
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('Holiday<br>' + item.open_time != '' ?item.open_time + " - " + item.close_time: '' );
+                }else{
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap');
+                }
+            });
+        },
         close () {
             this.show = false;
         },
@@ -219,7 +450,9 @@
                 arr.push({
                     text: lastDayCount - i + 1,
                     time: new Date(time.getFullYear(), time.getMonth(), lastDayCount - i + 1),
-                    status: 'date-pass'
+                    status: 'date-pass',
+                    hours_open: '',
+                    hours_close: '',
                 });
             }
 
@@ -229,12 +462,14 @@
             var value = this.value || this.stringify(new Date());
             for (let i = 0; i < curDayCount; i++) {
                 let tmpTime = new Date(time.getFullYear(), time.getMonth(), i + 1);
-                let status = '';
-                this.stringify(tmpTime) === value && (status = 'date-active');
+                let status = 'date-current';
+                //this.stringify(tmpTime) === value && (status = 'date-active');
                 arr.push({
                     text: i + 1,
                     time: tmpTime,
-                    status: status
+                    status: status,
+                    hours_open: '',
+                    hours_close: '',
                 });
             }
 
@@ -243,7 +478,9 @@
                 arr.push({
                     text: j,
                     time: new Date(time.getFullYear(), time.getMonth() + 1, j),
-                    status: 'date-future'
+                    status: 'date-future',
+                    hours_open: '',
+                    hours_close: '',
                 });
                 j++;
             }
@@ -252,6 +489,7 @@
         monthClick (flag) {
             this.now.setMonth(this.now.getMonth() + flag);
             this.now = new Date(this.now);
+            this.fetchDataDates();
         },
         parse (str) {
             var time = new Date(str);
@@ -275,12 +513,18 @@
                 return map[str];
             });
         }
-    },
-    ready () {
-        this.now = this.parse(this.value) || new Date();
-    },
-    beforeDestroy () {
-        document.removeEventListener('click', this.close, false);
-    }
+        },
+        ready () {
+            this.now = this.parse(this.value) || new Date();
+        },
+        beforeDestroy () {
+            document.removeEventListener('click', this.close, false);
+        }
     };
+
+        $(function() {
+            $("body").on('click','.btn-clock',function(){
+                $(this).parent().find('.dlg-setopenday').toggleClass('hidden');
+            })
+        });
 </script>

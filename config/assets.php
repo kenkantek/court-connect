@@ -56,7 +56,10 @@ return [
             'jquery-ui',
             'jquery-ui-slider',
             'jquery-ui-timepicker',
+            'jquery-ui-multidatespicker',
+            'ionslider',
             'home',
+            'city-autocomplete',
         ],
         'stylesheets' => [
             'bootstrap',
@@ -64,6 +67,8 @@ return [
             'jquery-ui',
             'jquery-ui-timepicker',
             'home',
+            'ionslider',
+            'autocomplete'
         ],
     ],
     'resources' => [
@@ -104,6 +109,13 @@ return [
                     'local' => '/resources/vendor/routes.js',
                 ],
             ],
+            'city-autocomplete' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/home/js/jquery.city-autocomplete.js',
+                ],
+            ],
             'bootstrap' => [
                 'use_cdn' => false,
                 'location' => 'bottom',
@@ -125,6 +137,14 @@ return [
                 'location' => 'bottom',
                 'src' => [
                     'local' => '/resources/vendor/jquery-ui-slider/jquery-ui-sliderAccess.js',
+                    'cdn' => '',
+                ],
+            ],
+            'jquery-ui-multidatespicker' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/jquery-ui-multidatespicker/js/jquery-ui.multidatespicker.js',
                     'cdn' => '',
                 ],
             ],
@@ -315,6 +335,13 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/home/css/home.css',
+                ],
+            ],
+            'autocomplete' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/home/css/autocomplete.css',
                 ],
             ],
             'font-awesome' => [

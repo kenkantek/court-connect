@@ -31,12 +31,24 @@ class Club extends Model
 
     protected $fillable = ['name', 'phone', 'image', 'address', 'city', 'state', 'zipcode'];
 
-    public function club()
+    public function courts()
     {
-        return $this->belongsTo('App\Models\Club');
+        return $this->hasMany('App\Models\Court');
+    }
+    public function date_clubs()
+    {
+        return $this->hasMany('App\Models\DateClub');
     }
     public function deal()
     {
         return $this->hasMany('App\Models\Deal');
+    }
+    public function state()
+    {
+        return $this->belongsTo('App\Models\State', 'state');
+    }
+    public function city()
+    {
+        return $this->belongsTo('App\Models\City', 'city');
     }
 }
