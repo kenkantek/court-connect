@@ -5,34 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5f5957a-1815-4849-b435-b382f4884f33" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/migrations/2016_03_30_030847_create_table_contract_time.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/migrations/2016_04_14_072300_add_2_couloum_table_users.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Models/Contract.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/ContractController.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Repositories/Interfaces/Admin/ContractInterface.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/contract/ContractRate.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/contract/ContractRateEdit.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Repositories/Eloquent/Admin/ContractRepository.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/contract/ContractTime.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Http/Requests/CreateContractRequest.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/contract/FormEdit.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/contract/FormNew.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/contract/List.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Middleware/AdminMiddleware.php" afterPath="$PROJECT_DIR$/app/Http/Middleware/AdminMiddleware.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Providers/Admin/AdminProvider.php" afterPath="$PROJECT_DIR$/app/Providers/Admin/AdminProvider.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/ClubSetting.vue" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/ClubSetting.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/CourtRate.vue" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/CourtRate.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/FormEditCourt.vue" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/FormEditCourt.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/FormNewCourt.vue" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/club/FormNewCourt.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/admin/css/admin.css" afterPath="$PROJECT_DIR$/public/resources/admin/css/admin.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/sass/admin.scss" afterPath="$PROJECT_DIR$/resources/assets/admin/sass/admin.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/admin/js/app_modules/app.js" afterPath="$PROJECT_DIR$/public/resources/admin/js/app_modules/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/app.js" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/admin/css/custom.css" afterPath="$PROJECT_DIR$/public/resources/admin/css/custom.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gulpfile.js" afterPath="$PROJECT_DIR$/gulpfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/vendor/routes.js" afterPath="$PROJECT_DIR$/public/resources/vendor/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" afterPath="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="courtconnect.iws" />
@@ -115,7 +88,7 @@
       <file leaf-file-name="custom.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/resources/admin/css/custom.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.42465752">
+            <state vertical-scroll-proportion="2.6382978">
               <caret line="601" column="1" selection-start-line="601" selection-start-column="1" selection-end-line="601" selection-end-column="1" />
               <folding />
             </state>
@@ -1036,7 +1009,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30030257" sideWeight="0.44117647" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1047,7 +1020,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6235489" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.8006536" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1546,7 +1519,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/resources/admin/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42465752">
+        <state vertical-scroll-proportion="2.6382978">
           <caret line="601" column="1" selection-start-line="601" selection-start-column="1" selection-end-line="601" selection-end-column="1" />
           <folding />
         </state>

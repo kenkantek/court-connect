@@ -5,3 +5,6 @@ Homestead.yaml
 Homestead.json
 .env
 /.idea
+public/error_log
+public/resources/admin/js/app_modules/app.js
+public/resources/vendor/routes.js
