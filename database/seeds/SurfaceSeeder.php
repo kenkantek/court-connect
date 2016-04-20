@@ -16,18 +16,28 @@ class SurfaceSeeder extends Seeder
             [
                 [
                     'id' => 1,
-                    'name' => 'porous',
-                    'label' => 'Porous',
+                    'name' => 'hard',
+                    'label' => 'Hard',
                 ],
                 [
                     'id' => 2,
-                    'name' => 'natural-grass',
-                    'label' => 'Natural Grass',
+                    'name' => 'hartru',
+                    'label' => 'Har-Tru',
                 ],
                 [
                     'id' => 3,
-                    'name' => 'hard',
-                    'label' => 'Hard',
+                    'name' => 'redclay',
+                    'label' => 'Red Clay',
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'grass',
+                    'label' => 'Grass',
+                ],
+                [
+                    'id' => 5,
+                    'name' => 'carpet',
+                    'label' => 'Carpet',
                 ],
             ]
         );
