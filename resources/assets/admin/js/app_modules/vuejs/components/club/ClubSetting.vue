@@ -2,16 +2,20 @@
 	<div class="box-body">
 		<div id="clubSetting-wrapper" style="position: relative; overflow: hidden">
 			<section class="col-xs-12 col-md-5">
-				<div class="court_list courtbox">
+				<div class="court_list courtbox clearfix">
 					<h3 class="title-box pull-left">Courts</h3>
-					<a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
-					<list-court
+					
+					
+				</div>
+
+				<list-court
 						:club-setting-id="clubSettingId"
 						:courts_choice.sync="courts_choice"
 						:courts.sync="courts"
 						:reload-courts.sync="reloadCourts"
 						></list-court>
-				</div>
+			<div>
+					<a class="btn btn-primary btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
 				<form-edit-court
 					v-if="courts_choice.length < 2"
 					:courts_choice="courts_choice"
@@ -22,20 +26,28 @@
 					:data-rates.sync="dataRates"
 					></form-edit-court>
 				<form-new-court
-					v-if="!courts_choice.length"
+					v-if="!courts_choice.length && btnAddCourt"
 					:surface="surface"
 					:courts.sync="courts"
 					:club-setting-id="clubSettingId"
 					:reload-courts.sync="reloadCourts"
 					:data-rates.sync="dataRates"
+					:btn-add-court.sync = "btnAddCourt"
 					>
 						<span slot="temp">When creating a new court you can set the initial prices to match a previously created court. Select the court you'd like to copy the prices from.
 						</span>
 				</form-new-court>
-
+				</div>
 			</section>
 			<section class="col-xs-12 col-md-7">
-				<court-rate :club-setting-id.sync="clubSettingId" :data-rates.sync="dataRates" :courts_choice.sync="courts_choice"></court-rate>
+				<court-rate 
+				:club-setting-id.sync="clubSettingId" 
+				:data-rates.sync="dataRates" 
+				:courts_choice.sync="courts_choice"
+				:btn-add-court.sync = "btnAddCourt"
+				:reload-courts.sync = "reloadCourts"
+				></court-rate>
+				
 			</section>
 		</div>
 
@@ -95,6 +107,7 @@
 			surface:null,
 			courts:[],
 			reloadCourts:1,
+			btnAddCourt:false,
 		}
 	},
 	watch: {
@@ -105,8 +118,9 @@
 				for (var index in this.courts_choice) {    // don't actually do this
 
 					for (var i in this.courts_choice[index].rates) {
-						const temp = _.cloneDeep(this.courts_choice[index].rates[i]);
-						this.dataRates.push(temp);
+						const datarate = _.cloneDeep(this.courts_choice[index].rates[i]);
+						const nameCourt = _.cloneDeep(this.courts_choice[index].name);
+						this.dataRates.push({datarate,nameCourt});
 					}
 
 				}
@@ -125,7 +139,7 @@
 	},
 	methods:{
 		scrollAddnewCourt(){
-			$('html, body').animate({ scrollTop: $('#btnAddnewCourt').position().top }, 500);
+			this.btnAddCourt = !this.btnAddCourt;
 		},
 		fetchSurface(surface) {
 			let def = deferred(),

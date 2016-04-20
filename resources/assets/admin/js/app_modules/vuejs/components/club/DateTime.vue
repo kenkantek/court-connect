@@ -229,7 +229,7 @@
                                         <input class="form-control" name="closetime" type="time" v-model="date[i*7+j].hours_close" >
                                     </div>
                                     <div >
-                                        <input class="btn btn-primary" style="margin-top: 6px; width: auto;" type="button" @click="setTimeClick(i * 7 + j)" value="Apply" >
+                                        <input class="btn btn-primary" style="margin-top: 6px; width: auto;" type="button" @click="setTimeClick(i * 7 + j)" value="Oke" >
                                     </div>
                                 </div>
                             </div>
