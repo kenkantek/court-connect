@@ -220,12 +220,6 @@
 			function formatRepoSelection (repo) {
 				return repo.email || repo.address1;
 			}
-
-
-			$(document).on("click",'.col-court-name',function(){
-				var court_id = $(this).data('court_id');
-				$(".day-grid[data-court='"+court_id+"']").addClass('selected');
-			});
 		});
 	</script>
 @stop

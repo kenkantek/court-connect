@@ -18,19 +18,19 @@
             <div class="cld-wrapper">
                 <div class="grid-row col-hour">
                     <div class="grid grid-null"></div>
-                    <div v-for="(index,hour) in hours" class="grid court-name col-court-name" data-court="court{{court['id']}}">{{hour}}</div>
+                    <div v-for="item in hours" class="grid court-name row-hour-name" data-hour="{{item.key}}">{{item.value}}</div>
                 </div>
                 <div class="grid-content-box">
                     <div class="grid-wrap">
                         <div class="court-name-wrap">
-                            <div v-for="(index,court) in dataOfClub" class="grid court-name">{{court['name']}}</div>
+                            <div v-for="(index,court) in dataOfClub" class="grid court-name col-court-name" data-court="{{court['id']}}">{{court['name']}}</div>
                         </div>
                         <div class="clearfix"></div>
                         <div class="grid-content-wap">
                             <template v-for="(index,court) in dataOfClub">
-                                <div class="grid-row court{{court['id']}}" data-court="court{{court['id']}}">
+                                <div class="grid-row court{{court['id']}}" data-court="{{court['id']}}">
                                     <template v-for="(index,grid) in court['hours']">
-                                        <div v-if="grid.g_start || grid.g_end" data-court="court{{court['id']}}" data-hour="{{grid.hour}}" class="day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}"
+                                        <div v-if="grid.g_start || grid.g_end" data-court="{{court['id']}}" data-hour="{{grid.hour}}" class="day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}"
                                              @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)">
                                             <div v-if=" !grid.g_end">
                                         <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
@@ -39,7 +39,7 @@
                                                 <template v-if="grid.status != 'available'">{{grid.content}}</template>
                                             </div>
                                         </div>
-                                        <div v-else @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="test day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
+                                        <div v-else data-court="{{court['id']}}" data-hour="{{grid.hour}}" @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="test day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
                                     <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
                                          ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
                                     </span>
@@ -271,9 +271,17 @@
                 show: true,
                 days: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
                 months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                hours: ['5am','5:30am','6am','6:30am','7am','7:30am','8am','8:30am','9am','9:30am','10am','10:30am','11am',
-                    '11:30am','12pm','12:30pm','1pm','1:30pm','2pm','2:30pm','3pm','3:30pm','4pm','4:30pm',
-                    '5pm','5:30pm','6pm','6:30pm','7pm','7:30pm','8pm','8:30pm','9pm','9:30pm','10pm','10:30pm'],
+                hours:[
+                    {key: 5, value: "5am"}, {key: 5.50, value: "5:30am"}, {key: 6, value: "6am"}, {key: 6.50, value: "6:30am"},
+                    {key: 7, value: "7am"}, {key: 7.50, value: "7:30am"}, {key: 8, value: "8am"}, {key: 8.50, value: "8:30am"},
+                    {key: 9, value: "9am"}, {key: 9.50, value: "9:30am"}, {key: 10, value: "10am"}, {key: 10.50, value: "10:30am"},
+                    {key: 11, value: "11am"}, {key: 11.50, value: "11:30am"}, {key: 12, value: "12am"}, {key: 12.50, value: "12:30pm"},
+                    {key: 13, value: "1pm"}, {key: 13.50, value: "1:30pm"}, {key: 14, value: "2pm"}, {key: 14.50, value: "2:30pm"},
+                    {key: 15, value: "3pm"}, {key: 15.50, value: "3:30pm"}, {key: 16, value: "4pm"}, {key: 16.50, value: "4:30pm"},
+                    {key: 17, value: "5pm"}, {key: 17.50, value: "5:30pm"}, {key: 18, value: "6pm"}, {key: 18.50, value: "6:30pm"},
+                    {key: 19, value: "7pm"}, {key: 19.50, value: "7:30pm"}, {key: 20, value: "8pm"}, {key: 20.50, value: "8:30pm"},
+                    {key: 21, value: "9pm"}, {key: 21.50, value: "9:30pm"}, {key: 22, value: "10pm"}
+                ],
                 dates: [],
                 now: new Date(),
                 courts: [],
@@ -302,6 +310,7 @@
                     price_nonmember: null,
                     court_name: null
                 },
+                grids_selected: null,
             }
         },
     watch: {
@@ -533,6 +542,25 @@
     ready () {
         this.now = this.dateChooise === null ? new Date(): this.parse(this.dateChooise);
         $(".gn" ).prop( "disabled", true );
+        $('#day-view-content').selectable({
+            filter: ".day-grid",
+            selected: ( event, ui ) => {
+            $(".unSelected").removeClass('hidden');
+            const x = $(ui.selected).data('court'),
+                    y = $(ui.selected).data('hour');
+            this.grids_selected.push({x , y});
+        },
+        unselected:( event, ui ) => {
+            const x = $(ui.selected).data('court'),
+                    y = $(ui.selected).data('hour');
+            this.grids_selected = _.reject(this.selected, {x, y});
+        }
+        });
+        $(document).on("click",'.col-court-name',function(){
+            var court_id = $(this).data('court');
+            console.log(court_id);
+            $(".day-grid[data-court='"+court_id+"']").addClass('multi-selected');
+        });
     },
     beforeDestroy () {
 
