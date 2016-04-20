@@ -196,12 +196,12 @@ form.form-court{
     cursor: pointer;
 }
 .day-grid.available{
-    background: #fff;
     color: #c7c7c7;
     cursor: pointer;
 }
 .day-grid.unavailable{
     background: #ddd;
+    cursor: text;
 }
 
 .day-view-content .grid-null{
@@ -496,6 +496,8 @@ form.form-court{
     position: ABSOLUTE;
     top: 0px;
     left: 0px;
+    bottom: 0px;
+    right: 0px;
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.2);
@@ -563,14 +565,24 @@ form.form-court{
     height: 0px;
     padding: 0;
     opacity: 0;
+    display: none;
 }
 .grid-content-wap .grid-row .grid.gn{
     height: 30px;
-    opacity: 0;
+    cursor: text;
+    font-size: 0px;
 }
 .grid-content-wap .grid-row .grid.g1{
     height: 30px;
 }
+/*.grid-content-wap .grid-row .grid.gn ~ .gstart{*/
+    /*height: 60px;*/
+/*}*/
+/*.grid-content-wap .grid-row .grid.gn ~ .gend{*/
+    /*height: 0px;*/
+    /*border: 0px;*/
+/*}*/
+
 .grid-content-wap .grid-row .grid.gn ~ .gstart{
     height: 60px;
 }
@@ -621,7 +633,7 @@ form.form-court{
     z-index: 9999;
 }
 .select2-dropdown, .select2-selection{
-    width: 200px !important;
+    width: 300px !important;
 }
 .grid-row.col-hour .court-name:nth-of-type(2n){
     height: 60px;
@@ -633,4 +645,24 @@ form.form-court{
 }
 .grid-content-wap .grid-row .day-grid:last-child{
     border-bottom: 1px solid #ccc;
+}
+.content .box.box-primary{
+    position: inherit;
+}
+.grid-content-wap .grid-row .day_close{
+    background: #000;
+    color: #fff;
+    cursor: text;
+}
+#md-new-deal table{
+    width: 100%;
+}
+#md-new-deal tr td{
+    width: 50%;
+    text-align: right;
+    padding-right: 5px;
+}
+#md-new-deal tr td:last-child{
+    text-align: left;
+    padding-left: 5px;
 }

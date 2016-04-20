@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade mb-modal" style="display: none" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade mb-modal" style="display: none; top: 50px" id="myModal" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -99,7 +99,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="mb-group-sl slc-type-open slc-type-group">
+                                    <div class="mb-group-sl slc-type-contract slc-type-group">
                                         <div class="col-xs-12 col-md-12">
                                             <h4 class="mb-title-h4-modal text-center">Extras</h4>
                                             <input type="checkbox" class="styled" value="1" v-model="inputBookingDetail.extras" v-model="inputBookingDetail.extra_id">
@@ -168,77 +168,82 @@
                                     <hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
                                     <form method="POST" action="" accept-charset="UTF-8" enctype="multipart/form-data">
 
-                                        <!--<select class="js-data-user-ajax" v-model="customerDetail.user_id">-->
-                                            <!--<option value="" selected="selected">Select user member</option>-->
-                                        <!--</select>-->
+                                        <div style="width: 300px; margin: 0px auto" v-if="inputBookingDetail.member == 1">
+                                            <label>Select a player for booking</label>
+                                            <select class="js-data-user-ajax" name="player_id" id="player_id" v-model="customerDetail.player_id">
+                                                <option value="">Select user member</option>
+                                            </select>
+                                        </div>
+                                        <div v-else>
+                                            <div class="form-group">
+                                                <label for="surname" class="col-sm-4 control-label">Customer Lookup</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" placeholder="Surname" name="surname" type="text" value="" id="surname" v-model="customerDetail.surname">
+                                                </div>
+                                            </div>
+                                            <div class="clearfix" style="padding-bottom: 20px;"></div>
+                                            <div class="form-group">
+                                                <div class="col-sm-4">
+                                                    <label for="title">Title *</label>
+                                                    <input class="form-control" placeholder="Title" name="title" type="text" value="" id="title" v-model="customerDetail.title">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label for="firstname">Fist Name *</label>
+                                                    <input class="form-control" placeholder="First name" name="first_name" type="text" value="" id="firstname" v-model="customerDetail.first_name">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label for="lastname">Last Name *</label>
+                                                    <input class="form-control" placeholder="Lastname" name="lastname" type="text" value="" id="lastname" v-model="customerDetail.last_name">
+                                                </div>
+                                            </div>
+                                            <div class="clearfix" style="padding-bottom: 20px;"></div>
+                                            <div class="form-group clearfix">
+                                                <label for="zipcode" class="col-sm-2 control-label">Zipcode *</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" placeholder="Enter Zip Code" style="width: 50%; margin-right: 10px;" name="Zipcode" type="text" value="" id="zipcode" v-model="customerDetail.zip_code">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <button class="btn btn-primary" type="button" @click="address_lookup()">Address Lookup</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label for="address1" class="col-sm-2 control-label">Address 1 *</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" placeholder="Address Line 1" name="address1" type="text" value="" id="address1" v-model="customerDetail.address1">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label for="address2" class="col-sm-2 control-label">Address 2</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" placeholder="Address Line 2" name="address2" type="text" value="" id="address2" v-model="customerDetail.address2">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label for="city" class="col-sm-2 control-label">City *</label>
+                                                <div class=" col-sm-10">
+                                                    <input class="form-control" placeholder="City" name="city" type="text" value="" id="city" v-model="customerDetail.city">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label for="state" class="col-sm-2 control-label">State *</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" placeholder="State" name="state" type="text" value="" id="state" v-model="customerDetail.state">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label for="email" class="col-sm-2 control-label">Email *</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" placeholder="Email" name="email" type="text" value="" id="email" v-model="customerDetail.email">
+                                                </div>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label for="phone" class="col-sm-2 control-label">Phone *</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" placeholder="Phone" name="phone" type="text" value="" id="phone" v-model="customerDetail.phone">
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                        <div class="form-group">
-                                            <label for="surname" class="col-sm-4 control-label">Customer Lookup</label>
-                                            <div class="col-sm-8">
-                                                <input class="form-control" placeholder="Surname" name="surname" type="text" value="" id="surname" v-model="customerDetail.surname">
-                                            </div>
-                                        </div>
-                                        <div class="clearfix" style="padding-bottom: 20px;"></div>
-                                        <div class="form-group">
-                                            <div class="col-sm-4">
-                                                <label for="title">Title *</label>
-                                                <input class="form-control" placeholder="Title" name="title" type="text" value="" id="title" v-model="customerDetail.title">
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label for="firstname">Fist Name *</label>
-                                                <input class="form-control" placeholder="First name" name="firstname" type="text" value="" id="firstname" v-model="customerDetail.firstname">
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label for="lastname">Last Name *</label>
-                                                <input class="form-control" placeholder="Lastname" name="lastname" type="text" value="" id="lastname" v-model="customerDetail.lastname">
-                                            </div>
-                                        </div>
-                                        <div class="clearfix" style="padding-bottom: 20px;"></div>
-                                        <div class="form-group clearfix">
-                                            <label for="zipcode" class="col-sm-2 control-label">Zipcode *</label>
-                                            <div class="col-sm-7">
-                                                <input class="form-control" placeholder="Enter Zip Code" style="width: 50%; margin-right: 10px;" name="Zipcode" type="text" value="" id="zipcode" v-model="customerDetail.zipcode">
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <button class="btn btn-primary" type="button">Address Lookup</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <label for="address1" class="col-sm-2 control-label">Address 1 *</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" placeholder="Address Line 1" name="address1" type="text" value="" id="address1" v-model="customerDetail.address1">
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <label for="address2" class="col-sm-2 control-label">Address 2</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" placeholder="Address Line 2" name="address2" type="text" value="" id="address2" v-model="customerDetail.address2">
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <label for="city" class="col-sm-2 control-label">City *</label>
-                                            <div class=" col-sm-10">
-                                                <input class="form-control" placeholder="City" name="city" type="text" value="" id="city" v-model="customerDetail.city">
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <label for="state" class="col-sm-2 control-label">State *</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" placeholder="State" name="state" type="text" value="" id="state" v-model="customerDetail.state">
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <label for="email" class="col-sm-2 control-label">Email *</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" placeholder="Email" name="email" type="text" value="" id="email" v-model="customerDetail.email">
-                                            </div>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <label for="phone" class="col-sm-2 control-label">Phone *</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" placeholder="Phone" name="phone" type="text" value="" id="phone" v-model="customerDetail.phone">
-                                            </div>
-                                        </div>
                                         <div class="form-group clearfix">
                                             <input type="button" class="btn btn-primary pull-right" type="submit" value="Next" @click.prevent="nextPayment()">
                                         </div>
@@ -285,7 +290,7 @@
                                     <table style="width: 100%">
                                         <tr>
                                             <td>Name: </td>
-                                            <td>{{customerDetail.firstname + " " + customerDetail.lastname}}</td>
+                                            <td>{{customerDetail.first_name + " " + customerDetail.last_name}}</td>
                                         </tr>
                                         <tr>
                                             <td>Address: </td>
@@ -424,7 +429,7 @@
                                         <table style="width: 100%">
                                             <tr>
                                                 <td>Name: </td>
-                                                <td>{{customerDetail.firstname + " " + customerDetail.lastname}}</td>
+                                                <td>{{customerDetail.first_name + " " + customerDetail.last_name}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Address: </td>
@@ -458,7 +463,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Payment Reference: </td>
-                                                <td>{{paymentDetail.booking_reference}}</td>
+                                                <td>{{booking_reference}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Amount: </td>
@@ -478,7 +483,7 @@
     var _ = require('lodash'),
             deferred = require('deferred');
     export default {
-        props: ['clubSettingId','clickNewBooking','watchNewBooking'],
+        props: ['clubSettingId','clickNewBooking','flagChangeDataOfDate'],
         data (){
         return {
             courts: [],
@@ -497,7 +502,7 @@
                 num_player: 0,
             },
             customerDetail:{
-                user_id: null,
+                player_id: null,
                 surname: null,
                 title: null,
                 firstname: null,
@@ -613,26 +618,55 @@
         }, res => {
 
         });
-        },
+    },
     nextPayment(){
-            const customer = this.customerDetail;
-            // check validate customer
-            let def = deferred(),
-            url = laroute.route('booking.checkInputCustomer', customer);
-            this.$http.get(url).then(res => {
-                if(res.data.error)
-                {
-                    var msg = "";
-                    $.each(res.data.messages,function(k,v){
-                        msg += "<div>"+v+"</div>";
-                    });
-                    showNotice('error', msg, 'Error!');
-                }else{
-                    this.tabClick("mb-payment-details-content")
-                }
-            }, res => {
+            if(this.inputBookingDetail.member == 1){
+                this.customerDetail.player_id = $("#player_id").val();
+                this.$http.get(laroute.route('booking.checkPlayerforBooking', {one: this.customerDetail.player_id})).then(res => {
+                    if(res.data.success)
+                    {
+                        var player = res.data.player; console.log(player);
+                        this.customerDetail.first_name = player.first_name;
+                        this.customerDetail.last_name = player.last_name;
+                        this.customerDetail.address1 = player.address1;
+                        this.customerDetail.state = player.state;
+                        this.customerDetail.city = player.city;
+                        this.customerDetail.email = player.email;
+                        this.customerDetail.phone = player.phone;
+                        this.tabClick("mb-payment-details-content");
+                    }else{
+                        var msg = "";
+                        $.each(res.data.messages,function(k,v){
+                            msg += "<div>"+v+"</div>";
+                        });
+                        showNotice('error', msg, 'Error!');
+                    }
+                }, res => {
 
-            });
+                });
+            }
+            else{
+                const customer = this.customerDetail;
+                // check validate customer
+                let def = deferred(),
+                url = laroute.route('booking.checkInputCustomer', customer);
+                this.$http.get(url).then(res => {
+                    if(res.data.error)
+                    {
+                        var msg = "";
+                        $.each(res.data.messages,function(k,v){
+                            msg += "<div>"+v+"</div>";
+                        });
+                        showNotice('error', msg, 'Error!');
+                    }else{
+                        this.tabClick("mb-payment-details-content");
+                    }
+                }, res => {
+
+                });
+            }
+
+
         },
         nextConfirmation(){
             var data = new FormData();
@@ -650,7 +684,9 @@
                     });
                     showNotice('error', msg, 'Error!');
                 }else{
-                    this.booking_reference = data.booking_id
+                    this.booking_reference = res.data.booking_id;
+                    this.flagChangeDataOfDate = Math.random();
+                    this.$dispatch('child-change-flagChangeDataOfDate', this.flagChangeDataOfDate);
                     this.tabClick("mb-confirmation-content")
                 }
             }, res => {
@@ -687,12 +723,12 @@
                         num_player: null
             };
             this.customerDetail = {
-                        user_id: null,
+                        player_id: null,
                         surname: null,
                         title: null,
-                        firstname: null,
-                        lastname: null,
-                        zipcode: null,
+                        first_name: null,
+                        last_name: null,
+                        zip_code: null,
                         address1: null,
                         address2: null,
                         state: null,
@@ -713,6 +749,24 @@
             };
             this.booking_reference = null;
             this.total_price = '';
+        },
+        address_lookup(){
+            this.$http.get(laroute.route('booking.address_lookup', {one: this.customerDetail.zipcode})).then(res => {
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }else{
+                    console.log(res.data);
+                    this.customerDetail.state = res.data.state;
+                    this.customerDetail.city = res.data.city;
+                }
+            }, res => {
+
+            });
         }
     },ready () {
         //test model open

@@ -29,12 +29,14 @@ class Deal extends Model
     */
     protected $dates    = ['created_at', 'updated_at'];
 
-    protected $fillable = ['user_id','player_id','court_id','price','time','payment_id','status'];
+    protected $guarded = array();
 
-    public $timestamps = true;
-
-    public function club()
+    public function setDateAttribute($value)
     {
-        return $this->belongsTo('App\Models\Club');
+        $this->attributes['date'] = date('y-m-d', strtotime($value));
+    }
+    public function getDateAttribute($value)
+    {
+        return date('m/d/y', strtotime($value));
     }
 }

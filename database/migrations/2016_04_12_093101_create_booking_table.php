@@ -28,17 +28,12 @@ class CreateBookingTable extends Migration
             $table->tinyInteger('hour_length');
             $table->tinyInteger('num_player')->nullable();
             $table->integer('player_id');
-            $table->text('user_info');
+            $table->text('player_info');
             $table->text('payment_info');
 
             $table->foreign('court_id')
                 ->references('id')
                 ->on('courts')
-                ->onDelete('cascade');
-
-            $table->foreign('player_id')
-                ->references('id')
-                ->on('players')
                 ->onDelete('cascade');
             $table->timestamps();
         });

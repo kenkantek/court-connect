@@ -12,13 +12,12 @@ class CreateDealsTable extends Migration {
 	public function up() {
 		Schema::create('deals', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('user_id')->unsigned()->references('id')->on('users');
-			$table->integer('player_id')->unsigned()->references('id')->on('players');
-			$table->integer('court_id')->unsigned()->references('id')->on('court');
-			$table->decimal('price')->unsigned();
-			$table->string('time', 30);
-			$table->integer('payment_id')->unsigned();
-			$table->tinyinteger('status')->unsigned();
+			$table->date('date');
+			$table->integer('court_id')->unsigned();
+			$table->float('hour');
+			$table->float('hour_length');
+			$table->float('price_member');
+			$table->float('price_nonmember');
 			$table->timestamps();
 		});
 	}

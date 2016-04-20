@@ -21,7 +21,7 @@
     <calendar-booking
         :club-setting-id="clubSettingId",
         :date-chooise="dateChooise",
-        :watch-new-booking="watchNewBooking"
+        :flag-change-data-of-date="flagChangeDataOfDate"
         ></calendar-booking>
 
     <div class="clearfix"></div>
@@ -30,7 +30,7 @@
     <new-booking
             :club-setting-id.sync="clubSettingId",
             :click-new-booking.sync="clickNewBooking"
-            :watch-new-booking="watchNewBooking"
+            :flag-change-data-of-date="flagChangeDataOfDate"
             ></new-booking>
     <!-- Modal -->
 
@@ -47,11 +47,12 @@
             return {
                 dateChooise: (new Date()).getMonth()+1+"/"+(new Date()).getDate()+"/"+(new Date()).getFullYear(),
                 clickNewBooking: null,
-                watchNewBooking: Math.random()
+                flagChangeDataOfDate: Math.random()
             }
         },
         watch: {
-            dateChooise: 'reloadAsyncData'
+            dateChooise: 'reloadAsyncData',
+            flagChangeDataOfDate: 'reloadAsyncData'
         },
         computed: {
 
@@ -74,6 +75,9 @@
         events: {
             'child-change-dateChooise': function (day) {
                 this.dateChooise = day;
+            },
+            'child-change-flagChangeDataOfDate': function (flagChangeDataOfDate) {
+                this.flagChangeDataOfDate = flagChangeDataOfDate;
             }
         }
     }

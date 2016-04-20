@@ -8,8 +8,10 @@ use App\Models\Contexts\Court;
 use App\Models\CourtRate;
 use App\Models\CourtRateDetail;
 use App\Models\DateClub;
+use App\Models\Deal;
 use App\Models\Player;
 use App\Models\SetOpenDay;
+use App\Models\TimeUnavailable;
 use App\Repositories\Interfaces\Admin\ClubInterface;
 use Carbon\Carbon;
 use DateTime;
@@ -47,10 +49,30 @@ class ManageBookingController extends Controller
     public function getDataOfClub(Request $request){
         $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
         $hours = range(5,22.5,0.5);
-        //[5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,
-          //  14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22];
+
         $courts = Court::where('club_id',$request->input('club_id'))
             ->select(['id','name'])->get();
+
+        //check date close
+        $date_close = SetOpenDay::where('date',$date)->where('is_close',1)->first();
+        if(isset($date_close)){
+            foreach($courts as $k=>$court){
+                $arr_hour_tmp = [];
+                foreach($hours as $key=>$hour) {
+                    $arr_hour["h_" . $hour]['hour'] = $hour;
+                    $arr_hour["h_" . $hour]['status'] = 'day_close';
+                    $arr_hour["h_" . $hour]['content'] = '';
+                    $arr_hour["h_" . $hour]['booking_id'] = '';
+                }
+                foreach($arr_hour as $v)
+                    $arr_hour_tmp[] = $v;
+                $courts[$k]['hours'] = $arr_hour_tmp;
+            }
+            return response()->json([
+                'success' => true,
+                'data' => $courts
+            ]);
+        }
         foreach($courts as $k=>$court){
             $arr_hour = [];
             foreach($hours as $key=>$hour) {
@@ -59,18 +81,39 @@ class ManageBookingController extends Controller
                 $arr_hour["h_" . $hour]['content'] = '';
                 $arr_hour["h_" . $hour]['booking_id'] = '';
             }
+
+            //get booking
             $bookings = Booking::where('date',$date)->where('court_id',$court['id'])->get();
             foreach($bookings as $booking){
                 $tmp_i = 0;
                 for($i=$booking['hour']; $i < $booking['hour'] + $booking['hour_length']; $i+=0.5){
-                    $user_info = json_decode($booking['user_info']);
+                    if($booking['player_id'] == 0) {
+                        $player_info = json_decode($booking['player_info']);
+                        $arr_hour["h_".$i]['content'] = $player_info->first_name. " ". $player_info->last_name;
+                    }else{
+                        $player_info = Player::where('id',$booking['player_info'])->first();
+                        if($player_info)
+                            $arr_hour["h_".$i]['content'] = $player_info['first_name']. " ". $player_info['last_name'];
+                        $arr_hour["h_".$i]['content'] = "";
+                    }
                     $arr_hour["h_".$i]['status'] = $booking['type'];
                     $arr_hour["h_".$i]['booking_id'] = $booking['id'];
-                    $arr_hour["h_".$i]['content'] = $user_info->firstname. " ". $user_info->lastname;
+
                     if($tmp_i % 2 == 0)
                         $arr_hour["h_" . $i]['g_start'] = "start";
                     else
                         $arr_hour["h_" . $i]['g_end'] = "end";
+                    $tmp_i++;
+                }
+            }
+
+            //get unavailable
+            $unavailables = TimeUnavailable::where('date',$date)->where('court_id',$court['id'])->get();
+            foreach($unavailables as $unavailable){
+                $tmp_i = 0;
+                for($i=$unavailable['hour']; $i < $unavailable['hour'] + $unavailable['hour_length']; $i+=0.5){
+                    $arr_hour["h_".$i]['status'] = 'unavailable';
+                    $arr_hour["h_".$i]['content'] = $unavailable['reason'];
                     $tmp_i++;
                 }
             }
@@ -91,6 +134,9 @@ class ManageBookingController extends Controller
     //caculator price and check is book
     function calPrice($request){
         $errors = array();
+        if(!$request->input('date'))
+            return ['error' => true, "messages" => ["Select a date"]];
+
         $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
         if($request->input('type') == 'open'){
 
@@ -137,9 +183,10 @@ class ManageBookingController extends Controller
                 ->where('end_date','>=',$date)
                 ->where('court_id',$request->input('court_id'))
                 ->where('is_member',$request->input('member'))
+                ->orderBy('updated_at','DESC')
                 ->first();
             if(empty($court_rate))
-                return ['error' => true,"messages"=>["Can't found data"]];
+                return ['error' => true,"messages"=>["Can't found data. Courts can't yet set prices"]];
 
             $dayOfWeek = date('w', strtotime($date));
             $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
@@ -176,9 +223,9 @@ class ManageBookingController extends Controller
     public function getCheckInputCustomer(Request $request){
         $v = Validator::make($request->all(), [
             'title' => 'required',
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'zipcode' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'zip_code' => 'required | integer | min: 5',
             'address1' => 'required',
             'state' => 'required',
             'city' => 'required',
@@ -211,6 +258,16 @@ class ManageBookingController extends Controller
         }
 
         $inputBookingDetail = json_decode($request->input('infoBooking'));
+        $customerDetail = json_decode($request->input('customer'));
+        if($inputBookingDetail->member == 1) {
+            $player_id =  $customerDetail->player_id;
+            $player_info = json_encode([]);
+        }
+        else{
+            $player_id = 0;
+            $player_info = $request->input('customer');
+        }
+
         $booking = Booking::create([
             'type' => $inputBookingDetail->type,
             'date' => $inputBookingDetail->date,
@@ -223,9 +280,9 @@ class ManageBookingController extends Controller
             'total_price' => $request->input('total_price'),
             'hour' => $inputBookingDetail->hour_start,
             'hour_length' => $inputBookingDetail->hour_length,
-            'player_id' => 1,
+            'player_id' => $player_id,
             'num_player' => $inputBookingDetail->num_player,
-            'user_info' => $request->input('customer'),
+            'player_info' => $player_info,
             'payment_info'=> $request->input('payment')
         ]);
         return [
@@ -239,6 +296,11 @@ class ManageBookingController extends Controller
         $booking = Booking::whereId($booking_id)->with('court')->first();
         if(!isset($booking)){
             return ['error' => true, "messages" => ["Not found data"]];
+        }
+        if($booking['player_id'] != 0) {
+            $player_info = Player::where('id',$booking['player_id'])->select(["first_name","last_name","email","phone","address1","city","state"])->first();
+            if($player_info)
+                $booking['player_info'] = json_encode($player_info);
         }
         return response()->json([
             'success' => true,
@@ -259,9 +321,209 @@ class ManageBookingController extends Controller
         ]);
     }
 
+    //cancle booking
+    public function putDelete($booking_id){
+        $booking = Booking::find($booking_id)->first();
+        if(!isset($booking)){
+            return ['error' => true, "messages" => ["Not found data"]];
+
+        }
+        $booking->delete();
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
     //ajax search player
     public function getSearchPlayers(Request $request){
         $players = Player::where('email','LIKE','%'.$request['q'].'%')->limit(10)->select(['email','id','address1'])->get();
         return $players;
+    }
+
+    //get address lookup
+    public function getAddressLookup($zipcode){
+        $city = City::with('state')->where('zipcode',$zipcode)->select(['citys.name as city','states.name as state'])->first();
+        if(!isset($booking)){
+            return ['error' => true, "messages" => ["Not found data"]];
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $city
+        ]);
+    }
+
+    public function getCheckPlayerforBooking($player_id){
+        $player = Player::where('id',$player_id)->first();
+        if(!isset($player)){
+            return ['error' => true, "messages" => ["Not found data"]];
+        }
+        return response()->json([
+            'success' => true,
+            'player' => $player
+        ]);
+    }
+
+    //getInfoGridAvailable
+    public function getInfoGridAvailable(Request $request){
+        $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
+        $hour = $request->input('hour');
+        $court_id = $request->input('court_id');
+        $limit_hour = $hour + 5 <= 22 ? 5 : (int)(22 - $hour);
+
+        $arr_lb_hour = [];
+        $tmp_inc_hour = 1;
+        for($i=$hour; $i< $hour + $limit_hour; $i++) {
+            $arr_lb_hour[] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
+                ($hour + $tmp_inc_hour <=12 ? str_replace(".5",":30",$hour + $tmp_inc_hour)."am" : str_replace(".5",":30",$hour + $tmp_inc_hour - 12)."pm") ." (".$tmp_inc_hour." hour)";
+            $tmp_inc_hour+=0.5;
+        }
+
+        $price_member = [];
+        $tmp_inc_hour = 1;
+        for($i=$hour; $i< $hour + $limit_hour; $i++) {
+            $price_member[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,1);
+            $tmp_inc_hour+=0.5;
+        }
+
+        $tmp_inc_hour = 1;
+        $price_nonmember = [];
+        for($i=$hour; $i< $hour + $limit_hour; $i++) {
+            $price_nonmember[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,0);
+            $tmp_inc_hour+=0.5;
+        }
+
+        $data['lb_hour'] = $arr_lb_hour;
+        $data['price_member'] = $price_member;
+        $data['price_nonmember'] = $price_nonmember;
+
+        return [
+            'success' => true,
+            'data' => $data
+        ];
+    }
+
+    //get price
+    private function getPrice($court_id, $date, $hour_start, $hour_length, $is_member){
+
+        $court_rate= CourtRate::where('start_date','<=',$date)
+            ->where('end_date','>=',$date)
+            ->where('court_id',$court_id)
+            ->where('is_member',$is_member)
+            ->orderBy('updated_at','DESC')
+            ->first();
+
+        $rates = $court_rate['rates'];
+
+        $dayOfWeek = date('w', strtotime($date));
+        $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
+        $total_price = 0;
+
+        $index_hour = $hour_start - 5; // hour begin: 5am
+        $b_hour_start = $hour_start;
+        $hour_full = $hour_start + $hour_length;
+
+        $hour_start = round($hour_start);
+        $b_hour_full = round($hour_full);
+        if($hour_start > $b_hour_start) {
+            $index_hour = $hour_start - 5;
+            $total_price += $rates[$index_hour - 1][$index_json] / 2;
+        }
+        if($b_hour_full > $hour_full){
+            if($hour_start > $b_hour_start)
+                $total_price -= $rates[round($index_hour + $hour_length)][$index_json]/2;
+            else $total_price += $rates[round($index_hour + $hour_length)][$index_json]/2;
+        }
+
+        for($i=1; $i <= $hour_length; $i++){
+            $total_price += $rates[$index_hour+$i][$index_json];
+        }
+        return $total_price;
+    }
+
+    //makeTimeUnavailable
+    public function postMakeTimeUnavailable(Request $request){
+        $v = Validator::make($request->all(), [
+            'date' => 'required',
+            'hour' => 'required',
+            'hour_length' => 'required',
+            'reason' => 'required',
+            'court_id' => 'required',
+        ]);
+
+        if($v->fails())
+        {
+            return ['error' => true,"messages"=>$v->errors()->all()];
+        }
+
+        $time_available = TimeUnavailable::create([
+           'date' => $request->input('date'),
+            'court_id' => $request->input('court_id'),
+            'hour' => $request->input('hour'),
+            'hour_length' => $request->input('hour_length'),
+            'reason' => $request->input('reason'),
+        ]);
+        if($time_available)
+        return [
+            'success' => true,
+        ];
+        else return [
+            'error' => true
+        ];
+    }
+
+    //getInfoGridAvailable
+    public function getInfoGridForDeal(Request $request){
+        $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
+        $hour = $request->input('hour');
+        $hour_length = $request->input('hour_length');
+        $court_id = $request->input('court_id');
+
+        //court
+        $court = Court::where('id',$court_id)->select('name')->first();
+
+        $data['court_name'] = $court['name'];
+        $data['price_member']= $this->getPrice($court_id,$date,$hour, $hour_length,1);
+        $data['price_nonmember']= $this->getPrice($court_id,$date,$hour, $hour_length,0);
+        $data['date_text'] = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("l jS \of F Y");
+        $data['time'] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
+            ($hour + $hour_length <=12 ? str_replace(".5",":30",$hour + $hour_length)."am" : str_replace(".5",":30",$hour + $hour_length - 12)."pm");
+
+        return [
+            'success' => true,
+            'data' => $data
+        ];
+    }
+
+    //new deal
+    public function postNewDeal(Request $request){
+        $v = Validator::make($request->all(), [
+            'date'  =>'required',
+            'new_price_member' => 'required | numeric ',
+            'new_price_nonmember' => 'required | numeric ',
+            'hour' => 'required',
+            'hour_length' => 'required',
+            'court_id' => 'required',
+        ]);
+
+        if($v->fails())
+        {
+            return ['error' => true,"messages"=>$v->errors()->all()];
+        }
+
+        $deal = Deal::create([
+            'date' => $request->input('date'),
+            'court_id' => $request->input('court_id'),
+            'hour' => $request->input('hour'),
+            'hour_length' => $request->input('hour_length'),
+            'price_member' => $request->input('new_price_member'),
+            'price_nonmember' => $request->input('new_price_nonmember'),
+        ]);
+        if($deal)
+            return [
+                'success' => true,
+            ];
+        else return [
+            'error' => true
+        ];
     }
 }
