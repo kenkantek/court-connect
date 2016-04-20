@@ -385,16 +385,16 @@ class ManageBookingController extends Controller
             $tmp_inc_hour+=0.5;
         }
 
-        $tmp_inc_hour = 1;
-        $price_nonmember = [];
-        for($i=$hour; $i< $hour + $limit_hour; $i++) {
-            $price_nonmember[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,0);
-            $tmp_inc_hour+=0.5;
-        }
+//        $tmp_inc_hour = 1;
+//        $price_nonmember = [];
+//        for($i=$hour; $i< $hour + $limit_hour; $i++) {
+//            $price_nonmember[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,0);
+//            $tmp_inc_hour+=0.5;
+//        }
 
         $data['lb_hour'] = $arr_lb_hour;
         $data['price_member'] = $price_member;
-        $data['price_nonmember'] = $price_nonmember;
+//        $data['price_nonmember'] = $price_nonmember;
 
         return [
             'success' => true,
@@ -412,30 +412,35 @@ class ManageBookingController extends Controller
             ->orderBy('updated_at','DESC')
             ->first();
 
-        $rates = $court_rate['rates'];
+        if(!isset($court_rate)) return 0;
 
         $dayOfWeek = date('w', strtotime($date));
         $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
         $total_price = 0;
 
-        $index_hour = $hour_start - 5; // hour begin: 5am
-        $b_hour_start = $hour_start;
+
         $hour_full = $hour_start + $hour_length;
 
-        $hour_start = round($hour_start);
-        $b_hour_full = round($hour_full);
-        if($hour_start > $b_hour_start) {
-            $index_hour = $hour_start - 5;
-            $total_price += $rates[$index_hour - 1][$index_json] / 2;
-        }
-        if($b_hour_full > $hour_full){
-            if($hour_start > $b_hour_start)
-                $total_price -= $rates[round($index_hour + $hour_length)][$index_json]/2;
-            else $total_price += $rates[round($index_hour + $hour_length)][$index_json]/2;
-        }
+        $rates = $court_rate['rates'];
+        $deals = Deal::where('date',$date)->where('court_id',$court_id)
+            ->orderBy('updated_at','asc')
+            ->get();
 
-        for($i=1; $i <= $hour_length; $i++){
-            $total_price += $rates[$index_hour+$i][$index_json];
+        foreach($deals as $deal){
+            for($i=$deal['hour']; $i< $deal['hour'] + $deal['hour_length']; $i++) {
+                if($is_member)
+                    $rates[$i - 5][$index_json] = $deal['price_member'];
+                else $rates[$i - 5][$index_json] = $deal['price_nonmember'];
+            }
+        }
+        $rates_full = [];
+        foreach($rates as $rate){
+            $rates_full[] = $rate;
+            $rates_full[] = $rate;
+        }
+        for($i= $hour_start; $i< $hour_start + $hour_length; $i+=0.5){
+            $tmp_index = ($i - 5) *2;
+            $total_price += $rates_full[$tmp_index][$index_json] / 2;
         }
         return $total_price;
     }

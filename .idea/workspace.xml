@@ -5,22 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5f5957a-1815-4849-b435-b382f4884f33" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2016_02_24_084812_create_deals_table.php" afterPath="$PROJECT_DIR$/database/migrations/2016_02_24_084812_create_deals_table.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2016_04_12_093101_create_booking_table.php" afterPath="$PROJECT_DIR$/database/migrations/2016_04_12_093101_create_booking_table.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/booking/CalendarBooking.vue" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/booking/CalendarBooking.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/City.php" afterPath="$PROJECT_DIR$/app/Models/City.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Deal.php" afterPath="$PROJECT_DIR$/app/Models/Deal.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/booking/ManageBooking.vue" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/booking/ManageBooking.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/ManageBookingController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/ManageBookingController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/booking/NewBooking.vue" afterPath="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/booking/NewBooking.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Home/SearchController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Home/SearchController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/admin/js/app_modules/app.js" afterPath="$PROJECT_DIR$/public/resources/admin/js/app_modules/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/admin/css/custom.css" afterPath="$PROJECT_DIR$/public/resources/admin/css/custom.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gulpfile.js" afterPath="$PROJECT_DIR$/gulpfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/admin/booking/index.blade.php" afterPath="$PROJECT_DIR$/resources/views/admin/booking/index.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/resources/vendor/routes.js" afterPath="$PROJECT_DIR$/public/resources/vendor/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" afterPath="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="courtconnect.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -51,16 +36,13 @@
       <file leaf-file-name="ManageBookingController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ManageBookingController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.17531306">
-              <caret line="366" column="59" selection-start-line="366" selection-start-column="59" selection-end-line="366" selection-end-column="59" />
+            <state vertical-scroll-proportion="0.42264152">
+              <caret line="439" column="9" selection-start-line="439" selection-start-column="9" selection-end-line="439" selection-end-column="9" />
               <folding>
                 <element signature="e#45#81#0#PHP" expanded="true" />
-                <element signature="e#3321#4483#0#PHP" expanded="false" />
                 <element signature="e#13572#13966#0#PHP" expanded="false" />
                 <element signature="e#13972#14310#0#PHP" expanded="false" />
-                <element signature="e#14343#15835#0#PHP" expanded="false" />
-                <element signature="e#17241#18136#0#PHP" expanded="false" />
-                <element signature="e#19277#20312#0#PHP" expanded="false" />
+                <marker date="1461131996029" expanded="true" signature="16951:17465" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -212,10 +194,10 @@
         <option value="$PROJECT_DIR$/app/Models/Deal.php" />
         <option value="$PROJECT_DIR$/app/Http/Endpoints/Admin/routes.php" />
         <option value="$PROJECT_DIR$/database/migrations/2016_02_24_084812_create_deals_table.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/ManageBookingController.php" />
         <option value="$PROJECT_DIR$/public/resources/admin/css/custom.css" />
         <option value="$PROJECT_DIR$/resources/assets/admin/js/app_modules/vuejs/components/booking/CalendarBooking.vue" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Home/SearchController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/ManageBookingController.php" />
       </list>
     </option>
   </component>
@@ -1052,7 +1034,7 @@
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="4" />
+      <option name="time" value="5" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1483,16 +1465,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ManageBookingController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17531306">
-          <caret line="366" column="59" selection-start-line="366" selection-start-column="59" selection-end-line="366" selection-end-column="59" />
+        <state vertical-scroll-proportion="0.42264152">
+          <caret line="439" column="9" selection-start-line="439" selection-start-column="9" selection-end-line="439" selection-end-column="9" />
           <folding>
             <element signature="e#45#81#0#PHP" expanded="true" />
-            <element signature="e#3321#4483#0#PHP" expanded="false" />
             <element signature="e#13572#13966#0#PHP" expanded="false" />
             <element signature="e#13972#14310#0#PHP" expanded="false" />
-            <element signature="e#14343#15835#0#PHP" expanded="false" />
-            <element signature="e#17241#18136#0#PHP" expanded="false" />
-            <element signature="e#19277#20312#0#PHP" expanded="false" />
+            <marker date="1461131996029" expanded="true" signature="16951:17465" placeholder="..." />
           </folding>
         </state>
       </provider>
