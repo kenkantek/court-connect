@@ -109,12 +109,6 @@
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
 			});
 
-			//drag
-			//$( "#day-view-content > table" ).draggable();
-			// end calendar
-
-			//$(".create_new_book").click();
-
 
 			$('.datetimepicker').datetimepicker({defaultDate: new Date(), format: 'MM/DD/YYYY'});
 

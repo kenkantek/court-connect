@@ -192,7 +192,7 @@ form.form-court{
 .day-view-content .day-grid {
     height: 35px;
     min-width: 120px;
-    max-height: 60px;
+    max-height: 40px;
     cursor: pointer;
 }
 .day-grid.available{
@@ -520,12 +520,12 @@ form.form-court{
 .court-name-wrap .grid{
     float: left;
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 5px 10px 0px 10px;
     width: 150px;
     background: #f2f2f2;
     color: #000;
     text-align: center;
-    height: 60px;
+    height: 50px;
     cursor: pointer;
 }
 .grid-content-wap .grid-row{
@@ -547,20 +547,20 @@ form.form-court{
     border: 1px solid #ccc;
     border-top: 0px;
     border-right: 0px;
-    height: 30px;
+    height: 20px;
 }
 .grid-row.col-hour .grid-null{
     width: 100px;
-    height: 61px;
+    height: 50px;
 }
 .grid-content-wap .grid-row .grid{
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
-    height: 30px;
+    height: 20px;
     box-sizing: border-box;
 }
 .grid-content-wap .grid-row .grid.g2{
-    height: 60px;
+    height: 40px;
 }
 .grid-content-wap .grid-row .grid.g0{
     height: 0px;
@@ -568,13 +568,16 @@ form.form-court{
     opacity: 0;
     display: none;
 }
+.grid-content-wap .grid-row .grid.g0.gn{
+    display: block;
+}
 .grid-content-wap .grid-row .grid.gn{
-    height: 30px;
+    height: 20px;
     cursor: text;
     font-size: 0px;
 }
 .grid-content-wap .grid-row .grid.g1{
-    height: 30px;
+    height: 20px;
 }
 /*.grid-content-wap .grid-row .grid.gn ~ .gstart{*/
     /*height: 60px;*/
@@ -585,14 +588,14 @@ form.form-court{
 /*}*/
 
 .grid-content-wap .grid-row .grid.gn ~ .gstart{
-    height: 60px;
+    height: 40px;
 }
 .grid-content-wap .grid-row .grid.gn ~ .gend{
     height: 0px;
     border: 0px;
 }
 .grid-content-wap .grid-row .grid:last-child{
-    height: 30px;
+    height: 20px;
 }
 .grid-content-wap{
     min-height: 500px;
@@ -637,7 +640,7 @@ form.form-court{
     width: 300px !important;
 }
 .grid-row.col-hour .court-name:nth-of-type(2n){
-    height: 60px;
+    height: 40px;
 }
 .grid-row.col-hour .court-name:nth-of-type(2n+1){
     height: 0px;
@@ -667,6 +670,44 @@ form.form-court{
     text-align: left;
     padding-left: 5px;
 }
-.multi-selected{
+.day-grid.ui-selectee{
+    cursor: text;
+}
+.day-grid.ui-selected{
     background: rgba(0,0,0,0.6);
+}
+#calendar_bookings{
+    z-index: 999999;
+    background: #fff;
+}
+#light-overlay-full{
+    position: fixed; z-index: 99999;
+    opacity: 0.98;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: rgb(0, 0, 0);
+}
+#mb-multi-make-time-unavailable{
+    display: inline-block;
+    padding-bottom: 20px;
+}
+#mb-multi-create-deal{
+    display: inline-block;
+}
+.fright{
+    float: right;
+}
+#mb-multi-make-time-unavailable form .show-expand{
+    clear: both;
+    float: right;
+    display: none;
+}
+#manageMultiTimes .close-md{
+    position: absolute;
+    left: calc(100% - 50px);
+    font-size: 3em;
+    color: #000;
 }

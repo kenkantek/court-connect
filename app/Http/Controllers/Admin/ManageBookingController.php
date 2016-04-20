@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Contexts\Club;
 use App\Models\Contexts\Court;
+use App\Models\CourtRate;
 use App\Models\Deal;
 use App\Models\Player;
 use App\Models\SetOpenDay;
@@ -21,8 +22,8 @@ class ManageBookingController extends Controller
 
     public function getManageBooking()
     {
-        \Assets::addJavascript(['select2','uniform', 'monthly', 'moment', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
-        \Assets::addStylesheets(['select2','uniform', 'monthly', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
+        \Assets::addJavascript(['select2','uniform', 'monthly', 'moment', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
+        \Assets::addStylesheets(['select2','uniform', 'monthly', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
         return view('admin.booking.index');
     }
 
@@ -444,33 +445,38 @@ class ManageBookingController extends Controller
 
     //makeTimeUnavailable
     public function postMakeTimeUnavailable(Request $request){
-        $v = Validator::make($request->all(), [
-            'date' => 'required',
-            'hour' => 'required',
-            'hour_length' => 'required',
-            'reason' => 'required',
-            'court_id' => 'required',
-        ]);
+        print_r(json_decode($request->input('multi_make_time_unavailable')));
+        echo "abc";
+        if(!empty($request->input('multi_make_time_unavailable'))) {
 
-        if($v->fails())
-        {
-            return ['error' => true,"messages"=>$v->errors()->all()];
+        }else{
+            $v = Validator::make($request->all(), [
+                'date' => 'required',
+                'hour' => 'required',
+                'hour_length' => 'required',
+                'reason' => 'required',
+                'court_id' => 'required',
+            ]);
+
+            if ($v->fails()) {
+                return ['error' => true, "messages" => $v->errors()->all()];
+            }
+
+            $time_available = TimeUnavailable::create([
+                'date' => $request->input('date'),
+                'court_id' => $request->input('court_id'),
+                'hour' => $request->input('hour'),
+                'hour_length' => $request->input('hour_length'),
+                'reason' => $request->input('reason'),
+            ]);
+            if ($time_available)
+                return [
+                    'success' => true,
+                ];
+            else return [
+                'error' => true
+            ];
         }
-
-        $time_available = TimeUnavailable::create([
-           'date' => $request->input('date'),
-            'court_id' => $request->input('court_id'),
-            'hour' => $request->input('hour'),
-            'hour_length' => $request->input('hour_length'),
-            'reason' => $request->input('reason'),
-        ]);
-        if($time_available)
-        return [
-            'success' => true,
-        ];
-        else return [
-            'error' => true
-        ];
     }
 
     //getInfoGridAvailable
@@ -498,34 +504,37 @@ class ManageBookingController extends Controller
 
     //new deal
     public function postNewDeal(Request $request){
-        $v = Validator::make($request->all(), [
-            'date'  =>'required',
-            'new_price_member' => 'required | numeric ',
-            'new_price_nonmember' => 'required | numeric ',
-            'hour' => 'required',
-            'hour_length' => 'required',
-            'court_id' => 'required',
-        ]);
+        if(empty($request->input('multi_deal'))){
 
-        if($v->fails())
-        {
-            return ['error' => true,"messages"=>$v->errors()->all()];
-        }
+        }else {
+            $v = Validator::make($request->all(), [
+                'date' => 'required',
+                'new_price_member' => 'required | numeric ',
+                'new_price_nonmember' => 'required | numeric ',
+                'hour' => 'required',
+                'hour_length' => 'required',
+                'court_id' => 'required',
+            ]);
 
-        $deal = Deal::create([
-            'date' => $request->input('date'),
-            'court_id' => $request->input('court_id'),
-            'hour' => $request->input('hour'),
-            'hour_length' => $request->input('hour_length'),
-            'price_member' => $request->input('new_price_member'),
-            'price_nonmember' => $request->input('new_price_nonmember'),
-        ]);
-        if($deal)
-            return [
-                'success' => true,
+            if ($v->fails()) {
+                return ['error' => true, "messages" => $v->errors()->all()];
+            }
+
+            $deal = Deal::create([
+                'date' => $request->input('date'),
+                'court_id' => $request->input('court_id'),
+                'hour' => $request->input('hour'),
+                'hour_length' => $request->input('hour_length'),
+                'price_member' => $request->input('new_price_member'),
+                'price_nonmember' => $request->input('new_price_nonmember'),
+            ]);
+            if ($deal)
+                return [
+                    'success' => true,
+                ];
+            else return [
+                'error' => true
             ];
-        else return [
-            'error' => true
-        ];
+        }
     }
 }
