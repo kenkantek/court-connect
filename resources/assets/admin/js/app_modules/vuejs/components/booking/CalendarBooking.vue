@@ -18,7 +18,7 @@
             <div class="cld-wrapper">
                 <div class="grid-row col-hour">
                     <div class="grid grid-null"></div>
-                    <div v-for="(index,hour) in hours" class="grid court-name">{{hour}}</div>
+                    <div v-for="(index,hour) in hours" class="grid court-name col-court-name" data-court="court{{court['id']}}">{{hour}}</div>
                 </div>
                 <div class="grid-content-box">
                     <div class="grid-wrap">
@@ -28,9 +28,9 @@
                         <div class="clearfix"></div>
                         <div class="grid-content-wap">
                             <template v-for="(index,court) in dataOfClub">
-                                <div class="grid-row court{{court['id']}}">
+                                <div class="grid-row court{{court['id']}}" data-court="court{{court['id']}}">
                                     <template v-for="(index,grid) in court['hours']">
-                                        <div v-if="grid.g_start || grid.g_end" class="day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}"
+                                        <div v-if="grid.g_start || grid.g_end" data-court="court{{court['id']}}" data-hour="{{grid.hour}}" class="day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}"
                                              @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)">
                                             <div v-if=" !grid.g_end">
                                         <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
@@ -153,11 +153,11 @@
                         <div class="col-xs-8">
                             <table class="table">
                                 <thead>
-                                <tr>
-                                    <th>Quick Quotes</th>
-                                    <th v-for="item in info_grid_available.lb_hour">{{ item }}</th>
+                                    <tr>
+                                        <th>Quick Quotes</th>
+                                        <th v-for="item in info_grid_available.lb_hour">{{ item }}</th>
+                                    </tr>
                                 </thead>
-                                </tr>
                                 <tbody>
                                 <tr>
                                     <td>Member: </td>

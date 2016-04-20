@@ -385,16 +385,16 @@ class ManageBookingController extends Controller
             $tmp_inc_hour+=0.5;
         }
 
-//        $tmp_inc_hour = 1;
-//        $price_nonmember = [];
-//        for($i=$hour; $i< $hour + $limit_hour; $i++) {
-//            $price_nonmember[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,0);
-//            $tmp_inc_hour+=0.5;
-//        }
+        $tmp_inc_hour = 1;
+        $price_nonmember = [];
+        for($i=$hour; $i< $hour + $limit_hour; $i++) {
+            $price_nonmember[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,0);
+            $tmp_inc_hour+=0.5;
+        }
 
         $data['lb_hour'] = $arr_lb_hour;
         $data['price_member'] = $price_member;
-//        $data['price_nonmember'] = $price_nonmember;
+        $data['price_nonmember'] = $price_nonmember;
 
         return [
             'success' => true,
