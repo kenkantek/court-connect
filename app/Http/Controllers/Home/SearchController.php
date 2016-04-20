@@ -54,34 +54,7 @@ class SearchController extends Controller
 
     public function postSearch(Request $request)
     {
-        $results = array();
-        $date = date_format(date_create($request->input('date')),"y-m-d");
-        $s_name = $request->input('s_name');
-        $queries = CourtRate::with(['Court','Court.Club','Court.Club.State','Court.Club.City'])
-            ->where('start_date', ">=" , $request->input('date'))
-            ->where('end_date', ">=" , $request->input('date'))
-            ->whereHas('Court', function($q) use($s_name){
-                $q->whereHas('Club', function($q) use($s_name) {
-                        $q->where(function($q) use($s_name){
-                            $q->orWhereHas('State', function ($q) use ($s_name) {
-                                $q->where('name', 'like', '%' . $s_name . '%');
-                            })->orWhereHas('City', function ($q) use ($s_name) {
-                                    $q->where('name', 'like', '%' . $s_name . '%');
-                                });
-                        })
-                        ->orWhere('name','like','%'.$s_name.'%');
-                    })
-                    ->groupBy('court_id')
-                    ->orWhere('name','like','%'.$s_name.'%');
-            })
-            ->get();
 
-        echo "<pre>";
-        echo $date.$s_name;
-        foreach($queries as $row) {
-            echo $row['Court']['name'] ."  ". $row['Court']['Club']['name']."<br>";
-        }
-        echo "</pre>";
         return view('home.search',compact('request'));
     }
 

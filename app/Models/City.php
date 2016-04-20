@@ -10,7 +10,7 @@ class City extends Model
 
     public function state()
     {
-        return $this->belongsTo('App\Models\State');
+        return $this->belongsTo('App\Models\State','state_code');
     }
     public function clubs()
     {

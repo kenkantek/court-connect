@@ -31,7 +31,7 @@ gulp.task('admin', function() {
     elixir.config.publicPath = 'public/resources/admin/';
     elixir(function(mix) {
 
-        mix.sass('admin.scss');
+        //mix.sass('admin.scss');
         //mix.scripts('admin.js');
         mix.browserify('app_modules/app.js','public/resources/admin/js/app_modules/app.js');
         //mix.scripts('app_modules/datatables.js');

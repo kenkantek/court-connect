@@ -75,7 +75,7 @@
 	<script type="text/javascript">
 		$(function() {
 
-			$("#myModal .modal-dialog").css('max-height',$(window).height() -100);
+			$("#myModal .modal-dialog").css('height',$(window).height() - 50);
 			//calendar
 			function getDaysInMonth(month, year) {
 				// Since no month has fewer than 28 days
@@ -109,17 +109,16 @@
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
 			});
 
-			//drag
-			//$( "#day-view-content > table" ).draggable();
-			// end calendar
-
-			//$(".create_new_book").click();
-
 
 			$('.datetimepicker').datetimepicker({defaultDate: new Date(), format: 'MM/DD/YYYY'});
 
 			$('.daterange').daterangepicker();
 			$("body").on('click',".day-view-content .day-grid.available",function(event){
+				if($(this).hasClass('gn')){
+					event.preventDefault();
+					return false;
+				}
+				$("#md-booking-content-expand").hide();
 				$("#md-available-content-expand").css({'display':'block','width': $(".day-view-content").width() - 100});
 				var tooltipX =  110;
 				var tooltipY = event.pageY + 8 - $("#day-view-content").offset().top + 40;
@@ -127,6 +126,7 @@
 			});
 
 			$("body").on('click',".day-view-content .day-grid.open, .day-view-content .day-grid.contract, .day-view-content .day-grid.lesson",function(event){
+				$("#md-available-content-expand").hide();
 				$("#md-booking-content-expand").css({'display':'block','width': $(".day-view-content").width() - 100});
 				var tooltipX =  110;
 				var tooltipY = event.pageY + 8 - $("#day-view-content").offset().top + 40;
@@ -140,7 +140,7 @@
 				$("#md-booking-content-expand").hide();
 			})
 
-			$(document).on("click",'.btn-in-expand',function(){ console.log("test");
+			$(document).on("click",'.btn-in-expand',function(){
 				//console.log($(this).parent().find('.show-expand').html());
 				$('.show-expand').slideToggle();
 			});
@@ -202,10 +202,10 @@
 				if (repo.loading) return repo.text;
 
 				var markup = "<div class='select2-result-repository clearfix'>" +
-						"<div class='select2-result-repository__title'>Email: " + repo.email + "</div>";
+						"<div class='select2-result-repository__title'><strong>Email: </strong>" + repo.email + "</div>";
 
 				if (repo.address1) {
-					markup += "<div class='select2-result-repository__description'>Address: " + repo.address1 + "</div>";
+					markup += "<div class='select2-result-repository__description'><strong>Address: </strong> " + repo.address1 + "</div>";
 				}
 
 				return markup;

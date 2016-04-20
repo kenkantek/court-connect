@@ -109,11 +109,10 @@
         immediately after the control sidebar -->
         <div class='control-sidebar-bg'></div>
         </div><!-- ./wrapper -->
-
+        <div id="light-overlay-full" class="hide"></div>
         <div data-base-url="{{ url('/') }}"></div>
 
         @include('admin.elements.notice')
-
 
         <script type="text/javascript">
             var userLogin = {

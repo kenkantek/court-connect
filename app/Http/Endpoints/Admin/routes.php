@@ -50,8 +50,15 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getCheckInputCustomer' =>'booking.checkInputCustomer',
         'postCheckInputPayment' =>'booking.checkInputPayment',
         'getView' =>'booking.view',
+        'putDelete' =>'booking.delete',
         'getAcceptPayment' =>'booking.acceptPayment',
-        'getSearchPlayers' =>'booking.players'
+        'getSearchPlayers' =>'booking.players',
+        'getAddressLookup' =>'booking.address_lookup',
+        'getCheckPlayerforBooking' =>'booking.checkPlayerforBooking',
+        'getInfoGridAvailable' =>'booking.infoGridAvailable',
+        'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
+        'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
+        'postNewDeal' => 'booking.newDeal'
     ]);
 });
 
