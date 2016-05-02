@@ -29,7 +29,7 @@ class ClubController extends Controller
     {
         $take    = $request->take ?: 10;
         $clubid    = $request->clubid;
-        $courts = Court::where('club_id', $clubid)->with('surface', 'rates')->paginate($take)->appends(['take' => $take]);
+        $courts = Court::where('club_id', $clubid)->with('surface', 'rates')->orderBy('updated_at', 'DESC')->paginate($take)->appends(['take' => $take]);
         return $courts;
     }
     public function getListDays(Request $request){

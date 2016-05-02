@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Home;
 
 use App\Models\City;
-use App\Models\Club;
+use App\Models\Contexts\Club;
+use App\Models\Contexts\Court;
 use App\Models\CourtRate;
 use App\Models\State;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class SearchController extends Controller
 
         foreach ($queries as $query)
         {
-            $results['clubs'][] = [ 'id' => $query->id, 'value' => $query->name ];
+            $results['clubs'][] = ['id' => $query->id, 'value' => $query->name];
         }
 
         $queries = City::where('name', 'LIKE', '%'.$term.'%')
@@ -54,40 +55,34 @@ class SearchController extends Controller
 
     public function postSearch(Request $request)
     {
-        $results = array();
-        $date = date_format(date_create($request->input('date')),"y-m-d");
-        $s_name = $request->input('s_name');
-        $queries = CourtRate::with(['Court','Court.Club','Court.Club.State','Court.Club.City'])
-            ->where('start_date', ">=" , $request->input('date'))
-            ->where('end_date', ">=" , $request->input('date'))
-            ->whereHas('Court', function($q) use($s_name){
-                $q->whereHas('Club', function($q) use($s_name) {
-                        $q->where(function($q) use($s_name){
-                            $q->orWhereHas('State', function ($q) use ($s_name) {
-                                $q->where('name', 'like', '%' . $s_name . '%');
-                            })->orWhereHas('City', function ($q) use ($s_name) {
-                                    $q->where('name', 'like', '%' . $s_name . '%');
-                                });
-                        })
-                        ->orWhere('name','like','%'.$s_name.'%');
-                    })
-                    ->groupBy('court_id')
-                    ->orWhere('name','like','%'.$s_name.'%');
-            })
-            ->get();
-
-        echo "<pre>";
-        echo $date.$s_name;
-        foreach($queries as $row) {
-            echo $row['Court']['name'] ."  ". $row['Court']['Club']['name']."<br>";
-        }
-        echo "</pre>";
-        return view('home.search',compact('request'));
+        $keyword =  $request->input('s_name');
+        $clubs = Club::search($keyword)->paginate(5);  
+        return view('home.search',compact('request','clubs'));
     }
 
     public function getSearch(Request $request)
     {
+        $keyword_clubs = $request->input('s_name');
+        $keyword_day = $request->input('date');
+        $keyword_day = date("Y-m-d", strtotime($keyword_day));
 
+        $keyword_time = $request->input('s_time');
+        $keyword_surface = $request->input('surface_id');
+        $keyword_longtime = $request->input('mb-book-in-hour');
+
+
+        $clubs = CLub::search($keyword_clubs)->join('set_open_days','clubs.id', '=', 'set_open_days.club_id')
+                ->where(function ($query) use ($keyword_day) {
+                    $query->where('set_open_days.date', '=', $keyword_day)
+                          ->where('is_close','=','0');
+
+                })
+
+                ->get(['clubs.*']);
+
+
+        $results =  Court::where('surface_id','=',$keyword_surface)->get();
+        return $clubs;
         return view('home.search',compact('request'));
     }
 }

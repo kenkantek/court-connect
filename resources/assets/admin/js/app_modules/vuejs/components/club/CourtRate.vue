@@ -25,8 +25,7 @@
 						</div>
 						<br>
 						<div class="pull-right">
-							<input class="btn btn-primary" type="button" value="Oke" @click.prevent="addNewCourtRate()">
-
+							<button class="btn btn-primary" type="button" @click.prevent="addNewCourtRate()">Ok</button>
 						</div>
 					</div>
 				</div>
@@ -237,6 +236,11 @@
 				this.dataRate = this.dataRates[index].datarate;
 			}
 		},
+		reloadCourts: function () {
+			this.priceSet =  20;
+			this.dataRate = this.defaultRate;
+			this.dataRates = [];
+		},
 		courts_choice: function () {
 			if (this.courts_choice.length > 1) {
 				this.showNotice = true;
@@ -247,7 +251,7 @@
 				var index = this.indexDataRates ;
 				this.dataRate = this.dataRates[index].datarate;
 			}else{
-				this.dataRate = this.defaultRate
+				this.dataRate = this.defaultRate;
 			}
 		}
 	},
@@ -313,11 +317,13 @@
 		this.$set('dataRate.is_member', number);
 	},
 	addNewCourtRate(){
-		const p = _.cloneDeep(this.dataRate);
-		p.name = this.dataRate.name,
-			p.is_member = this.dataRate.is_member,
-			p.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
-		p.start_date =  $(".daterange").data('daterangepicker').startDate.format('MM/DD/YYYY');
+		const p = {};
+		p.datarate = _.cloneDeep(this.dataRate);
+
+		p.datarate.name = this.dataRate.name,
+			p.datarate.is_member = this.dataRate.is_member,
+			p.datarate.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
+		p.datarate.start_date =  $(".daterange").data('daterangepicker').startDate.format('MM/DD/YYYY');
 		this.dataRates.push(p);
 		$('.new_date_preiod').addClass('hidden');
 	},

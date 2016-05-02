@@ -428,9 +428,7 @@ h1 {
 
 .btn-search {
     background-color: #63ac1e;
-    height: 38px;
-    padding-left: 47px;
-    padding-right: 47px;
+    height: 35px;
     color: #fff;
     border-radius: 0
 }
@@ -883,13 +881,15 @@ a.ui-state-default.ui-state-highlight {
 .content #search-results .distance{
     padding: 10px;
 }
-
-.content #search-results .club-time {
-    padding: 8px 20px;
+.content #search-results .img-clubs{
+    width: 100%;
 }
 
-.content #search-results .club-time .col-md-2{
+
+
+.content #search-results .club-time .col-price{
     width: 20%;
+    float: left;
 }
 
 .content #search-results .club-time .price {

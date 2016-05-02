@@ -22,7 +22,7 @@ class SuperAdminController extends Controller
 
     public function getIndex()
     {
-        \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
+        \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect','apimap','geocomplete']);
         \Assets::addStylesheets(['select2', 'uniform', 'monthly', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
         \Assets::addAppModule(['app']);
         $title = 'Dashboard Super Admin';
@@ -47,6 +47,9 @@ class SuperAdminController extends Controller
         } else {
             $club->image = '/uploads/images/clubs/no-image.jpg';
         }
+        $club->longitude = $request->input('longitude');
+        $club->latitude = $request->input('latitude');
+        $club->country = $request->input('country');
         $club->save();
         return response([
             'success_msg' => 'Club has been created!',

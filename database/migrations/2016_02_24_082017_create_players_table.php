@@ -26,6 +26,9 @@ class CreatePlayersTable extends Migration {
 			$table->string('surname', 100);
 			$table->string('facebook', 120);
 			$table->string('google', 120);
+			$table->string('country')->nullable();
+      $table->float('longitude')->nullable();
+      $table->float('latitude')->nullable();
 			$table->tinyInteger('gender');
 			$table->string('facebook_id')->nullable();
 			$table->string('avatar')->default('uploads/images/users/no-avatar.png');

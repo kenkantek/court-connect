@@ -4,7 +4,7 @@ namespace App\Models\Contexts;
 
 use App\Models\Surface;
 use Illuminate\Database\Eloquent\Model;
-
+use Nicolaslopezj\Searchable\SearchableTrait;
 /**
  * App\Models\Court
  *
@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Court extends Model
 {
+    use SearchableTrait;
+
     protected $table = 'courts';
 
     /**
@@ -33,6 +35,13 @@ class Court extends Model
 
     protected $fillable = ['name', 'indoor_outdoor', 'club_id', 'surface_id'];
 
+    protected $searchable = [
+        'columns' => [
+            'name' => 10,
+            'surface_id' => 10,
+            'indoor_outdoor'=> 10,
+        ]
+    ];
     public function club()
     {
         return $this->belongsTo('App\Models\Contexts\Club','club_id');
