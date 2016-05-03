@@ -745,3 +745,6 @@ form.form-court{
     top: 50%;
     background: rgb(255, 255, 255);
 }
+.daterangepicker.dropdown-menu{
+    z-index: 9999999999999999999999;
+}

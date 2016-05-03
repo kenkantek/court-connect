@@ -24,6 +24,24 @@ class ContractController extends Controller
     {
         return Contract::where('club_id', $club_id)->orderBy('updated_at', 'desc')->paginate(50);
     }
+
+    public function getList(Request $request)
+    {
+        $contracts = Contract::where(['club_id' => $request->input('club_id'), 'is_member' => $request->input('member')])
+            ->orderBy('updated_at', 'desc')->get(['id','start_date','end_date','is_member','total_week']);
+        return response([
+            'data' => $contracts,
+        ]);
+    }
+
+    public function getView($contract_id)
+    {
+        $contract = Contract::where('contract_id',$contract_id)->first();
+        return response([
+            'data' => $contract,
+        ]);
+    }
+
     public function postUpdateContract(Request $request)
     {
         //return $request->input('id');

@@ -19,7 +19,7 @@ class CreateBookingTable extends Migration
             $table->integer('payment_id')->unsigned();
             $table->enum('status', ['required', 'paid'])->default('required');
             $table->date('date');
-            $table->string('date_range')->nullable();
+            $table->integer('contract_id')->nullable();
             $table->integer('day_of_week')->nullable();
             $table->integer('court_id')->unsigned();
             $table->text('extra_id')->nullable();

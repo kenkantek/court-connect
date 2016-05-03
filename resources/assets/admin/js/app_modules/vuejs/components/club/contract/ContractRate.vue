@@ -36,9 +36,9 @@
 		<tbody>
 			<tr>
 				<td class="td_field_label"> 5 am</td>
-				
 				<td data-x="0" data-y="_5_1">$1200</td><td data-x="0" data-y="_5_2">$1200</td><td data-x="0" data-y="_5_3">$1200</td><td data-x="0" data-y="_5_4">$1200</td><td data-x="0" data-y="_5_5">$1200</td><td data-x="0" data-y="_5_6">$1500</td><td data-x="0" data-y="_5_7">$1500</td>
-			</tr><tr>
+			</tr>
+			<tr>
 				<td class="td_field_label"> 6 am</td>
 				
 				<td data-x="1" data-y="_6_1">$1200</td><td data-x="1" data-y="_6_2">$1200</td><td data-x="1" data-y="_6_3">$1200</td><td data-x="1" data-y="_6_4">$1200</td><td data-x="1" data-y="_6_5">$1200</td><td data-x="1" data-y="_6_6">$1500</td><td data-x="1" data-y="_6_7">$1500</td>

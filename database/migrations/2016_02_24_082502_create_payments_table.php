@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration {
 			$table->string('card_number', 20);
 			$table->tinyInteger('exp_month')->unsigned();
 			$table->tinyInteger('exp_year')->unsigned();
-			$table->tinyInteger('cvc')->unsigned();
+			$table->tinyInteger('cvv')->unsigned();
 			$table->timestamps();
 		});
 	}

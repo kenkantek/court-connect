@@ -55,17 +55,11 @@ class SearchController extends Controller
 
     public function postSearch(Request $request)
     {
-<<<<<<< .mine
 
-        return view('home.search',compact('request'));
-    }
-
-=======
         $keyword =  $request->input('s_name');
         $clubs = Club::search($keyword)->paginate(5);  
         return view('home.search',compact('request','clubs'));
     }
->>>>>>> .theirs
 
     public function getSearch(Request $request)
     {
@@ -78,7 +72,7 @@ class SearchController extends Controller
         $keyword_longtime = $request->input('mb-book-in-hour');
 
 
-        $clubs = CLub::search($keyword_clubs)->join('set_open_days','clubs.id', '=', 'set_open_days.club_id')
+        $clubs = Club::search($keyword_clubs)->join('set_open_days','clubs.id', '=', 'set_open_days.club_id')
                 ->where(function ($query) use ($keyword_day) {
                     $query->where('set_open_days.date', '=', $keyword_day)
                           ->where('is_close','=','0');
@@ -89,7 +83,7 @@ class SearchController extends Controller
 
 
         $results =  Court::where('surface_id','=',$keyword_surface)->get();
-        return $clubs;
-        return view('home.search',compact('request'));
+        //return $clubs;
+        return view('home.search',compact('request','clubs'));
     }
 }

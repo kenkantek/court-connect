@@ -35,6 +35,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postUpdateContract' => 'contracts.update',
         'deleteContract' => 'contracts.delete',
         'getListContract' => 'contracts.list',
+        'getList' => 'contracts.listContract',
+        'getView' => 'contracts.getView'
     ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',
@@ -47,7 +49,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getManageBooking' => 'booking.index',
         'getDataOfClub' => 'booking.dataOfClub',
         'getViewPriceOrder' =>'booking.viewPriceOrder',
-        'getCheckInputBooking' =>'booking.getCheckCourtBooking',
+        'getCheckCourtBooking' =>'booking.getCheckCourtBooking',
         'getCheckInputCustomer' =>'booking.checkInputCustomer',
         'postPayment' =>'booking.postPayment',
         'getView' =>'booking.view',

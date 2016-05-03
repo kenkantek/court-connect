@@ -73,7 +73,7 @@ class User extends Authenticatable
     {
         $pivot = array();
         if($pivot != NULL)
-            $priot['context'] = $context;
+            $pivot['context'] = $context;
         if($context_id != NULL)
             $pivot['context_id'] = $context_id;
         $this->roles()->attach($this->getStoredRole($role), $pivot);
@@ -100,4 +100,8 @@ class User extends Authenticatable
         return $arr[0];
     }
 
+    public function scopeIsPlayer()
+    {
+        return $this->roles()->wherePivot('context', 'players');
+    }
 }

@@ -14,7 +14,7 @@
         "intervention/image": "^2.3",
         "laravel/socialite": "~2.0",
 	"nicolaslopezj/searchable": "1.*",
-        "cartalyst/stripe-laravel": "4.0.*"
+        "cartalyst/stripe-laravel": "4.0.*",
         "cartalyst/sentinel": "2.0.",
         "nicolaslopezj/searchable": "1.*"
     },
