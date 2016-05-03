@@ -67,7 +67,7 @@ class ClubController extends Controller
                 if($is_event == 'close')
                     $tmp['is_close'] = $tmp['is_close'] == 1 ? 0 : 1;
                 if($is_event == 'sethours'){
-                    if(empty($request->input('hours_open')) || empty($request->input('hours_close'))){
+                    if(empty($request->input('open_time')) || empty($request->input('close_time'))){
                         return response()->json(['error' => true,"messages"=>['Data hours invalid']]);
                     }
                     $tmp['open_time'] = $request->input('open_time');

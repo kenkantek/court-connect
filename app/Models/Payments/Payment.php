@@ -29,6 +29,5 @@ class Payment extends Model
     * @var array
     */
     protected $dates    = ['created_at', 'updated_at'];
-
-    protected $fillable = [];
+    protected $guarded = array();
 }

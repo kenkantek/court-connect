@@ -22,7 +22,7 @@
 
 	<style>
 		#myModal{
-			z-index: 3000;
+			z-index:  3000000000;;
 		}
 		.modal-content{
 			color: #000;
@@ -142,7 +142,7 @@
 
 			$(document).on("click",'.btn-in-expand',function(){
 				//console.log($(this).parent().find('.show-expand').html());
-				$('.show-expand').slideToggle();
+				$(this).parent().find('.show-expand').slideToggle();
 			});
 
 			$('#mb-book-day-open').datetimepicker({
@@ -214,6 +214,7 @@
 			function formatRepoSelection (repo) {
 				return repo.email || repo.address1;
 			}
+
 		});
 	</script>
 @stop

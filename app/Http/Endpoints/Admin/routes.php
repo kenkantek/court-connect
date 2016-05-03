@@ -28,6 +28,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postCreateCourt' => 'courts.create',
         'postUpdateCourt' => 'courts.update',
         'postUpdateCourts' => 'courts.update.multi',
+        'getList' => 'courts.list',
     ]);
     Route::controller('contracts', ContractController::class, [
         'postCreateContract' => 'contracts.create',
@@ -46,9 +47,9 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getManageBooking' => 'booking.index',
         'getDataOfClub' => 'booking.dataOfClub',
         'getViewPriceOrder' =>'booking.viewPriceOrder',
-        'getCheckInputBooking' =>'booking.checkInputBooking',
+        'getCheckInputBooking' =>'booking.getCheckCourtBooking',
         'getCheckInputCustomer' =>'booking.checkInputCustomer',
-        'postCheckInputPayment' =>'booking.checkInputPayment',
+        'postPayment' =>'booking.postPayment',
         'getView' =>'booking.view',
         'putDelete' =>'booking.delete',
         'getAcceptPayment' =>'booking.acceptPayment',

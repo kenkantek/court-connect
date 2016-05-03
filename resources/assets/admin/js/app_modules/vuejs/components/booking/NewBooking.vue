@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade mb-modal" style="display: none; top: 50px" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade mb-modal" style="display: none;" id="myModal" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -169,7 +169,7 @@
                                     <form method="POST" action="" accept-charset="UTF-8" enctype="multipart/form-data">
 
                                         <div style="width: 300px; margin: 0px auto" v-if="inputBookingDetail.member == 1">
-                                            <label>Select a player for booking</label>
+                                            <label>Select a player member for booking</label>
                                             <select class="js-data-user-ajax" name="player_id" id="player_id" v-model="customerDetail.player_id">
                                                 <option value="">Select user member</option>
                                             </select>
@@ -560,7 +560,7 @@
     methods: {
         fetchCourts() {
             let def = deferred(),
-                    url = laroute.route('clubs.courts.list', {one:this.clubSettingId});
+                    url = laroute.route('courts.list', {one:this.clubSettingId});
             this.$http.get(url).then(res => {
                 def.resolve(res.data.data);
         }, res => {
@@ -600,7 +600,7 @@
 
         // check validate data
         let def = deferred(),
-                url = laroute.route('booking.checkInputBooking', input);
+                url = laroute.route('booking.getCheckCourtBooking', input);
         this.$http.get(url).then(res => {
             if(res.data.error)
             {
@@ -675,7 +675,7 @@
             data.append('payment',JSON.stringify(this.paymentDetail));
             data.append('total_price', this.total_price);
             // check validate customer
-            this.$http.post('/sadmin/booking/check-input-payment', data).then(res => {
+            this.$http.post('/sadmin/booking/payment', data).then(res => {
                 if(res.data.error)
                 {
                     var msg = "";

@@ -6,25 +6,6 @@ use App\Models\Contexts\Club;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-/**
- * App\Models\Auth\User
- *
- * @property integer $id
- * @property string $username
- * @property string $email
- * @property string $password
- * @property string $phone
- * @property string $first_name
- * @property string $last_name
- * @property string $zip_code
- * @property string $facebook
- * @property string $google
- * @property boolean $gender
- * @property string $avatar
- * @property string $remember_token
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- */
 class User extends Authenticatable
 {
     use HasRoles;
@@ -36,7 +17,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at'];
+    protected $dates = ['created_at', 'updated_at','trial_ends_at'];
+
 
     /**
      * The attributes that are mass assignable.
@@ -78,9 +60,6 @@ class User extends Authenticatable
         return ucfirst($value);
     }
 
-    /**
-     * Always capitalize the last name when we retrieve it
-     */
     public function getLastNameAttribute($value)
     {
         return ucfirst($value);

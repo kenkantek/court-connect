@@ -15,6 +15,8 @@ class CreateBookingTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('type', ['open', 'contract','lesson']);
+            $table->integer('player_id')->unsigned();
+            $table->integer('payment_id')->unsigned();
             $table->enum('status', ['required', 'paid'])->default('required');
             $table->date('date');
             $table->string('date_range')->nullable();
@@ -27,7 +29,6 @@ class CreateBookingTable extends Migration
             $table->float('hour');
             $table->tinyInteger('hour_length');
             $table->tinyInteger('num_player')->nullable();
-            $table->integer('player_id')->unsigned();
 
             $table->text('player_info');
             $table->text('payment_info');
@@ -36,6 +37,12 @@ class CreateBookingTable extends Migration
                 ->references('id')
                 ->on('courts')
                 ->onDelete('cascade');
+
+            $table->foreign('payment_id')
+                ->references('id')
+                ->on('payments')
+                ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

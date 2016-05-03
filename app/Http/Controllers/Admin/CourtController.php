@@ -18,9 +18,12 @@ class CourtController extends Controller
     {
         $this->courtRepository = $courtRepository;
     }
-    public function getList($clubId)
+    public function getList($club_id)
     {
-        # code...
+        $courts = Court::where('club_id', $club_id)->get();
+        return response([
+            'data' => $courts,
+        ]);
     }
     public function postCreateCourt(CreateCourtRequest $request)
     {

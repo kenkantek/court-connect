@@ -634,8 +634,8 @@ form.form-court{
     border: 1px solid #ddd;
     padding: 5px 10px;
 }
-.select2-container{
-    z-index: 9999;
+.select2-container,.daterangepicker{
+    z-index: 999999999999999;
 }
 .select2-dropdown, .select2-selection{
     width: 300px !important;
@@ -647,6 +647,7 @@ form.form-court{
     height: 0px;
     opacity: 0;
     border: 0px;
+    display: none;
 }
 .grid-content-wap .grid-row .day-grid:last-child{
     border-bottom: 1px solid #ccc;
@@ -681,8 +682,12 @@ form.form-court{
     z-index: 999999;
     background: #fff;
 }
+.grid-row.col-hour .court-name.row-hour-name{
+    cursor: pointer;
+}
 #light-overlay-full{
-    position: fixed; z-index: 99999;
+    position: fixed;
+    z-index: 9999;
     opacity: 0.98;
     top: 0px;
     left: 0px;
@@ -701,14 +706,42 @@ form.form-court{
 .fright{
     float: right;
 }
-#mb-multi-make-time-unavailable form .show-expand{
-    clear: both;
+.fleft{
+    float: left;
+}
+#mb-multi-make-time-unavailable form{
     float: right;
+    text-align: center;
+}
+#mb-multi-make-time-unavailable form .show-expand, #mb-multi-create-deal .show-expand {
     display: none;
+    position: absolute;
+    top: 51px;
+    width: 240px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    z-index: 9;
+    padding: 5px 10px;
 }
 #manageMultiTimes .close-md{
     position: absolute;
     left: calc(100% - 50px);
     font-size: 3em;
     color: #000;
+}
+#md-new-deal{
+    display: none;
+    z-index: 3000000;
+    top: 50%;
+    line-height: 24px;
+}
+#md-new-deal input{
+    margin-bottom: 10px;
+}
+#confirm-booking-delete{
+    z-index: 3000000;
+    display: none;
+    height: 150px;
+    top: 50%;
+    background: rgb(255, 255, 255);
 }

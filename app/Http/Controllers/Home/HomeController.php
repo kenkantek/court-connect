@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PlayerRequest;
 use App\Models\Auth\User;
 use App\Models\Deal;
+use App\Models\Payments\Payment;
 use App\Models\Player;
-use Hash;
+use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use Exception;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use Cartalyst\Stripe\Exception\CardErrorException;
 class HomeController extends Controller
 {
 
@@ -18,94 +21,49 @@ class HomeController extends Controller
         return view('home.index');
     }
 
-    public function getSignUp()
+    public function paypal()
     {
-        return view('home.signup');
+        return view('home.paypal.app');
     }
 
-    public function postSignUp(PlayerRequest $request)
+    public function orderPost(Request $request)
     {
-        $user = new User();
-        $user->first_name = $request->firstname;
-        $user->last_name = $request->lastname;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->remember_token = $request->_token;
-        $user->fullname = $request->firstname . " " . $request->lastname;
-        $user->save();
+        $input = $request->all();
 
-        $user_id = $user->id;
-
-        $player = new Player();
-        $player->user_id = $user_id;
-        $player->receive_discount_offers = $request->cb_offers;
-        $player->is_recive_notification = 1;
-        $player->save();
-
-        return view('home.index');
-    }
-
-    public function getAccount($id)
-    {
-        $booking = Deal::where('deals.user_id', $id)
-            ->join('courts', 'courts.id', '=', 'deals.court_id')
-            ->join('clubs', 'clubs.id', '=', 'courts.club_id')
-            ->join('players', 'players.id', '=', 'deals.player_id')
-            ->join('users', 'users.id', '=', 'players.user_id')
-            ->select(['deals.id', 'deals.court_id', 'deals.player_id', 'deals.created_at', 'clubs.name', 'clubs.address'])->get();
-        $user = \Auth::user();
-        $player = Player::where('id', $user->id)->first();
-        return view('home.account', compact('booking', 'user', 'player'));
-    }
-
-    public function updateSettingPassword(Request $request, $id)
-    {
-        $user = User::find($id);
-        if (!Hash::check($request->old_password, $user->password)) {
-            return back()->withInput()->with(['flash_level' => 'danger', 'flash_message' => 'Old Password Is Not Correct']);
-        } elseif ($request->password != $request->cfrpassword) {
-            return back()->withInput()->with(['flash_level' => 'danger', 'flash_message' => 'Password Is Not Match']);
-        } else {
-            if ($request->password == "") {
-                return back()->withInput()->with(['flash_level' => 'danger', 'flash_message' => 'Please Enter New Password']);
-            } else {
-                $user->password = Hash::make($request->password);
-                $user->save();
-                return back()->withInput()->with(['flash_level' => 'success', 'flash_message' => 'Success! Complete Update Password!']);
-            }
-
+        try {
+            $token = Stripe::tokens()->create([
+                'card' => [
+                    'number' => $input['card_number'],
+                    'exp_month' => $input['exp_month'],
+                    'cvc' => $input['cvc'],
+                    'exp_year' => $input['exp_year'],
+                ],
+            ]);
+        }catch (Exception $e){
+            return $e->getMessage();
         }
-    }
 
-    public function updateSettingContact(Request $request, $id)
-    {
-        $user = User::find($id);
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->save();
-        return back()->withInput()->with(['flash_level' => 'success', 'flash_message' => 'Success! Complete Update Contact!']);
-    }
+        $customer = Stripe::customers()->create([
+            'email'       => $input['email'],
+            'source'      => $token['id'],
+        ]);
 
-    public function updateSettingAddress(Request $request, $id)
-    {
-        $user = Player::find($id);
-        $user->zipcode = $request->zipcode;
-        $user->address1 = $request->address1;
-        $user->address2 = $request->address2;
-        $user->city = $request->city;
-        $user->state = $request->state;
-        $user->save();
-        return back()->withInput()->with(['flash_level' => 'success', 'flash_message' => 'Success! Complete Update Address!']);
-    }
+        $charge = Stripe::charges()->create([
+            'customer' => $customer['id'],
+            'currency' => 'USD',
+            'amount'   => 50.49,
+        ]);
 
-    public function showCheckout()
-    {
-        return view('home.checkout');
-    }
+        Payment::create([
+            'user_id' => 0,
+            'card_number' => $input['card_number'],
+            'amount' => 50.49,
+            'exp_month' => $input['exp_month'],
+            'exp_year' => $input['exp_year'],
+            'cvc'       => $input['cvc'],
+            'stripe_transaction_id' => $charge['id'],
+        ]);
+        return " done";
 
-    public function postCheckout()
-    {
-        return view('home.checkout');
     }
-
 }

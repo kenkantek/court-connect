@@ -7,6 +7,7 @@ use App\Models\Contexts\Club;
 use App\Models\Contexts\Court;
 use App\Models\CourtRate;
 use App\Models\Deal;
+use App\Models\Payments\Payment;
 use App\Models\Player;
 use App\Models\SetOpenDay;
 use App\Models\TimeUnavailable;
@@ -129,181 +130,66 @@ class ManageBookingController extends Controller
         ]);
     }
 
-    //caculator price and check is book
-    function calPrice($request){
-        $errors = array();
-        if(!$request->input('date'))
-            return ['error' => true, "messages" => ["Select a date"]];
-
-        $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
-        if($request->input('type') == 'open'){
-
-            $messages = [
-                'hour_start'    => 'The Select a Time field is required.',
-                'hour_length'    => 'The Select a Court field is required.',
-                'court_id.exists'  => 'The selected court is invalid.',
-                'club_id.exists'      => 'The selected club is invalid.',
-                'court_id.required'  => 'The selected court is invalid.',
-                'club_id.required'      => 'The selected club is invalid.',
-            ];
-            $v = Validator::make($request->all(), [
-                'date' => 'required',
-                'hour_start' => 'required',
-                'hour_length' => 'required',
-                'court_id' => 'required|exists:courts,id',
-                'club_id' => 'required|exists:clubs,id',
-            ],$messages);
-
-            if($v->fails())
-            {
-                return ['error' => true,"messages"=>$v->errors()->all()];
-            }
-
-            //check book
-            $check_book = Booking::where('date',$date)
-                ->where(function ($q) use($request) {
-                    $q->whereIn('hour', range($request->input('hour_start'), $request->input('hour_start') + $request->input('hour_length') - 0.5,0.5))
-                        ->orWhere(function ($q) use ($request) {
-                            $q->where('hour', '<', $request->input('hour_start'))
-                                ->whereRaw('hour + hour_length > '.$request->input('hour_start'));
-                        })
-                        ->orWhere(function ($q) use ($request) {
-                            $q->whereRaw('hour + hour_length < '.$request->input('hour_length'))
-                                ->whereRaw('hour + hour_length > '.$request->input('hour_length'));
-                        });
-                })
-                ->first();
-            if(!empty($check_book))
-                return ['error' => true, "messages" => ["This was book. Please select another time or date"]];
-
-            //cal price
-            $court_rate = CourtRate::where('start_date','<=',$date)
-                ->where('end_date','>=',$date)
-                ->where('court_id',$request->input('court_id'))
-                ->where('is_member',$request->input('member'))
-                ->orderBy('updated_at','DESC')
-                ->first();
-            if(empty($court_rate))
-                return ['error' => true,"messages"=>["Can't found data. Courts can't yet set prices"]];
-
-            $dayOfWeek = date('w', strtotime($date));
-            $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
-            $rates = $court_rate['rates'];
-            $total_price = 0;
-            $index_hour = $request->input('hour_start') - 5; // hour begin: 5am
-
-            for($i=0; $i < $request->input('hour_length'); $i++){
-                $total_price += $rates[$index_hour+$i][$index_json];
-            }
+    //get price
+    private function getPrice($court_id, $date, $hour_start, $hour_length, $is_member){
+        $unavailable = TimeUnavailable::where(['date' => $date, 'court_id' => $court_id])
+            ->where(function ($q) use($hour_start,$hour_length) {
+                $q->orWhere('hour', $hour_start)
+                    ->orWhere(function ($q) use ($hour_start,$hour_length) {
+                        $q->where('hour',"<",$hour_start)
+                            ->whereRaw('hour + hour_length > '.$hour_start);
+                    });
+            })
+            ->get();
+        if(isset($unavailable) && count($unavailable) > 0){
             return [
-                'success' => true,
-                'total_price' => $total_price
+                'error' => true,
+                'message' => "Unavailable (".$unavailable[0]['reason'].")"
+            ];
+        }
+        $court_rate= CourtRate::where('start_date','<=',$date)
+            ->where('end_date','>=',$date)
+            ->where('court_id',$court_id)
+            ->where('is_member',$is_member)
+            ->orderBy('updated_at','DESC')
+            ->first();
+
+        if(!isset($court_rate)){
+            return [
+                'error' => true,
+                'message' => "The court is not a set price"
             ];
         }
 
-        return ['error' => true,"messages"=>["Booking type invalid"]];
-    }
-    //view price order
-    public function  getViewPriceOrder(Request $request){
-        $result = $this->calPrice($request);
-        return response()->json($result);
-    }
+        $dayOfWeek = date('w', strtotime($date));
+        $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
+        $total_price = 0;
 
-    public function getCheckInputBooking(Request $request){
-        $result = $this->calPrice($request);
-        if(isset($result['success'])){
-            $result['court_detail'] = Court::find($request->input('court_id'))->first();
-            return response()->json($result);
+        $rates = $court_rate['rates'];
+        $deals = Deal::where('date',$date)->where('court_id',$court_id)
+            ->orderBy('updated_at','asc')
+            ->get();
+
+        foreach($deals as $deal){
+            for($i=$deal['hour']; $i< $deal['hour'] + $deal['hour_length']; $i++) {
+                if($is_member)
+                    $rates[$i - 5][$index_json] = $deal['price_member'];
+                else $rates[$i - 5][$index_json] = $deal['price_nonmember'];
+            }
         }
-        return response()->json($result);
-    }
-
-    public function getCheckInputCustomer(Request $request){
-        $v = Validator::make($request->all(), [
-            'title' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'zip_code' => 'required | integer | min: 5',
-            'address1' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-        ]);
-
-        if($v->fails())
-        {
-            return ['error' => true,"messages"=>$v->errors()->all()];
+        $rates_full = [];
+        foreach($rates as $rate){
+            $rates_full[] = $rate;
+            $rates_full[] = $rate;
         }
-
+        for($i= $hour_start; $i< $hour_start + $hour_length; $i+=0.5){
+            $tmp_index = ($i - 5) *2;
+            $total_price += $rates_full[$tmp_index][$index_json] / 2;
+        }
         return [
-            'success' => true,
+            'error' => false,
+            'price' => $total_price
         ];
-
-    }
-
-    public function postCheckInputPayment(Request $request){
-        $v = Validator::make((array) json_decode($request->input('payment')), [
-            'type' => 'required',
-            'card_number' => 'required|integer',
-            'expiry' => 'required',
-            'cvv' => 'required|integer',
-        ]);
-
-        if($v->fails())
-        {
-            return ['error' => true,"messages"=>$v->errors()->all()];
-        }
-
-        $inputBookingDetail = json_decode($request->input('infoBooking'));
-        $customerDetail = json_decode($request->input('customer'));
-        if($inputBookingDetail->member == 1) {
-            $player_id =  $customerDetail->player_id;
-            $player_info = json_encode([]);
-        }
-        else{
-            $player_id = 0;
-            $player_info = $request->input('customer');
-        }
-
-        $booking = Booking::create([
-            'type' => $inputBookingDetail->type,
-            'date' => $inputBookingDetail->date,
-            'date_range' => $inputBookingDetail->date_range,
-            'day_of_week' => is_numeric($inputBookingDetail->dayOfWeek) ? $inputBookingDetail->dayOfWeek : 0,
-            'court_id' => $inputBookingDetail->court_id,
-            'extra_id' => json_encode($inputBookingDetail->extra_id),
-            'teacher_id' => is_numeric($inputBookingDetail->teacher_id) ? $inputBookingDetail->teacher_id : 0,
-            'is_member' => $inputBookingDetail->member,
-            'total_price' => $request->input('total_price'),
-            'hour' => $inputBookingDetail->hour_start,
-            'hour_length' => $inputBookingDetail->hour_length,
-            'player_id' => $player_id,
-            'num_player' => $inputBookingDetail->num_player,
-            'player_info' => $player_info,
-            'payment_info'=> $request->input('payment')
-        ]);
-        return [
-            'success' => true,
-            'booking_id' => $booking['id']
-        ];
-    }
-
-    //get view booking
-    public function getView($booking_id){
-        $booking = Booking::whereId($booking_id)->with('court')->first();
-        if(!isset($booking)){
-            return ['error' => true, "messages" => ["Not found data"]];
-        }
-        if($booking['player_id'] != 0) {
-            $player_info = Player::where('id',$booking['player_id'])->select(["first_name","last_name","email","phone","address1","city","state"])->first();
-            if($player_info)
-                $booking['player_info'] = json_encode($player_info);
-        }
-        return response()->json([
-            'success' => true,
-            'booking' => $booking
-        ]);
     }
 
     //accept payment
@@ -379,14 +265,16 @@ class ManageBookingController extends Controller
         $price_member = [];
         $tmp_inc_hour = 1;
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
-            $price_member[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,1);
+            $r = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,1);
+            $price_member[] = !$r['error'] ? $r['price']: $r['message'];
             $tmp_inc_hour+=0.5;
         }
 
         $tmp_inc_hour = 1;
         $price_nonmember = [];
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
-            $price_nonmember[] = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,0);
+            $r = $this->getPrice($court_id,$date,$hour, $tmp_inc_hour,0);
+            $price_nonmember[] = !$r['error'] ? $r['price']: $r['message'];
             $tmp_inc_hour+=0.5;
         }
 
@@ -400,55 +288,37 @@ class ManageBookingController extends Controller
         ];
     }
 
-    //get price
-    private function getPrice($court_id, $date, $hour_start, $hour_length, $is_member){
-
-        $court_rate= CourtRate::where('start_date','<=',$date)
-            ->where('end_date','>=',$date)
-            ->where('court_id',$court_id)
-            ->where('is_member',$is_member)
-            ->orderBy('updated_at','DESC')
-            ->first();
-
-        if(!isset($court_rate)) return 0;
-
-        $dayOfWeek = date('w', strtotime($date));
-        $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
-        $total_price = 0;
-
-
-        $hour_full = $hour_start + $hour_length;
-
-        $rates = $court_rate['rates'];
-        $deals = Deal::where('date',$date)->where('court_id',$court_id)
-            ->orderBy('updated_at','asc')
-            ->get();
-
-        foreach($deals as $deal){
-            for($i=$deal['hour']; $i< $deal['hour'] + $deal['hour_length']; $i++) {
-                if($is_member)
-                    $rates[$i - 5][$index_json] = $deal['price_member'];
-                else $rates[$i - 5][$index_json] = $deal['price_nonmember'];
-            }
-        }
-        $rates_full = [];
-        foreach($rates as $rate){
-            $rates_full[] = $rate;
-            $rates_full[] = $rate;
-        }
-        for($i= $hour_start; $i< $hour_start + $hour_length; $i+=0.5){
-            $tmp_index = ($i - 5) *2;
-            $total_price += $rates_full[$tmp_index][$index_json] / 2;
-        }
-        return $total_price;
-    }
-
     //makeTimeUnavailable
     public function postMakeTimeUnavailable(Request $request){
-        print_r(json_decode($request->input('multi_make_time_unavailable')));
-        echo "abc";
         if(!empty($request->input('multi_make_time_unavailable'))) {
+            $v = Validator::make((array) json_decode($request->input('multi_make_time_unavailable')), [
+                'date' => 'required',
+                'reason' => 'required',
+            ]);
 
+            if($v->fails())
+            {
+                return ['error' => true,"messages"=>$v->errors()->all()];
+            }
+            $input = json_decode($request->input('multi_make_time_unavailable'));
+            $grids_selected = json_decode($request->input('grids_selected'));
+            if(count($grids_selected) == 0)
+            {
+                return ['error' => true,"messages"=>['Please, select a grid time']];
+            }
+            foreach($grids_selected as $grid){
+                TimeUnavailable::create([
+                    'date' => $input->date,
+                    'court_id' => $grid->c,
+                    'hour' => $grid->h,
+                    'hour_length' => 1,
+                    'reason' => $input->reason,
+                ]);
+            }
+
+            return [
+                'success' => true,
+            ];
         }else{
             $v = Validator::make($request->all(), [
                 'date' => 'required',
@@ -490,8 +360,12 @@ class ManageBookingController extends Controller
         $court = Court::where('id',$court_id)->select('name')->first();
 
         $data['court_name'] = $court['name'];
-        $data['price_member']= $this->getPrice($court_id,$date,$hour, $hour_length,1);
-        $data['price_nonmember']= $this->getPrice($court_id,$date,$hour, $hour_length,0);
+        $price_member = $this->getPrice($court_id,$date,$hour, $hour_length,1);
+        $data['price_member']= !$price_member['error'] ? $price_member['price']: $price_member['message'];
+
+        $price_nonmember = $this->getPrice($court_id,$date,$hour, $hour_length,0);
+        $data['price_nonmember']= !$price_nonmember['error'] ? $price_nonmember['price']: $price_nonmember['message'];
+
         $data['date_text'] = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("l jS \of F Y");
         $data['time'] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
             ($hour + $hour_length <=12 ? str_replace(".5",":30",$hour + $hour_length)."am" : str_replace(".5",":30",$hour + $hour_length - 12)."pm");
@@ -504,9 +378,34 @@ class ManageBookingController extends Controller
 
     //new deal
     public function postNewDeal(Request $request){
-        if(empty($request->input('multi_deal'))){
+        if(!empty($request->input('multi_deal'))) {
+            $v = Validator::make((array)json_decode($request->input('multi_deal')), [
+                'date' => 'required',
+                'hour_length' => 'required',
+                'new_price_member' => 'required | numeric ',
+                'new_price_nonmember' => 'required | numeric ',
+            ]);
 
-        }else {
+            if ($v->fails()) {
+                return ['error' => true, "messages" => $v->errors()->all()];
+            }
+            $input = json_decode($request->input('multi_deal'));
+            $grids_selected = json_decode($request->input('grids_selected'));
+            foreach($grids_selected as $grid){
+                Deal::create([
+                    'date' => $input->date,
+                    'court_id' => $grid->c,
+                    'hour' => $grid->h,
+                    'hour_length' => $input->hour_length,
+                    'price_member' => $input->new_price_member,
+                    'price_nonmember' => $input->new_price_nonmember,
+                ]);
+            }
+            return [
+                'success' => true,
+            ];
+        }else
+        {
             $v = Validator::make($request->all(), [
                 'date' => 'required',
                 'new_price_member' => 'required | numeric ',
@@ -537,4 +436,209 @@ class ManageBookingController extends Controller
             ];
         }
     }
+
+
+    /*BOOKING*/
+    //caculator price and check is book
+    function calPriceForBooking($request){
+        $errors = array();
+        if(!$request->input('date'))
+            return ['error' => true, "messages" => ["Select a date"]];
+
+        $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
+        if($request->input('type') == 'open'){
+            $messages = [
+                'hour_start'    => 'The Select a Time field is required.',
+                'hour_length'    => 'The Select a Court field is required.',
+                'court_id.exists'  => 'The selected court is invalid.',
+                'club_id.exists'      => 'The selected club is invalid.',
+                'court_id.required'  => 'The selected court is invalid.',
+                'club_id.required'      => 'The selected club is invalid.',
+            ];
+            $v = Validator::make($request->all(), [
+                'date' => 'required',
+                'hour_start' => 'required',
+                'hour_length' => 'required',
+                'court_id' => 'required|exists:courts,id',
+                'club_id' => 'required|exists:clubs,id',
+            ],$messages);
+
+            if($v->fails())
+            {
+                return ['error' => true,"messages"=>$v->errors()->all()];
+            }
+
+            //check book is exist
+            $check_book = Booking::where('date',$date)
+                ->where(function ($q) use($request) {
+                    $q->whereIn('hour', range($request->input('hour_start'), $request->input('hour_start') + $request->input('hour_length') - 0.5,0.5))
+                        ->orWhere(function ($q) use ($request) {
+                            $q->where('hour', '<', $request->input('hour_start'))
+                                ->whereRaw('hour + hour_length > '.$request->input('hour_start'));
+                        })
+                        ->orWhere(function ($q) use ($request) {
+                            $q->whereRaw('hour + hour_length < '.$request->input('hour_length'))
+                                ->whereRaw('hour + hour_length > '.$request->input('hour_length'));
+                        });
+                })
+                ->first();
+            if(!empty($check_book))
+                return ['error' => true, "messages" => ["This was book. Please select another time or date"]];
+
+            $r = $this->getPrice($request->input('court_id'),$date,
+                $request->input('hour_start'),$request->input('hour_length'),$request->input('member'));
+
+            if($r['error']){
+                return ['error' => true,"messages"=>[$r['message']]];
+            }else {
+                $total_price = $r['price'];
+                return [
+                    'success' => true,
+                    'total_price' => $total_price
+                ];
+            }
+        }
+
+        return ['error' => true,"messages"=>["Booking type invalid"]];
+    }
+    //view price order
+    public function getViewPriceOrder(Request $request){
+        $result = $this->calPriceForBooking($request);
+        return response()->json($result);
+    }
+
+    public function getCheckCourtBooking(Request $request){
+        $result = $this->calPriceForBooking($request);
+        if(isset($result['success'])){
+            $result['court_detail'] = Court::find($request->input('court_id'))->first();
+            return response()->json($result);
+        }
+        return response()->json($result);
+    }
+
+    public function getCheckInputCustomer(Request $request){
+        $v = Validator::make($request->all(), [
+            'title' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'zip_code' => 'required | integer | min: 5',
+            'address1' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+        ]);
+
+        if($v->fails())
+        {
+            return ['error' => true,"messages"=>$v->errors()->all()];
+        }
+
+        return [
+            'success' => true,
+        ];
+
+    }
+
+    public function postPayment(Request $request){
+        $v = Validator::make((array) json_decode($request->input('payment')), [
+            'type' => 'required',
+            'card_number' => 'required|integer',
+            'expiry' => 'required',
+            'cvv' => 'required|integer',
+        ]);
+
+        if($v->fails())
+        {
+            return ['error' => true,"messages"=>$v->errors()->all()];
+        }
+
+        $inputBookingDetail = json_decode($request->input('infoBooking'));
+        $customerDetail = json_decode($request->input('customer'));
+        $paymentDetail = $request->input('payment');
+        if($inputBookingDetail->member == 1) {
+            $player_id =  $customerDetail->player_id;
+            $player_info = json_encode([]);
+        }
+        else{
+            $player_id = 0;
+            $player_info = $request->input('customer');
+        }
+
+        $expiry = explode("/",$paymentDetail['expiry']);
+        //stripe
+        try {
+            $token = Stripe::tokens()->create([
+                'card' => [
+                    'number' => $paymentDetail['card_number'],
+                    'exp_month' => $expiry[0],
+                    'exp_year' => $expiry[1],
+                    'cvc' => $paymentDetail['cvc'],
+                ],
+            ]);
+        }catch (Exception $e){
+            return ['error' => true,"messages"=>[$e->getMessage()]];
+        }
+
+        $customer = Stripe::customers()->create([
+            'email'       => $customerDetail['email'],
+            'source'      => $token['id'],
+        ]);
+
+        $charge = Stripe::charges()->create([
+            'customer' => $customer['id'],
+            'currency' => 'USD',
+            'amount'   => 50.49,
+        ]);
+
+        Payment::create([
+            'user_id' => 0,
+            'card_number' => $paymentDetail['card_number'],
+            'amount' => $request->input('total_price'),
+            'exp_month' => $expiry['0'],
+            'exp_year' => $expiry['1'],
+            'cvv'       => $paymentDetail['cvv'],
+            'stripe_transaction_id' => $charge['id'],
+        ]);
+
+        $booking = Booking::create([
+            'type' => $inputBookingDetail->type,
+            'date' => $inputBookingDetail->date,
+            'date_range' => $inputBookingDetail->date_range,
+            'day_of_week' => is_numeric($inputBookingDetail->dayOfWeek) ? $inputBookingDetail->dayOfWeek : 0,
+            'court_id' => $inputBookingDetail->court_id,
+            'extra_id' => json_encode($inputBookingDetail->extra_id),
+            'teacher_id' => is_numeric($inputBookingDetail->teacher_id) ? $inputBookingDetail->teacher_id : 0,
+            'is_member' => $inputBookingDetail->member,
+            'total_price' => $request->input('total_price'),
+            'hour' => $inputBookingDetail->hour_start,
+            'hour_length' => $inputBookingDetail->hour_length,
+            'player_id' => $player_id,
+            'num_player' => $inputBookingDetail->num_player,
+            'player_info' => $player_info,
+            'payment_info'=> $request->input('payment')
+        ]);
+        return [
+            'success' => true,
+            'booking_id' => $booking['id']
+        ];
+    }
+
+    //get view booking
+    public function getView($booking_id){
+        $booking = Booking::whereId($booking_id)->with('court')->first();
+        if(!isset($booking)){
+            return ['error' => true, "messages" => ["Not found data"]];
+        }
+        if($booking['player_id'] != 0) {
+            $player_info = Player::where('id',$booking['player_id'])->select(["first_name","last_name","email","phone","address1","city","state"])->first();
+            if($player_info)
+                $booking['player_info'] = json_encode($player_info);
+        }
+        return response()->json([
+            'success' => true,
+            'booking' => $booking
+        ]);
+    }
+
 }

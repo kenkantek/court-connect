@@ -18,7 +18,25 @@
                     </form>
                 </div>
 
-                <div id="mb-multi-create-deal" @click.prevent="multiOpenModalDeal()" style="margin-left: 20px" class="col-md-6 btn btn-primary btn-mb-ex icon-fa-star">Create Deal</div>
+                <div id="mb-multi-create-deal"  style="float: left" class="col-md-6">
+                    <div class="btn btn-primary btn-mb-ex icon-fa-star btn-in-expand icon-fa-angle-down">Create Deal</div>
+                    <div class="show-expand">
+                        <h4 >Create A New Deal</h4>
+
+                            <div class="form-group">
+                                <label>New Price for Member</label>
+                                <input type="text" v-model="multi_deal.new_price_member">
+                            </div>
+                            <div class="form-group">
+                                <label>New Price for Non member</label>
+                                <input type="text" v-model="multi_deal.new_price_nonmember">
+                            </div>
+                        <div class="form-group text-center">
+                            <input type="button" @click.prevent="createMultiDeal()" class="btn btn-primary" value="Publish Deal">
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -39,12 +57,12 @@
             <div class="cld-wrapper">
                 <div class="grid-row col-hour">
                     <div class="grid grid-null"></div>
-                    <div v-for="item in hours" class="grid court-name row-hour-name" data-hour="{{item.key}}">{{item.value}}</div>
+                    <div v-for="item in hours" class="grid court-name row-hour-name" @click.prevent="rowHourClick(item.key)">{{item.value}}</div>
                 </div>
                 <div class="grid-content-box">
                     <div class="grid-wrap">
                         <div class="court-name-wrap">
-                            <div v-for="(index,court) in dataOfClub" class="grid court-name col-court-name" data-court="{{court['id']}}">{{court['name']}}</div>
+                            <div v-for="(index,court) in dataOfClub" class="grid court-name col-court-name" @click.prevent="colCourtClick(court['id'])">{{court['name']}}</div>
                         </div>
                         <div class="clearfix"></div>
                         <div class="grid-content-wap">
@@ -215,7 +233,7 @@
         </div>
     </section>
 
-    <div id="confirm-booking-delete" class="modal fade" style="z-index: 3000; display: none; height: 150px;top: 50%;background: rgb(255, 255, 255);">
+    <div id="confirm-booking-delete" class="modal fade">
         <div class="modal-body">
             Are you sure delete?
         </div>
@@ -225,7 +243,7 @@
         </div>
     </div>
 
-    <div id="md-new-deal" class="modal fade mb-modal" style="display: none; z-index: 3000; top: 50%" role="dialog" aria-labelledby="myModalLabel">
+    <div id="md-new-deal" class="modal fade mb-modal" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -257,7 +275,7 @@
                             </tr>
                             <tr>
                                 <td>New Price for Member</td>
-                                <td><input type="text" v-model="deal.new_price_member"></td>
+                                <td><input type="text" v-model="deal.new_price_member"><br></td>
                             </tr>
                             <tr>
                                 <td>New Price for Non member</td>
@@ -273,33 +291,6 @@
         </div>
     </div>
 
-    <div id="md-multi-new-deal" class="modal fade mb-modal" style="display: none; z-index: 3000; top: 50%" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Create A New Deal</h4>
-                </div>
-                <div class="modal-body">
-                    <div >
-                        <table>
-                            <tr>
-                                <td>New Price for Member</td>
-                                <td><input type="text" v-model="deal.new_price_member"></td>
-                            </tr>
-                            <tr>
-                                <td>New Price for Non member</td>
-                                <td><input type="text" v-model="deal.new_price_nonmember"></td>
-                            </tr>
-                        </table>
-                        <div class="form-group text-center">
-                            <input type="button" @click.prevent="createMultiDeal()" class="btn btn-primary" value="Publish Deal">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </template>
 <script>
@@ -365,10 +356,7 @@
                     price_nonmember: null,
                     court_name: null
                 },
-                multi_deal: {
-                    price_member: null,
-                    price_nonmember: null,
-                },
+                multi_deal: {},
                 grids_selected: [],
             }
         },
@@ -384,30 +372,7 @@
         clubSettingId: 'reloadAsyncData',
         dateChooise: 'reloadAsyncData',
         flagChangeDataOfDate: 'reloadAsyncData',
-        multiTimes: function(){
-
-            if(!$("#day-view-content").hasClass('multi-time')){
-                $("#day-view-content").selectable({
-                    filter: ".day-grid",
-                    selected: ( event, ui ) => {
-                    const x = $(ui.selected).data('court'),
-                            y = $(ui.selected).data('hour');
-
-                    this.grids_selected.push({x , y});
-                },
-                unselected:( event, ui ) => {
-                    const x = $(ui.selected).data('court'),
-                            y = $(ui.selected).data('hour');
-                    this.grids_selected = _.reject(this.selected, {x, y});
-                }
-                });
-            }else{
-                $("#day-view-content").selectable( "destroy" );
-            }
-
-            $("#day-view-content").toggleClass('multi-time');
-            $("#light-overlay-full, #manager-book-top, #manageMultiTimes").toggleClass('hide');
-        }
+        multiTimes: 'enableSelectGrid'
     },
     asyncData(resolve, reject) {
         this.fetchCourts().done((courts) => {
@@ -490,6 +455,8 @@
                 return def.promise;
             },
         openModalGridExpand(court_id, cls_status, booking_id, hour){
+            if($("#day-view-content").hasClass('multi-time'))
+                return;
             if(cls_status == 'available'){
                 this.fetchDataOfGridAvailable(court_id, hour);
             }else if(cls_status == 'open' || cls_status == 'contract' || cls_status == 'lesson'){
@@ -624,14 +591,16 @@
         multiMakeTimeUnavailable(){ //multi
             this.$set('multi_make_time_unavailable.hour_length', 1);
             this.$set('multi_make_time_unavailable.date', this.dateChooise);
-
+            var _this = this;
             var data = new FormData();
             data.append('multi_make_time_unavailable',JSON.stringify(this.multi_make_time_unavailable));
             data.append('grids_selected',JSON.stringify(this.grids_selected));
-            this.$http.post(laroute.route('booking.makeTimeUnavailable',data)).then(res => {
+            $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+            this.$http.post(laroute.route('booking.makeTimeUnavailable'),data).then(res => {
                 if(res.data.success){
                     $("#multi_make_time_unavailable .btn-in-expand").click();
                     this.flagChangeDataOfDate = Math.random();
+                    _this.grids_selected = [];
                     showNotice('success', "Make Time Unavailable success", 'Update Success!');
                 }else{
                     var msg = "";
@@ -643,24 +612,22 @@
             }, res => {
 
             });
-        },
-        multiOpenModalDeal(){
-            this.$set('multi_deal.hour_length', 1);
-            this.$set('multi_deal.date', this.dateChooise);
-            const multi_deal = this.multi_deal;
-            $('#md-multi-new-deal').modal('show');
+            $("#day-view-content .loading").remove();
         },
         createMultiDeal(){
+            this.$set('multi_deal.hour_length', 1);
+            this.$set('multi_deal.date', this.dateChooise);
             const multi_deal = this.multi_deal;
             var data = new FormData();
             data.append('multi_deal',JSON.stringify(this.multi_deal));
             data.append('grids_selected',JSON.stringify(this.grids_selected));
-
-            this.$http.post(laroute.route('booking.newDeal',data)).then(res => {
+            var _this = this;
+            this.$http.post(laroute.route('booking.newDeal'),data).then(res => {
                 if(res.data.success){
                     this.flagChangeDataOfDate = Math.random();
                     $('#md-multi-new-deal').modal('hide');
                     showNotice('success', "New multi deal success", 'Update Success!');
+                    _this.grids_selected = [];
                 }else{
                     var msg = "";
                     $.each(res.data.messages,function(k,v){
@@ -674,16 +641,63 @@
         },
         closeMultiTimes(){
             this.multiTimes = Math.random();
+        },
+        enableSelectGrid(reload = 0){
+            var p = this;
+            if(!$("#day-view-content").hasClass('multi-time')){
+                $("#day-view-content .grid-content-wap").selectable({
+                    filter: ".day-grid.available:not(.gn)",
+                    selected: ( event, ui ) => {
+                    const c = $(ui.selected).data('court'),
+                            h = $(ui.selected).data('hour');
+
+                    this.grids_selected.push({c , h});
+                },
+                unselected:( event, ui ) => {
+                    const c = $(ui.unselected).data('court'),
+                            h = $(ui.unselected).data('hour');
+                    this.grids_selected = _.reject(this.grids_selected, {c, h});
+                }
+                });
+            }else{
+                if(!reload)
+                    $("#day-view-content").selectable( "destroy" );
+            }
+
+            $("#day-view-content").toggleClass('multi-time');
+            $("#light-overlay-full, #manager-book-top, #manageMultiTimes").toggleClass('hide');
+        },
+        colCourtClick(court_id){
+            if($("#day-view-content").hasClass("multi-time")) {
+                var parent = this;
+                $(".day-grid.available.g2[data-court='" + court_id + "']").each(function (index) {
+                    if (!$(this).hasClass("ui-selected")) {
+                        $(this).addClass("ui-selected");
+                        const c = $(this).data('court'),
+                                h = $(this).data('hour');
+                        parent.grids_selected.push({c, h});
+                    }
+                });
+            }
+        },
+        rowHourClick(hour){
+            if($("#day-view-content").hasClass("multi-time")) {
+                var parent = this;
+                var parent = this;
+                $(".day-grid.g2.available[data-hour='" + hour + "']").each(function(index){
+                    if (!$(this).hasClass("ui-selected")) {
+                        $(this).addClass("ui-selected");
+                        const c = $(this).data('court'),
+                                h = $(this).data('hour');
+                        parent.grids_selected.push({c, h});
+                    }
+                });
+            }
         }
     },
     ready () {
         this.now = this.dateChooise === null ? new Date(): this.parse(this.dateChooise);
         $(".gn" ).prop( "disabled", true );
-        $(document).on("click",'.col-court-name',function(){
-            var court_id = $(this).data('court');
-            console.log(court_id);
-            $(".day-grid[data-court='"+court_id+"']").addClass('multi-selected');
-        });
     },
     beforeDestroy () {
 

@@ -27,7 +27,10 @@
     font-family: RobotoBold;
     src: url(../fonts/Roboto/Roboto-Bold.ttf)
 }
-
+body{
+    font-family: 'Source Sans Pro',sans-serif;
+    font-size: 13px;
+}
 .header {
     background: url(../images/header-bg.jpg) no-repeat top;
     height: 681px;
@@ -990,5 +993,7 @@ a.ui-state-default.ui-state-highlight {
     content: 'Tennis Clubs';
     font-weight: bold;
 }
-
+.instruction table{
+    font-size: 13px;
+}
     
