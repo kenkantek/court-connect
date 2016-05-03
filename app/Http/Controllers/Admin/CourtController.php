@@ -27,11 +27,12 @@ class CourtController extends Controller
     }
     public function postCreateCourt(CreateCourtRequest $request)
     {
+ 
         $court = new Court;
         $court->fill($request->all());
         $court->status = 1;
         $court->save();
-        $inputRates = $request->input('dataRates');
+         $inputRates = $request->input('dataRates');
 
         $this->updateTableRates($court, $inputRates);
         return response([
@@ -42,6 +43,7 @@ class CourtController extends Controller
     }
     public function postUpdateCourt(UpdateCourtRequest $request)
     {
+
         $court = Court::find($request->input('id'));
         $court->fill($request->all());
         $court->save();

@@ -80,8 +80,8 @@
 			$('html, body').animate({ scrollTop: $('.new_date_preiod').position().top }, 500);
 			$('#date-picker-rate').focus();
 
-		}
-	}
-	}
+		 }
+	  }
+	 }
 	}
 </script>

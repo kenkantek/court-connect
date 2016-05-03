@@ -23,6 +23,7 @@
 				:contract-select.sync = "contractSelect"
 				:reload-contracts.sync = "reloadContracts"
 				:if-contract-edit.sync = "ifContractEdit"
+				:show-contract.sync = "showContract"
 				v-if="ifContractEdit"
 				v-show="showContractEdit"
 			>

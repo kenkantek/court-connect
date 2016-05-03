@@ -71,10 +71,14 @@ $(function () {
     }
     loadDayOfWeek();
 
-
+    var dateNow = new Date();
+    console.log(dateNow);
     $('#datepicker').datetimepicker({
+        minDate: 0, 
+        maxDate: "+1M +10D",
         showTimepicker: false,
         showButtonPanel: true,
+        format: 'mm/dd/yy',
         beforeShow: function (input) {
             setTimeout(function () {
                 var buttonPane = $(input)
@@ -100,7 +104,7 @@ $(function () {
         onSelect: function (dateText, inst) {
             //$("#calendar-switch").hide();
         }
-    });
+    }).datepicker('setDate', dateNow);;
     //set time search time
     $("#search-timepicker").val($(".search-time").val());
     $(".search-time").change(function(){

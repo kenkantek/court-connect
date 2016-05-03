@@ -124,11 +124,11 @@ return [
                 ],
             ],
             'bootstrap' => [
-                'use_cdn' => false,
+                'use_cdn' => true,
                 'location' => 'bottom',
                 'src' => [
                     'local' => '/resources/vendor/bootstrap/js/bootstrap.min.js',
-                    'cdn' => '',
+                    'cdn' => '//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js',
                 ],
             ],
             'jquery-ui' => [
@@ -304,15 +304,32 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'apimap' => [
+                'use_cdn' => true,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '',
+                    'cdn' => 'http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places',
+                ],
+            ],
+            'geocomplete' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/jquery.geocomplete.js',
+                    'cdn' => '',
+                ],
+            ],
             // End JS
         ],
         /* -- STYLESHEET ASSETS -- */
         'stylesheets' => [
             'bootstrap' => [
-                'use_cdn' => false,
+                'use_cdn' => true,
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/vendor/bootstrap/css/bootstrap.min.css',
+                    'cdn'   => '//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
                 ],
             ],
             'fontawesome' => [
