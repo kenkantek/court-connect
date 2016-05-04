@@ -504,9 +504,10 @@ class ManageBookingController extends Controller
 
     //new deal
     public function postNewDeal(Request $request){
-        if(empty($request->input('multi_deal'))){
+        //if(empty($request->input('multi_deal'))){
 
-        }else {
+        //}else 
+{
             $v = Validator::make($request->all(), [
                 'date' => 'required',
                 'new_price_member' => 'required | numeric ',
