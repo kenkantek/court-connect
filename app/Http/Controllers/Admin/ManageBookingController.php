@@ -203,8 +203,8 @@ class ManageBookingController extends Controller
         ]);
     }
 
-    public function getCheckPlayerforBooking($player_id){
-        $player = Player::where('id',$player_id)->first();
+    public function postCheckPlayerforBooking($player_id){
+        $player = User::where('id',$player_id)->first();
         if(!isset($player)){
             return ['error' => true, "messages" => ["Not found data"]];
         }
@@ -404,36 +404,33 @@ class ManageBookingController extends Controller
         }
     }
 
-    private function createRangeDate($s,$e){
+    private function createRangeDate($s,$e,$dayOfWeek){
         $startDate =  new DateTime($s);
         $endDate = new DateTime($e);
 
         $range_date = [];
         for($i = $startDate; $startDate <= $endDate; $i->modify('+1 day')){
             $tmp_date = $i->format("Y-m-d");
-            if(date("N",strtotime($tmp_date)) == $input['dayOfWeek'])
+            if(date("N",strtotime($tmp_date)) == $dayOfWeek)
                 $range_date[] = $tmp_date;
         }
         return$range_date;
     }
     /*BOOKING*/
     //caculator price and check is book
-    private function calPriceForBooking($input){//[date,type,hour_start,hour_length,court_id,club_id,contract_id,member]
+    public function calPriceForBooking($input){//[date,type,hour_start,hour_length,court_id,club_id,contract_id,member]
         if($input['type'] == 'open'){
             $messages = [
                 'hour_start'    => 'The Select a Time field is required.',
                 'hour_length'    => 'The Select a Court field is required.',
                 'court_id.exists'  => 'The selected court is invalid.',
-                'club_id.exists'      => 'The selected club is invalid.',
                 'court_id.required'  => 'The selected court is invalid.',
-                'club_id.required'      => 'The selected club is invalid.',
             ];
             $v = Validator::make($input, [
                 'date' => 'required',
                 'hour_start' => 'required',
                 'hour_length' => 'required',
                 'court_id' => 'required|exists:courts,id',
-                'club_id' => 'required|exists:clubs,id',
             ],$messages);
 
             if($v->fails())
@@ -484,7 +481,6 @@ class ManageBookingController extends Controller
                 'club_id.required'      => 'The selected club is invalid.',
             ];
             $v = Validator::make($input, [
-                'date' => 'required',
                 'contract_id' => 'required',
                 'dayOfWeek' => 'required',
                 'hour_start' => 'required',
@@ -500,7 +496,7 @@ class ManageBookingController extends Controller
 
             //contract
             $contract = Contract::where('id',$input['contract_id'])->first();
-            $range_date = $this->createRangeDate($contract['start_date'],$contract['end_date']);
+            $range_date = $this->createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
 
             foreach($range_date as $date) {
                 //check book yet
@@ -524,18 +520,23 @@ class ManageBookingController extends Controller
                 }
             }
 
-
             $total_price = 0;
-            $errors = array();
-
             $r= $this->getPriceOfContract($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member']);
+            $price_extra = 0;
+            foreach($input['extra_id'] as $item){
+                foreach($contract['extras'] as $extra){
+                    if($item == $extra['name'])
+                        $price_extra += $extra['value'];
+                }
+            }
 
             if($r['error']){
                 return ['error' => true,"messages"=>[$r['message']]];
             }else {
+                $total_price += $price_extra + $r['price'];
                 return [
                     'success' => true,
-                    'total_price' => $r['price']
+                    'total_price' => $total_price
                 ];
             }
         }
@@ -601,12 +602,12 @@ class ManageBookingController extends Controller
                 $tmp_i = 0;
                 for($i=$booking['hour']; $i < $booking['hour'] + $booking['hour_length']; $i+=0.5){
                     if($booking['player_id'] == 0) {
-                        $player_info = json_decode($booking['player_info']);
-                        $arr_hour["h_".$i]['content'] = $player_info->first_name. " ". $player_info->last_name;
+                        $billing_info = json_decode($booking['billing_info']);
+                        $arr_hour["h_".$i]['content'] = $billing_info->first_name. " ". $billing_info->last_name;
                     }else{
-                        $player_info = Player::where('id',$booking['player_info'])->first();
-                        if($player_info)
-                            $arr_hour["h_".$i]['content'] = $player_info['first_name']. " ". $player_info['last_name'];
+                        $billing_info = Player::where('id',$booking['billing_info'])->first();
+                        if($billing_info)
+                            $arr_hour["h_".$i]['content'] = $billing_info['first_name']. " ". $billing_info['last_name'];
                         $arr_hour["h_".$i]['content'] = "";
                     }
                     $arr_hour["h_".$i]['status'] = $booking['type'];
@@ -645,13 +646,11 @@ class ManageBookingController extends Controller
     }
 
     //view price order
-    public function getViewPriceOrder(Request $request){
+    public function postViewPriceOrder(Request $request){
         $input = [
             'date'=> $request->input('date'),
             'type' => $request->input('type'),
-            'date_range' => $request->input('date_range'),
-            'startDate' => $request->input('startDate'),
-            'endDate' => $request->input('endDate'),
+            'contract_id' => $request->input('contract_id'),
             'dayOfWeek' => $request->input('dayOfWeek'),
             'extra_id' => $request->input('extra_id'),
             'teacher_id' => $request->input('teacher_id'),
@@ -665,13 +664,11 @@ class ManageBookingController extends Controller
         return response()->json($result);
     }
 
-    public function getCheckCourtBooking(Request $request){
+    public function postCheckCourtBooking(Request $request){
         $input = [
             'date'=> $request->input('date'),
             'type' => $request->input('type'),
-            'date_range' => $request->input('date_range'),
-            'startDate' => $request->input('startDate'),
-            'endDate' => $request->input('endDate'),
+            'contract_id' => $request->input('contract_id'),
             'dayOfWeek' => $request->input('dayOfWeek'),
             'extra_id' => $request->input('extra_id'),
             'teacher_id' => $request->input('teacher_id'),
@@ -689,7 +686,7 @@ class ManageBookingController extends Controller
         return response()->json($result);
     }
 
-    public function getCheckInputCustomer(Request $request){
+    public function postCheckInputCustomer(Request $request){
         $v = Validator::make($request->all(), [
             'title' => 'required',
             'first_name' => 'required',
@@ -734,9 +731,7 @@ class ManageBookingController extends Controller
         $input = [
             'date'=> $inputBookingDetail->date,
             'type' => $inputBookingDetail->type,
-            'date_range' => $inputBookingDetail->date_range,
-            'startDate' => $inputBookingDetail->startDate,
-            'endDate' => $inputBookingDetail->endDate,
+            'contract_id' => $inputBookingDetail->contract_id,
             'dayOfWeek' => $inputBookingDetail->dayOfWeek,
             'extra_id' => $inputBookingDetail->extra_id,
             'teacher_id' => $inputBookingDetail->teacher_id,
@@ -752,10 +747,10 @@ class ManageBookingController extends Controller
 
             if ($inputBookingDetail->member == 1) {
                 $player_id = $customerDetail->player_id;
-                $player_info = json_encode([]);
+                $billing_info = json_encode([]);
             } else {
                 $player_id = 0;
-                $player_info = $request->input('customer');
+                $billing_info = $request->input('customer');
             }
 
             $expiry = explode("/", $paymentDetail->expiry);
@@ -769,7 +764,7 @@ class ManageBookingController extends Controller
                         'cvv' => $paymentDetail->cvv,
                     ],
                 ]);
-            } catch (Exception $e) {
+            } catch (CardErrorException $e) {
                 return ['error' => true, "messages" => [$e->getMessage()]];
             }
 
@@ -800,7 +795,7 @@ class ManageBookingController extends Controller
                     'payment_id' => $payment['id'],
                     'type' => $inputBookingDetail->type,
                     'date' => $inputBookingDetail->date,
-                    'date_range' => $inputBookingDetail->date_range,
+                    'contract_id' => $inputBookingDetail->contract_id,
                     'day_of_week' => is_numeric($inputBookingDetail->dayOfWeek) ? $inputBookingDetail->dayOfWeek : 0,
                     'court_id' => $inputBookingDetail->court_id,
                     'extra_id' => json_encode($inputBookingDetail->extra_id),
@@ -811,21 +806,23 @@ class ManageBookingController extends Controller
                     'hour_length' => $inputBookingDetail->hour_length,
                     'player_id' => $player_id,
                     'num_player' => $inputBookingDetail->num_player,
-                    'player_info' => $player_info,
+                    'billing_info' => $billing_info,
                     'payment_info' => $request->input('payment')
                 ]);
                 return [
                     'success' => true,
-                    'booking_id' => $booking['id']
+                    'payment_id' => $payment['id']
                 ];
             }else if($inputBookingDetail->type == 'contract') { //save with type contract
-                $bookings_id = [];
-                foreach($result_prices['info'] as $item) {
+
+                $contract = Contract::where('id',$inputBookingDetail->contract_id)->first();
+                $range_date = $this->createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
+                foreach($range_date as $date) {
                     $booking = Booking::create([
                         'payment_id' => $payment['id'],
                         'type' => $inputBookingDetail->type,
-                        'date' => $item['date'],
-                        'date_range' => $inputBookingDetail->date_range,
+                        'date' => $date,
+                        'contract_id' => $inputBookingDetail->contract_id,
                         'day_of_week' => is_numeric($inputBookingDetail->dayOfWeek) ? $inputBookingDetail->dayOfWeek : 0,
                         'court_id' => $inputBookingDetail->court_id,
                         'extra_id' => json_encode($inputBookingDetail->extra_id),
@@ -836,15 +833,14 @@ class ManageBookingController extends Controller
                         'hour_length' => $inputBookingDetail->hour_length,
                         'player_id' => $player_id,
                         'num_player' => $inputBookingDetail->num_player,
-                        'player_info' => $player_info,
+                        'billing_info' => $billing_info,
                         'payment_info' => $request->input('payment')
                     ]);
-                    $bookings_id[] = $booking['id'];
                 }
 
                 return [
                     'success' => true,
-                    'booking_id' => implode(", ", $bookings_id)
+                    'payment_id' => $payment['id']
                 ];
             }
 
@@ -860,9 +856,9 @@ class ManageBookingController extends Controller
             return ['error' => true, "messages" => ["Not found data"]];
         }
         if($booking['player_id'] != 0) {
-            $player_info = Player::where('id',$booking['player_id'])->select(["first_name","last_name","email","phone","address1","city","state"])->first();
-            if($player_info)
-                $booking['player_info'] = json_encode($player_info);
+            $billing_info = User::where('id',$booking['player_id'])->select(["first_name","last_name","email","phone","address1","city","state"])->first();
+            if($billing_info)
+                $booking['billing_info'] = json_encode($billing_info);
         }
         return response()->json([
             'success' => true,

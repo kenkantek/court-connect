@@ -99,25 +99,25 @@
                         <button type="button" class="close-md close" aria-label="Close"><span aria-hidden="true">X</span></button>
                         <div class="col-xs-3">
                             <h3 class="title-part">Customer Details</h3>
-                            <table v-if="player_info">
+                            <table v-if="billing_info">
                                 <tr>
                                     <td align="right">Name</td>
                                     <td>
-                                        <div class="editable_">{{player_info['first_name']}}</div>
-                                        <div class="editable_" >{{player_info['last_name']}}</div>
+                                        <div class="editable_">{{billing_info['first_name']}}</div>
+                                        <div class="editable_" >{{billing_info['last_name']}}</div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="right">Email</td>
-                                    <td><div class="editable_" >{{player_info['email']}}</div></td>
+                                    <td><div class="editable_" >{{billing_info['email']}}</div></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Phone</td>
-                                    <td><div class="editable_" >{{player_info['phone']}}</div></td>
+                                    <td><div class="editable_" >{{billing_info['phone']}}</div></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Address</td>
-                                    <td><div class="editable_">{{player_info['address1']}}</div></td>
+                                    <td><div class="editable_">{{billing_info['address1']}}</div></td>
                                 </tr>
                             </table>
                         </div>
@@ -328,7 +328,7 @@
                 courts: [],
                 dataOfClub: [],
                 booking_detail: null,
-                player_info: {
+                billing_info: {
                     first_name: null,
                     last_name: null,
                     email: null,
@@ -465,14 +465,14 @@
         },
         fetchDataOfBooking(booking_id){
             this.booking_detail = null;
-            this.player_info = null;
+            this.billing_info = null;
             this.payment_info = null;
             $("#md-booking-content-expand").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.view', {one:booking_id})).then(res => {
                 $("#md-booking-content-expand .loading").remove();
                 if(res.data.success){
                     this.booking_detail = res.data.booking;
-                    this.player_info = JSON.parse(this.booking_detail['player_info']);
+                    this.billing_info = JSON.parse(this.booking_detail['billing_info']);
                     this.payment_info = JSON.parse(this.booking_detail['payment_info']);
                 }
             }, res => {

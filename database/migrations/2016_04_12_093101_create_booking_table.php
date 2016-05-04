@@ -29,8 +29,8 @@ class CreateBookingTable extends Migration
             $table->float('hour');
             $table->tinyInteger('hour_length');
             $table->tinyInteger('num_player')->nullable();
-
             $table->text('player_info');
+            $table->text('billing_info');
             $table->text('payment_info');
 
             $table->foreign('court_id')

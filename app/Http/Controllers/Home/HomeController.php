@@ -39,7 +39,7 @@ class HomeController extends Controller
                     'exp_year' => $input['exp_year'],
                 ],
             ]);
-        }catch (Exception $e){
+        }catch (CardErrorException $e){
             return $e->getMessage();
         }
 
