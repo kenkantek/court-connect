@@ -80,12 +80,12 @@
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i class="glyphicon glyphicon-time"></i>
-                            <input type="time" class="form-control" name="s_time" id="search-timepicker" placeholder="Time">
+                            <input type="time" class="form-control" name="s_time" id="search-timepicker" step="1800" placeholder="Time">
                             <div class="search-tooltip hidden">
                                 <div class="tooltiptext">
                                     <div >
                                         <label for="opentime">Start Time</label>
-                                        <input class="form-control search-time" name="search-time" value="08:00" type="time">
+                                        <input class="form-control search-time" name="search-time" value="08:00" type="time" step="1800">
                                     </div>
                                     <div>
                                         <label for="opentime">Length</label>

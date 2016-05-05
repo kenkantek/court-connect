@@ -36,10 +36,18 @@ class ContractController extends Controller
 
     public function getView($contract_id)
     {
-        $contract = Contract::where('contract_id',$contract_id)->first();
-        return response([
-            'data' => $contract,
-        ]);
+        $contract = Contract::where('id',$contract_id)->select(['id','start_date','end_date','is_member','total_week','extras'])->first();
+        if(isset($contract['id'])){
+            return response([
+                'success' => true,
+                'data' => $contract,
+            ]);
+        }else{
+            return response([
+                'error' => true,
+                'messages' =>['Data invalid']
+            ]);
+        }
     }
 
     public function postUpdateContract(Request $request)

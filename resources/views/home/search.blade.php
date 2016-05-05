@@ -139,7 +139,9 @@
         {{-- #show-results --}}
         <div class="row text-left" id="show-results">
           @if (isset($clubs))
-            Showing Results <span>1-5</span> of <span>{!! $clubs->count() !!}</span>
+            Showing Results <span>1-5</span> of <span>{!! $clubs->total() !!}</span>
+            {!! $clubs->render() !!}
+
           @endif
         </div>
         {{-- End #show-results --}}
@@ -150,18 +152,19 @@
             @if (isset($clubs))
               @foreach ($clubs as $club)
                 {{-- Club block     --}}
-                  <div class="club-block row">
-                    <div class="col-md-4">
+                  <div class="club-block">
+                    <div class="club-intro">
+                      <div class="col-md-4">
                         <div class="row thumbnail text-center">                 
                             <img src="{{ asset('resources/home/images/club-image-1.jpg') }}" alt="" class="img-responsive col-md-12 img-clubs">
                              <div class="caption">
                               <div class="col-md-6 col-xs-6">
                                 Indoor/Outdoor<br/>
-                                <b>Indoor</b>
+                                <b>{{$club->courts[0]->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
                               </div>
                               <div class="col-md-6 col-xs-6">
                                 Court Type<br/>
-                                <b>Hard</b>
+                                <b>{{$club->courts[0]->surface->label}}</b>
                               </div>                      
                             </div>
                         </div>              
@@ -181,45 +184,80 @@
                       </div>              
                       <div class="row">
                         <div class="col-md-12">
-                          <span>Select a Time</span>
-                          <div class="club-time text-center">
-                            <div class="col-price">
-                              <span>4-5pm</span>
-                              <div class="price">
-                                $45
+                          <div class="club-time text-center club-time-wrap">
+                              <div class="first-court">
+                                  <div class="court-name">Court: #1</div>
+                                  <hr style="width: 100%">
+                                  <div class="intro-court clearfix">
+                                      <div class="court-io-door pull-right">
+                                          Indoor/Outdoor:
+                                          <b>{{$club->courts[0]->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                                      </div>
+                                      <div class="court-type pull-left">
+                                          Court Type:
+                                          <b>{{$club->courts[0]->surface->label}}</b>
+                                      </div>
+                                  </div>
+                                  <div class="club-time text-center club-time-wrap clearfix">
+                                      @foreach ($club->courts[0]->prices as $item)
+                                          <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                              <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start'])."am" : str_replace(".5",":30",($item['hour_start'] - 12))."pm"}} -
+                                                  {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
+                                              </span>
+                                              <div class="price">
+                                                  {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
+                                              </div>
+                                          </div>
+                                      @endforeach
+                                  </div>
                               </div>
-                            </div>
-                            <div class="col-price">
-                              <span>5-6pm</span>
-                              <div class="price">
-                                $35
-                              </div>
-                            </div class="price">
-                            <div class="col-price active">
-                              <span>6-7pm</span>
-                              <div class="price">
-                                $45
-                              </div>
-                            </div>
-                            <div class="col-price">
-                              <span>7-8pm</span>
-                              <div class="price">
-                                $45
-                              </div>
-                            </div>
-                            <div class="col-price">
-                              <span>8-9pm</span>
-                              <div class="price">
-                                $45
-                              </div>
-                            </div>
+                          </div>
+                          <div class="text-right">
+                              <span class="btn">View more >></span>
                           </div>
                         </div>
                       </div>              
                     </div>
+                    </div>
+                    
+                    <div class="content-view-more-court content-view-more-court-1">
+                        <div class="row">
+                            <div class="court-name">Court: #1</div>
+                            <hr style="width: 100%">
+                            <div class="left">
+                                <div class="court-io-door">
+                                    Indoor/Outdoor:
+                                    <b>{{$club->courts[0]->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                                </div>
+                                <div class="court-type">
+                                    Court Type:
+                                    <b>{{$club->courts[0]->surface->label}}</b>
+                                </div>
+                            </div>
+                            <div class="right">Select a Time</div>
+                            <div class="clearfix"></div>
+                            <br>
+
+                            <div class="club-time text-center club-time-wrap clearfix">
+                                @foreach ($club->courts[0]->prices as $item)
+                                    <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                        <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start'])."am" : str_replace(".5",":30",($item['hour_start'] - 12))."pm"}} -
+                                            {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
+                                        </span>
+                                        <div class="price">
+                                            {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
                   </div>
+                  
                 {{-- End Club block --}}
               @endforeach
+            @else
+                <div class="text-center">No result</div>
             @endif
           </div>
           

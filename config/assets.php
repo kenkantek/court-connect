@@ -58,17 +58,21 @@ return [
             'jquery-ui-timepicker',
             'jquery-ui-multidatespicker',
             'ionslider',
-            'home',
             'city-autocomplete',
+            'select2',
+            //'moment',
+            //'datetimepicker',
+            'home'
         ],
         'stylesheets' => [
             'bootstrap',
             'fontawesome',
             'jquery-ui',
             'jquery-ui-timepicker',
-            'home',
             'ionslider',
-            'autocomplete'
+            'autocomplete',
+            'select2',
+            'datetimepicker'
         ],
     ],
     'resources' => [

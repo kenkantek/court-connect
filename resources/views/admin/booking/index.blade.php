@@ -93,17 +93,20 @@
 
 			$("body").on('click','#next-day-in-month',function(){
 				var w_left = parseFloat($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));
-				w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
+				var w_grid = parseFloat(($('#calendar_bookings .days-in-month-wrap').width())/7);
 				w_left -= w_grid;
-				if(Math.abs(w_left) < parseInt($('#calendar_bookings .days-in-month-wrap .days').css('width')) - w_grid *6 )
+				var w_full = w_grid * $('#calendar_bookings .days-in-month-wrap .days .day-item').length;
+				console.log(w_full);
+				if(Math.abs(w_left) > w_full - w_grid *7 )
 					return;
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
 			});
 
 			$("body").on('click','#prev-day-in-month',function(){
 				var w_left = parseFloat($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));
-				w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
+				var w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
 				w_left += w_grid;
+				var w_full = w_grid * $('#calendar_bookings .days-in-month-wrap .days .day-item').length;
 				if(w_left > 1 )
 					return;
 				$('#calendar_bookings .days-in-month-wrap .days').css('margin-left',w_left);
@@ -113,6 +116,7 @@
 			$('.datetimepicker').datetimepicker({defaultDate: new Date(), format: 'MM/DD/YYYY'});
 
 			$('.daterange').daterangepicker();
+
 			$("body").on('click',".day-view-content .day-grid.available",function(event){
 				if($(this).hasClass('gn')){
 					event.preventDefault();
@@ -120,7 +124,7 @@
 				}
 				$("#md-booking-content-expand").hide();
 				$("#md-available-content-expand").css({'display':'block','width': $(".day-view-content").width() - 100});
-				var tooltipX =  110;
+				var tooltipX =  $("#day-view-content").scrollLeft() + 110;
 				var tooltipY = event.pageY + 8 - $("#day-view-content").offset().top + 40;
 				$("#md-available-content-expand").css({top: tooltipY, left: tooltipX});
 			});

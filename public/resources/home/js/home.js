@@ -1,5 +1,16 @@
 $(function () {
 
+    $('#card-expiry').datetimepicker({
+        format: 'MM/YY',
+    });
+
+    if (jQuery().select2) {
+        $('.select2').select2({
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
+    }
+
     $( "#q1" ).autocomplete({
         source: function( request, response ) {
             $.ajax({
@@ -74,7 +85,7 @@ $(function () {
     var dateNow = new Date();
     console.log(dateNow);
     $('#datepicker').datetimepicker({
-        minDate: 0, 
+        minDate: 0,
         maxDate: "+1M +10D",
         showTimepicker: false,
         showButtonPanel: true,
@@ -147,4 +158,11 @@ $(function () {
         hasGrid: false,
         hideMinMax: false,
     });
+
+    //booking
+    $("body").on('click','.btn-booking-tennis',function(e){
+
+    })
 });
+
+//# sourceMappingURL=home.js.map

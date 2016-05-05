@@ -30,16 +30,18 @@ class Club extends Model
     protected $searchable = [
         'columns' => [
             'name' => 10,
+            'state' => 10,
             'address' => 10,
             'zipcode' => 10,
-            'state' => 10
+            'city' => 10
+            
         ]
     ];
 
 
     public function courts()
     {
-        return $this->hasMany('App\Models\Court');
+        return $this->hasMany('App\Models\Contexts\Court');
     }
     public function state()
     {
