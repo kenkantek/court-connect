@@ -79,9 +79,9 @@ class SearchController extends Controller
 
                 })
 
-                ->get(['clubs.*']);
+                ->skip(0)->take(5)->get(['clubs.*']);
 
-
+       //return $clubs;        
         $results =  Court::where('surface_id','=',$keyword_surface)->get();
         //return $clubs;
         return view('home.search',compact('request','clubs'));

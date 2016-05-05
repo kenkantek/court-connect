@@ -8,5 +8,6 @@ Homestead.json
 .env
 .idea
 error_log
-public/resources/admin/js/app_modules/app.js
-public/resources/vendor/routes.js
+/public/resources/vendor/routes.js
+/public/resources/admin/js/app_modules/app.js
+/public/resources/admin/js/app_modules/app.js.map 

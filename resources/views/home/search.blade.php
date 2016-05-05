@@ -139,8 +139,7 @@
         {{-- #show-results --}}
         <div class="row text-left" id="show-results">
           @if (isset($clubs))
-            Showing Results <span>1-5</span> of <span>//$clubs->total()</span>
-            $clubs->render()
+            Showing Results <span>1-5</span> of <span>{!! $clubs->count() !!}</span>
           @endif
         </div>
         {{-- End #show-results --}}

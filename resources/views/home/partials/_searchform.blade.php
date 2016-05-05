@@ -3,12 +3,10 @@
             <h3 class="text-center">Find Your Court</h3>     
             <div class="container">
                 <div class="row">
-                    <form action="{{ route('home.search') }}" method="get" role="form">
-                        {{ csrf_field() }}
+                    {!!  Form::open(array('route' => 'home.search','method' => 'get')) !!}
                         <div class="form-group col-md-3 form-icon">
                             <i class="fa fa-map-marker"></i>
-                            <input type="text" class="form-control" name="s_name" id="q"
-                                   placeholder="Seach by Zip/Address or Club Name" autocomplete="off" data-country="us">
+                            {!! Form::text('s_name', $request->input('s_name'), ['id' => 'q', 'class' => 'form-control', 'autocomplete' => 'off', 'data-country' => 'us', 'placeholder' => 'Seach by Zip/Address or Club Name'] ) !!}       
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i class="fa fa-calendar"></i>
@@ -98,7 +96,7 @@
                             <span>Distance</span>
                           </div>
                       </div>
-                    </form>
+                    {!! Form::close() !!}
                 </div>
             </div>          
         </div>  
