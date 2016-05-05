@@ -199,15 +199,15 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Member: </td>
-                                    <td v-for="itemmember in info_grid_available.price_member">${{itemmember}}</td>
+                                    <td>Member ($): </td>
+                                    <td v-for="itemmember in info_grid_available.price_member">{{itemmember}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Non Member: </td>
-                                    <td v-for="itemnonmember in info_grid_available.price_nonmember">${{itemnonmember}}</td>
+                                    <td>Non Member ($): </td>
+                                    <td v-for="itemnonmember in info_grid_available.price_nonmember">{{itemnonmember}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Lesson: </td>
+                                    <td>Lesson ($): </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -267,11 +267,11 @@
                             </tr>
                             <tr>
                                 <td>Orginal Price (Member): </td>
-                                <td> ${{deal.price_member}}</td>
+                                <td>{{deal.price_member}}</td>
                             </tr>
                             <tr>
-                                <td>Orginal Price (Non ember): </td>
-                                <td> ${{deal.price_nonmember}}</td>
+                                <td>Orginal Price (Non member): </td>
+                                <td>{{deal.price_nonmember}}</td>
                             </tr>
                             <tr>
                                 <td>New Price for Member</td>

@@ -32,7 +32,7 @@ class ManageBookingController extends Controller
     }
 
     //get price of type open time
-    private function getPriceOfOpenTime($court_id, $date, $hour_start, $hour_length, $is_member){
+    private function getPriceOverType($court_id, $date, $hour_start, $hour_length, $is_member,$type = 'open'){
         $unavailable = TimeUnavailable::where(['date' => $date, 'court_id' => $court_id])
             ->where(function ($q) use($hour_start,$hour_length) {
                 $q->orWhere('hour', $hour_start)
@@ -48,28 +48,48 @@ class ManageBookingController extends Controller
                 'message' => "Unavailable (".$unavailable[0]['reason'].")"
             ];
         }
-        $court_rate= CourtRate::where('start_date','<=',$date)
-            ->where('end_date','>=',$date)
-            ->where('court_id',$court_id)
-            ->where('is_member',$is_member)
-            ->orderBy('updated_at','DESC')
-            ->first();
 
-        if(!isset($court_rate)){
-            return [
-                'error' => true,
-                'message' => "The court is not a set price"
-            ];
+        if($type == "open") {
+            $table_rate = CourtRate::where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date)
+                ->where('court_id', $court_id)
+                ->where('is_member', $is_member)
+                ->orderBy('updated_at', 'DESC')
+                ->first();
+        }else if($type == "contract") {
+            $court = Court::where('id',$court_id)->first();
+            $table_rate = Contract::where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date)
+                ->where('club_id', $court['club_id'])
+                ->where('is_member', $is_member)
+                ->orderBy('updated_at', 'DESC')
+                ->first();
         }
+        $deals = Deal::where('date',$date)->where('court_id',$court_id)
+            ->orderBy('updated_at','asc')
+            ->get();
+
+        if(!isset($table_rate)){
+//            return [
+//                'error' => true,
+//                'message' => "The court is not a set price"
+//            ];
+            for($i=0; $i<17; $i++){
+                $rates[$i]['A1'] = "N/A";
+                $rates[$i]['A2'] = "N/A";
+                $rates[$i]['A3'] = "N/A";
+                $rates[$i]['A4'] = "N/A";
+                $rates[$i]['A5'] = "N/A";
+                $rates[$i]['A6'] = "N/A";
+                $rates[$i]['A7'] = "N/A";
+            }
+        }else
+            $rates = $table_rate['rates'];
+
 
         $dayOfWeek = date('w', strtotime($date));
         $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
         $total_price = 0;
-
-        $rates = $court_rate['rates'];
-        $deals = Deal::where('date',$date)->where('court_id',$court_id)
-            ->orderBy('updated_at','asc')
-            ->get();
 
         foreach($deals as $deal){
             for($i=$deal['hour']; $i< $deal['hour'] + $deal['hour_length']; $i++) {
@@ -83,71 +103,17 @@ class ManageBookingController extends Controller
             $rates_full[] = $rate;
             $rates_full[] = $rate;
         }
+
         for($i= $hour_start; $i< $hour_start + $hour_length; $i+=0.5){
             $tmp_index = ($i - 5) *2;
-            $total_price += $rates_full[$tmp_index][$index_json] / 2;
-        }
-        return [
-            'error' => false,
-            'price' => $total_price
-        ];
-    }
-
-    //get price of type contract
-    private function getPriceOfContract($court_id, $date, $hour_start, $hour_length, $is_member){
-        $unavailable = TimeUnavailable::where(['date' => $date, 'court_id' => $court_id])
-            ->where(function ($q) use($hour_start,$hour_length) {
-                $q->orWhere('hour', $hour_start)
-                    ->orWhere(function ($q) use ($hour_start,$hour_length) {
-                        $q->where('hour',"<",$hour_start)
-                            ->whereRaw('hour + hour_length > '.$hour_start);
-                    });
-            })
-            ->get();
-        if(isset($unavailable) && count($unavailable) > 0){
-            return [
-                'error' => true,
-                'message' => "Date: ".$date." at ".$hour_start." - ".($hour_start + $hour_length)." : Unavailable (".$unavailable[0]['reason'].")"
-            ];
-        }
-        $court = Court::where('id',$court_id)->first();
-        $contract= Contract::where('start_date','<=',$date)
-            ->where('end_date','>=',$date)
-            ->where('club_id',$court['club_id'])
-            ->where('is_member',$is_member)
-            ->orderBy('updated_at','DESC')
-            ->first();
-
-        if(!isset($contract)){
-            return [
-                'error' => true,
-                'message' => "The court is not a set price"
-            ];
-        }
-
-        $dayOfWeek = date('w', strtotime($date));
-        $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
-        $total_price = 0;
-
-        $rates = $contract['rates'];
-        $deals = Deal::where('date',$date)->where('court_id',$court_id)
-            ->orderBy('updated_at','asc')
-            ->get();
-
-        foreach($deals as $deal){
-            for($i=$deal['hour']; $i< $deal['hour'] + $deal['hour_length']; $i++) {
-                if($is_member)
-                    $rates[$i - 5][$index_json] = $deal['price_member'];
-                else $rates[$i - 5][$index_json] = $deal['price_nonmember'];
+            if(!isset($rates_full[$tmp_index][$index_json])){
+                $total_price ="ERROR";
+                break;
             }
-        }
-        $rates_full = [];
-        foreach($rates as $rate){
-            $rates_full[] = $rate;
-            $rates_full[] = $rate;
-        }
-        for($i= $hour_start; $i< $hour_start + $hour_length; $i+=0.5){
-            $tmp_index = ($i - 5) *2;
+            if($rates_full[$tmp_index][$index_json] == "N/A"){
+                $total_price = "N/A";
+                break;
+            }
             $total_price += $rates_full[$tmp_index][$index_json] / 2;
         }
         return [
@@ -232,7 +198,8 @@ class ManageBookingController extends Controller
         $price_member = [];
         $tmp_inc_hour = 1;
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
-            $r = $this->getPriceOfOpenTime($court_id,$date,$hour, $tmp_inc_hour,1);
+            $r = $this->getPriceOverType($court_id,$date,$hour, $tmp_inc_hour,1,'open');
+            //$price_member[] = !$r['error'] ? $r['price']: $r['message'];
             $price_member[] = !$r['error'] ? $r['price']: $r['message'];
             $tmp_inc_hour+=0.5;
         }
@@ -240,7 +207,7 @@ class ManageBookingController extends Controller
         $tmp_inc_hour = 1;
         $price_nonmember = [];
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
-            $r = $this->getPriceOfOpenTime($court_id,$date,$hour, $tmp_inc_hour,0);
+            $r = $this->getPriceOverType($court_id,$date,$hour, $tmp_inc_hour,0,'open');
             $price_nonmember[] = !$r['error'] ? $r['price']: $r['message'];
             $tmp_inc_hour+=0.5;
         }
@@ -327,11 +294,11 @@ class ManageBookingController extends Controller
         $court = Court::where('id',$court_id)->select('name')->first();
 
         $data['court_name'] = $court['name'];
-        $price_member = $this->getPriceOfOpenTime($court_id,$date,$hour, $hour_length,1);
+        $price_member = $this->getPriceOverType($court_id,$date,$hour, $hour_length,1,'open');
         $data['price_member']= !$price_member['error'] ? $price_member['price']: $price_member['message'];
 
-        $price_nonmember = $this->getPriceOfOpenTime($court_id,$date,$hour, $hour_length,0);
-        $data['price_nonmember']= !$price_nonmember['error'] ? $price_nonmember['price']: $price_nonmember['message'];
+        $price_nonmember = $this->getPriceOverType($court_id,$date,$hour, $hour_length,0,'open');
+        $data['price_nonmember']= !$price_nonmember['error'] ? $price_nonmember['price']: $price_member['message'];
 
         $data['date_text'] = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("l jS \of F Y");
         $data['time'] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
@@ -416,6 +383,7 @@ class ManageBookingController extends Controller
         }
         return$range_date;
     }
+
     /*BOOKING*/
     //caculator price and check is book
     public function calPriceForBooking($input){//[date,type,hour_start,hour_length,court_id,club_id,contract_id,member]
@@ -456,8 +424,8 @@ class ManageBookingController extends Controller
             if(!empty($check_book))
                 return ['error' => true, "messages" => ["This was book. Please select another time or date"]];
 
-            $r = $this->getPriceOfOpenTime($input['court_id'],$date,
-                $input['hour_start'],$input['hour_length'],$input['member']);
+            $r = $this->getPriceOverType($input['court_id'],$date,
+                $input['hour_start'],$input['hour_length'],$input['member'],'open');
 
             if($r['error']){
                 return ['error' => true,"messages"=>[$r['message']]];
@@ -521,7 +489,7 @@ class ManageBookingController extends Controller
             }
 
             $total_price = 0;
-            $r= $this->getPriceOfContract($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member']);
+            $r= $this->getPriceOverType($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member'],'contract');
             $price_extra = 0;
             foreach($input['extra_id'] as $item){
                 foreach($contract['extras'] as $extra){
