@@ -190,7 +190,7 @@
                                       {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
                                       </span>
                                       <a href="{{route('home.checkout',['date'=>$request->input('date'),'court'=>$club->court->id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis"  data-court="{{$club->court->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
-                                          ${{$item['total_price']}}
+                                          {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
                                       </a>
                                   </div>
                               @endforeach
@@ -227,7 +227,7 @@
                                           {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
                                       </span>
                                       <div class="price">
-                                          ${{$item['total_price']}}
+                                          {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
                                       </div>
                                   </div>
                               @endforeach

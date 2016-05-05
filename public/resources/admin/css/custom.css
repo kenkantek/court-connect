@@ -679,7 +679,7 @@ form.form-court{
     background: rgba(0,0,0,0.6);
 }
 #calendar_bookings{
-    z-index: 999999;
+    z-index: 99;
     background: #fff;
 }
 .grid-row.col-hour .court-name.row-hour-name{
