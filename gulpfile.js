@@ -14,8 +14,6 @@ require('laravel-elixir-vueify');
  |
  */
 
-elixir.config.sourcemaps = false;
-elixir.config.production = true;
 
 gulp.task('auth', function() {
     elixir.config.assetsPath = 'resources/assets/auth/';

@@ -20,27 +20,20 @@
                 <label for="address" class="col-sm-2 control-label">Address</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="address" placeholder="Enter address club" v-model="club.address">
+                    <input id="geocomplete" type="text" class="form-control" id="address" placeholder="Enter address club" v-model="club.address">
                 </div>
             </div>
             <div class="form-group">
                 <label for="state" class="col-sm-2 control-label">State</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="state" id="state" v-model="club.state" @change="fetchCitys()">
-                        <option v-for="option in states" :value="option.id">
-                            {{ option.name }}
-                        </option>
-                    </select>
+                    <input type="text" class="form-control" id="zipcode" placeholder="Enter zipcode club" v-model="club.state">
+
                 </div>
             </div>
             <div class="form-group">
                 <label for="city" class="col-sm-2 control-label">City</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="city" id="city" v-model="club.city">
-                        <option v-for="option in citys" v-bind:value="option.id">
-                            {{ option.name }}
-                        </option>
-                    </select>
+                    <input type="text" class="form-control" id="zipcode" placeholder="Enter zipcode club" v-model="club.city">
                 </div>
             </div>
             <div class="form-group">
@@ -59,11 +52,19 @@
                     <input type="file" @change="onChangeImage($event)" accept="image/*" v-el:input-image class="hidden" />
                 </div>
             </div>
-            <button type="submit" class="btn btn-flat btn-info pull-right" :disabled="submiting" style="margin-right: 85px;">Update club</button>
-            <button type="button" class="btn btn-flat btn-danger pull-right" @click="deleteClub">Delete club</button>
+            <div class="form-group">
+                 <button type="submit" class="btn btn-flat btn-info pull-right" :disabled="submiting" style="margin-right: 85px;">Update club</button>
+                <button type="button" class="btn btn-flat btn-danger pull-right" @click="deleteClub">Delete club</button>
+            </div>
+           
 
 
         </form>
+                <div class="map_canvas" style="border:red; height:400px"></div>
+<!--         <form>
+            <input id="geocomplete" type="text" placeholder="Type in an address" value="Empire State Bldg" />
+            <input id="find" type="button" value="find" />
+        </form> -->
     </div>
 </template>
 <script>
@@ -98,8 +99,49 @@
     },
     watch: {
         clubs_choice: function(){
-            this.fetchCitys();
+             // $("#geocomplete").geocomplete({
+             //      map: ".map_canvas",
+             //      details: "form",
+             //      types: ["geocode", "establishment"],
+             //    })
+            //this.fetchCitys();
         }
+    },
+    ready() {
+        var _this = this;
+        
+        $("#geocomplete").geocomplete({
+          map: ".map_canvas",
+          details: "form",
+          types: ["geocode", "establishment"],
+        }).bind("geocode:result", function(event, result){
+                if (typeof result.formatted_address != "undefined" ) { 
+                    _this.club.address = result.formatted_address;
+                }
+                if (typeof result.geometry.access_points[0] != "undefined" ) { 
+                     _this.club.latitude = result.geometry.access_points[0].location.lat;
+                    _this.club.longitude = result.geometry.access_points[0].location.lng;
+                }
+            
+             $.each(result.address_components, function(index, val) {
+                if (typeof val.types[0] != "undefined" ) {
+                      if( val.types[0] == "locality"){
+                        _this.club.city = val.long_name;
+                        }
+                        if(val.types[0] == 'administrative_area_level_1'){
+                            _this.club.state = val.long_name;
+                        }
+                        if(val.types[0] == "postal_code"){
+                            _this.club.zipcode = val.long_name;
+                        }
+                        if(val.types[0] == "country"){
+                            _this.club.country = val.long_name;
+                        }
+                }
+                
+            });
+          });
+        $("#geocomplete").trigger("geocode");
     },
     methods: {
         fetchStates() {

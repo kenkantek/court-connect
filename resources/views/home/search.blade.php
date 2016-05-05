@@ -1,111 +1,7 @@
 @extends('home.layouts.master')
-@include('home.layouts.header')
-@section('banner')
-<div class="row">
-  <div id="find-your-court">
-            <h3 class="text-center">Find Your Court</h3>     
-            <div class="container">
-                <div class="col-md-12">
-                    <form action="" method="post" role="form">
-                        {!! csrf_field() !!}
-                      <div class="row">
-                        <div class="form-group col-md-4 form-icon">
-                            <i class="fa fa-map-marker"></i>
-                            <input type="text" class="form-control" name="s_name" id="q" value="{{$request->s_name}}"
-                                   placeholder="Seach by Zip/Address or Club Name" autocomplete="off" data-country="us">
-                        </div>
-                        <div class="form-group col-md-2 form-icon">
-                            <i class="fa fa-calendar"></i>
-                            <input type="text" class="form-control" name="date" value="{{$request->date}}" id="datepicker" placeholder="Date">
-                            <div id="calendar-switch">
-                                <span id="calendar-switch-header">Select the days of the week<br/>you'd like to book</span>
-                                <div id="day-of-week">
-                                    <div class="checkbox">
-                                        <div class="col-md-6">
-                                            <label class="checkbox-inline"><input type="checkbox" value="" id="mondays">Mondays</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="checkbox-inline"><input type="checkbox" value="" id="saturdays">Saturdays</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="checkbox">
-                                        <div class="col-md-6">
-                                            <label class="checkbox-inline"><input type="checkbox" value="" id="tuesdays">Tuesday</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="checkbox-inline"><input type="checkbox" value="" id="sundays">Sundays</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="checkbox">
-                                        <div class="col-md-6">
-                                            <label><input type="checkbox" value="" id="wednesdays">Wednesdays</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="checkbox">
-                                        <div class="col-md-6">
-                                            <label><input type="checkbox" value="" id="thursdays">Thursdays</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="checkbox">
-                                        <div class="col-md-6">
-                                            <label><input type="checkbox" value="" id="fridays">Fridays</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div style="padding: 20px 15px 10px 15px;">
-                                        <button class="btn btn-search" id="calendar-switch-button" type="button">Switch To Open Time Bookings</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 form-icon">
-                            <i class="glyphicon glyphicon-time"></i>
-                            <input type="text" class="form-control" name="s_time" value="{{ $request->s_time }}" id="search-timepicker" placeholder="Time">
-                            <div class="search-tooltip hidden">
-                                <div class="tooltiptext">
-                                    <div >
-                                        <label for="opentime">Start Time</label>
-                                        <input class="form-control search-time" name="search-time" value="{{ $request->s_time }}" type="time">
-                                    </div>
-                                    <div>
-                                        <label for="opentime">Length</label>
-                                        <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" value="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 form-icon">
-                            <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                            {!! Form::select('court',[1,2,3,4],$request->court,['id'=>'inputID','class' => 'form-control','style'=>'text-align-last:center; ']) !!}
-                        </div>
-                        <div class="form-group col-md-2">
-                            <button type="submit" class="btn btn-search">SEARCH</button>
-                        </div>
-                      </div>
-                      <div class="row" style="color:#fff; margin-top: 40px;">
-                          <div class="form-group col-md-5">
-                            <span>Court Type</span>                            
-                            <label class="checkbox-inline"><input type="checkbox" value="">Hard</label>
-                            <label class="checkbox-inline"><input type="checkbox" value="">Grass</label>
-                            <label class="checkbox-inline"><input type="checkbox" value="">Clay</label>
-                            <label class="checkbox-inline"><input type="checkbox" value="">Carpet</label>                            
-                          </div>
-                          <div class="form-group col-md-7">
-                            <span>Distance</span>
-                          </div>
-                      </div>
-                    </form>
-                </div>
-            </div>          
-        </div>  
 
-</div>
-@stop
 @section('content')
+  @include('home.partials._searchform')
     <div class="row">
       <div class="container content"> 
         <div class="row" id="featured-courts">         
@@ -238,376 +134,115 @@
               </div>            
             </div>
         </div> 
+        
+
         {{-- #show-results --}}
         <div class="row text-left" id="show-results">
-          Showing Results <span>1-5</span> of <span>15</span>
+          @if (isset($clubs))
+            Showing Results <span>1-5</span> of <span>{!! $clubs->total() !!}</span>
+            {!! $clubs->render() !!}
+          @endif
         </div>
         {{-- End #show-results --}}
 
         {{-- #search-results --}}
         <div class="row text-left" id="search-results">
           <div class="col-md-8"> 
-
-            {{-- Club block     --}}
-            <div class="club-block row">
-              <div class="col-md-4">
-                  <div class="row thumbnail text-center">                 
-                      <img src="{{ asset('resources/home/images/club-image-1.jpg') }}" alt="" class="img-responsive col-md-12">
-                       <div class="caption">
-                        <div class="col-md-6">
-                          Indoor/Outdoor<br/>
-                          <b>Indoor</b>
+            @if (isset($clubs))
+              @foreach ($clubs as $club)
+                {{-- Club block     --}}
+                  <div class="club-block row">
+                    <div class="col-md-4">
+                        <div class="row thumbnail text-center">                 
+                            <img src="{{ asset('resources/home/images/club-image-1.jpg') }}" alt="" class="img-responsive col-md-12 img-clubs">
+                             <div class="caption">
+                              <div class="col-md-6 col-xs-6">
+                                Indoor/Outdoor<br/>
+                                <b>{{$club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                              </div>
+                              <div class="col-md-6 col-xs-6">
+                                Court Type<br/>
+                                <b>{{$club->court->surface->label}}</b>
+                              </div>                      
+                            </div>
+                        </div>              
+                    </div>                  
+                    <div class="col-md-8">
+                      <div class="row information">
+                        <div class="col-md-10 col-xs-9">
+                            <h4 class="club-name">{!! $club->name !!}</h4>
+                            <small class="club-address">{!! $club->address !!}</small>
+                          </div>
+                          <div class="col-md-2 col-xs-3 text-center distance">
+                            <p>
+                              Distance <br>
+                              <b>1 mile</b>
+                            </p>
+                          </div>
+                      </div>              
+                      <div class="row">
+                        <div class="col-md-12">
+                          <span>Select a Time</span>
+                          <div class="club-time text-center club-time-wrap">
+                              @foreach ($club->court->prices as $item)
+                                  <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                      <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start'])."am" : str_replace(".5",":30",($item['hour_start'] - 12))."pm"}} -
+                                      {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
+                                      </span>
+                                      <a href="{{route('home.checkout',['date'=>$request->input('date'),'court'=>$club->court->id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis"  data-court="{{$club->court->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
+                                          {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
+                                      </a>
+                                  </div>
+                              @endforeach
+                          </div>
+                          <div class="text-right">
+                              <span class="btn">View more >></span>
+                          </div>
                         </div>
-                        <div class="col-md-6">
-                          Court Type<br/>
-                          <b>Hard</b>
-                        </div>                      
-                      </div>
-                  </div>              
-              </div>                  
-              <div class="col-md-8">
-                <div class="row information">
-                  <div class="col-md-10">
-                      <h4 class="club-name">Junction Indoor Tennis Club</h4>
-                      <small class="club-address">123 Junction Road, City, ST, 123456</small>
-                    </div>
-                    <div class="col-md-2 text-center distance">
-                      <p>
-                        Distance <br>
-                        <b>1 mile</b>
-                      </p>
-                    </div>
-                </div>              
-                <div class="row">
-                  <div class="col-md-12">
-                    <span>Select a Time</span>
-                    <div class="club-time col-md-12 text-center">
-                      <div class="col-md-2">
-                        <span>4-5pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>5-6pm</span>
-                        <div class="price">
-                          $35
-                        </div>
-                      </div class="price">
-                      <div class="col-md-2 active">
-                        <span>6-7pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>7-8pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>8-9pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
+                      </div>              
                     </div>
                   </div>
-                </div>              
-              </div>
-            </div>
-            {{-- End Club block --}}
+                  <div class="content-view-more-court content-view-more-court-1 row">
+                      <div class="row">
+                          <div class="court-name">Court: #1</div>
+                          <hr style="width: 100%">
+                          <div class="left">
+                              <div class="court-io-door">
+                                  Indoor/Outdoor:
+                                  <b>{{$club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                              </div>
+                              <div class="court-type">
+                                  Court Type:
+                                  <b>{{$club->court->surface->label}}</b>
+                              </div>
+                          </div>
+                          <div class="right">Select a Time</div>
+                          <div class="clearfix"></div>
+                          <br>
 
-             {{-- Club block     --}}
-            <div class="club-block row">
-              <div class="col-md-4">
-                  <div class="row thumbnail text-center">                 
-                      <img src="{{ asset('resources/home/images/club-image-2.jpg') }}" alt="" class="img-responsive col-md-12">
-                       <div class="caption">
-                        <div class="col-md-6">
-                          Indoor/Outdoor<br/>
-                          <b>Outdoor</b>
-                        </div>
-                        <div class="col-md-6">
-                          Court Type<br/>
-                          <b>Grass</b>
-                        </div>                      
+                          <div class="club-time text-center club-time-wrap clearfix">
+                              @foreach ($club->court->prices as $item)
+                                  <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                      <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start'])."am" : str_replace(".5",":30",($item['hour_start'] - 12))."pm"}} -
+                                          {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
+                                      </span>
+                                      <div class="price">
+                                          {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
+                                      </div>
+                                  </div>
+                              @endforeach
+                          </div>
                       </div>
-                  </div>              
-              </div>                  
-              <div class="col-md-8">
-                <div class="row information">
-                  <div class="col-md-10">
-                      <h4 class="club-name">En Tout Cas</h4>
-                      <small class="club-address">456 Tout Road, City, ST, 123456</small>
-                    </div>
-                    <div class="col-md-2 text-center distance">
-                      <p>
-                        Distance <br>
-                        <b>5 miles</b>
-                      </p>
-                    </div>
-                </div>              
-                <div class="row">
-                  <div class="col-md-12">
-                    <span>Select a Time</span>
-                    <div class="club-time col-md-12 text-center">
-                      <div class="col-md-2">
-                        <span>4-5pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2 unvailable">
-                        <span>5-6pm</span>
-                        <div class="price">
-                          Not Available
-                        </div>
-                      </div class="price">
-                      <div class="col-md-2 active">
-                        <span>6-7pm</span>
-                        <div class="price">
-                          $50
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>7-8pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>8-9pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                    </div>
                   </div>
-                </div>              
-              </div>
-            </div>
-            {{-- End Club block --}}
-
-            {{-- Club block     --}}
-            <div class="club-block row">
-              <div class="col-md-4">
-                  <div class="row thumbnail text-center">                 
-                      <img src="{{ asset('resources/home/images/club-image-3.jpg') }}" alt="" class="img-responsive col-md-12">
-                       <div class="caption">
-                        <div class="col-md-6">
-                          Indoor/Outdoor<br/>
-                          <b>Indoor</b>
-                        </div>
-                        <div class="col-md-6">
-                          Court Type<br/>
-                          <b>Hard</b>
-                        </div>                      
-                      </div>
-                  </div>              
-              </div>                  
-              <div class="col-md-8">
-                <div class="row information">
-                  <div class="col-md-10">
-                      <h4 class="club-name">University of Bath</h4>
-                      <small class="club-address">999 Bath Road, City, ST, 123456</small>
-                    </div>
-                    <div class="col-md-2 text-center distance">
-                      <p>
-                        Distance <br>
-                        <b>5 miles</b>
-                      </p>
-                    </div>
-                </div>              
-                <div class="row">
-                  <div class="col-md-12">
-                    <span>Select a Time</span>
-                    <div class="club-time col-md-12 text-center">
-                      <div class="col-md-2">
-                        <span>4-5pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2 unvailable">
-                        <span>5-6pm</span>
-                        <div class="price">
-                          Not Available
-                        </div>
-                      </div class="price">
-                      <div class="col-md-2 unvailable">
-                        <span>6-7pm</span>
-                        <div class="price">
-                          Not Available
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>7-8pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>8-9pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>              
-              </div>
-            </div>
-            {{-- End Club block --}}
-
-            {{-- Club block     --}}
-            <div class="club-block row">
-              <div class="col-md-4">
-                  <div class="row thumbnail text-center">                 
-                      <img src="{{ asset('resources/home/images/club-image-4.jpg') }}" alt="" class="img-responsive col-md-12">
-                       <div class="caption">
-                        <div class="col-md-6">
-                          Indoor/Outdoor<br/>
-                          <b>Indoor</b>
-                        </div>
-                        <div class="col-md-6">
-                          Court Type<br/>
-                          <b>Hard</b>
-                        </div>                      
-                      </div>
-                  </div>              
-              </div>                  
-              <div class="col-md-8">
-                <div class="row information">
-                  <div class="col-md-10">
-                      <h4 class="club-name">Junction Indoor Tennis Club</h4>
-                      <small class="club-address">123 Junction Road, City, ST, 123456</small>
-                    </div>
-                    <div class="col-md-2 text-center distance">
-                      <p>
-                        Distance <br>
-                        <b>5 miles</b>
-                      </p>
-                    </div>
-                </div>              
-                <div class="row">
-                  <div class="col-md-12">
-                    <span>Select a Time</span>
-                    <div class="club-time col-md-12 text-center">
-                      <div class="col-md-2">
-                        <span>4-5pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>5-6pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div class="price">
-                      <div class="col-md-2 unvailable">
-                        <span>6-7pm</span>
-                        <div class="price">
-                          Not Available
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>7-8pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>8-9pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>              
-              </div>
-            </div>
-            {{-- End Club block --}}
-
-            {{-- Club block     --}}
-            <div class="club-block row">
-              <div class="col-md-4">
-                  <div class="row thumbnail text-center">                 
-                      <img src="{{ asset('resources/home/images/club-image-5.jpg') }}" alt="" class="img-responsive col-md-12">
-                       <div class="caption">
-                        <div class="col-md-6">
-                          Indoor/Outdoor<br/>
-                          <b>Indoor</b>
-                        </div>
-                        <div class="col-md-6">
-                          Court Type<br/>
-                          <b>Hard</b>
-                        </div>                      
-                      </div>
-                  </div>              
-              </div>                  
-              <div class="col-md-8">
-                <div class="row information">
-                  <div class="col-md-10">
-                      <h4 class="club-name">Wickwood Tennis Center</h4>
-                      <small class="club-address">123 Junction Road, City, ST, 123456</small>
-                    </div>
-                    <div class="col-md-2 text-center distance">
-                      <p>
-                        Distance <br>
-                        <b>15 miles</b>
-                      </p>
-                    </div>
-                </div>              
-                <div class="row">
-                  <div class="col-md-12">
-                    <span>Select a Time</span>
-                    <div class="club-time col-md-12 text-center">
-                      <div class="col-md-2">
-                        <span>4-5pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2 unvailable">
-                        <span>5-6pm</span>
-                        <div class="price">
-                          Not Available
-                        </div>
-                      </div class="price">
-                      <div class="col-md-2 unvailable">
-                        <span>6-7pm</span>
-                        <div class="price">
-                          Not Available
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>7-8pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <span>8-9pm</span>
-                        <div class="price">
-                          $45
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>              
-              </div>
-            </div>
-            {{-- End Club block --}}
-           
-
+                {{-- End Club block --}}
+              @endforeach
+            @else
+                <div class="text-center">No result</div>
+            @endif
           </div>
-            
+          
           <div class="col-md-4">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28680.846982591822!2d-74.31112890937982!3d40.9222646086784!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDU1JzUzLjciTiA3NMKwMTQnMTkuMSJX!5e0!3m2!1svi!2s!4v1458551717545" width="365" height="670" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <div id="map" style="height: 400px"></div>
           </div>
         </div>
         {{-- End #search-results --}}
@@ -815,4 +450,50 @@
                 
       </div>
     </div>
+  
+    
+    <script>
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 11
+        });
+        var infoWindow = new google.maps.InfoWindow({map: map});
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAY38RQJoR42kbulqrivcRaeYPNGLB3gWc&callback=initMap">
+    </script>
+  
 @stop

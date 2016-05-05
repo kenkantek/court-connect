@@ -20,8 +20,12 @@ $factory->define(User::class, function (Faker\Generator $faker) {
     return [
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
-        'fullname' => $faker->name,
         'email' => $faker->email,
+        'state' => $faker->state,
+        'city' => $faker->city,
+        'zip_code' => $faker->postcode,
+        'address1' => $faker->address,
+        'address2' => $faker->secondaryAddress,
         'password' => bcrypt(12345678),
         'remember_token' => str_random(40),
         'phone' => $faker->phoneNumber,
@@ -29,24 +33,6 @@ $factory->define(User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(Player::class, function (Faker\Generator $faker) {
-    return [
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'username' => str_random(40),
-        'state' => $faker->state,
-        'city' => $faker->city,
-        'zip_code' => $faker->postcode,
-        'address1' => $faker->address,
-        'address2' => $faker->secondaryAddress,
-        'surname' => str_random(40),
-        'email' => $faker->email,
-        'password' => bcrypt(12345678),
-        'remember_token' => str_random(40),
-        'phone' => $faker->phoneNumber,
-        'gender' => rand(1, 2),
-    ];
-});
 $factory->define(Club::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,

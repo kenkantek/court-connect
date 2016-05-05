@@ -3,7 +3,7 @@
 namespace App\Models\Contexts;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Nicolaslopezj\Searchable\SearchableTrait;
 /**
  * App\Models\Contexts\Club
  *
@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Club extends Model
 {
+    use SearchableTrait;
     protected $table = 'clubs';
 
     /**
@@ -26,6 +27,16 @@ class Club extends Model
     protected $dates = ['created_at', 'updated_at'];
 
     protected $fillable = ['name', 'phone', 'address', 'city', 'state', 'zipcode'];
+    protected $searchable = [
+        'columns' => [
+            'name' => 10,
+            'address' => 10,
+            'zipcode' => 10,
+            'state' => 10
+        ]
+    ];
+
+
     public function courts()
     {
         return $this->hasMany('App\Models\Court');

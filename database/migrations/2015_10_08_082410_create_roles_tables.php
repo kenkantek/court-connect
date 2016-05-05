@@ -22,7 +22,7 @@ class CreateRolesTables extends Migration
         Schema::create('role_user', function (Blueprint $table) {
             $table->integer('role_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->enum('context', ['clubs', 'groups'])->default('clubs');
+            $table->enum('context', ['clubs', 'groups','players'])->default('clubs');
             $table->tinyInteger('context_id')->unsigned();
             $table->foreign('role_id')
                 ->references('id')

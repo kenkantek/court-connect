@@ -25,9 +25,11 @@ class ClubController extends Controller
         return view('admin.clubs.setting', compact('title'));
     }
 
-    public function getCourts($club_id)
+    public function getCourts(Request $request)
     {
-        $courts = Court::where('club_id', $club_id)->with('surface', 'rates')->paginate(50);
+        $take    = $request->take ?: 10;
+        $clubid    = $request->clubid;
+        $courts = Court::where('club_id', $clubid)->with('surface', 'rates')->orderBy('updated_at', 'DESC')->paginate($take)->appends(['take' => $take]);
         return $courts;
     }
     public function getListDays(Request $request){

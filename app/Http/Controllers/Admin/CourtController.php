@@ -18,17 +18,22 @@ class CourtController extends Controller
     {
         $this->courtRepository = $courtRepository;
     }
-    public function getList($clubId)
+    public function getList($club_id)
     {
-        # code...
+        $courts = Court::where('club_id', $club_id)->get();
+        return response([
+            'data' => $courts,
+        ]);
     }
     public function postCreateCourt(CreateCourtRequest $request)
     {
+ 
         $court = new Court;
         $court->fill($request->all());
         $court->status = 1;
         $court->save();
-        $inputRates = $request->input('dataRates');
+         $inputRates = $request->input('dataRates');
+
         $this->updateTableRates($court, $inputRates);
         return response([
             'success_msg' => 'Court has been created!',
@@ -38,11 +43,13 @@ class CourtController extends Controller
     }
     public function postUpdateCourt(UpdateCourtRequest $request)
     {
+
         $court = Court::find($request->input('id'));
         $court->fill($request->all());
         $court->save();
         $rate = CourtRate::where('court_id', $request->input('id'))->delete();
         $inputRates = $request->input('dataRates');
+
         $this->updateTableRates($court, $inputRates);
 
         return response([
@@ -54,7 +61,6 @@ class CourtController extends Controller
     {
         $courts = $request->input('courts');
         $inputRates = $request->input('dataRates');
-
         foreach ($courts as $k => $court) {
             CourtRate::where('court_id', $court['id'])->delete();
             $this->updateTableRates($court, $inputRates);
@@ -68,14 +74,15 @@ class CourtController extends Controller
     protected function updateTableRates($court, $dataRates)
     {
         ini_set('max_execution_time', 3000);
+
         //set rate
         foreach ($dataRates as $key => $inputRate) {
             $rate = new CourtRate;
-            $rate->rates = json_encode($inputRate['rates']);
-            $rate->end_date = $inputRate['end_date'];
-            $rate->start_date = $inputRate['start_date'];
-            $rate->name = $inputRate['name'];
-            $rate->is_member = $inputRate['is_member'];
+            $rate->rates = json_encode($inputRate['datarate']['rates']);
+            $rate->end_date = $inputRate['datarate']['end_date'];
+            $rate->start_date = $inputRate['datarate']['start_date'];
+            $rate->name = $inputRate['datarate']['name'];
+            $rate->is_member = $inputRate['datarate']['is_member'];
             $rate->court_id = $court['id'];
             $rate->save();
             //$this->setDateRateOfCourt($rate['id'],$court, $inputRate);

@@ -1,25 +1,32 @@
 $(function () {
 
-    $( "#q1" ).autocomplete({
-        source: function( request, response ) {
-            $.ajax({
-                url: "search/autocomplete?term=" + request.term,
-                success: function( data ) {
-                    response( $.map( data, function( item ) {
-                        return {
-                            label: item.value, // john
-                            value: item.type + "|" + item.value // user|john
-                        }
-                    }));
-                }
-            });
-        },
-        minLength: 3,
-        select: function(event, ui) {
-            $('#q').val(ui.item.value);
+    $('#card-expiry').datetimepicker({
+        showTimepicker: false,
+        showButtonPanel: false,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/yy',
+        onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).val($.datepicker.formatDate('mm/yy', new Date(year, month, 1)));
         }
     });
-    $('#q').cityAutocomplete();
+    $("#card-expiry").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });
+    });
+
+    if (jQuery().select2) {
+        $('.select2').select2({
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
+    }
 
     //login
     $(".cc-loginFormUser").submit(function(e){
@@ -71,10 +78,14 @@ $(function () {
     }
     loadDayOfWeek();
 
-
+    var dateNow = new Date();
+    console.log(dateNow);
     $('#datepicker').datetimepicker({
+        minDate: 0,
+        maxDate: "+1M +10D",
         showTimepicker: false,
         showButtonPanel: true,
+        format: 'mm/dd/yy',
         beforeShow: function (input) {
             setTimeout(function () {
                 var buttonPane = $(input)
@@ -100,7 +111,8 @@ $(function () {
         onSelect: function (dateText, inst) {
             //$("#calendar-switch").hide();
         }
-    });
+    }).datepicker('setDate', dateNow);
+
     //set time search time
     $("#search-timepicker").val($(".search-time").val());
     $(".search-time").change(function(){
@@ -143,4 +155,26 @@ $(function () {
         hasGrid: false,
         hideMinMax: false,
     });
+
+
+    $( "#q1" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "search/autocomplete?term=" + request.term,
+                success: function( data ) {
+                    response( $.map( data, function( item ) {
+                        return {
+                            label: item.value, // john
+                            value: item.type + "|" + item.value // user|john
+                        }
+                    }));
+                }
+            });
+        },
+        minLength: 3,
+        select: function(event, ui) {
+            $('#q').val(ui.item.value);
+        }
+    });
+    $('#q').cityAutocomplete();
 });

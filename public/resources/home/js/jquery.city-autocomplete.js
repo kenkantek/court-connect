@@ -139,11 +139,9 @@
             'ā': 'a', 'č': 'c', 'ē': 'e', 'ģ': 'g', 'ī': 'i', 'ķ': 'k', 'ļ': 'l', 'ņ': 'n',
             'š': 's', 'ū': 'u', 'ž': 'z'
         };
-
         for (var k in char_map) {
             s = s.replace(new RegExp(k, 'g'), char_map[k]);
         }
-
         return s;
     };
 

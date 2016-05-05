@@ -171,7 +171,8 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
-
+        //Laravel\Cashier\CashierServiceProvider::class
+        'Cartalyst\Stripe\Laravel\StripeServiceProvider',
     ],
 
     /*
@@ -221,12 +222,13 @@ return [
         'HTML' => Collective\Html\HtmlFacade::class,
         'Carbon' => Carbon\Carbon::class,
 
+
         /*=================== CUSTOM COMPONENTS ALIAS ====================*/
 
         'Assets' => App\Components\Assets\Facade\AssetsFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Socialize' => 'Laravel\Socialite\Facades\Socialite',
-
+        'Stripe' => 'Cartalyst\Stripe\Laravel\Facades\Stripe',
     ],
 
     'admin_dir' => env('ADMIN_DIR', 'sadmin'),

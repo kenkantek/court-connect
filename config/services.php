@@ -30,7 +30,6 @@ return [
     ],
 
     'stripe' => [
-        'model'  => App\User::class,
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
@@ -40,5 +39,11 @@ return [
         'client_secret' => env('FB_SECRET'),
         'redirect'      => env('FB_REDIRECT_URI'),
     ],
-
+    'braintree' => [
+        'model'  => App\Models\Player::class,
+        'environment' => env('BRAINTREE_ENV'),
+        'merchant_id' => env('BRAINTREE_MERCHANT_ID'),
+        'public_key' => env('BRAINTREE_PUBLIC_KEY'),
+        'private_key' => env('BRAINTREE_PRIVATE_KEY'),
+    ],
 ];

@@ -29,7 +29,7 @@ class Club extends Model
     */
     protected $dates    = ['created_at', 'updated_at'];
 
-    protected $fillable = ['name', 'phone', 'image', 'address', 'city', 'state', 'zipcode'];
+    protected $fillable = ['name', 'phone', 'image', 'address', 'country', 'longitude', 'latitude', 'city', 'state', 'zipcode'];
 
     public function courts()
     {

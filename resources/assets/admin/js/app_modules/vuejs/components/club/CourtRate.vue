@@ -25,8 +25,7 @@
 						</div>
 						<br>
 						<div class="pull-right">
-							<input class="btn btn-primary" type="button" value="Apply" @click.prevent="addNewCourtRate()">
-
+							<button class="btn btn-primary" type="button" @click.prevent="addNewCourtRate()">Ok</button>
 						</div>
 					</div>
 				</div>
@@ -35,12 +34,14 @@
 				<strong>Date Period</strong>
 					<div>
 						<select name="list-period" id="inputList-Period" class="form-control" required="required" v-model="indexDataRates">
-							<option v-for="(index,d) in dataRates" v-text = "d.name" track-by="$index" value="{{index}}"></option>
+							<option v-for="(index,d) in dataRates" track-by="$index" value="{{index}}">
+								{{d.datarate.name}} -- {{d.nameCourt}}
+							</option>
 						</select>
 					</div>
 					<div class="date_period">
 						<button v-if="dataRates.length > 0" class="btn btn-danger" style="margin-right:30px" @click="deleteDataRate()">Delete</button>
-						<button class="btn btn-primary" v-show="courts_choice.length > 1" @click="updateMulti">Update Rates</button>
+						<button class="btn btn-primary" v-show="courts_choice.length > 0" @click="updateMulti">Update Rates</button>
 					</div>
 			</div>
 			<div class="clearfix"></div>
@@ -52,7 +53,7 @@
 					<span>Select hours from grid and press apply to adjust hours</span>
 				</div>				
 				<div class="col-md-4">
-					<button class="btn btn-primary"  @click="setPrice()" style="margin-top: 20px;">Apply</button>
+					<button class="btn btn-primary"  @click="setPrice()" style="margin-top: 20px;">Set Price</button>
 				</div>
 				<div class="col-md-3 text-right">
 					<button class="btn btn-primary unSelected hidden" style="margin-top: 20px; margin-left: 20px" @click="removeSelect()">Remove all select</button>
@@ -92,6 +93,17 @@
 					<p>Multiple Courts Selected</p>
 					<p>Updating prices will affect all courts selected and overwrite and existing prices input</p>
 					<p><button class="btn btn-primary" @click="continueRate">Continue</button></p>
+				</div>
+
+			</div>
+
+		</div>
+		<div id="myModal2" class="modal" v-show="this.courts_choice.length == 0 && btnAddCourt == false">
+
+			<!-- Modal content -->
+			<div class="modal-content">
+				<div class="notify">
+					
 				</div>
 
 			</div>
@@ -155,11 +167,37 @@
 	var _ = require('lodash'),
 		deferred = require('deferred');
 	export default {
-		props:   ['clubSettingId','dataRates','courts_choice'],
+		props:   ['clubSettingId','dataRates','courts_choice','btnAddCourt','reloadCourts'],
 
 		data() {
 		return {
 			dataRate : {
+				rates :[
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+				],
+				end_date:0,
+				start_date:0,
+				name:null,
+				is_member:1,
+			},
+			defaultRate : {
 				rates :[
 					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
 					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
@@ -195,8 +233,13 @@
 		indexDataRates: function () {
 			if (this.dataRates.length >0 ) {
 				var index = this.indexDataRates ;
-				this.dataRate = this.dataRates[index];
+				this.dataRate = this.dataRates[index].datarate;
 			}
+		},
+		reloadCourts: function () {
+			this.priceSet =  20;
+			this.dataRate = this.defaultRate;
+			this.dataRates = [];
 		},
 		courts_choice: function () {
 			if (this.courts_choice.length > 1) {
@@ -204,10 +247,11 @@
 			}else{
 				this.showNotice = false;
 			}
-
 			if (this.dataRates.length >0 ) {
 				var index = this.indexDataRates ;
-				this.dataRate = this.dataRates[index];
+				this.dataRate = this.dataRates[index].datarate;
+			}else{
+				this.dataRate = this.defaultRate;
 			}
 		}
 	},
@@ -251,8 +295,9 @@
 			$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
 			this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates}).then(res => {
 				this.reloadCourts =  Math.floor(Math.random() * 10000);
-			this.courts_choice = [];
-			this.dataRates = [];
+				this.courts_choice = [];
+				this.dataRates = [];
+				this.dataRate = this.defaultRate
 			showNotice('success', res.data.success_msg, 'Update Multi Success!');
 			$("#clubSetting-wrapper .loading").remove();
 		}, (res) => {
@@ -272,11 +317,13 @@
 		this.$set('dataRate.is_member', number);
 	},
 	addNewCourtRate(){
-		const p = _.cloneDeep(this.dataRate);
-		p.name = this.dataRate.name,
-			p.is_member = this.dataRate.is_member,
-			p.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
-		p.start_date =  $(".daterange").data('daterangepicker').startDate.format('MM/DD/YYYY');
+		const p = {};
+		p.datarate = _.cloneDeep(this.dataRate);
+
+		p.datarate.name = this.dataRate.name,
+			p.datarate.is_member = this.dataRate.is_member,
+			p.datarate.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
+		p.datarate.start_date =  $(".daterange").data('daterangepicker').startDate.format('MM/DD/YYYY');
 		this.dataRates.push(p);
 		$('.new_date_preiod').addClass('hidden');
 	},

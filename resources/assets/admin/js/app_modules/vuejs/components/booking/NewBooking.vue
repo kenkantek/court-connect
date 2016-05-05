@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade mb-modal" style="display: none; top: 50px" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade mb-modal" style="display: none;" id="myModal" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -30,26 +30,26 @@
                                     <div class="slc-type mb-group-sl">
                                         <h4 class="mb-title-h4-modal text-center">Select a Booking Type</h4>
                                         <div class="col-xs-12 col-md-4">
-                                            <input type="radio" name="book-type" value="open" id="book-type-open" v-model="inputBookingDetail.type">
-                                            <label for="book-type-opentime">Open Time</label>
+                                            <input type="radio" name="book-type" value="open" id="book-type-open" v-model="inputBookingDetail.type" v-on:change="changeBookingType">
+                                            <label for="book-type-open">Open Time</label>
                                         </div>
                                         <div class="col-xs-12 col-md-4">
-                                            <input type="radio" name="book-type" value="contract" id="book-type-contract" v-model="inputBookingDetail.type">
+                                            <input type="radio" name="book-type" value="contract" id="book-type-contract" v-model="inputBookingDetail.type" v-on:change="changeBookingType">
                                             <label for="book-type-contract">Contract Time</label>
                                         </div>
                                         <div class="col-xs-12 col-md-4">
-                                            <input type="radio" name="book-type" value="lesson" id="book-type-lesson" v-model="inputBookingDetail.type">
+                                            <input type="radio" name="book-type" value="lesson" id="book-type-lesson" v-model="inputBookingDetail.type" v-on:change="changeBookingType">
                                             <label for="book-type-lesson">Lesson</label>
                                         </div>
                                     </div>
                                     <div class="slc-member mb-group-sl">
                                         <h4 class="mb-title-h4-modal text-center">Member?</h4>
                                         <div class="col-sm-6">
-                                            <input type="radio" value="1" checked="checked" name="book-member" id="book-member-yes" v-model="inputBookingDetail.member">
+                                            <input type="radio" value="1" name="book-member" id="book-member-yes" v-model="inputBookingDetail.member" v-on:change="changeBookingType">
                                             <label for="book-member-yes">Yes</label>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="radio" value="0" name="book-member" id="book-member-no" v-model="inputBookingDetail.member">
+                                            <input type="radio" value="0" checked="checked" name="book-member" id="book-member-no" v-model="inputBookingDetail.member" v-on:change="changeBookingType">
                                             <label for="book-member-no">No</label>
                                         </div>
                                     </div>
@@ -61,16 +61,19 @@
                                             </div>
                                             <div class="slc-type-contract slc-type-group">
                                                 <h4 class="mb-title-h4-modal text-center">Select a Date Period</h4>
-                                                <input type="text" class="form-control" name="mb-book-day-contract" id="mb-book-day-contract" v-model="inputBookingDetail.date_range">
+                                                <select name="mb-book-day-contract" class="form-control" v-model="inputBookingDetail.contract_id" v-on:change="changeContract">
+                                                    <option value="">--Select--</option>
+                                                    <option v-for="item in contracts" value="{{item.id}}">{{item.start_date + " - " + item.end_date}}</option>
+                                                </select>
                                                 <h4 class="mb-title-h4-modal text-center">Start Day</h4>
                                                 <select name="mb-book-start-day-contract" class="form-control" v-model="inputBookingDetail.dayOfWeek">
-                                                    <option value="mon">Monday</option>
-                                                    <option value="tue">Tuesday</option>
-                                                    <option value="web">Wednesday</option>
-                                                    <option value="thu">Thursday</option>
-                                                    <option value="fri">Friday</option>
-                                                    <option value="sat">Saturday</option>
-                                                    <option value="sun">Sunday</option>
+                                                    <option value="1">Monday</option>
+                                                    <option value="2">Tuesday</option>
+                                                    <option value="3">Wednesday</option>
+                                                    <option value="4">Thursday</option>
+                                                    <option value="5">Friday</option>
+                                                    <option value="6">Saturday</option>
+                                                    <option value="7">Sunday</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -87,7 +90,7 @@
                                     <div class="clearfix"></div>
                                     <div class="mb-group-sl slc-type-contract slc-type-group">
                                         <div class="col-xs-12 col-md-12">
-                                            <span>Total day: 35</span>
+                                            <span>Total day: {{info_contract.total_week}}</span>
                                         </div>
                                     </div>
 
@@ -102,8 +105,10 @@
                                     <div class="mb-group-sl slc-type-contract slc-type-group">
                                         <div class="col-xs-12 col-md-12">
                                             <h4 class="mb-title-h4-modal text-center">Extras</h4>
-                                            <input type="checkbox" class="styled" value="1" v-model="inputBookingDetail.extras" v-model="inputBookingDetail.extra_id">
-                                            <label for="">Balls($10)</label>
+                                                <div v-for="item in info_contract.extras">
+                                                    <input type="checkbox" class="styled" value="{{item.name}}" v-model="inputBookingDetail.extra_id">
+                                                    <label for="">{{item.name + "("+item.value+")"}}</label>
+                                                </div>
                                         </div>
                                     </div>
                                     <div class="mb-group-sl slc-type-lesson slc-type-group">
@@ -150,7 +155,12 @@
                                         </td>
 
                                         <td>
-                                            <div>Date: <b>{{inputBookingDetail.date}}</b></div>
+                                            <div v-if="inputBookingDetail.type != 'contract'">
+                                                Date: <b>{{inputBookingDetail.date}}</b>
+                                            </div>
+                                            <div v-else>
+                                                Date Period: <br><b>{{info_contract.start_date + " - " + info_contract.end_date}}</b>
+                                            </div>
                                             <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? inputBookingDetail.hour_start + " am" : (inputBookingDetail.hour_start - 12) + " pm"}}</b></div>
                                             <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>
                                         </td>
@@ -168,13 +178,13 @@
                                     <hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
                                     <form method="POST" action="" accept-charset="UTF-8" enctype="multipart/form-data">
 
-                                        <div style="width: 300px; margin: 0px auto" v-if="inputBookingDetail.member == 1">
-                                            <label>Select a player for booking</label>
+                                        <div style="width: 300px; margin: 0px auto" class="{{inputBookingDetail.member == 1 ? 'block' :'hidden'}}">
+                                            <label>Select a player member for booking</label>
                                             <select class="js-data-user-ajax" name="player_id" id="player_id" v-model="customerDetail.player_id">
                                                 <option value="">Select user member</option>
                                             </select>
                                         </div>
-                                        <div v-else>
+                                        <div class="{{inputBookingDetail.member == 1 ? 'hidden' :'block'}}">
                                             <div class="form-group">
                                                 <label for="surname" class="col-sm-4 control-label">Customer Lookup</label>
                                                 <div class="col-sm-8">
@@ -267,7 +277,12 @@
                                         </td>
 
                                         <td>
-                                            <div>Date: <b>{{inputBookingDetail.date}}</b></div>
+                                            <div v-if="inputBookingDetail.type != 'contract'">
+                                                Date: <b>{{inputBookingDetail.date}}</b>
+                                            </div>
+                                            <div v-else>
+                                                Date Period: <br><b>{{info_contract.start_date + " - " + info_contract.end_date}}</b>
+                                            </div>
                                             <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? inputBookingDetail.hour_start + " am" : (inputBookingDetail.hour_start - 12) + " pm"}}</b></div>
                                             <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>
                                         </td>
@@ -407,7 +422,12 @@
                                             </td>
 
                                             <td>
-                                                <div>Date: <b>{{inputBookingDetail.date}}</b></div>
+                                                <div v-if="inputBookingDetail.type != 'contract'">
+                                                    Date: <b>{{inputBookingDetail.date}}</b>
+                                                </div>
+                                                <div v-else>
+                                                    Date Period: <br><b>{{info_contract.start_date + " - " + info_contract.end_date}}</b>
+                                                </div>
                                                 <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? inputBookingDetail.hour_start + " am" : (inputBookingDetail.hour_start - 12) + " pm"}}</b></div>
                                                 <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>
                                             </td>
@@ -463,7 +483,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Payment Reference: </td>
-                                                <td>{{booking_reference}}</td>
+                                                <td>#{{booking_reference}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Amount: </td>
@@ -489,9 +509,9 @@
             courts: [],
             inputBookingDetail:{
                 type: null,
-                member: 1,
+                member: 0,
                 date: null,
-                date_range: null,
+                contract_id: null,
                 hour_start: 5,
                 hour_length: 1,
                 dayOfWeek: null,
@@ -527,7 +547,12 @@
                 name: null,
             },
             booking_reference: null,
-            total_price: '',
+            total_price: null,
+            contracts: [],
+            info_contract: {
+                total_week: null,
+                extras: []
+            },
             hours:[
                 {key: 5, value: "5am"}, {key: 5.50, value: "5:30am"}, {key: 6, value: "6am"}, {key: 6.50, value: "6:30am"},
                 {key: 7, value: "7am"}, {key: 7.50, value: "7:30am"}, {key: 8, value: "8am"}, {key: 8.50, value: "8:30am"},
@@ -539,9 +564,6 @@
                 {key: 19, value: "7pm"}, {key: 19.50, value: "7:30pm"}, {key: 20, value: "8pm"}, {key: 20.50, value: "8:30pm"},
                 {key: 21, value: "9pm"}, {key: 21.50, value: "9:30pm"}, {key: 22, value: "10pm"}
             ],
-            inputBookingDetail_bk: null,
-            customerDetail_bk: null,
-            paymentDetail_bk: null,
         }
     },
     watch: {
@@ -552,119 +574,152 @@
     asyncData(resolve, reject) {
         this.fetchCourts().done((courts) => {
             resolve({courts});
-    }, (error) => {
-        console.log(error);
-    });
+        }, (error) => {
+            console.log(error);
+        });
 
     },
     methods: {
         fetchCourts() {
             let def = deferred(),
-                    url = laroute.route('clubs.courts.list', {one:this.clubSettingId});
+                    url = laroute.route('courts.list', {one:this.clubSettingId});
             this.$http.get(url).then(res => {
                 def.resolve(res.data.data);
-        }, res => {
-            def.reject(res);
-        });
-        return def.promise;
-    },
-    viewPriceOrder(){
-        this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
-        this.$set('inputBookingDetail.date',$("#mb-book-day-open").val());
-        this.$set('inputBookingDetail.club_id',this.clubSettingId);
-        const input = this.inputBookingDetail;
-
-        let def = deferred(),
-                url = laroute.route('booking.viewPriceOrder', input);
-        this.$http.get(url).then(res => {
-            if(res.data.error) {
-            var msg = "";
-            $.each(res.data.messages,function(k,v){
-                msg += "<div>"+v+"</div>";
+            }, res => {
+                def.reject(res);
             });
-            this.total_price = "NaN";
-            showNotice('error', msg, 'Error!');
-        }else
-        {
-            this.total_price = res.data.total_price;
-        }
-    }, res => {
+            return def.promise;
+        },
+        changeBookingType(){
+            if(this.inputBookingDetail.type == 'contract'){
+            var url = laroute.route('contracts.listContract', {club_id: this.clubSettingId, member: this.inputBookingDetail.member});
+            this.$http.get(url).then(res => {
+                this.contracts = res.data.data;
+            }, res => {
 
-    });
-    },
-    nextCustomerDetail(){
-        this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
-        this.$set('inputBookingDetail.date',$("#mb-book-day-open").val());
-        this.$set('inputBookingDetail.club_id',this.clubSettingId);
-        const input = this.inputBookingDetail;
+            });
+            }
 
-        // check validate data
-        let def = deferred(),
-                url = laroute.route('booking.checkInputBooking', input);
-        this.$http.get(url).then(res => {
-            if(res.data.error)
-            {
+        },
+        changeContract(){
+            if(this.inputBookingDetail.contract_id == '' || this.inputBookingDetail.contract_id == null){
+                showNotice('error', "Please, select a date period", 'Error!');
+                return;
+            }
+            this.$http.get(laroute.route('contracts.getView',{one:this.inputBookingDetail.contract_id})).then(res => {
+                if(res.data.success)
+                {
+                    this.info_contract = res.data.data;
+                }else{
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }
+            }, res => {
+
+            });
+        },
+        viewPriceOrder(){
+            this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
+            this.$set('inputBookingDetail.date',$("#mb-book-day-open").val());
+            this.$set('inputBookingDetail.club_id',this.clubSettingId);
+
+                const input = this.inputBookingDetail;
+
+            let def = deferred(),
+                    url = laroute.route('booking.viewPriceOrder');
+            this.$http.post(url,input).then(res => {
+                if(res.data.error) {
                 var msg = "";
                 $.each(res.data.messages,function(k,v){
                     msg += "<div>"+v+"</div>";
                 });
                 this.total_price = "NaN";
                 showNotice('error', msg, 'Error!');
-            }else{
+            }else
+            {
                 this.total_price = res.data.total_price;
-                this.court_detail = res.data.court_detail;
-                this.tabClick("mb-customer-details-content")
             }
-        }, res => {
+            }, res => {
 
-        });
-    },
-    nextPayment(){
-            if(this.inputBookingDetail.member == 1){
-                this.customerDetail.player_id = $("#player_id").val();
-                this.$http.get(laroute.route('booking.checkPlayerforBooking', {one: this.customerDetail.player_id})).then(res => {
-                    if(res.data.success)
-                    {
-                        var player = res.data.player; console.log(player);
-                        this.customerDetail.first_name = player.first_name;
-                        this.customerDetail.last_name = player.last_name;
-                        this.customerDetail.address1 = player.address1;
-                        this.customerDetail.state = player.state;
-                        this.customerDetail.city = player.city;
-                        this.customerDetail.email = player.email;
-                        this.customerDetail.phone = player.phone;
-                        this.tabClick("mb-payment-details-content");
-                    }else{
-                        var msg = "";
-                        $.each(res.data.messages,function(k,v){
-                            msg += "<div>"+v+"</div>";
-                        });
-                        showNotice('error', msg, 'Error!');
-                    }
-                }, res => {
+            });
+        },
+        nextCustomerDetail(){
+            this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
+            this.$set('inputBookingDetail.date',$("#mb-book-day-open").val());
+            this.$set('inputBookingDetail.club_id',this.clubSettingId);
 
-                });
-            }
-            else{
-                const customer = this.customerDetail;
-                // check validate customer
-                let def = deferred(),
-                url = laroute.route('booking.checkInputCustomer', customer);
-                this.$http.get(url).then(res => {
-                    if(res.data.error)
-                    {
-                        var msg = "";
-                        $.each(res.data.messages,function(k,v){
-                            msg += "<div>"+v+"</div>";
-                        });
-                        showNotice('error', msg, 'Error!');
-                    }else{
-                        this.tabClick("mb-payment-details-content");
-                    }
-                }, res => {
+            const input = this.inputBookingDetail;
 
-                });
-            }
+            // check validate data
+            let def = deferred(),
+                    url = laroute.route('booking.postCheckCourtBooking');
+            this.$http.post(url, input).then(res => {
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    this.total_price = "NaN";
+                    showNotice('error', msg, 'Error!');
+                }else{
+                    this.total_price = res.data.total_price;
+                    this.court_detail = res.data.court_detail;
+                    this.tabClick("mb-customer-details-content")
+                }
+            }, res => {
+
+            });
+        },
+        nextPayment(){
+                if(this.inputBookingDetail.member == 1){
+                    this.customerDetail.player_id = $("#player_id").val();
+                    this.$http.post(laroute.route('booking.checkPlayerforBooking', {one: this.customerDetail.player_id})).then(res => {
+                        if(res.data.success)
+                        {
+                            var player = res.data.player; console.log(player);
+                            this.customerDetail.first_name = player.first_name;
+                            this.customerDetail.last_name = player.last_name;
+                            this.customerDetail.address1 = player.address1;
+                            this.customerDetail.state = player.state;
+                            this.customerDetail.city = player.city;
+                            this.customerDetail.email = player.email;
+                            this.customerDetail.phone = player.phone;
+                            this.tabClick("mb-payment-details-content");
+                        }else{
+                            var msg = "";
+                            $.each(res.data.messages,function(k,v){
+                                msg += "<div>"+v+"</div>";
+                            });
+                            showNotice('error', msg, 'Error!');
+                        }
+                    }, res => {
+
+                    });
+                }
+                else{
+                    const customer = this.customerDetail;
+                    // check validate customer
+                    let def = deferred(),
+                    url = laroute.route('booking.checkInputCustomer');
+                    this.$http.post(url,customer).then(res => {
+                        if(res.data.error)
+                        {
+                            var msg = "";
+                            $.each(res.data.messages,function(k,v){
+                                msg += "<div>"+v+"</div>";
+                            });
+                            showNotice('error', msg, 'Error!');
+                        }else{
+                            this.tabClick("mb-payment-details-content");
+                        }
+                    }, res => {
+
+                    });
+                }
 
 
         },
@@ -674,8 +729,10 @@
             data.append('customer',JSON.stringify(this.customerDetail));
             data.append('payment',JSON.stringify(this.paymentDetail));
             data.append('total_price', this.total_price);
+
             // check validate customer
-            this.$http.post('/sadmin/booking/check-input-payment', data).then(res => {
+            $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+            this.$http.post('/sadmin/booking/payment', data).then(res => {
                 if(res.data.error)
                 {
                     var msg = "";
@@ -684,11 +741,12 @@
                     });
                     showNotice('error', msg, 'Error!');
                 }else{
-                    this.booking_reference = res.data.booking_id;
+                    this.booking_reference = res.data.payment_id;
                     this.flagChangeDataOfDate = Math.random();
                     this.$dispatch('child-change-flagChangeDataOfDate', this.flagChangeDataOfDate);
                     this.tabClick("mb-confirmation-content")
                 }
+                $("#mb-create-new-booking .loading").remove();
             }, res => {
 
             });
@@ -710,9 +768,9 @@
             this.preBookingDetail();
             this.inputBookingDetail = {
                 type: null,
-                        member: 1,
+                        member: 0,
                         date: null,
-                        date_range: null,
+                        contract_id: null,
                         hour_start: 5,
                         hour_length: 1,
                         dayOfWeek: null,
@@ -749,6 +807,11 @@
             };
             this.booking_reference = null;
             this.total_price = '';
+            this.contracts = [];
+            this.info_contract = {
+                total_week: null,
+                extras: []
+            };
         },
         address_lookup(){
             this.$http.get(laroute.route('booking.address_lookup', {one: this.customerDetail.zipcode})).then(res => {
@@ -771,6 +834,13 @@
     },ready () {
         //test model open
         //$(".create_new_book").click();
+
+        $('.daterange').daterangepicker(
+                {
+                    showDropdowns: true,
+                    startDate: moment().startOf('month'),
+                    endDate: moment().add(3, 'months').endOf('month'),
+                });
 
         $("li.tab-disabled").click(function (e) {
             console.log("abc");

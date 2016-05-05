@@ -7,5 +7,5 @@ View::composer('home.layouts.master', function ($view) {
 
     $view->with('headScripts', $headScripts);
     $view->with('bodyScripts', $bodyScripts);
-    $view->with('stylesheets', Assets::getStylesheets());
+    $view->with('stylesheets', Assets::getStylesheets(['home']));
 });

@@ -51,7 +51,7 @@
 </template>
 <script>
 	export default {
-		props:['surface','courts','clubSettingId','reloadCourts','dataRates'],
+		props:['surface','courts','clubSettingId','reloadCourts','dataRates','btnAddCourt'],
 		data() {
 		return {
 			court : {
@@ -93,6 +93,7 @@
 				this.$set('court.indoor_outdoor', 1);
 				this.$set('court.surface_id', 1);
 				this.$set('court.base_price', 0);
+				this.$set('btnAddCourt', false);
 				showNotice('success', res.data.success_msg, 'Success!');
 				this.submit = false;
 				$('.unSelected').click();

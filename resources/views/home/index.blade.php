@@ -260,5 +260,5 @@
                 <a href="#" class="btn btn-club">Find Out More</a>
             </div>
         </div>
-    </div> 
+    </div>
 @stop

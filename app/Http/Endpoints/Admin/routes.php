@@ -28,12 +28,15 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postCreateCourt' => 'courts.create',
         'postUpdateCourt' => 'courts.update',
         'postUpdateCourts' => 'courts.update.multi',
+        'getList' => 'courts.list',
     ]);
     Route::controller('contracts', ContractController::class, [
         'postCreateContract' => 'contracts.create',
         'postUpdateContract' => 'contracts.update',
         'deleteContract' => 'contracts.delete',
         'getListContract' => 'contracts.list',
+        'getList' => 'contracts.listContract',
+        'getView' => 'contracts.getView'
     ]);
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',
@@ -45,16 +48,16 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     Route::controller('booking', ManageBookingController::class, [
         'getManageBooking' => 'booking.index',
         'getDataOfClub' => 'booking.dataOfClub',
-        'getViewPriceOrder' =>'booking.viewPriceOrder',
-        'getCheckInputBooking' =>'booking.checkInputBooking',
-        'getCheckInputCustomer' =>'booking.checkInputCustomer',
-        'postCheckInputPayment' =>'booking.checkInputPayment',
+        'postViewPriceOrder' =>'booking.viewPriceOrder',
+        'postCheckCourtBooking' =>'booking.postCheckCourtBooking',
+        'postCheckInputCustomer' =>'booking.checkInputCustomer',
+        'postPayment' =>'booking.postPayment',
+        'postCheckPlayerforBooking' =>'booking.checkPlayerforBooking',
         'getView' =>'booking.view',
         'putDelete' =>'booking.delete',
         'getAcceptPayment' =>'booking.acceptPayment',
         'getSearchPlayers' =>'booking.players',
         'getAddressLookup' =>'booking.address_lookup',
-        'getCheckPlayerforBooking' =>'booking.checkPlayerforBooking',
         'getInfoGridAvailable' =>'booking.infoGridAvailable',
         'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
         'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
