@@ -1153,4 +1153,30 @@ a.ui-state-default.ui-state-highlight {
         padding:0 5px;
     }
 }
+.item-court {
+    border: 1px solid #f0f0f0;
+    margin-bottom: 10px;
+}
+.btn-primary {
+    background-color: #0f494d;
+    border-radius: 0px !important;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #053032;
+    border-color: #17383A;
+}
+.viewmore {
+    margin: 5px 0px;
+}
+.show-result {
+    margin: 20px 0px;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #0f494d;
+    border-color: #17383A;
+}
 /*# sourceMappingURL=home.css.map */

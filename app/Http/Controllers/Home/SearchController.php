@@ -98,7 +98,7 @@ class SearchController extends Controller {
 				}
 			}
 
-		}
+	}
 		return view('home.search', compact('request', 'clubs', 'keyword_hour'));
 	}
 
