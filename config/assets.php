@@ -59,12 +59,21 @@ return [
             'jquery-ui-multidatespicker',
             'ionslider',
             'city-autocomplete',
+<<<<<<< .mine
             'select2',
             'apimap',
             'geocomplete',
             //'moment',
             //'datetimepicker',
             'home'
+=======
+            'select2',
+            //'moment',
+            //'datetimepicker',
+            'home'
+
+
+>>>>>>> .theirs
         ],
         'stylesheets' => [
             'bootstrap',

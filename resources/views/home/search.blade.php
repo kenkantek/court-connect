@@ -135,12 +135,31 @@
             </div>
         </div> 
         
-
+        {{-- #search-results --}}
+        <div class="row text-left" id="search-results">
+          <div class="col-md-8"> 
         {{-- #show-results --}}
-        <div class="row text-left" id="show-results">
+              <div class="text-left clearfix" id="show-results">
           @if (isset($clubs))
+<<<<<<< .mine
             Showing Results <span>1-5</span> of <span>{!! $clubs->total() !!}</span>
             {!! $clubs->render() !!}
+
+
+
+
+
+
+=======
+                  <div class="pull-left show-result">
+                    Showing Results <span>1-5</span> of <span>{!! $clubs->total() !!}</span>
+
+                  </div>
+                  <div class="pull-right">
+                    {!! $clubs->appends($request->input())->render() !!}
+                  </div>
+
+>>>>>>> .theirs
           @endif
         </div>
         {{-- End #show-results --}}
@@ -152,17 +171,27 @@
               @foreach ($clubs as $club)
                 {{-- Club block     --}}
                   <div class="club-block row">
+                  <div class="club-block">
+                    <div class="club-intro clearfix">
                     <div class="col-md-4">
                         <div class="row thumbnail text-center">                 
                             <img src="{{ asset('resources/home/images/club-image-1.jpg') }}" alt="" class="img-responsive col-md-12 img-clubs">
                              <div class="caption">
                               <div class="col-md-6 col-xs-6">
                                 Indoor/Outdoor<br/>
+<<<<<<< .mine
                                 <b>{{$club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+=======
+                                <b>{{$club->courts[0]->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+>>>>>>> .theirs
                               </div>
                               <div class="col-md-6 col-xs-6">
                                 Court Type<br/>
+<<<<<<< .mine
                                 <b>{{$club->court->surface->label}}</b>
+=======
+                                <b>{{$club->courts[0]->surface->label}}</b>
+>>>>>>> .theirs
                               </div>                      
                             </div>
                         </div>              
@@ -182,6 +211,7 @@
                       </div>              
                       <div class="row">
                         <div class="col-md-12">
+<<<<<<< .mine
                           <span>Select a Time</span>
                           <div class="club-time text-center club-time-wrap">
                               @foreach ($club->court->prices as $item)
@@ -193,15 +223,72 @@
                                           {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
                                       </a>
                                   </div>
+=======
+                          <div class="club-time text-center club-time-wrap">
+                              <div class="first-court">
+                                  <div class="court-name">Court: #1</div>
+                                  <hr style="width: 100%">
+                                  <div class="intro-court clearfix">
+                                      <div class="court-io-door pull-right">
+                                          Indoor/Outdoor:
+                                          <b>{{$club->courts[0]->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+
+
+                                      </div>
+>>>>>>> .theirs
+<<<<<<< .mine
                               @endforeach
+
+
                           </div>
+=======
+                                      <div class="court-type pull-left">
+                                          Court Type:
+                                          <b>{{$club->courts[0]->surface->label}}</b>
+                                      </div>
+>>>>>>> .theirs
+<<<<<<< .mine
                           <div class="text-right">
                               <span class="btn btn-view-more-court" data-club="{!! $club->id !!}">View more >></span>
                           </div>
+=======
+
+
+                                  </div>
+>>>>>>> .theirs
+<<<<<<< .mine
+
+
+
+
+
+
+
+
                         </div>
                       </div>              
+=======
+                                  <div class="club-time text-center club-time-wrap clearfix">
+                                      @foreach ($club->courts[0]->prices as $item)
+                                          <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                              <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start'])."am" : str_replace(".5",":30",($item['hour_start'] - 12))."pm"}} -
+                                                  {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
+                                              </span>
+                                              <div class="price">
+                                                  {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
+                                              </div>
+                                          </div>
+>>>>>>> .theirs
+<<<<<<< .mine
+
                     </div>
                   </div>
+=======
+                                      @endforeach
+                                  </div>
+                              </div>
+>>>>>>> .theirs
+<<<<<<< .mine
                   <div class="content-view-more-court content-view-more-court-1 row">
                       <div class="row">
                           <div class="court-name">Court: #1</div>
@@ -210,11 +297,98 @@
                               <div class="court-io-door">
                                   Indoor/Outdoor:
                                   <b>{{$club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+                          </div>
+                          <div class="text-right">
+                              <span class="btn btn-primary viewmore" data-view="content-view-more-club-{!! $club->id !!}">View more >></span>
+                          </div>
+                        </div>
+                      </div>              
+                    </div>
+                    </div>
+                    
+                      <div class="content-view-more-court content-view-more-club-{!! $club->id !!}" style="display: none;">
+                          @foreach($club->courts as $court )
+                             <div class="row item-court">
+                                <div class="court-name">Court: {!! $court->name !!}</div>
+                                  <hr style="width: 100%" />
+                                <div class="intro-court clearfix">
+                                      <div class="court-io-door pull-right">
+                                          Indoor/Outdoor:
+                                          <b>{{$court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                                      </div>
+                                      <div class="court-type pull-left">
+                                          Court Type:
+                                          <b>{{$court->surface->label}}</b>
+                                      </div>
+                                </div>
+
+                                <div class="club-time text-center club-time-wrap clearfix ">
+                                    @foreach ($court->prices as $item)
+                                        <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                            <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start'])."am" : str_replace(".5",":30",($item['hour_start'] - 12))."pm"}} -
+                                                {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
+                                            </span>
+                                            <div class="price">
+                                                
+                                                @if(isset($item['total_price']))
+
+                                                     @if( $item['total_price'] == 'N/A' )
+                                                          <span>N/A</span>
+                                                     @else
+                                                          <span>$ {!! $item['total_price'] !!}</span>
+                                                     @endif
+                                                @else
+                                                      <span>Unavailable</span>   
+                                                @endif
+                                                
+>>>>>>> .theirs
                               </div>
                               <div class="court-type">
                                   Court Type:
                                   <b>{{$club->court->surface->label}}</b>
+<<<<<<< .mine
                               </div>
+=======
+                                        </div>
+>>>>>>> .theirs
+                                    @endforeach
                           </div>
                           <div class="right">Select a Time</div>
                           <div class="clearfix"></div>
@@ -228,11 +402,27 @@
                                       </span>
                                       <div class="price">
                                           {{isset($item['total_price']) ? "$".$item['total_price'] : "unavai"}}
+<<<<<<< .mine
                                       </div>
+=======
+                            </div>
+>>>>>>> .theirs
+                          @endforeach
+
+                       
+                      
+<<<<<<< .mine
                                   </div>
+=======
+                    </div>
+>>>>>>> .theirs
                               @endforeach
+<<<<<<< .mine
                           </div>
-                      </div>
+=======
+                  </div>
+>>>>>>> .theirs
+                  
                   </div>
                 {{-- End Club block --}}
               @endforeach
@@ -451,7 +641,25 @@
 
       $("body").on('click','.btn-view-more-court',function(event){
 
+<<<<<<< .mine
       });
+
+
+
+
+
+
+
+=======
+     <script>
+      $( ".viewmore" ).click(function() {
+        var viewTogle = $(this).data('view');
+        $( "."+viewTogle ).toggle( "slow" );
+        
+      });
+      </script> 
+    <script>
+>>>>>>> .theirs
       // Note: This example requires that you consent to location sharing when
       // prompted by your browser. If you see the error "The Geolocation service
       // failed.", it means you probably did not give permission for the browser to

@@ -2,6 +2,7 @@ $(function () {
     if($('#q').length)
         $('#q').cityAutocomplete();
 
+<<<<<<< .mine
     $('#card-expiry').datetimepicker({
         showTimepicker: false,
         showButtonPanel: false,
@@ -12,6 +13,38 @@ $(function () {
             var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).val($.datepicker.formatDate('mm/yy', new Date(year, month, 1)));
+
+
+
+
+
+
+
+
+
+
+=======
+    $('#card-expiry').datetimepicker({
+        format: 'MM/YY',
+    });
+
+    if (jQuery().select2) {
+        $('.select2').select2({
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
+    }
+
+    $( "#q1" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "search/autocomplete?term=" + request.term,
+                success: function( data ) {
+                    response( $.map( data, function( item ) {
+                        return {
+                            label: item.value, // john
+                            value: item.type + "|" + item.value // user|john
+>>>>>>> .theirs
         }
     });
     $("#card-expiry").focus(function () {
@@ -157,6 +190,7 @@ $(function () {
         hasGrid: false,
         hideMinMax: false,
     });
+<<<<<<< .mine
 
 
     $( "#q1" ).autocomplete({
@@ -219,3 +253,67 @@ $(function () {
         });
 
 });
+=======
+
+    //booking
+    $("body").on('click','.btn-booking-tennis',function(e){
+
+    })
+});
+
+//# sourceMappingURL=home.js.map
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
