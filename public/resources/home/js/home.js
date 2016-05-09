@@ -1,4 +1,6 @@
 $(function () {
+    if($('#q').length)
+        $('#q').cityAutocomplete();
 
     $('#card-expiry').datetimepicker({
         showTimepicker: false,
@@ -176,5 +178,44 @@ $(function () {
             $('#q').val(ui.item.value);
         }
     });
-    $('#q').cityAutocomplete();
+
+
+    //lookup address
+    $("body").on('click','.btn-get-address-lookup',function(){
+        var zipcode;
+        if($("#input-zip_code").length)
+            zipcode = $("#input-zip_code").val();
+        else zipcode = $("input[name=zipcode]").val();
+        console.log(zipcode);
+        $.ajax({
+            url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode+"&sensor=false",
+            method: "POST",
+            success:function(data){
+                $("input[name=state], #input-state").val(data.results[0].address_components[2].long_name);
+                $("input[name=city], #input-city").val(data.results[0].address_components[3].long_name);
+            }
+        });
+    });
+
+    $("#input-address1").geocomplete()
+        .bind("geocode:result", function(event, result){
+            console.log(result);
+            $.each(result.address_components, function(index, val) {
+                if (typeof val.types[0] != "undefined" ) {
+                    if(val.types[0] == "locality"){
+                        $("#input-city").val(val.long_name);
+                    }
+                    if(val.types[0] == 'administrative_area_level_1'){
+                        $("#input-state").val(val.long_name);
+                    }
+                    if(val.types[0] == "postal_code"){
+                        $("#input-zip_code").val(val.long_name);
+                    }
+                    if(val.types[0] == "country"){
+                        $("#input-country").val(val.short_name);
+                    }
+                }
+            });
+        });
+
 });

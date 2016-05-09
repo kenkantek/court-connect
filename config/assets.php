@@ -60,6 +60,8 @@ return [
             'ionslider',
             'city-autocomplete',
             'select2',
+            'apimap',
+            'geocomplete',
             //'moment',
             //'datetimepicker',
             'home'

@@ -196,7 +196,7 @@
                               @endforeach
                           </div>
                           <div class="text-right">
-                              <span class="btn">View more >></span>
+                              <span class="btn btn-view-more-court" data-club="{!! $club->id !!}">View more >></span>
                           </div>
                         </div>
                       </div>              
@@ -447,12 +447,11 @@
         </div>
     </div>
         {{-- End #deals-near-you --}}
-                
-      </div>
-    </div>
-  
-    
     <script>
+
+      $("body").on('click','.btn-view-more-court',function(event){
+
+      });
       // Note: This example requires that you consent to location sharing when
       // prompted by your browser. If you see the error "The Geolocation service
       // failed.", it means you probably did not give permission for the browser to

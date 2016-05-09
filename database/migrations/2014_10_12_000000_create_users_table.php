@@ -24,6 +24,11 @@ class CreateUsersTable extends Migration{
             $table->string('state', 100);
             $table->string('city', 100);
             $table->string('zip_code', 6);
+//            $table->integer('skill_level')->unsigned();
+//            $table->foreign('role_id')
+//                ->references('id')
+//                ->on('roles')
+//                ->onDelete('cascade');
             $table->string('google_id', 120);
             $table->string('facebook_id')->nullable();
             $table->string('avatar')->default('no-avatar.png');

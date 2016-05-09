@@ -111,8 +111,10 @@ class ManageBookingController extends Controller
                 break;
             }
             if($rates_full[$tmp_index][$index_json] == "N/A"){
-                $total_price = "N/A";
-                break;
+                return [
+                    'error' => false,
+                    'price' => "N/A"
+                ];
             }
             $total_price += $rates_full[$tmp_index][$index_json] / 2;
         }

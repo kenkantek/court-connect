@@ -513,6 +513,7 @@ form.form-court{
     top: 50%;
     position: ABSOLUTE;
 }
+
 @media print {
     .notprint{
         display: none;

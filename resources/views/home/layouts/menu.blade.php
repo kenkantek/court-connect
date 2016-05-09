@@ -8,7 +8,7 @@
                     class="caret"></b></a>
             <ul class="dropdown-menu ">
                 <span class="arrow-up"></span>
-                <li class="text-center"><a href="{{ route('home.account', Auth::user()->id) }}">Manage Account</a></li>
+                <li class="text-center"><a href="{{ route('home.account') }}">Manage Account</a></li>
                 <li class="text-center"><a href="{{ route('auth.logout-home') }}">Log out</a></li>
             </ul>
         </li>

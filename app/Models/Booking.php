@@ -14,6 +14,11 @@ class Booking extends Model
     {
         return $this->belongsTo('App\Models\Contexts\Court','court_id');
     }
+    public function payment()
+    {
+        return $this->belongsTo('App\Models\Payments\Payment','payment_id');
+    }
+
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = date('y-m-d', strtotime($value));

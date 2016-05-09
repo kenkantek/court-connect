@@ -79,14 +79,8 @@ class SearchController extends Controller
         if($keyword_hour <5){
 
         }else {
-            $clubs = Club::search($keyword_clubs)->join('set_open_days', 'clubs.id', '=', 'set_open_days.club_id')
-                ->where(function ($query) use ($keyword_day) {
-                    $query->where('set_open_days.date', '=', $keyword_day)
-                        ->where('is_close', '=', '0');
-
-                })
+            $clubs = Club::search($keyword_clubs)
                 ->select('clubs.*')->paginate(5);
-
 
             $results = Court::where('surface_id', '=', $keyword_surface)->get();
 
@@ -115,7 +109,6 @@ class SearchController extends Controller
 
     //get price follow hour of court
     function getPriceOfCourt($input){
-        $bookingClass = new ManageBookingController();
         $list_price = [];
         $hour_start = 0;
         $hour_end = 0;
@@ -136,7 +129,7 @@ class SearchController extends Controller
 
         for($i = $hour_start; $i<= $hour_end; $i++) {
             $input['hour_start'] = $i;
-            $calPrice = $bookingClass->calPriceForBooking($input);
+            $calPrice = getPriceForBooking($input);
             $calPrice['hour_start'] = $i;
             $calPrice['hour_length'] = $input['hour_length'];
             $list_price[] = $calPrice;

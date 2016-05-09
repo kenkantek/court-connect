@@ -1,1 +1,1213 @@
-@font-face{font-family:RobotoLight;src:url(../fonts/Roboto/Roboto-Light.ttf)}@font-face{font-family:RobotoBlackItalic;src:url(../fonts/Roboto/Roboto-BlackItalic.ttf)}@font-face{font-family:RobotoRegular;src:url(../fonts/Roboto/Roboto-Regular.ttf)}@font-face{font-family:RobotoThin;src:url(../fonts/Roboto/Roboto-Thin.ttf)}@font-face{font-family:RobotoMedium;src:url(../fonts/Roboto/Roboto-Medium.ttf)}@font-face{font-family:RobotoBold;src:url(../fonts/Roboto/Roboto-Bold.ttf)}body{font-family:Source Sans Pro,sans-serif;font-size:13px}.header{background:url(../images/header-bg.jpg) no-repeat top;height:681px;background-size:cover}.header-1{background-color:#000;height:93px}.header-1-bg{background:url(../images/header-1-bg.jpg) no-repeat top;height:193px;background-size:cover}.logo{max-width:254px;max-height:142px}.header-1 .logo{max-width:240px;max-height:93px}.navbar-default{background-color:transparent;border-color:transparent;font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:17px;color:#fff}.navbar-default .navbar-nav>li>a{color:#fff}.navbar-default .navbar-nav>.open>a,.navbar-default .navbar-nav>.open>a:focus,.navbar-default .navbar-nav>.open>a:hover{color:#fff;background-color:transparent}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#fff}.dropdown-wg{width:300px;padding:26px}.arrow-up{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:10px solid #fff;position:absolute;top:-10px;right:10px}.form-control{border:1px solid #f2f2f2;border-radius:0}.inline li{display:inline}label.form-label{font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;color:#63ac1e;font-size:12px;font-weight:400}label.form-label:hover{cursor:pointer}button.btn.btn-login{border-radius:0;width:100%;text-align:center;background-color:#63ac1d}ul.nav.navbar-nav.navbar-right{margin-top:15px}div.modal-dialog{margin-top:135px;width:630px}div.modal-body{text-align:center}.btn-login-facebook{background:url(../images/signin-with-facebook.png) no-repeat;background-size:contain;width:197px;height:43px;border:none;display:block;margin:0 auto}.line-label span{padding:0 22px;background:#fff}.hidden{display:none}.line-label{clear:both;color:#cbcbcb;font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:17px;font-weight:400;position:relative;width:100%}.line-label:before{content:'';position:absolute;width:100%;height:2px;border-top:2px solid #f2f2f2;left:0;top:10px;z-index:-1}.app-bar{background-color:#2c2c2c}.err{color:red}.app-bar .col-md-6{min-height:49px;color:#fff;font-size:25px;font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;text-align:center;line-height:2em}.app-bar .col-md-6 span{font-family:RobotoRegular,Helvetica Neue,Helvetica,Arial,sans-serif;color:#63ac1e}.content h2{font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:55px;color:#082e31;margin-bottom:60px}.container.content{text-align:center}.container.content h2 span{color:#63ac1e}.caption{width:255px;margin:0 auto;font-family:RobotoThin,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:21px;line-height:1em;color:#082e31;margin-top:10px}.caption.title{font-size:48px;font-family:RobotoBlackItalic,Helvetica Neue,Helvetica,Arial,sans-serif;margin-top:11px;width:45%;background:#fff}.thumbnail{min-height:139px;border:none;padding:0}.footer{background-color:#131101;min-height:254px;background:url(../images/footer-bg.png) no-repeat 50%;background-size:cover;text-align:center;color:#fff;font-family:RobotoRegular,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:12px;padding-top:40px}.line-content{position:relative;width:100%}.line-content:before{content:'';position:absolute;width:60%;height:4px;border-top:4px solid #63ac1d;left:20%;top:185px;z-index:-1}.ball{background:#fff;width:100px;margin:0 auto}.line-ball{margin-top:70px;position:relative;width:100%}.line-ball:before{content:'';position:absolute;width:50%;height:3px;border-top:3px solid #ececec;left:25%;top:13px;z-index:-1}.img-carousel img{border-radius:50%}.carousel-control.right{background-image:none}span.glyphicon.glyphicon-chevron-right{color:#e7ebe4}.carousel-control.left{background-image:none}span.glyphicon.glyphicon-chevron-left{color:#e7ebe4}.title-carousel{font-family:RobotoMedium,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:20px;color:#002c2c}.location-carousel{font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;color:#5f5f5f}.carousel-control{width:5%;top:-45%}hr{margin:0 auto;margin-top:6px;margin-bottom:15px;border-top:2px solid #63ac1d;width:25%}.datetime-carousel{font-size:14px;font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif}.datetime-carousel i{color:#63ac1e}.price-carousel{color:#63ac1e;font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:36px;margin-top:15px;margin-bottom:40px}.club{min-height:124px;background-color:#547535;padding-top:22px}.btn-club{background-color:#333;min-width:160px;height:44px;color:#fff;font-size:14px;font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;padding-top:11.5px;margin-top:12px;margin-bottom:20px}.copyright{text-align:center;color:#d9d9d9;font-family:RobotoThin,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:12px;margin-top:20px;margin-bottom:20px}.btn-club:hover{color:#fff}.footer span{font-family:RobotoBold,Helvetica Neue,Helvetica,Arial,sans-serif;color:#63ac1e;font-weight:400;font-size:25px}.social [class*="fa fa-"]{background-color:#333;border-radius:70px;color:#fff;display:inline-block;height:70px;line-height:70px;margin:auto 3px;width:70px;font-size:40px;text-align:center;margin-top:10px}.footer li a{color:#fff;font-family:RobotoRegular,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:12px}.footer ul{margin-top:15px;padding-left:0;padding-bottom:0;margin-bottom:0}.footer li{list-style:none;height:30px}h1{font-family:RobotoLight,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:70px;color:#fff;text-align:center;margin:0 auto;margin-top:100px;margin-bottom:30px}.btn-search{background-color:#63ac1e;height:35px;color:#fff;border-radius:0;outline:none}.form-icon{position:relative}.form-icon i{position:absolute;color:#63ac1e;font-size:20px;top:7px;left:25px}.form-icon input,select{padding-left:35px;font-family:RobotoRegular,Helvetica Neue,Helvetica,Arial,sans-serif;height:38px}div.ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all{background:none;border:none}.ui-datepicker-title,a.ui-state-default,div#ui-datepicker-div{color:#63ac1e!important}a.ui-state-default{background-color:#f4faf0!important}span.ui-slider-handle.ui-state-default.ui-corner-all,span.ui-slider-handle.ui-state-default.ui-corner-all.ui-state-hover{background-image:url(/images/balltime_05.png);border:none;top:-7px}.ui-datepicker-today a{background-color:#70c13d!important}div.ui_tpicker_hour_slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all{border:none;height:6px;background-color:#cbcbcb;background-image:none}a.ui-state-default.ui-state-hover{background-color:#8dce64!important;color:#fff!important}a.ui-state-default.ui-state-highlight{color:#fff!important}.divine-appbar-r{border-right:1px solid #101010}.divine-appbar-l{border-left:1px solid #4d4d4d}.ui-widget-header .ui-state-highlight{background:none!important}.ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight{background:#70c13d!important}.ui-state-default,.ui-state-focus,.ui-state-hover,.ui-widget-content .ui-state-default,.ui-widget-content .ui-state-focus,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-default,.ui-widget-header .ui-state-focus,.ui-widget-header .ui-state-hover,.ui-widget-overlay,.ui-widget-shadow{background:none}@media (max-width:768px){.logo{max-height:80px}.divine-appbar-r{border-right:none}.divine-appbar-l{border-left:none}}#calendar-switch{display:none;padding:20px 0;box-sizing:border-box;border:1px solid #aaa;border-radius:4px;position:absolute;top:88px;left:356.828px;z-index:1;background:#fff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;font-family:Verdana,Arial,sans-serif}#calendar-switch-header{text-align:center;display:block;color:#63ac1e}#calendar-switch-button{width:100%;font-size:12px;padding:0}#calendar-switch-button:hover{background-color:#fff;border:1px solid #999}#day-of-week{width:260px;height:180px;margin-top:20px}#day-of-week label{color:#aaa}#day-of-week input[type=checkbox]{box-shadow:inset 0 1px 3px rgba(0,0,0,.3);height:14px}.content .instruction{color:#0f484d}.content .page-header{margin-bottom:0}.content .instruction small{font-style:italic}.content .table tr th{background-color:#f2f2f2;border:0}.content .dropdown.yr-booking .dropdown-menu{min-width:auto;width:100%}.content .dropdown.yr-booking button{min-width:auto;width:100%;border-radius:0;background-color:#0f484d;color:#fff}.content .dropdown.yr-booking span{float:right;color:#cbcbcb;font-size:18px}.content form .submit button{background-color:#63ac1e;height:38px;padding-left:47px;padding-right:47px;color:#fff;border-radius:0}.content form .dropdown-menu{min-width:auto;width:100%}.content form .dropdown button{min-width:auto;width:100%;text-align:left;border-radius:0}.content form .dropdown span{float:right;color:#cbcbcb;font-size:18px}.content form .submit .submit-text{margin-top:15px}.content form .submit .submit-text a{color:#63ac1e;text-decoration:none}.content table td{text-align:left}.content form input[text]{height:30px;line-height:30px;font-size:12px}.content .form-blocks{border-bottom:1px dashed #dedede;padding-bottom:45px;padding-top:15px}.content .btn-sub{background-color:#0f484d;color:#fff;padding:10px 30px 7px;border:0;font-size:14px}.left-sidebar .nav.nav-tabs{margin-bottom:40px;border-bottom:none}.left-sidebar .nav.nav-tabs a{text-decoration:none}.left-sidebar,.left-sidebar a,.left-sidebar legend{color:#0f484d}.left-sidebar #checkout-form{margin-bottom:175px}.right-sidebar .detail-top .club-name{font-weight:600;font-size:18px;display:block}.right-sidebar .detail-header{border-bottom:2px solid #f2f2f2;padding:0 0 10px 5px;margin-bottom:13px}.right-sidebar .detail-header h4{display:inline-block;margin-right:20px}.right-sidebar .detail-information{padding-top:10px;padding-bottom:6px}.right-sidebar .detail-information .form-group{padding-top:8px;padding-bottom:8px}.right-sidebar .detail-price{line-height:20px}.right-sidebar .detail-price .price{color:#63ac1e;font-size:26px}.left-sidebar fieldset{margin-bottom:35px}.left-sidebar .payment-details .payment-logo{min-height:35px;display:flex;align-items:center}.left-sidebar .payment-details img{margin:0 auto}#find-your-court{height:192px;background-color:#373737;padding-top:1px}#find-your-court h3{color:#63ac1e}.content #featured-courts{color:#0f484d;background-color:#f2f2f2;text-align:left;padding:10px}.content .featured-blocks .price span{color:#63ac1e;font-size:26px;line-height:51px}.content .featured-blocks .club-image{padding:0}.content .information h4.club-name{font-size:22px;font-weight:700;margin-bottom:0}.content .information small.club-address{color:#a0a0a0;font-size:14px}.content .information p{margin-bottom:5px}.content .featured-blocks .btn-sub,.content .featured-blocks .btn p{width:100%;margin-top:5px}.content .featured-blocks .dropdown li{text-align:center;font-size:15px;padding:0 10px}.content .featured-blocks .dropdown li span{color:#0f484d}.content .featured-blocks .dropdown li span.price{color:#63ac1e}.content .featured-blocks .dropdown li.unvailable span:first-child{padding-top:3px}.content .featured-blocks .dropdown li.unvailable span{color:#d2d2d2}.content .featured-blocks .dropdown li.unvailable span.price{font-size:10px}.content #show-results{padding-top:35px;padding-bottom:22px;font-size:14px;color:#d7d7d7}.content #show-results span{color:#0f484d;font-weight:700}.content #search-results .club-block{background-color:#f2f2f2;margin-bottom:30px}.content #search-results .thumbnail{position:relative;margin-bottom:0}.content #search-results img{padding:0}.content #search-results .caption{background:url(../images/text-overlay.png);width:100%;color:#fff;font-size:12px;bottom:0;position:absolute}.content #search-results .club-time{background-color:#dfdfdf}.content #search-results{color:#0f484d}.content #search-results .information{margin-bottom:25px}.content #search-results .distance{padding:10px}.content #search-results .img-clubs{width:100%}.content #search-results .club-time .col-price{width:20%;float:left}.content #search-results .club-time .price{text-align:center;color:#fff;border-radius:0;background-color:#0f484d;font-size:14px;padding:8px 15px;margin:0 10px;font-weight:700;display:block;text-decoration:none}.content #search-results .club-time .price:hover{background:#6bd7e0}.content #search-results .club-time .price:active{border-top:2px solid #0f484d}.content #search-results .club-time .active span{font-weight:700}.content #search-results .club-time .active .price{background-color:#63ac1e}.content #search-results .club-time .unvailable .price{background-color:#cbcbcb;font-size:10px;padding:4px 5px}.login-box,.register-box{width:480px;margin:7% auto}.login-box-body{padding:0;border:1px solid #ddd}.login-box-body form{padding:5px 10px;text-align:left}.fa.form-control-feedback{line-height:34px;color:#000}.login-box-body>div{padding:20px}.login-box-body h3{box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);margin:0;padding:20px 10px;text-align:center;font-size:26px;color:#fff;background:#00c0ef;border-top-left-radius:4px;border-top-right-radius:4px}.login-box-body .btn-info{width:100%}.login-box-body span.fa.form-control-feedback{line-height:33px}.search-tooltip{position:relative;display:inline-block;border-bottom:1px dotted #000;margin-top:4px}.search-tooltip .tooltiptext{visibility:visible;width:260px;background-color:#fff;color:#000;text-align:center;padding:5px 0;border:1px solid #d8d8d8;position:absolute;z-index:1;padding:10px}.search-tooltip .tooltiptext:after{content:" ";position:absolute;bottom:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:transparent transparent #fff}.search-time{width:auto;border:1px solid #d8d8d8;margin:0 auto;outline:none}.city-autocomplete{padding:10px}.city-autocomplete .citys:before{content:'Location';font-weight:700}.city-autocomplete .clubs:before{content:'Tennis Clubs';font-weight:700}.instruction table{font-size:13px}.club-time-wrap{background:#ddd;overflow:hidden;padding:10px 20px}.club-time-wrap .col-price.active .price{background-color:#63ac1e}.left{float:left}.right{float:right}.clearfix{clear:both}.content-view-more-court{border:1px solid #d8d8d8;margin:0 -15px;padding:20px 30px}.btn-booking-tennis{cursor:pointer}.select2-container--default.select2-container--focus,.select2-container--default:active,.select2-container--default:focus,.select2-selection.select2-container--focus,.select2-selection:active,.select2-selection:focus{outline:none}.select2-container--default .select2-selection--single,.select2-selection .select2-selection--single{border:1px solid #d2d6de;border-radius:0;padding:6px 12px;height:34px}.select2-container--default.select2-container--open{border-color:#2d3a42}.select2-container--default .select2-results__option--highlighted[aria-selected]{background-color:#2d3a42;color:#fff}.select2-container--default .select2-selection--single .select2-selection__arrow{height:28px;right:3px}.select2-container--default .select2-selection--single .select2-selection__arrow b{margin-top:0}.select2-container--default .select2-results__option[aria-disabled=true]{color:#999}.select2-container--default .select2-results__option[aria-selected=true]{background-color:#ddd}.select2-container--default .select2-selection--multiple{border:1px solid #d2d6de;border-radius:0}.select2-container--default .select2-selection--multiple:focus{border-color:#2d3a42}.select2-container--default .select2-selection--multiple .select2-selection__choice{background-color:#2d3a42;border-color:#367fa9;padding:1px 10px;color:#fff}.select2-container--default .select2-selection--multiple .select2-selection__choice__remove{margin-right:5px;color:hsla(0,0%,100%,.7)}.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover{color:#fff}.select2-container--default.select2-container--focus .select2-selection--multiple{border-color:#d2d6de}.select2-dropdown{border:1px solid #d2d6de;border-radius:0}.select2-results__option{padding:6px 12px;user-select:none;-webkit-user-select:none}.select2-container .select2-selection--single .select2-selection__rendered{padding-left:0;padding-right:0;height:auto;margin-top:-4px;padding-right:10px}.select2-container[dir=rtl] .select2-selection--single .select2-selection__rendered{padding-right:6px;padding-left:20px}.select2-dropdown .select2-search__field,.select2-search--inline .select2-search__field{border:1px solid #d2d6de}.select2-dropdown .select2-search__field:focus{outline:none;border:1px solid #2d3a42}.select2-container--default .select2-results__option[aria-selected=true],.select2-container--default .select2-results__option[aria-selected=true]:hover{color:#444}
+@font-face {
+    font-family: RobotoLight;
+    src: url(../fonts/Roboto/Roboto-Light.ttf)
+}
+
+@font-face {
+    font-family: RobotoBlackItalic;
+    src: url(../fonts/Roboto/Roboto-BlackItalic.ttf)
+}
+
+@font-face {
+    font-family: RobotoRegular;
+    src: url(../fonts/Roboto/Roboto-Regular.ttf)
+}
+
+@font-face {
+    font-family: RobotoThin;
+    src: url(../fonts/Roboto/Roboto-Thin.ttf)
+}
+
+@font-face {
+    font-family: RobotoMedium;
+    src: url(../fonts/Roboto/Roboto-Medium.ttf)
+}
+
+@font-face {
+    font-family: RobotoBold;
+    src: url(../fonts/Roboto/Roboto-Bold.ttf)
+}
+body{
+    font-family: 'Source Sans Pro',sans-serif;
+    font-size: 13px;
+}
+a,button,input{
+    outline: none;
+}
+.header {
+    background: url(../images/header-bg.jpg) no-repeat top;
+    height: 681px;
+    background-size: cover
+}
+
+.header-1 {
+    background-color: #000;
+    height: 93px;
+}
+
+.header-1-bg {
+    background: url(../images/header-1-bg.jpg) no-repeat top;
+    height: 193px;
+    background-size: cover
+}
+
+.logo {
+    max-width: 254px;
+    max-height: 142px
+}
+
+.header-1 .logo {
+    max-width: 240px;
+    max-height: 93px
+}
+
+.navbar-default {
+    background-color: transparent;
+    border-color: transparent;
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    color: #fff
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #fff
+}
+
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover {
+    color: #fff;
+    background-color: transparent
+}
+
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover {
+    color: #fff
+}
+
+.dropdown-wg {
+    width: 300px;
+    padding: 26px
+}
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid #fff;
+    position: absolute;
+    top: -10px;
+    right: 10px
+}
+
+.form-control {
+    border: 1px solid #f2f2f2;
+    border-radius: 0
+}
+
+.inline li {
+    display: inline;
+}
+
+label.form-label {
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #63ac1e;
+    font-size: 12px;
+    font-weight: 400
+}
+
+label.form-label:hover {
+    cursor: pointer
+}
+
+button.btn.btn-login {
+    border-radius: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #63ac1d
+}
+
+ul.nav.navbar-nav.navbar-right {
+    margin-top: 15px
+}
+
+div.modal-dialog {
+    margin-top: 135px;
+    width: 630px
+}
+
+div.modal-body {
+    /*text-align: center*/
+}
+
+.btn-login-facebook {
+    background: url(../images/signin-with-facebook.png) no-repeat;
+    background-size: contain;
+    width: 197px;
+    height: 43px;
+    border: none;
+    display: block;
+    margin: 0px auto;
+}
+
+.line-label span {
+    padding: 0 22px;
+    background: #fff
+}
+.hidden{
+    display: none;
+}
+.line-label {
+    clear: both;
+    color: #cbcbcb;
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    position: relative;
+    width: 100%
+}
+
+.line-label:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    border-top: 2px solid #f2f2f2;
+    left: 0;
+    top: 10px;
+    z-index: -1
+}
+
+.app-bar {
+    background-color: #2c2c2c
+}
+.err{
+    color: red;
+}
+
+.app-bar .col-md-6 {
+    min-height: 49px;
+    color: #fff;
+    font-size: 25px;
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    text-align: center;
+    line-height: 2em
+}
+
+.app-bar .col-md-6 span {
+    font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #63ac1e
+}
+
+.content h2 {
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 55px;
+    color: #082e31;
+    margin-bottom: 60px
+}
+
+.container.content {
+    text-align: center
+}
+
+.container.content h2 span {
+    color: #63ac1e
+}
+
+.caption {
+    width: 255px;
+    margin: 0 auto;
+    font-family: RobotoThin, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 21px;
+    line-height: 1em;
+    color: #082e31;
+    margin-top: 10px
+}
+
+.caption.title {
+    font-size: 48px;
+    font-family: RobotoBlackItalic, Helvetica Neue, Helvetica, Arial, sans-serif;
+    margin-top: 11px;
+    width: 45%;
+    background: #fff
+}
+
+.thumbnail {
+    min-height: 139px;
+    border: none;
+    padding: 0
+}
+
+.footer {
+    background-color: #131101;
+    min-height: 254px;
+    background: url(../images/footer-bg.png) no-repeat 50%;
+    background-size: cover;
+    text-align: center;
+    color: #fff;
+    font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    padding-top: 40px
+}
+
+.line-content {
+    position: relative;
+    width: 100%
+}
+
+.line-content:before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 4px;
+    border-top: 4px solid #63ac1d;
+    left: 20%;
+    top: 185px;
+    z-index: -1
+}
+
+.ball {
+    background: #fff;
+    width: 100px;
+    margin: 0 auto
+}
+
+.line-ball {
+    margin-top: 70px;
+    position: relative;
+    width: 100%
+}
+
+.line-ball:before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 3px;
+    border-top: 3px solid #ececec;
+    left: 25%;
+    top: 13px;
+    z-index: -1
+}
+
+.img-carousel img {
+    border-radius: 50%
+}
+
+.carousel-control.right {
+    background-image: none
+}
+
+span.glyphicon.glyphicon-chevron-right {
+    color: #e7ebe4
+}
+
+.carousel-control.left {
+    background-image: none
+}
+
+span.glyphicon.glyphicon-chevron-left {
+    color: #e7ebe4
+}
+
+.title-carousel {
+    font-family: RobotoMedium, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: #002c2c
+}
+
+.location-carousel {
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #5f5f5f
+}
+
+.carousel-control {
+    width: 5%;
+    top: -45%
+}
+
+hr {
+    margin: 0 auto;
+    margin-top: 6px;
+    margin-bottom: 15px;
+    border-top: 2px solid #63ac1d;
+    width: 25%
+}
+
+.datetime-carousel {
+    font-size: 14px;
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif
+}
+
+.datetime-carousel i {
+    color: #63ac1e
+}
+
+.price-carousel {
+    color: #63ac1e;
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 36px;
+    margin-top: 15px;
+    margin-bottom: 40px
+}
+
+.club {
+    min-height: 124px;
+    background-color: #547535;
+    padding-top: 22px
+}
+
+.btn-club {
+    background-color: #333;
+    min-width: 160px;
+    height: 44px;
+    color: #fff;
+    font-size: 14px;
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    padding-top: 11.5px;
+    margin-top: 12px;
+    margin-bottom: 20px
+}
+
+.copyright {
+    text-align: center;
+    color: #d9d9d9;
+    font-family: RobotoThin, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px
+}
+
+.btn-club:hover {
+    color: #fff
+}
+
+.footer span {
+    font-family: RobotoBold, Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #63ac1e;
+    font-weight: 400;
+    font-size: 25px
+}
+
+.social [class*="fa fa-"] {
+    background-color: #333;
+    border-radius: 70px;
+    color: #fff;
+    display: inline-block;
+    height: 70px;
+    line-height: 70px;
+    margin: auto 3px;
+    width: 70px;
+    font-size: 40px;
+    text-align: center;
+    margin-top: 10px
+}
+
+.footer li a {
+    color: #fff;
+    font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 12px
+}
+
+.footer ul {
+    margin-top: 15px;
+    padding-left: 0;
+    padding-bottom: 0;
+    margin-bottom: 0
+}
+
+.footer li {
+    list-style: none;
+    height: 30px
+}
+
+h1 {
+    font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 70px;
+    color: #fff;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 100px;
+    margin-bottom: 30px
+}
+
+.btn-search {
+    background-color: #63ac1e;
+    height: 35px;
+    color: #fff;
+    border-radius: 0;
+    outline: none;
+}
+
+.form-icon {
+    position: relative
+}
+
+.form-icon i {
+    position: absolute;
+    color: #63ac1e;
+    font-size: 20px;
+    top: 7px;
+    left: 25px
+}
+
+.form-icon input,
+select {
+    padding-left: 35px;
+    font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
+    height: 38px
+}
+
+div.ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all {
+    background: none;
+    border: none
+}
+
+.ui-datepicker-title,
+a.ui-state-default,
+div#ui-datepicker-div {
+    color: #63ac1e!important
+}
+
+a.ui-state-default {
+    background-color: #f4faf0!important
+}
+
+span.ui-slider-handle.ui-state-default.ui-corner-all,
+span.ui-slider-handle.ui-state-default.ui-corner-all.ui-state-hover {
+    background-image: url(/images/balltime_05.png);
+    border: none;
+    top: -7px
+}
+
+.ui-datepicker-today a {
+    background-color: #70c13d!important
+}
+
+div.ui_tpicker_hour_slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all {
+    border: none;
+    height: 6px;
+    background-color: #cbcbcb;
+    background-image: none
+}
+
+a.ui-state-default.ui-state-hover {
+    background-color: #8dce64!important;
+    color: #fff!important
+}
+
+a.ui-state-default.ui-state-highlight {
+    color: #fff!important
+}
+
+.divine-appbar-r {
+    border-right: 1px solid #101010
+}
+
+.divine-appbar-l {
+    border-left: 1px solid #4d4d4d
+}
+
+.ui-widget-header .ui-state-highlight {
+    background: none!important
+}
+
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+    background: #70c13d!important
+}
+
+.ui-state-default,
+.ui-state-focus,
+.ui-state-hover,
+.ui-widget-content .ui-state-default,
+.ui-widget-content .ui-state-focus,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-default,
+.ui-widget-header .ui-state-focus,
+.ui-widget-header .ui-state-hover,
+.ui-widget-overlay,
+.ui-widget-shadow {
+    background: none
+}
+
+@media (max-width:768px) {
+    .logo {
+        max-height: 80px
+    }
+    .divine-appbar-r {
+        border-right: none
+    }
+    .divine-appbar-l {
+        border-left: none
+    }
+}
+
+
+/* Calendar Switch */
+#calendar-switch{
+    display: none;
+    padding: 20px 0;
+    box-sizing: border-box;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+    position: absolute;
+    top: 88px;left: 356.828px;
+    z-index: 1;
+    background:#ffffff url('images/ui-bg_flat_75_ffffff_40x100.png') 50% 50% repeat-x;
+    font-family: Verdana,Arial,sans-serif;
+}
+#calendar-switch-header{
+    text-align: center;
+    display: block;
+    color:#63ac1e
+}
+#calendar-switch-button{
+    width:100%;
+    font-size:12px;
+    padding: 0;
+}
+#calendar-switch-button:hover{
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
+}
+#day-of-week{
+    width: 260px;
+    height:180px;
+    margin-top: 20px;
+}
+#day-of-week label{
+    color: #aaaaaa;
+}
+#day-of-week input[type="checkbox"]{
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+    height: 14px;
+}
+/* End Calendar Switch */
+
+/* Sign Up page */
+.content .instruction{
+    color: #0f484d;
+}
+
+.content .page-header{
+    margin-bottom: 0;
+}
+
+.content .instruction small {
+    font-style: italic;
+}
+
+.content .table tr th{
+    background-color: #f2f2f2;
+    border:0;
+}
+
+.content .dropdown.yr-booking .dropdown-menu{
+    min-width:auto;
+    width:100%;
+}
+
+.content .dropdown.yr-booking button{
+    min-width:auto;
+    width:100%;
+    border-radius: 0;
+    background-color: #0f484d;
+    color: #fff;
+}
+
+.content .dropdown.yr-booking span{
+    float: right;
+    color: #cbcbcb;
+    font-size: 18px;
+}
+
+.content form .submit button{
+    background-color: #63ac1e;
+    height: 38px;
+    padding-left: 47px;
+    padding-right: 47px;
+    color: #fff;
+    border-radius: 0;
+}
+
+.content form .dropdown-menu{
+    min-width:auto;
+    width:100%;
+}
+
+.content form .dropdown button{
+    min-width:auto;
+    width:100%;
+    text-align: left;
+    border-radius: 0;
+}
+
+.content form .dropdown span{
+    float: right;
+    color: #cbcbcb;
+    font-size: 18px;
+}
+
+.content form .submit .submit-text{
+    margin-top: 15px;
+}
+
+.content form .submit .submit-text a{
+    color: #63ac1e;
+    text-decoration: none;
+}
+
+.content table td{
+    text-align: left;
+}
+
+.content form input[text]{
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+
+.content .form-blocks{
+    border-bottom: 1px dashed #dedede;
+    padding-bottom: 45px;
+    padding-top: 15px;
+}
+
+.content .btn-sub{
+    background-color: #0f484d;
+    color: #fff;
+    padding: 7px 30px 7px 30px;
+    border: 0;
+    font-size: 14px;
+}
+
+/*end Sign Up page*/
+
+/*Checkout page*/
+
+.left-sidebar .nav.nav-tabs{
+    margin-bottom: 40px;
+    border-bottom: none;
+}
+
+.left-sidebar .nav.nav-tabs a{
+    text-decoration: none;
+}
+
+.left-sidebar a, .left-sidebar, .left-sidebar legend{
+    color: #0f484d;
+}
+
+
+.left-sidebar #checkout-form{
+    margin-bottom: 175px;
+}
+
+.right-sidebar .detail-top .club-name{
+    font-weight: 600;
+    font-size: 18px;
+    display: block;
+}
+
+.right-sidebar .detail-header{
+    border-bottom: 2px solid #f2f2f2;
+    padding: 0 0 10px 5px;
+    margin-bottom: 13px;
+}
+
+.right-sidebar .detail-header h4{
+    display:inline-block;
+    margin-right: 20px;
+}
+
+
+.right-sidebar .detail-information{
+    padding-top: 10px;
+    padding-bottom: 6px;
+}
+
+.right-sidebar .detail-information .form-group{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.right-sidebar .detail-price{
+    line-height: 20px;
+}
+
+.right-sidebar .detail-price .price{
+    color: #63ac1e;
+    font-size: 26px;
+}
+
+.left-sidebar fieldset{
+    margin-bottom: 35px;
+}
+
+.left-sidebar .payment-details .payment-logo{
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.left-sidebar .payment-details img{
+    margin: 0 auto;
+}
+
+/*end Checkout page*/
+
+
+/* Search page */
+#find-your-court{
+    height: 192px;
+    background-color: #373737;
+    padding-top: 1px;
+}
+#find-your-court h3{
+    color: #63ac1e;
+}
+
+.content #featured-courts{
+    color: #0f484d;
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 10px;
+}
+.content .featured-blocks .price span{
+    color: #63ac1e;
+    font-size: 26px;
+    line-height: 51px;
+}
+
+.content .featured-blocks .club-image{
+    padding: 0;
+}
+
+.content .information h4.club-name{
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.content .information small.club-address{
+    color: #a0a0a0;
+    font-size: 14px;
+}
+
+.content .information p{
+    margin-bottom: 5px;
+}
+
+.content .featured-blocks .btn p{
+    width: 100%;
+    margin-top: 5px;
+}
+
+.content .featured-blocks .btn-sub{
+    width: 100%;
+    margin-top: 5px;
+}
+
+.content .featured-blocks .dropdown li{
+    text-align: center;
+    font-size: 15px;
+    padding: 0 10px;
+}
+
+.content .featured-blocks .dropdown li span{
+    color: #0f484d;
+}
+
+.content .featured-blocks .dropdown li span.price{
+    color: #63ac1e;
+}
+
+.content .featured-blocks .dropdown li.unvailable span:first-child{
+    padding-top:3px;
+}
+
+.content .featured-blocks .dropdown li.unvailable span{
+    color: #d2d2d2;
+}
+
+.content .featured-blocks .dropdown li.unvailable span.price{
+
+    font-size: 10px;
+}
+
+
+
+.content #show-results{
+    padding-top: 35px;
+    padding-bottom: 22px;
+    font-size: 14px;
+    color: #d7d7d7;
+}
+
+.content #show-results span{
+    color: #0f484d;
+    font-weight: bold;
+}
+
+.content #search-results .club-block {
+    background-color: #f2f2f2;
+    margin-bottom: 30px;
+}
+
+
+.content #search-results .thumbnail{
+    position:relative;
+    margin-bottom: 0;
+}
+.content #search-results img{
+    padding: 0;
+}
+
+.content #search-results .caption {
+    background: url(../images/text-overlay.png);
+    width: 100%;
+    color: #fff;
+    font-size: 12px;
+    bottom:0;
+    position: absolute;
+}
+.content #search-results .club-time {
+    background-color: #dfdfdf;
+}
+
+.content #search-results{
+    color: #0f484d;
+}
+
+.content #search-results .information{
+    margin-bottom: 25px;
+}
+
+.content #search-results .distance{
+    padding: 10px;
+}
+.content #search-results .img-clubs{
+    width: 100%;
+}
+
+
+
+.content #search-results .club-time .col-price{
+    width: 20%;
+    float: left;
+}
+
+.content #search-results .club-time .price {
+    text-align: center;
+    color: #fff;
+    border-radius: 0;
+    background-color: #0f484d;
+    font-size: 14px;
+    padding: 8px 15px;
+    margin: 0px 10px;
+    font-weight: bold;
+    display: block;
+    text-decoration: none;
+}
+.content #search-results .club-time .price:hover{
+    background: #6BD7E0;
+}
+.content #search-results .club-time .price:active{
+    border-top: 2px solid #0f484d;
+}
+.content #search-results .club-time .active span {
+    font-weight: bold;
+}
+
+
+.content #search-results .club-time .active .price {
+    background-color: #63ac1e;
+}
+
+.content #search-results .club-time .unvailable .price {
+    background-color: #cbcbcb;
+    font-size: 10px;
+    padding: 4px 5px;
+}
+.login-box, .register-box {
+    width: 480px;
+    margin: 7% auto;
+}
+.login-box-body{
+    padding: 0;
+    border: 1px solid #ddd;
+}
+.login-box-body form{
+    padding: 5px 10px;
+    text-align: left;
+}
+.fa.form-control-feedback{
+    line-height: 34px;
+    color: #000;
+}
+.login-box-body>div{padding:20px}
+.login-box-body h3{box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);
+    margin: 0px;
+    padding:20px 10px;text-align:center;font-size:26px;color:#fff;background:#00c0ef;border-top-left-radius:4px;border-top-right-radius:4px}.login-box-body .btn-info{width:100%}.login-box-body span.fa.form-control-feedback{line-height:33px}
+
+/* Tooltip container */
+.search-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    margin-top: 4px;
+}
+
+/* Tooltip text */
+.search-tooltip .tooltiptext {
+    visibility: visible;
+    width: 260px;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    padding: 5px 0;
+    border: 1px solid #d8d8d8;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    padding: 10px;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.search-tooltip:hover .tooltiptext {
+
+}
+.search-tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
+}
+.search-time{
+    width: auto;
+    border: 1px solid #d8d8d8;
+    margin: 0px auto;
+    outline: none;
+}
+.city-autocomplete{
+    padding: 10px;
+}
+.city-autocomplete .citys:before{
+    content: 'Location';
+    font-weight: bold;
+}
+.city-autocomplete .clubs:before{
+    content: 'Tennis Clubs';
+    font-weight: bold;
+}
+.instruction table{
+    font-size: 13px;
+    min-height: 180px;
+}
+.club-time-wrap{
+    background: #ddd;
+    overflow: hidden;
+    padding: 10px 20px;
+}
+.club-time-wrap .col-price.active .price{
+    background-color: #63ac1e;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.clearfix{
+    clear: both;
+}
+.content-view-more-court{
+    border: 1px solid #d8d8d8;
+    margin: 0px -15px;
+    padding: 20px 30px;
+}
+.btn-booking-tennis{
+    cursor: pointer;
+}
+/*
+ * Plugin: Select2
+ * ---------------
+ */
+.select2-container--default.select2-container--focus,
+.select2-selection.select2-container--focus,
+.select2-container--default:focus,
+.select2-selection:focus,
+.select2-container--default:active,
+.select2-selection:active {
+    outline: none;
+}
+
+.select2-container--default .select2-selection--single,
+.select2-selection .select2-selection--single {
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+    padding: 6px 12px;
+    height: 34px;
+}
+
+.select2-container--default.select2-container--open {
+    border-color: #2d3a42;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #2d3a42;
+    color: white;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 28px;
+    right: 3px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    margin-top: 0;
+}
+
+.select2-container--default .select2-results__option[aria-disabled=true] {
+    color: #999;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #ddd;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+}
+
+.select2-container--default .select2-selection--multiple:focus {
+    border-color: #2d3a42;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #2d3a42;
+    border-color: #367fa9;
+    padding: 1px 10px;
+    color: #fff;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    margin-right: 5px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #fff;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #d2d6de;
+}
+
+.select2-dropdown {
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+}
+
+.select2-results__option {
+    padding: 6px 12px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+    padding-right: 0;
+    height: auto;
+    margin-top: -4px;
+    padding-right: 10px;
+}
+
+.select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+    padding-right: 6px;
+    padding-left: 20px;
+}
+
+.select2-dropdown .select2-search__field,
+.select2-search--inline .select2-search__field {
+    border: 1px solid #d2d6de;
+}
+
+.select2-dropdown .select2-search__field:focus {
+    outline: none;
+    border: 1px solid #2d3a42;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true],
+.select2-container--default .select2-results__option[aria-selected=true]:hover {
+    color: #444;
+}
+.loading{
+    position: ABSOLUTE;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    text-align: Center;
+    margin: 0px auto;
+    display: block;
+    font-size: 3em;
+    color: #fff;
+}
+.loading i{
+    text-align: Center;
+    top: 50%;
+    position: ABSOLUTE;
+}
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+#form-checkout-wrapper{
+    position: relative;
+}
+#cc-form-booking-info{
+    position: relative;
+}
+#cc-form-booking-info.disabled:before{
+    content:'';
+    position: ABSOLUTE;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    text-align: Center;
+    margin: 0px auto;
+    display: block;
+    font-size: 3em;
+    color: #fff;
+}
+.alert-message-box{
+    text-align: left;
+}
+#exist-customer{
+    position: relative;
+}
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
