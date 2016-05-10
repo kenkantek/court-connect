@@ -132,7 +132,7 @@
 			$("body").on('click',".day-view-content .day-grid.open, .day-view-content .day-grid.contract, .day-view-content .day-grid.lesson",function(event){
 				$("#md-available-content-expand").hide();
 				$("#md-booking-content-expand").css({'display':'block','width': $(".day-view-content").width() - 100});
-				var tooltipX =  110;
+				var tooltipX =  $("#day-view-content").scrollLeft() + 110;
 				var tooltipY = event.pageY + 8 - $("#day-view-content").offset().top + 40;
 				$("#md-booking-content-expand").css({top: tooltipY, left: tooltipX});
 			});

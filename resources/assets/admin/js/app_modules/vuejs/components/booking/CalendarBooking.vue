@@ -97,91 +97,90 @@
                     <!-- court booking-expanded -->
                     <div class="court-booking-expanded">
                         <button type="button" class="close-md close" aria-label="Close"><span aria-hidden="true">X</span></button>
-                        <div class="col-xs-3">
-                            <h3 class="title-part">Customer Details</h3>
-                            <table v-if="billing_info">
-                                <tr>
-                                    <td align="right">Name</td>
-                                    <td>
-                                        <div class="editable_">{{billing_info['first_name']}}</div>
-                                        <div class="editable_" >{{billing_info['last_name']}}</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Email</td>
-                                    <td><div class="editable_" >{{billing_info['email']}}</div></td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Phone</td>
-                                    <td><div class="editable_" >{{billing_info['phone']}}</div></td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Address</td>
-                                    <td><div class="editable_">{{billing_info['address1']}}</div></td>
-                                </tr>
-                            </table>
+                        <div v-if="booking">
+                            <div class="col-xs-3">
+                                <h3 class="title-part">Customer Details</h3>
+                                <table v-if="booking['billing_info']">
+                                    <tr>
+                                        <td align="right">Name</td>
+                                        <td>
+                                            <div class="editable_">{{booking['billing_info']['first_name']}}</div>
+                                            <div class="editable_" >{{booking['billing_info']['last_name']}}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Email</td>
+                                        <td><div class="editable_" >{{booking['billing_info']['email']}}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Phone</td>
+                                        <td><div class="editable_" >{{booking['billing_info']['phone']}}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Address</td>
+                                        <td><div class="editable_">{{booking['billing_info']['address1']}}</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div v-if="booking['court']" class="col-xs-3">
+                                <h3 class="title-part">Booking Details</h3>
+                                <table>
+                                    <tr>
+                                        <td align="right">Booking Type</td>
+                                        <td>{{booking['type']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Court:</td>
+                                        <td>{{booking['court']['name']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Start Time</td>
+                                        <td>{{booking['hour'] + " - " + (booking['hour'] + booking['hour_length'])}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Length</td>
+                                        <td>{{booking['hour_length']}} Hour</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Players</td>
+                                        <td>{{booking['num_player']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Create Time</td>
+                                        <td>{{booking['created_at']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Booking By</td>
+                                        <td>Court-Connect.com</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-3">
+                                <h3 class="title-part">Payment Details</h3>
+                                <table>
+                                    <tr>
+                                        <td align="right">Status</td>
+                                        <td v-if="booking['status'] == 'required'" style="text-transform: capitalize"><span style="color:red">Payment Required</span></td>
+                                        <td v-else style="text-transform: capitalize">{{booking['status']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Tender</td>
+                                        <td style="text-transform: capitalize">{{booking['type']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">Total Due</td>
+                                        <td>{{booking['total_price']}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-3">
+                                <div id="mb-print-receipt" class="btn btn-primary btn-mb-ex icon-fa-print">Print Receipt</div>
+                                <div v-if="booking['status'] == 'required'" @click="acceptPayment(booking['id'])" id="mb-accept-payment" class="btn btn-primary btn-mb-ex icon-fa-accept">Accept Payment</div>
+                                <div v-else id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-check">Check Players In</div>
+                                <div id="mb-edit-booking" @click="editBooking(booking['id'])" class="btn btn-primary btn-mb-ex icon-fa-edit">Edit Booking</div>
+                                <div id="mb-cancel-booking" @click="cancelBooking(booking['id'])"class="btn btn-primary btn-mb-ex btn-custom icon-fa-cancel">Cancel Booking</div>
+                            </div>
                         </div>
-                        <template v-if="booking_detail">
-                        <div class="col-xs-3">
-                            <h3 class="title-part">Booking Details</h3>
-
-                            <table>
-                                <tr>
-                                    <td align="right">Booking Type</td>
-                                    <td>{{booking_detail['type']}}</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Court:</td>
-                                    <td>{{booking_detail['court']['name']}}</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Start Time</td>
-                                    <td>{{booking_detail['hour'] + " - " + (booking_detail['hour'] + booking_detail['hour_length'])}}</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Length</td>
-                                    <td>{{booking_detail['hour_length']}} Hour</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Players</td>
-                                    <td>{{booking_detail['num_player']}}</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Create Time</td>
-                                    <td>{{booking_detail['created_at']}}</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Booking By</td>
-                                    <td>Court-Connect.com</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-xs-3">
-                            <h3 class="title-part">Payment Details</h3>
-                            <table v-if="payment_info">
-                                <tr>
-                                    <td align="right">Status</td>
-                                    <td v-if="booking_detail['status'] == 'required'" style="text-transform: capitalize"><span style="color:red">Payment Required</span></td>
-                                    <td v-else style="text-transform: capitalize">{{booking_detail['status']}}</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Tender</td>
-                                    <td style="text-transform: capitalize">{{payment_info['type']}}</td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Total Due</td>
-                                    <td>{{booking_detail['total_price']}}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-xs-3">
-                            <div id="mb-print-receipt" class="btn btn-primary btn-mb-ex icon-fa-print">Print Receipt</div>
-                            <div v-if="booking_detail['status'] == 'required'" @click="acceptPayment(booking_detail['id'])" id="mb-accept-payment" class="btn btn-primary btn-mb-ex icon-fa-accept">Accept Payment</div>
-                            <div v-else id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-check">Check Players In</div>
-                            <div id="mb-edit-booking" @click="editBooking(booking_detail['id'])" class="btn btn-primary btn-mb-ex icon-fa-edit">Edit Booking</div>
-                            <div id="mb-cancel-booking" @click="cancelBooking(booking_detail['id'])"class="btn btn-primary btn-mb-ex btn-custom icon-fa-cancel">Cancel Booking</div>
-                        </div>
-                        </template>
                     </div>
                     <!-- end court booking-expanded -->
                 </div>
@@ -327,15 +326,7 @@
                 now: new Date(),
                 courts: [],
                 dataOfClub: [],
-                booking_detail: null,
-                billing_info: {
-                    first_name: null,
-                    last_name: null,
-                    email: null,
-                    phone: null,
-                    address1: null
-                },
-                payment_info: null,
+                booking:[],
                 info_grid_available: null,
                 make_time_unavailable: {
                     hour: null,
@@ -442,7 +433,7 @@
             $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.dataOfClub'), {date: this.dateChooise, club_id: this.clubSettingId,}).then(
                 res => {
-                    if(res.data.success)
+                    if(res.data.error == false)
                     {
                         def.resolve(res.data.data);
                     }
@@ -464,16 +455,12 @@
             }
         },
         fetchDataOfBooking(booking_id){
-            this.booking_detail = null;
-            this.billing_info = null;
-            this.payment_info = null;
+            this.booking = [];
             $("#md-booking-content-expand").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.view', {one:booking_id})).then(res => {
                 $("#md-booking-content-expand .loading").remove();
-                if(res.data.success){
-                    this.booking_detail = res.data.booking;
-                    this.billing_info = JSON.parse(this.booking_detail['billing_info']);
-                    this.payment_info = JSON.parse(this.booking_detail['payment_info']);
+                if(res.data.error == false){
+                    this.booking = res.data.booking;
                 }
             }, res => {
                 $("#md-booking-content-expand .loading").remove();
@@ -486,7 +473,7 @@
             $("#md-available-content-expand").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.infoGridAvailable', {court_id:court_id, hour: hour, date: this.dateChooise})).then(res => {
                 $("#md-available-content-expand .loading").remove();
-                if(res.data.success){
+                if(res.data.error == false){
                     this.info_grid_available = res.data.data;
                     this.make_time_unavailable.court_id = this.deal.court_id = court_id;
                     this.make_time_unavailable.hour = this.deal.hour = hour;
@@ -497,8 +484,8 @@
         },
         acceptPayment(booking_id){
             this.$http.get(laroute.route('booking.acceptPayment', {one: booking_id}),(data) => {
-                if(data.success){
-                    this.booking_detail.status = "paid";
+                if(data.error == false){
+                    this.booking.status = "paid";
                     showNotice('success', "Update accept payment success!", 'Update Success!');
                 }
             }).error((data) => {
@@ -513,11 +500,16 @@
             var parent = this;
             $('#confirm-booking-delete').modal({ backdrop: 'static', keyboard: false })
                 .one('click', '#booking-delete', function (e) {
-                        parent.$http.put(laroute.route('booking.delete', {one: booking_id}),(data) => {
-                            if(data.success){
+                        $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        parent.$http.get(laroute.route('booking.cancel', {one: booking_id}),(data) => {
+                            console.log(data);
+                            if(data.error == false){
                                 parent.flagChangeDataOfDate = Math.random();
-                                showNotice('success', "Delete success!", 'Delete Success!');
+                                showNotice('success', "Cancel booking success!", 'Cancel Success!');
+                            }else{
+                                showNotice('error', data.message, 'Error!');
                             }
+                            $("body .loading").remove();
                         }).error((data) => {
 
                         });
@@ -533,7 +525,7 @@
             this.$set('make_time_unavailable.date', this.dateChooise);
             const make_time_unavailable = this.make_time_unavailable;
             this.$http.post(laroute.route('booking.makeTimeUnavailable',make_time_unavailable)).then(res => {
-                if(res.data.success){
+                if(res.data.error == false){
                     $("#mb-make-time-unavailable .btn-in-expand").click();
                     this.flagChangeDataOfDate = Math.random();
                     showNotice('success', "Make Time Unavailable success", 'Update Success!');
@@ -555,7 +547,7 @@
             $('#md-new-deal').modal('show');
             $("#md-new-deal .modal-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.getInfoGridForDeal',deal)).then(res => {
-                if(res.data.success){
+                if(res.data.error == false){
                     var data = res.data.data;
                     this.deal.date_text = data['date_text'];
                     this.deal.time = data['time'];
@@ -573,7 +565,7 @@
         createDeal(){
             const deal = this.deal;
             this.$http.post(laroute.route('booking.newDeal',deal)).then(res => {
-                if(res.data.success){
+                if(res.data.error == false){
                     this.flagChangeDataOfDate = Math.random();
                     $('#md-new-deal').modal('hide');
                     showNotice('success', "New deal success", 'Update Success!');
@@ -597,7 +589,7 @@
             data.append('grids_selected',JSON.stringify(this.grids_selected));
             $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(laroute.route('booking.makeTimeUnavailable'),data).then(res => {
-                if(res.data.success){
+                if(res.data.error == false){
                     $("#multi_make_time_unavailable .btn-in-expand").click();
                     this.flagChangeDataOfDate = Math.random();
                     _this.grids_selected = [];
@@ -623,7 +615,7 @@
             data.append('grids_selected',JSON.stringify(this.grids_selected));
             var _this = this;
             this.$http.post(laroute.route('booking.newDeal'),data).then(res => {
-                if(res.data.success){
+                if(res.data.error == false){
                     this.flagChangeDataOfDate = Math.random();
                     $('#md-multi-new-deal').modal('hide');
                     showNotice('success', "New multi deal success", 'Update Success!');

@@ -4,7 +4,7 @@
         <thead>
         <tr>
             <th></th>
-            <th>Full Name</th>
+            <th>Name</th>
             <th>Email</th>
             <th>Is Admin ?</th>
         </tr>
@@ -22,7 +22,7 @@
 </template>
 <script>
     var _ = require('lodash'),
-    deferred = require('deferred');
+            deferred = require('deferred');
     var tmp_choice = null;
     export default {
         props:['clubSettingId','users_choice','users','reloadUsers','dataRates'],
@@ -38,33 +38,33 @@
     });
 
     },
-        methods: {
-            fetchUsers() {
-                let def = deferred(),
+    methods: {
+        fetchUsers() {
+            let def = deferred(),
                     url = laroute.route('users.listdata', {one:this.clubSettingId});
-                this.$http.get(url).then(res => {
-                    def.resolve(res.data.data);
-            }, res => {
-                def.reject(res);
-            });
-            return def.promise;
-            },
-            addUsers(index){
-                this.users_choice = [];
-                $("#tbl-listuser .court-item-check:checked").prop("checked",false);
-                if(tmp_choice != index) {
-                    $("#tbl-listuser .court-item-check[value='"+index+"']").prop("checked",true);
-                    this.users_choice[0] = this.users[$("#tbl-listuser .court-item-check[value='" + index + "']").val()];
-                    tmp_choice = index;
-                }
-                else {
-                    tmp_choice = null;
-                }
-            },
-            scrollAddnewUser(){
-                $("#tbl-listuser .court-item-check:checked").prop("checked",false);
-                this.users_choice = [];
-            },
+            this.$http.get(url).then(res => {
+                def.resolve(res.data.data);
+        }, res => {
+            def.reject(res);
+        });
+        return def.promise;
+    },
+    addUsers(index){
+        this.users_choice = [];
+        $("#tbl-listuser .court-item-check:checked").prop("checked",false);
+        if(tmp_choice != index) {
+            $("#tbl-listuser .court-item-check[value='"+index+"']").prop("checked",true);
+            this.users_choice[0] = this.users[$("#tbl-listuser .court-item-check[value='" + index + "']").val()];
+            tmp_choice = index;
         }
+        else {
+            tmp_choice = null;
+        }
+    },
+    scrollAddnewUser(){
+        $("#tbl-listuser .court-item-check:checked").prop("checked",false);
+        this.users_choice = [];
+    },
+    }
     }
 </script>

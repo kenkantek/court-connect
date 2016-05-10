@@ -31,9 +31,6 @@ body{
     font-family: 'Source Sans Pro',sans-serif;
     font-size: 13px;
 }
-a,button,input{
-    outline: none;
-}
 .header {
     background: url(../images/header-bg.jpg) no-repeat top;
     height: 681px;
@@ -138,7 +135,7 @@ div.modal-dialog {
 }
 
 div.modal-body {
-    /*text-align: center*/
+    text-align: center
 }
 
 .btn-login-facebook {
@@ -679,7 +676,7 @@ a.ui-state-default.ui-state-highlight {
 .content .btn-sub{
     background-color: #0f484d;
     color: #fff;
-    padding: 7px 30px 7px 30px;
+    padding: 10px 30px 7px 30px;
     border: 0;
     font-size: 14px;
 }
@@ -905,7 +902,7 @@ a.ui-state-default.ui-state-highlight {
     border-radius: 0;
     background-color: #0f484d;
     font-size: 14px;
-    padding: 8px 15px;
+    padding: 8px 0px;
     margin: 0px 10px;
     font-weight: bold;
     display: block;
@@ -914,7 +911,7 @@ a.ui-state-default.ui-state-highlight {
 .content #search-results .club-time .price:hover{
     background: #6BD7E0;
 }
-.content #search-results .club-time .price:active{
+.content #search-results .club-time .price:not(.disabled):active{
     border-top: 2px solid #0f484d;
 }
 .content #search-results .club-time .active span {
@@ -1008,7 +1005,6 @@ a.ui-state-default.ui-state-highlight {
 }
 .instruction table{
     font-size: 13px;
-    min-height: 180px;
 }
 .club-time-wrap{
     background: #ddd;
@@ -1031,6 +1027,223 @@ a.ui-state-default.ui-state-highlight {
     border: 1px solid #d8d8d8;
     margin: 0px -15px;
     padding: 20px 30px;
+}
+.btn-booking-tennis{
+    cursor: pointer;
+}
+.btn-booking-tennis.disabled{
+    background: #ccc !important;
+}
+/*
+ * Plugin: Select2
+ * ---------------
+ */
+.select2-container--default.select2-container--focus,
+.select2-selection.select2-container--focus,
+.select2-container--default:focus,
+.select2-selection:focus,
+.select2-container--default:active,
+.select2-selection:active {
+    outline: none;
+}
+
+.select2-container--default .select2-selection--single,
+.select2-selection .select2-selection--single {
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+    padding: 6px 12px;
+    height: 34px;
+}
+
+.select2-container--default.select2-container--open {
+    border-color: #2d3a42;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #2d3a42;
+    color: white;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 28px;
+    right: 3px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    margin-top: 0;
+}
+
+.select2-container--default .select2-results__option[aria-disabled=true] {
+    color: #999;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #ddd;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+}
+
+.select2-container--default .select2-selection--multiple:focus {
+    border-color: #2d3a42;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #2d3a42;
+    border-color: #367fa9;
+    padding: 1px 10px;
+    color: #fff;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    margin-right: 5px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #fff;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #d2d6de;
+}
+
+.select2-dropdown {
+    border: 1px solid #d2d6de;
+    border-radius: 0;
+}
+
+.select2-results__option {
+    padding: 6px 12px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+    padding-right: 0;
+    height: auto;
+    margin-top: -4px;
+    padding-right: 10px;
+}
+
+.select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+    padding-right: 6px;
+    padding-left: 20px;
+}
+
+.select2-dropdown .select2-search__field,
+.select2-search--inline .select2-search__field {
+    border: 1px solid #d2d6de;
+}
+
+.select2-dropdown .select2-search__field:focus {
+    outline: none;
+    border: 1px solid #2d3a42;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true],
+.select2-container--default .select2-results__option[aria-selected=true]:hover {
+    color: #444;
+}
+.login-box-body{
+    padding: 0;
+    border: 1px solid #ddd;
+}
+.login-box-body form{
+    padding: 5px 10px;
+    text-align: left;
+}
+.fa.form-control-feedback{
+    line-height: 34px;
+    color: #000;
+}
+.login-box-body>div{padding:20px}
+.login-box-body h3{box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);
+    margin: 0px;
+    padding:20px 10px;text-align:center;font-size:26px;color:#fff;background:#00c0ef;border-top-left-radius:4px;border-top-right-radius:4px}.login-box-body .btn-info{width:100%}.login-box-body span.fa.form-control-feedback{line-height:33px}
+
+/* Tooltip container */
+.search-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    margin-top: 4px;
+}
+
+/* Tooltip text */
+.search-tooltip .tooltiptext {
+    visibility: visible;
+    width: 260px;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    padding: 5px 0;
+    border: 1px solid #d8d8d8;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    padding: 10px;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.search-tooltip:hover .tooltiptext {
+
+}
+.search-tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
+}
+.search-time{
+    width: auto;
+    border: 1px solid #d8d8d8;
+    margin: 0px auto;
+    outline: none;
+}
+.city-autocomplete{
+    padding: 10px;
+}
+.city-autocomplete .citys:before{
+    content: 'Location';
+    font-weight: bold;
+}
+.city-autocomplete .clubs:before{
+    content: 'Tennis Clubs';
+    font-weight: bold;
+}
+.instruction table{
+    font-size: 13px;
+}
+.club-time-wrap{
+    background: #ddd;
+    overflow: hidden;
+    padding: 10px 0px;
+}
+.club-time-wrap .col-price.active .price{
+    background-color: #63ac1e;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.clearfix{
+    clear: both;
+}
+.content-view-more-court{
+    border: 1px solid #d8d8d8;
+    margin: 0;
+    max-height: 600px;
+    overflow-x: scroll;
 }
 .btn-booking-tennis{
     cursor: pointer;
@@ -1150,7 +1363,7 @@ a.ui-state-default.ui-state-highlight {
     color: #444;
 }
 .loading{
-    position: ABSOLUTE;
+    position: fixed;
     top: 0px;
     left: 0px;
     bottom: 0px;
@@ -1199,8 +1412,46 @@ a.ui-state-default.ui-state-highlight {
 .alert-message-box{
     text-align: left;
 }
+.intro-court  {
+    padding: 0px 10px;
+
+}
+.club-time-wrap {
+    padding:0 5px;
+}
+.item-court {
+    border: 1px solid #f0f0f0;
+    margin-bottom: 10px;
+    padding: 10px 0px 50px 0;
+}
+.btn-primary {
+    background-color: #0f494d;
+    border-radius: 0px !important;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #053032;
+    border-color: #17383A;
+}
+.viewmore {
+    margin: 5px 0px;
+}
+.show-result {
+    margin: 20px 0px;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #0f494d;
+    border-color: #17383A;
+}
+
 #exist-customer{
     position: relative;
+}
+.print-book-confirm{
+    display: none;
 }
 @-webkit-keyframes spin2 {
     from { -webkit-transform: rotate(0deg);}
@@ -1211,3 +1462,4 @@ a.ui-state-default.ui-state-highlight {
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
+/*# sourceMappingURL=home.css.map */

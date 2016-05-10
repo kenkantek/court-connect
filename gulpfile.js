@@ -46,4 +46,4 @@ gulp.task('home', function() {
         mix.scripts('home.js');
     });
 });
-gulp.task('default', [ 'admin','home']);
+gulp.task('default', [ 'admin']);

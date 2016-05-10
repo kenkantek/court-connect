@@ -30,6 +30,11 @@ class RoleSeeder extends Seeder
                     'name' => 'player',
                     'label' => 'Player',
                 ],
+                [
+                    'id' => 4,
+                    'name' => 'teacher',
+                    'label' => 'Teacher',
+                ],
             ]
         );
     }

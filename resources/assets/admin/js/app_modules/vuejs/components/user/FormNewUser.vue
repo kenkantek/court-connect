@@ -2,17 +2,16 @@
     <div class="court_new courtbox">
         <h3 class="title-box">Add New User</h3>
         <form class="form-horizontal">
-            <div class="form-group" :class=" {'has-error' : (user.fullname == null && submit == true)}">
-                <label for="name" class="col-sm-4 control-label">Name *</label>
+            <div class="form-group" :class=" {'has-error' : (teacher.first_name == null && submit == true)}">
+                <label for="first_name" class="col-sm-4 control-label">First Name *</label>
                 <div class="col-sm-8">
-                    <input class="form-control" placeholder="Enter full name" name="fullname" type="text" id="fullname" v-model='user.fullname'>
+                    <input class="form-control" placeholder="Enter first name" name="first_name" type="text" id="first_name" v-model='user.first_name'>
                 </div>
             </div>
-
-            <div class="form-group" :class=" {'has-error' : (user.password == null && submit == true)}">
-                <label for="password" class="col-sm-4 control-label">Password *</label>
+            <div class="form-group" :class=" {'has-error' : (teacher.last_name == null && submit == true)}">
+                <label for="last_name" class="col-sm-4 control-label">Last Name *</label>
                 <div class="col-sm-8">
-                    <input class="form-control" placeholder="Password" name="password" type="password" id="password" v-model='user.password'>
+                    <input class="form-control" placeholder="Enter last name" name="last_name" type="text" id="last_name" v-model='user.last_name'>
                 </div>
             </div>
 
@@ -44,7 +43,8 @@
         data() {
             return {
                 user : {
-                    name:null,
+                    first_name:null,
+                    last_name: null,
                     password:null,
                     email:null,
                     is_admin:0,
@@ -70,7 +70,8 @@
                     }else
                     {
                         this.reloadUsers = Math.floor(Math.random() * 10000);
-                        this.$set('user.fullname', null);
+                        this.$set('user.first_name', null);
+                        this.$set('user.last_name', null);
                         this.$set('user.password', null);
                         this.$set('user.email', null);
                         this.$set('user.is_admin', 0);

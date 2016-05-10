@@ -3,6 +3,7 @@
 Route::group(['middleware' => ['web']], function () {
 
 	Route::get('/', ['as' => 'home.index', 'uses' => 'HomeController@getIndex']);
+	Route::get('/error', ['as' => 'home.error', 'uses' => 'HomeController@getError']);
 
 	Route::get('search', ['as' => 'home.search', 'uses' => 'SearchController@getSearch']);
 	Route::post('search', ['as' => 'home.search', 'uses' => 'SearchController@postSearch']);
@@ -10,7 +11,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('signup', ['as' => 'home.signup', 'uses' => 'UserController@getSignUp']);
 	Route::post('signup', ['as' => 'home.signup', 'uses' => 'UserController@postSignUp']);
 
-	Route::get('view-profile', ['as' => 'home.acouunt', 'uses' => 'UserController@getAccount']);
+	Route::get('view-profile', ['as' => 'home.acount', 'uses' => 'UserController@getAccount']);
 	Route::get('account', ['as' => 'home.acouunt', 'uses' => 'UserController@getAccount']);
 	Route::post('account', ['as' => 'home.account', 'uses' => 'UserController@updateAccount']);
 	
@@ -18,12 +19,16 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('account/setting/contact', ['as' => 'home.account.setting.contact', 'uses' => 'UserController@updateSettingContact']);
 	Route::post('account/setting/address', ['as' => 'home.account.setting.address', 'uses' => 'UserController@updateSettingAddress']);
 
-	Route::get('checkout', ['as' => 'home.checkout', 'uses' => 'CheckoutController@index']);
-	Route::post('checkout', ['as' => 'home.checkout', 'uses' => 'CheckoutController@postCheckout']);
-
+	Route::get('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@index']);
+	Route::post('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@postCheckout']);
+	Route::post('print-confirmation', ['as' => 'home.print_confirmation', 'uses' => 'BookingController@printConfirmation']);
+	Route::post('send-mail', ['as' => 'home.send_mail', 'uses' => 'BookingController@sendMailOrder']);
 	Route::get('search/autocomplete', 'SearchController@autocomplete');
-	Route::post('/check-update-booking', 'UserController@checkActionUpdateBooking');
-	Route::get('/cancel-booking', 'UserController@cancelBooking');
+	Route::post('/check-update-booking', 'BookingController@checkActionUpdateBooking');
+	Route::get('/cancel-booking', 'BookingController@cancelBooking');
+
+	Route::get('price', ['as' => 'home.send_mail', 'uses' => 'SearchController@checkPrice']);
+
 	Route::get('/paypal', ['as'=>'home','uses'=>'HomeController@paypal']);
 	Route::post('order-post', ['as'=>'order-post','uses'=>'HomeController@orderPost']);
 });

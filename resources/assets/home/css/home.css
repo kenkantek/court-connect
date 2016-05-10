@@ -932,7 +932,6 @@ a.ui-state-default.ui-state-highlight {
     width: 480px;
     margin: 7% auto;
 }
-<<<<<<< .mine
 .login-box-body{
     padding: 0;
     border: 1px solid #ddd;
@@ -1147,40 +1146,6 @@ a.ui-state-default.ui-state-highlight {
     color: #444;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
 .login-box-body{
     padding: 0;
     border: 1px solid #ddd;
@@ -1397,11 +1362,11 @@ a.ui-state-default.ui-state-highlight {
     padding: 0px 10px;
 
 }
-.intro-club {
-    .club-time-wrap {
-        padding:0 5px;
-    }
+
+.club-time-wrap {
+    padding:0 5px;
 }
+
 .item-court {
     border: 1px solid #f0f0f0;
     margin-bottom: 10px;
@@ -1428,4 +1393,5 @@ a.ui-state-default.ui-state-highlight {
     background-color: #0f494d;
     border-color: #17383A;
 }
->>>>>>> .theirs
+
+/*# sourceMappingURL=home.css.map */

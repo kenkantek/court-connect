@@ -94,46 +94,56 @@ class SearchController extends Controller {
                         $input['club_id'] = $club['id'];
                         $clubs[$k]['courts'][$p]['prices'] = $this->getPriceOfCourt($input);
                     }
-
                 }
             }
 
         }
+        //echo "<pre>"; dd($clubs[0]); echo "<pre>"; die;
         return view('home.search', compact('request', 'clubs', 'keyword_hour'));
     }
 
     //get price follow hour of court
-    function getPriceOfCourt($input) {
-        $bookingClass = new ManageBookingController();
+    function getPriceOfCourt($input){
         $list_price = [];
         $hour_start = 0;
         $hour_end = 0;
-        if ($input['hour_start'] - 5 >= 2) {
-            $limit_hour = $input['hour_start'] + 2 < 22 - $input['hour_length'] ? 2 : (int) (22 - $input['hour_start'] - 2);
-            $hour_start = $input['hour_start'] - 2;
+        if($input['hour_start'] - 5 >= 2){
+            $limit_hour = $input['hour_start'] + 2 < 22 - $input['hour_length']? 2 : (int)(22 - $input['hour_start'] - 2);
+            $hour_start = $input['hour_start'] -2;
             $hour_end = $input['hour_start'] + $limit_hour;
-        } else if ($input['hour_start'] - 5 >= 1) {
-            $limit_hour = $input['hour_start'] + 3 < 22 - $input['hour_length'] ? 3 : (int) (22 - $input['hour_start'] - 3);
-            $hour_start = $input['hour_start'] - 1;
-            $hour_end = $input['hour_start'] + $limit_hour;
-            dd($hour_end);
-        } else if ($input['hour_start'] - 5 >= 0) {
-            $limit_hour = $input['hour_start'] + 4 < 22 - $input['hour_length'] ? 4 : (int) (22 - $input['hour_start'] - 4);
+        }else if($input['hour_start'] - 5 >= 1){
+            $limit_hour = $input['hour_start'] + 3 < 22 - $input['hour_length']? 3 : (int)(22 - $input['hour_start']- 3);
+            $hour_start = $input['hour_start'] -1;
+            $hour_end = $input['hour_start'] + $limit_hour;dd($hour_end);
+        }
+        else if($input['hour_start'] - 5 >= 0){
+            $limit_hour = $input['hour_start'] + 4 < 22 - $input['hour_length']? 4 : (int)(22 - $input['hour_start']- 4);
             $hour_start = $input['hour_start'];
             $hour_end = $input['hour_start'] + $limit_hour;
         }
 
-        for ($i = $hour_start; $i <= $hour_end; $i++) {
+        for($i = $hour_start; $i<= $hour_end; $i++) {
             $input['hour_start'] = $i;
-            $calPrice = $bookingClass->calPriceForBooking($input);
+            $calPrice = getPriceForBooking($input);
             $calPrice['hour_start'] = $i;
             $calPrice['hour_length'] = $input['hour_length'];
             $list_price[] = $calPrice;
         }
         return $list_price;
-
     }
     public function getCosttoTimeAndDay($time, $date, $rate) {
         # code...
+    }
+    public function checkPrice(){
+        $input = [
+            'date' => "05/09/2016",
+            'type' => 'open',
+            'hour_start' => 7,
+            'hour_length' => 1,
+            'member' => 0,
+            'court_id' => '179'
+        ];
+        $price = $this->getPriceOfCourt($input);
+        dd($price);
     }
 }

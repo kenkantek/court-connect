@@ -3024,12 +3024,12 @@ module.exports = function (e1, e2) {
 (function (global){
 /**
  * @license
- * lodash 4.11.2 (Custom Build) <https://lodash.com/>
+ * lodash 4.6.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash -d -o ./foo/lodash.js`
- * Copyright jQuery Foundation and other contributors <https://jquery.org/>
- * Released under MIT license <https://lodash.com/license>
+ * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Available under MIT license <https://lodash.com/license>
  */
 ;(function() {
 
@@ -3037,7 +3037,7 @@ module.exports = function (e1, e2) {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.11.2';
+  var VERSION = '4.6.1';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -3102,7 +3102,6 @@ module.exports = function (e1, e2) {
       mapTag = '[object Map]',
       numberTag = '[object Number]',
       objectTag = '[object Object]',
-      promiseTag = '[object Promise]',
       regexpTag = '[object RegExp]',
       setTag = '[object Set]',
       stringTag = '[object String]',
@@ -3111,7 +3110,6 @@ module.exports = function (e1, e2) {
       weakSetTag = '[object WeakSet]';
 
   var arrayBufferTag = '[object ArrayBuffer]',
-      dataViewTag = '[object DataView]',
       float32Tag = '[object Float32Array]',
       float64Tag = '[object Float64Array]',
       int8Tag = '[object Int8Array]',
@@ -3143,10 +3141,7 @@ module.exports = function (e1, e2) {
       reIsPlainProp = /^\w*$/,
       rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]/g;
 
-  /**
-   * Used to match `RegExp`
-   * [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns).
-   */
+  /** Used to match `RegExp` [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns). */
   var reRegExpChar = /[\\^$.*+?()[\]{}|]/g,
       reHasRegExpChar = RegExp(reRegExpChar.source);
 
@@ -3155,16 +3150,10 @@ module.exports = function (e1, e2) {
       reTrimStart = /^\s+/,
       reTrimEnd = /\s+$/;
 
-  /** Used to match non-compound words composed of alphanumeric characters. */
-  var reBasicWord = /[a-zA-Z0-9]+/g;
-
   /** Used to match backslashes in property paths. */
   var reEscapeChar = /\\(\\)?/g;
 
-  /**
-   * Used to match
-   * [ES template delimiters](http://ecma-international.org/ecma-262/6.0/#sec-template-literal-lexical-components).
-   */
+  /** Used to match [ES template delimiters](http://ecma-international.org/ecma-262/6.0/#sec-template-literal-lexical-components). */
   var reEsTemplate = /\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;
 
   /** Used to match `RegExp` flags from their coerced string values. */
@@ -3179,7 +3168,7 @@ module.exports = function (e1, e2) {
   /** Used to detect binary string values. */
   var reIsBinary = /^0b[01]+$/i;
 
-  /** Used to detect host constructors (Safari). */
+  /** Used to detect host constructors (Safari > 5). */
   var reIsHostCtor = /^\[object .+?Constructor\]$/;
 
   /** Used to detect octal string values. */
@@ -3205,15 +3194,14 @@ module.exports = function (e1, e2) {
       rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff',
       rsMathOpRange = '\\xac\\xb1\\xd7\\xf7',
       rsNonCharRange = '\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf',
-      rsPunctuationRange = '\\u2000-\\u206f',
+      rsQuoteRange = '\\u2018\\u2019\\u201c\\u201d',
       rsSpaceRange = ' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000',
       rsUpperRange = 'A-Z\\xc0-\\xd6\\xd8-\\xde',
       rsVarRange = '\\ufe0e\\ufe0f',
-      rsBreakRange = rsMathOpRange + rsNonCharRange + rsPunctuationRange + rsSpaceRange;
+      rsBreakRange = rsMathOpRange + rsNonCharRange + rsQuoteRange + rsSpaceRange;
 
   /** Used to compose unicode capture groups. */
-  var rsApos = "['\u2019]",
-      rsAstral = '[' + rsAstralRange + ']',
+  var rsAstral = '[' + rsAstralRange + ']',
       rsBreak = '[' + rsBreakRange + ']',
       rsCombo = '[' + rsComboMarksRange + rsComboSymbolsRange + ']',
       rsDigits = '\\d+',
@@ -3231,17 +3219,12 @@ module.exports = function (e1, e2) {
   /** Used to compose unicode regexes. */
   var rsLowerMisc = '(?:' + rsLower + '|' + rsMisc + ')',
       rsUpperMisc = '(?:' + rsUpper + '|' + rsMisc + ')',
-      rsOptLowerContr = '(?:' + rsApos + '(?:d|ll|m|re|s|t|ve))?',
-      rsOptUpperContr = '(?:' + rsApos + '(?:D|LL|M|RE|S|T|VE))?',
       reOptMod = rsModifier + '?',
       rsOptVar = '[' + rsVarRange + ']?',
       rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
       rsSeq = rsOptVar + reOptMod + rsOptJoin,
       rsEmoji = '(?:' + [rsDingbat, rsRegional, rsSurrPair].join('|') + ')' + rsSeq,
       rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
-
-  /** Used to match apostrophes. */
-  var reApos = RegExp(rsApos, 'g');
 
   /**
    * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
@@ -3252,29 +3235,32 @@ module.exports = function (e1, e2) {
   /** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
   var reComplexSymbol = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
 
+  /** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
+  var reHasComplexSymbol = RegExp('[' + rsZWJ + rsAstralRange  + rsComboMarksRange + rsComboSymbolsRange + rsVarRange + ']');
+
+  /** Used to match non-compound words composed of alphanumeric characters. */
+  var reBasicWord = /[a-zA-Z0-9]+/g;
+
   /** Used to match complex or compound words. */
   var reComplexWord = RegExp([
-    rsUpper + '?' + rsLower + '+' + rsOptLowerContr + '(?=' + [rsBreak, rsUpper, '$'].join('|') + ')',
-    rsUpperMisc + '+' + rsOptUpperContr + '(?=' + [rsBreak, rsUpper + rsLowerMisc, '$'].join('|') + ')',
-    rsUpper + '?' + rsLowerMisc + '+' + rsOptLowerContr,
-    rsUpper + '+' + rsOptUpperContr,
+    rsUpper + '?' + rsLower + '+(?=' + [rsBreak, rsUpper, '$'].join('|') + ')',
+    rsUpperMisc + '+(?=' + [rsBreak, rsUpper + rsLowerMisc, '$'].join('|') + ')',
+    rsUpper + '?' + rsLowerMisc + '+',
+    rsUpper + '+',
     rsDigits,
     rsEmoji
   ].join('|'), 'g');
 
-  /** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-  var reHasComplexSymbol = RegExp('[' + rsZWJ + rsAstralRange  + rsComboMarksRange + rsComboSymbolsRange + rsVarRange + ']');
-
   /** Used to detect strings that need a more robust regexp to match words. */
-  var reHasComplexWord = /[a-z][A-Z]|[A-Z]{2,}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
+  var reHasComplexWord = /[a-z][A-Z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
 
   /** Used to assign default `context` object properties. */
   var contextProps = [
-    'Array', 'Buffer', 'DataView', 'Date', 'Error', 'Float32Array', 'Float64Array',
+    'Array', 'Buffer', 'Date', 'Error', 'Float32Array', 'Float64Array',
     'Function', 'Int8Array', 'Int16Array', 'Int32Array', 'Map', 'Math', 'Object',
-    'Promise', 'Reflect', 'RegExp', 'Set', 'String', 'Symbol', 'TypeError',
-    'Uint8Array', 'Uint8ClampedArray', 'Uint16Array', 'Uint32Array', 'WeakMap',
-    '_', 'clearTimeout', 'isFinite', 'parseInt', 'setTimeout'
+    'Reflect', 'RegExp', 'Set', 'String', 'Symbol', 'TypeError', 'Uint8Array',
+    'Uint8ClampedArray', 'Uint16Array', 'Uint32Array', 'WeakMap', '_',
+    'clearTimeout', 'isFinite', 'parseInt', 'setTimeout'
   ];
 
   /** Used to make template sourceURLs easier to identify. */
@@ -3289,26 +3275,25 @@ module.exports = function (e1, e2) {
   typedArrayTags[uint32Tag] = true;
   typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
   typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
-  typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
-  typedArrayTags[errorTag] = typedArrayTags[funcTag] =
-  typedArrayTags[mapTag] = typedArrayTags[numberTag] =
-  typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
-  typedArrayTags[setTag] = typedArrayTags[stringTag] =
-  typedArrayTags[weakMapTag] = false;
+  typedArrayTags[dateTag] = typedArrayTags[errorTag] =
+  typedArrayTags[funcTag] = typedArrayTags[mapTag] =
+  typedArrayTags[numberTag] = typedArrayTags[objectTag] =
+  typedArrayTags[regexpTag] = typedArrayTags[setTag] =
+  typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
 
   /** Used to identify `toStringTag` values supported by `_.clone`. */
   var cloneableTags = {};
   cloneableTags[argsTag] = cloneableTags[arrayTag] =
-  cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
-  cloneableTags[boolTag] = cloneableTags[dateTag] =
-  cloneableTags[float32Tag] = cloneableTags[float64Tag] =
-  cloneableTags[int8Tag] = cloneableTags[int16Tag] =
-  cloneableTags[int32Tag] = cloneableTags[mapTag] =
-  cloneableTags[numberTag] = cloneableTags[objectTag] =
-  cloneableTags[regexpTag] = cloneableTags[setTag] =
-  cloneableTags[stringTag] = cloneableTags[symbolTag] =
-  cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
-  cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+  cloneableTags[arrayBufferTag] = cloneableTags[boolTag] =
+  cloneableTags[dateTag] = cloneableTags[float32Tag] =
+  cloneableTags[float64Tag] = cloneableTags[int8Tag] =
+  cloneableTags[int16Tag] = cloneableTags[int32Tag] =
+  cloneableTags[mapTag] = cloneableTags[numberTag] =
+  cloneableTags[objectTag] = cloneableTags[regexpTag] =
+  cloneableTags[setTag] = cloneableTags[stringTag] =
+  cloneableTags[symbolTag] = cloneableTags[uint8Tag] =
+  cloneableTags[uint8ClampedTag] = cloneableTags[uint16Tag] =
+  cloneableTags[uint32Tag] = true;
   cloneableTags[errorTag] = cloneableTags[funcTag] =
   cloneableTags[weakMapTag] = false;
 
@@ -3446,7 +3431,7 @@ module.exports = function (e1, e2) {
    * @private
    * @param {Function} func The function to invoke.
    * @param {*} thisArg The `this` binding of `func`.
-   * @param {Array} args The arguments to invoke `func` with.
+   * @param {...*} args The arguments to invoke `func` with.
    * @returns {*} Returns the result of `func`.
    */
   function apply(func, thisArg, args) {
@@ -3553,8 +3538,7 @@ module.exports = function (e1, e2) {
    * @private
    * @param {Array} array The array to iterate over.
    * @param {Function} predicate The function invoked per iteration.
-   * @returns {boolean} Returns `true` if all elements pass the predicate check,
-   *  else `false`.
+   * @returns {boolean} Returns `true` if all elements pass the predicate check, else `false`.
    */
   function arrayEvery(array, predicate) {
     var index = -1,
@@ -3673,8 +3657,7 @@ module.exports = function (e1, e2) {
    * @param {Array} array The array to iterate over.
    * @param {Function} iteratee The function invoked per iteration.
    * @param {*} [accumulator] The initial value.
-   * @param {boolean} [initAccum] Specify using the first element of `array` as
-   *  the initial value.
+   * @param {boolean} [initAccum] Specify using the first element of `array` as the initial value.
    * @returns {*} Returns the accumulated value.
    */
   function arrayReduce(array, iteratee, accumulator, initAccum) {
@@ -3698,8 +3681,7 @@ module.exports = function (e1, e2) {
    * @param {Array} array The array to iterate over.
    * @param {Function} iteratee The function invoked per iteration.
    * @param {*} [accumulator] The initial value.
-   * @param {boolean} [initAccum] Specify using the last element of `array` as
-   *  the initial value.
+   * @param {boolean} [initAccum] Specify using the last element of `array` as the initial value.
    * @returns {*} Returns the accumulated value.
    */
   function arrayReduceRight(array, iteratee, accumulator, initAccum) {
@@ -3720,8 +3702,7 @@ module.exports = function (e1, e2) {
    * @private
    * @param {Array} array The array to iterate over.
    * @param {Function} predicate The function invoked per iteration.
-   * @returns {boolean} Returns `true` if any element passes the predicate check,
-   *  else `false`.
+   * @returns {boolean} Returns `true` if any element passes the predicate check, else `false`.
    */
   function arraySome(array, predicate) {
     var index = -1,
@@ -3736,6 +3717,35 @@ module.exports = function (e1, e2) {
   }
 
   /**
+   * The base implementation of methods like `_.max` and `_.min` which accepts a
+   * `comparator` to determine the extremum value.
+   *
+   * @private
+   * @param {Array} array The array to iterate over.
+   * @param {Function} iteratee The iteratee invoked per iteration.
+   * @param {Function} comparator The comparator used to compare values.
+   * @returns {*} Returns the extremum value.
+   */
+  function baseExtremum(array, iteratee, comparator) {
+    var index = -1,
+        length = array.length;
+
+    while (++index < length) {
+      var value = array[index],
+          current = iteratee(value);
+
+      if (current != null && (computed === undefined
+            ? current === current
+            : comparator(current, computed)
+          )) {
+        var computed = current,
+            result = value;
+      }
+    }
+    return result;
+  }
+
+  /**
    * The base implementation of methods like `_.find` and `_.findKey`, without
    * support for iteratee shorthands, which iterates over `collection` using
    * `eachFunc`.
@@ -3744,8 +3754,7 @@ module.exports = function (e1, e2) {
    * @param {Array|Object} collection The collection to search.
    * @param {Function} predicate The function invoked per iteration.
    * @param {Function} eachFunc The function to iterate over `collection`.
-   * @param {boolean} [retKey] Specify returning the key of the found element
-   *  instead of the element itself.
+   * @param {boolean} [retKey] Specify returning the key of the found element instead of the element itself.
    * @returns {*} Returns the found element or its key, else `undefined`.
    */
   function baseFind(collection, predicate, eachFunc, retKey) {
@@ -3828,20 +3837,6 @@ module.exports = function (e1, e2) {
   }
 
   /**
-   * The base implementation of `_.mean` and `_.meanBy` without support for
-   * iteratee shorthands.
-   *
-   * @private
-   * @param {Array} array The array to iterate over.
-   * @param {Function} iteratee The function invoked per iteration.
-   * @returns {number} Returns the mean.
-   */
-  function baseMean(array, iteratee) {
-    var length = array ? array.length : 0;
-    return length ? (baseSum(array, iteratee) / length) : NAN;
-  }
-
-  /**
    * The base implementation of `_.reduce` and `_.reduceRight`, without support
    * for iteratee shorthands, which iterates over `collection` using `eachFunc`.
    *
@@ -3849,8 +3844,7 @@ module.exports = function (e1, e2) {
    * @param {Array|Object} collection The collection to iterate over.
    * @param {Function} iteratee The function invoked per iteration.
    * @param {*} accumulator The initial value.
-   * @param {boolean} initAccum Specify using the first or last element of
-   *  `collection` as the initial value.
+   * @param {boolean} initAccum Specify using the first or last element of `collection` as the initial value.
    * @param {Function} eachFunc The function to iterate over `collection`.
    * @returns {*} Returns the accumulated value.
    */
@@ -3884,8 +3878,7 @@ module.exports = function (e1, e2) {
   }
 
   /**
-   * The base implementation of `_.sum` and `_.sumBy` without support for
-   * iteratee shorthands.
+   * The base implementation of `_.sum` without support for iteratee shorthands.
    *
    * @private
    * @param {Array} array The array to iterate over.
@@ -4014,6 +4007,79 @@ module.exports = function (e1, e2) {
   }
 
   /**
+   * Compares values to sort them in ascending order.
+   *
+   * @private
+   * @param {*} value The value to compare.
+   * @param {*} other The other value to compare.
+   * @returns {number} Returns the sort order indicator for `value`.
+   */
+  function compareAscending(value, other) {
+    if (value !== other) {
+      var valIsNull = value === null,
+          valIsUndef = value === undefined,
+          valIsReflexive = value === value;
+
+      var othIsNull = other === null,
+          othIsUndef = other === undefined,
+          othIsReflexive = other === other;
+
+      if ((value > other && !othIsNull) || !valIsReflexive ||
+          (valIsNull && !othIsUndef && othIsReflexive) ||
+          (valIsUndef && othIsReflexive)) {
+        return 1;
+      }
+      if ((value < other && !valIsNull) || !othIsReflexive ||
+          (othIsNull && !valIsUndef && valIsReflexive) ||
+          (othIsUndef && valIsReflexive)) {
+        return -1;
+      }
+    }
+    return 0;
+  }
+
+  /**
+   * Used by `_.orderBy` to compare multiple properties of a value to another
+   * and stable sort them.
+   *
+   * If `orders` is unspecified, all values are sorted in ascending order. Otherwise,
+   * specify an order of "desc" for descending or "asc" for ascending sort order
+   * of corresponding values.
+   *
+   * @private
+   * @param {Object} object The object to compare.
+   * @param {Object} other The other object to compare.
+   * @param {boolean[]|string[]} orders The order to sort by for each property.
+   * @returns {number} Returns the sort order indicator for `object`.
+   */
+  function compareMultiple(object, other, orders) {
+    var index = -1,
+        objCriteria = object.criteria,
+        othCriteria = other.criteria,
+        length = objCriteria.length,
+        ordersLength = orders.length;
+
+    while (++index < length) {
+      var result = compareAscending(objCriteria[index], othCriteria[index]);
+      if (result) {
+        if (index >= ordersLength) {
+          return result;
+        }
+        var order = orders[index];
+        return result * (order == 'desc' ? -1 : 1);
+      }
+    }
+    // Fixes an `Array#sort` bug in the JS engine embedded in Adobe applications
+    // that causes it, under certain circumstances, to provide the same value for
+    // `object` and `other`. See https://github.com/jashkenas/underscore/pull/1247
+    // for more details.
+    //
+    // This also ensures a stable sort in V8 and other engines.
+    // See https://code.google.com/p/v8/issues/detail?id=90 for more details.
+    return object.index - other.index;
+  }
+
+  /**
    * Gets the number of `placeholder` occurrences in `array`.
    *
    * @private
@@ -4105,6 +4171,20 @@ module.exports = function (e1, e2) {
       } catch (e) {}
     }
     return result;
+  }
+
+  /**
+   * Checks if `value` is a valid array-like index.
+   *
+   * @private
+   * @param {*} value The value to check.
+   * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+   * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+   */
+  function isIndex(value, length) {
+    value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
+    length = length == null ? MAX_SAFE_INTEGER : length;
+    return value > -1 && value % 1 == 0 && value < length;
   }
 
   /**
@@ -4230,7 +4310,6 @@ module.exports = function (e1, e2) {
    *
    * @static
    * @memberOf _
-   * @since 1.1.0
    * @category Util
    * @param {Object} [context=root] The context object.
    * @returns {Function} Returns a new `lodash` function.
@@ -4273,8 +4352,7 @@ module.exports = function (e1, e2) {
 
     /** Used for built-in method references. */
     var arrayProto = context.Array.prototype,
-        objectProto = context.Object.prototype,
-        stringProto = context.String.prototype;
+        objectProto = context.Object.prototype;
 
     /** Used to resolve the decompiled source of functions. */
     var funcToString = context.Function.prototype.toString;
@@ -4289,8 +4367,7 @@ module.exports = function (e1, e2) {
     var objectCtorString = funcToString.call(Object);
 
     /**
-     * Used to resolve the
-     * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+     * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
      * of values.
      */
     var objectToString = objectProto.toString;
@@ -4311,6 +4388,7 @@ module.exports = function (e1, e2) {
         Uint8Array = context.Uint8Array,
         clearTimeout = context.clearTimeout,
         enumerate = Reflect ? Reflect.enumerate : undefined,
+        getPrototypeOf = Object.getPrototypeOf,
         getOwnPropertySymbols = Object.getOwnPropertySymbols,
         iteratorSymbol = typeof (iteratorSymbol = Symbol && Symbol.iterator) == 'symbol' ? iteratorSymbol : undefined,
         objectCreate = Object.create,
@@ -4321,7 +4399,6 @@ module.exports = function (e1, e2) {
     /* Built-in method references for those with the same name as other `lodash` methods. */
     var nativeCeil = Math.ceil,
         nativeFloor = Math.floor,
-        nativeGetPrototype = Object.getPrototypeOf,
         nativeIsFinite = context.isFinite,
         nativeJoin = arrayProto.join,
         nativeKeys = Object.keys,
@@ -4329,14 +4406,10 @@ module.exports = function (e1, e2) {
         nativeMin = Math.min,
         nativeParseInt = context.parseInt,
         nativeRandom = Math.random,
-        nativeReplace = stringProto.replace,
-        nativeReverse = arrayProto.reverse,
-        nativeSplit = stringProto.split;
+        nativeReverse = arrayProto.reverse;
 
     /* Built-in method references that are verified to be native. */
-    var DataView = getNative(context, 'DataView'),
-        Map = getNative(context, 'Map'),
-        Promise = getNative(context, 'Promise'),
+    var Map = getNative(context, 'Map'),
         Set = getNative(context, 'Set'),
         WeakMap = getNative(context, 'WeakMap'),
         nativeCreate = getNative(Object, 'create');
@@ -4351,11 +4424,9 @@ module.exports = function (e1, e2) {
     var realNames = {};
 
     /** Used to detect maps, sets, and weakmaps. */
-    var dataViewCtorString = toSource(DataView),
-        mapCtorString = toSource(Map),
-        promiseCtorString = toSource(Promise),
-        setCtorString = toSource(Set),
-        weakMapCtorString = toSource(WeakMap);
+    var mapCtorString = Map ? funcToString.call(Map) : '',
+        setCtorString = Set ? funcToString.call(Set) : '',
+        weakMapCtorString = WeakMap ? funcToString.call(WeakMap) : '';
 
     /** Used to convert symbols to primitives and strings. */
     var symbolProto = Symbol ? Symbol.prototype : undefined,
@@ -4366,25 +4437,25 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a `lodash` object which wraps `value` to enable implicit method
-     * chain sequences. Methods that operate on and return arrays, collections,
-     * and functions can be chained together. Methods that retrieve a single value
-     * or may return a primitive value will automatically end the chain sequence
-     * and return the unwrapped value. Otherwise, the value must be unwrapped
-     * with `_#value`.
+     * chaining. Methods that operate on and return arrays, collections, and
+     * functions can be chained together. Methods that retrieve a single value or
+     * may return a primitive value will automatically end the chain sequence and
+     * return the unwrapped value. Otherwise, the value must be unwrapped with
+     * `_#value`.
      *
-     * Explicit chain sequences, which must be unwrapped with `_#value`, may be
-     * enabled using `_.chain`.
+     * Explicit chaining, which must be unwrapped with `_#value` in all cases,
+     * may be enabled using `_.chain`.
      *
      * The execution of chained methods is lazy, that is, it's deferred until
      * `_#value` is implicitly or explicitly called.
      *
-     * Lazy evaluation allows several methods to support shortcut fusion.
-     * Shortcut fusion is an optimization to merge iteratee calls; this avoids
-     * the creation of intermediate arrays and can greatly reduce the number of
-     * iteratee executions. Sections of a chain sequence qualify for shortcut
-     * fusion if the section is applied to an array of at least `200` elements
-     * and any iteratees accept only one argument. The heuristic for whether a
-     * section qualifies for shortcut fusion is subject to change.
+     * Lazy evaluation allows several methods to support shortcut fusion. Shortcut
+     * fusion is an optimization to merge iteratee calls; this avoids the creation
+     * of intermediate arrays and can greatly reduce the number of iteratee executions.
+     * Sections of a chain sequence qualify for shortcut fusion if the section is
+     * applied to an array of at least two hundred elements and any iteratees
+     * accept only one argument. The heuristic for whether a section qualifies
+     * for shortcut fusion is subject to change.
      *
      * Chaining is supported in custom builds as long as the `_#value` method is
      * directly or indirectly included in the build.
@@ -4409,49 +4480,48 @@ module.exports = function (e1, e2) {
      * `curry`, `debounce`, `defaults`, `defaultsDeep`, `defer`, `delay`,
      * `difference`, `differenceBy`, `differenceWith`, `drop`, `dropRight`,
      * `dropRightWhile`, `dropWhile`, `extend`, `extendWith`, `fill`, `filter`,
-     * `flatMap`, `flatMapDeep`, `flatMapDepth`, `flatten`, `flattenDeep`,
-     * `flattenDepth`, `flip`, `flow`, `flowRight`, `fromPairs`, `functions`,
-     * `functionsIn`, `groupBy`, `initial`, `intersection`, `intersectionBy`,
-     * `intersectionWith`, `invert`, `invertBy`, `invokeMap`, `iteratee`, `keyBy`,
-     * `keys`, `keysIn`, `map`, `mapKeys`, `mapValues`, `matches`, `matchesProperty`,
-     * `memoize`, `merge`, `mergeWith`, `method`, `methodOf`, `mixin`, `negate`,
-     * `nthArg`, `omit`, `omitBy`, `once`, `orderBy`, `over`, `overArgs`,
-     * `overEvery`, `overSome`, `partial`, `partialRight`, `partition`, `pick`,
-     * `pickBy`, `plant`, `property`, `propertyOf`, `pull`, `pullAll`, `pullAllBy`,
-     * `pullAllWith`, `pullAt`, `push`, `range`, `rangeRight`, `rearg`, `reject`,
-     * `remove`, `rest`, `reverse`, `sampleSize`, `set`, `setWith`, `shuffle`,
-     * `slice`, `sort`, `sortBy`, `splice`, `spread`, `tail`, `take`, `takeRight`,
-     * `takeRightWhile`, `takeWhile`, `tap`, `throttle`, `thru`, `toArray`,
-     * `toPairs`, `toPairsIn`, `toPath`, `toPlainObject`, `transform`, `unary`,
-     * `union`, `unionBy`, `unionWith`, `uniq`, `uniqBy`, `uniqWith`, `unset`,
-     * `unshift`, `unzip`, `unzipWith`, `update`, `updateWith`, `values`,
-     * `valuesIn`, `without`, `wrap`, `xor`, `xorBy`, `xorWith`, `zip`,
-     * `zipObject`, `zipObjectDeep`, and `zipWith`
+     * `flatten`, `flattenDeep`, `flattenDepth`, `flip`, `flow`, `flowRight`,
+     * `fromPairs`, `functions`, `functionsIn`, `groupBy`, `initial`, `intersection`,
+     * `intersectionBy`, `intersectionWith`, `invert`, `invertBy`, `invokeMap`,
+     * `iteratee`, `keyBy`, `keys`, `keysIn`, `map`, `mapKeys`, `mapValues`,
+     * `matches`, `matchesProperty`, `memoize`, `merge`, `mergeWith`, `method`,
+     * `methodOf`, `mixin`, `negate`, `nthArg`, `omit`, `omitBy`, `once`, `orderBy`,
+     * `over`, `overArgs`, `overEvery`, `overSome`, `partial`, `partialRight`,
+     * `partition`, `pick`, `pickBy`, `plant`, `property`, `propertyOf`, `pull`,
+     * `pullAll`, `pullAllBy`, `pullAllWith`, `pullAt`, `push`, `range`,
+     * `rangeRight`, `rearg`, `reject`, `remove`, `rest`, `reverse`, `sampleSize`,
+     * `set`, `setWith`, `shuffle`, `slice`, `sort`, `sortBy`, `splice`, `spread`,
+     * `tail`, `take`, `takeRight`, `takeRightWhile`, `takeWhile`, `tap`, `throttle`,
+     * `thru`, `toArray`, `toPairs`, `toPairsIn`, `toPath`, `toPlainObject`,
+     * `transform`, `unary`, `union`, `unionBy`, `unionWith`, `uniq`, `uniqBy`,
+     * `uniqWith`, `unset`, `unshift`, `unzip`, `unzipWith`, `update`, `values`,
+     * `valuesIn`, `without`, `wrap`, `xor`, `xorBy`, `xorWith`, `zip`, `zipObject`,
+     * `zipObjectDeep`, and `zipWith`
      *
      * The wrapper methods that are **not** chainable by default are:
      * `add`, `attempt`, `camelCase`, `capitalize`, `ceil`, `clamp`, `clone`,
-     * `cloneDeep`, `cloneDeepWith`, `cloneWith`, `deburr`, `divide`, `each`,
-     * `eachRight`, `endsWith`, `eq`, `escape`, `escapeRegExp`, `every`, `find`,
-     * `findIndex`, `findKey`, `findLast`, `findLastIndex`, `findLastKey`, `first`,
-     * `floor`, `forEach`, `forEachRight`, `forIn`, `forInRight`, `forOwn`,
-     * `forOwnRight`, `get`, `gt`, `gte`, `has`, `hasIn`, `head`, `identity`,
-     * `includes`, `indexOf`, `inRange`, `invoke`, `isArguments`, `isArray`,
-     * `isArrayBuffer`, `isArrayLike`, `isArrayLikeObject`, `isBoolean`, `isBuffer`,
-     * `isDate`, `isElement`, `isEmpty`, `isEqual`, `isEqualWith`, `isError`,
-     * `isFinite`, `isFunction`, `isInteger`, `isLength`, `isMap`, `isMatch`,
-     * `isMatchWith`, `isNaN`, `isNative`, `isNil`, `isNull`, `isNumber`,
-     * `isObject`, `isObjectLike`, `isPlainObject`, `isRegExp`, `isSafeInteger`,
-     * `isSet`, `isString`, `isUndefined`, `isTypedArray`, `isWeakMap`, `isWeakSet`,
-     * `join`, `kebabCase`, `last`, `lastIndexOf`, `lowerCase`, `lowerFirst`,
-     * `lt`, `lte`, `max`, `maxBy`, `mean`, `meanBy`, `min`, `minBy`, `multiply`,
-     * `noConflict`, `noop`, `now`, `nth`, `pad`, `padEnd`, `padStart`, `parseInt`,
-     * `pop`, `random`, `reduce`, `reduceRight`, `repeat`, `result`, `round`,
-     * `runInContext`, `sample`, `shift`, `size`, `snakeCase`, `some`, `sortedIndex`,
-     * `sortedIndexBy`, `sortedLastIndex`, `sortedLastIndexBy`, `startCase`,
-     * `startsWith`, `subtract`, `sum`, `sumBy`, `template`, `times`, `toInteger`,
-     * `toJSON`, `toLength`, `toLower`, `toNumber`, `toSafeInteger`, `toString`,
-     * `toUpper`, `trim`, `trimEnd`, `trimStart`, `truncate`, `unescape`,
-     * `uniqueId`, `upperCase`, `upperFirst`, `value`, and `words`
+     * `cloneDeep`, `cloneDeepWith`, `cloneWith`, `deburr`, `each`, `eachRight`,
+     * `endsWith`, `eq`, `escape`, `escapeRegExp`, `every`, `find`, `findIndex`,
+     * `findKey`, `findLast`, `findLastIndex`, `findLastKey`, `first`, `floor`,
+     * `forEach`, `forEachRight`, `forIn`, `forInRight`, `forOwn`, `forOwnRight`,
+     * `get`, `gt`, `gte`, `has`, `hasIn`, `head`, `identity`, `includes`,
+     * `indexOf`, `inRange`, `invoke`, `isArguments`, `isArray`, `isArrayBuffer`,
+     * `isArrayLike`, `isArrayLikeObject`, `isBoolean`, `isBuffer`, `isDate`,
+     * `isElement`, `isEmpty`, `isEqual`, `isEqualWith`, `isError`, `isFinite`,
+     * `isFunction`, `isInteger`, `isLength`, `isMap`, `isMatch`, `isMatchWith`,
+     * `isNaN`, `isNative`, `isNil`, `isNull`, `isNumber`, `isObject`, `isObjectLike`,
+     * `isPlainObject`, `isRegExp`, `isSafeInteger`, `isSet`, `isString`,
+     * `isUndefined`, `isTypedArray`, `isWeakMap`, `isWeakSet`, `join`, `kebabCase`,
+     * `last`, `lastIndexOf`, `lowerCase`, `lowerFirst`, `lt`, `lte`, `max`,
+     * `maxBy`, `mean`, `min`, `minBy`, `noConflict`, `noop`, `now`, `pad`,
+     * `padEnd`, `padStart`, `parseInt`, `pop`, `random`, `reduce`, `reduceRight`,
+     * `repeat`, `result`, `round`, `runInContext`, `sample`, `shift`, `size`,
+     * `snakeCase`, `some`, `sortedIndex`, `sortedIndexBy`, `sortedLastIndex`,
+     * `sortedLastIndexBy`, `startCase`, `startsWith`, `subtract`, `sum`, `sumBy`,
+     * `template`, `times`, `toInteger`, `toJSON`, `toLength`, `toLower`,
+     * `toNumber`, `toSafeInteger`, `toString`, `toUpper`, `trim`, `trimEnd`,
+     * `trimStart`, `truncate`, `unescape`, `uniqueId`, `upperCase`, `upperFirst`,
+     * `value`, and `words`
      *
      * @name _
      * @constructor
@@ -4492,7 +4562,7 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * The function whose prototype chain sequence wrappers inherit from.
+     * The function whose prototype all chaining wrappers inherit from.
      *
      * @private
      */
@@ -4505,7 +4575,7 @@ module.exports = function (e1, e2) {
      *
      * @private
      * @param {*} value The value to wrap.
-     * @param {boolean} [chainAll] Enable explicit method chain sequences.
+     * @param {boolean} [chainAll] Enable chaining for all wrapper methods.
      */
     function LodashWrapper(value, chainAll) {
       this.__wrapped__ = value;
@@ -4575,13 +4645,6 @@ module.exports = function (e1, e2) {
         '_': lodash
       }
     };
-
-    // Ensure wrappers are instances of `baseLodash`.
-    lodash.prototype = baseLodash.prototype;
-    lodash.prototype.constructor = lodash;
-
-    LodashWrapper.prototype = baseCreate(baseLodash.prototype);
-    LodashWrapper.prototype.constructor = LodashWrapper;
 
     /*------------------------------------------------------------------------*/
 
@@ -4699,14 +4762,10 @@ module.exports = function (e1, e2) {
       return result;
     }
 
-    // Ensure `LazyWrapper` is an instance of `baseLodash`.
-    LazyWrapper.prototype = baseCreate(baseLodash.prototype);
-    LazyWrapper.prototype.constructor = LazyWrapper;
-
     /*------------------------------------------------------------------------*/
 
     /**
-     * Creates a hash object.
+     * Creates an hash object.
      *
      * @private
      * @constructor
@@ -4765,9 +4824,6 @@ module.exports = function (e1, e2) {
     function hashSet(hash, key, value) {
       hash[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED : value;
     }
-
-    // Avoid inheriting from `Object.prototype` when possible.
-    Hash.prototype = nativeCreate ? nativeCreate(null) : objectProto;
 
     /*------------------------------------------------------------------------*/
 
@@ -4863,7 +4919,7 @@ module.exports = function (e1, e2) {
      * @memberOf MapCache
      * @param {string} key The key of the value to set.
      * @param {*} value The value to set.
-     * @returns {Object} Returns the map cache instance.
+     * @returns {Object} Returns the map cache object.
      */
     function mapSet(key, value) {
       var data = this.__data__;
@@ -4876,13 +4932,6 @@ module.exports = function (e1, e2) {
       }
       return this;
     }
-
-    // Add methods to `MapCache`.
-    MapCache.prototype.clear = mapClear;
-    MapCache.prototype['delete'] = mapDelete;
-    MapCache.prototype.get = mapGet;
-    MapCache.prototype.has = mapHas;
-    MapCache.prototype.set = mapSet;
 
     /*------------------------------------------------------------------------*/
 
@@ -4943,9 +4992,6 @@ module.exports = function (e1, e2) {
         map.set(value, HASH_UNDEFINED);
       }
     }
-
-    // Add methods to `SetCache`.
-    SetCache.prototype.push = cachePush;
 
     /*------------------------------------------------------------------------*/
 
@@ -5034,7 +5080,7 @@ module.exports = function (e1, e2) {
      * @memberOf Stack
      * @param {string} key The key of the value to set.
      * @param {*} value The value to set.
-     * @returns {Object} Returns the stack cache instance.
+     * @returns {Object} Returns the stack cache object.
      */
     function stackSet(key, value) {
       var data = this.__data__,
@@ -5055,20 +5101,13 @@ module.exports = function (e1, e2) {
       return this;
     }
 
-    // Add methods to `Stack`.
-    Stack.prototype.clear = stackClear;
-    Stack.prototype['delete'] = stackDelete;
-    Stack.prototype.get = stackGet;
-    Stack.prototype.has = stackHas;
-    Stack.prototype.set = stackSet;
-
     /*------------------------------------------------------------------------*/
 
     /**
      * Removes `key` and its value from the associative array.
      *
      * @private
-     * @param {Array} array The array to modify.
+     * @param {Array} array The array to query.
      * @param {string} key The key of the value to remove.
      * @returns {boolean} Returns `true` if the entry was removed, else `false`.
      */
@@ -5112,7 +5151,8 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Gets the index at which the `key` is found in `array` of key-value pairs.
+     * Gets the index at which the first occurrence of `key` is found in `array`
+     * of key-value pairs.
      *
      * @private
      * @param {Array} array The array to search.
@@ -5252,6 +5292,39 @@ module.exports = function (e1, e2) {
     }
 
     /**
+     * Casts `value` to an empty array if it's not an array like object.
+     *
+     * @private
+     * @param {*} value The value to inspect.
+     * @returns {Array} Returns the array-like object.
+     */
+    function baseCastArrayLikeObject(value) {
+      return isArrayLikeObject(value) ? value : [];
+    }
+
+    /**
+     * Casts `value` to `identity` if it's not a function.
+     *
+     * @private
+     * @param {*} value The value to inspect.
+     * @returns {Array} Returns the array-like object.
+     */
+    function baseCastFunction(value) {
+      return typeof value == 'function' ? value : identity;
+    }
+
+    /**
+     * Casts `value` to a path array if it's not one.
+     *
+     * @private
+     * @param {*} value The value to inspect.
+     * @returns {Array} Returns the cast property path array.
+     */
+    function baseCastPath(value) {
+      return isArray(value) ? value : stringToPath(value);
+    }
+
+    /**
      * The base implementation of `_.clamp` which doesn't coerce arguments to numbers.
      *
      * @private
@@ -5316,13 +5389,14 @@ module.exports = function (e1, e2) {
           }
           result = initCloneObject(isFunc ? {} : value);
           if (!isDeep) {
-            return copySymbols(value, baseAssign(result, value));
+            result = baseAssign(result, value);
+            return isFull ? copySymbols(value, result) : result;
           }
         } else {
           if (!cloneableTags[tag]) {
             return object ? value : {};
           }
-          result = initCloneByTag(value, tag, baseClone, isDeep);
+          result = initCloneByTag(value, tag, isDeep);
         }
       }
       // Check for circular references and return its corresponding clone.
@@ -5333,18 +5407,11 @@ module.exports = function (e1, e2) {
       }
       stack.set(value, result);
 
-      if (!isArr) {
-        var props = isFull ? getAllKeys(value) : keys(value);
-      }
       // Recursively populate clone (susceptible to call stack limits).
-      arrayEach(props || value, function(subValue, key) {
-        if (props) {
-          key = subValue;
-          subValue = value[key];
-        }
+      (isArr ? arrayEach : baseForOwn)(value, function(subValue, key) {
         assignValue(result, key, baseClone(subValue, isDeep, isFull, customizer, key, value, stack));
       });
-      return result;
+      return (isFull && !isArr) ? copySymbols(value, result) : result;
     }
 
     /**
@@ -5368,8 +5435,7 @@ module.exports = function (e1, e2) {
               predicate = source[key],
               value = object[key];
 
-          if ((value === undefined &&
-              !(key in Object(object))) || !predicate(value)) {
+          if ((value === undefined && !(key in Object(object))) || !predicate(value)) {
             return false;
           }
         }
@@ -5407,8 +5473,8 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * The base implementation of methods like `_.difference` without support
-     * for excluding multiple arrays or iteratee shorthands.
+     * The base implementation of methods like `_.difference` without support for
+     * excluding multiple arrays or iteratee shorthands.
      *
      * @private
      * @param {Array} array The array to inspect.
@@ -5445,7 +5511,6 @@ module.exports = function (e1, e2) {
         var value = array[index],
             computed = iteratee ? iteratee(value) : value;
 
-        value = (comparator || value !== 0) ? value : 0;
         if (isCommon && computed === computed) {
           var valuesIndex = valuesLength;
           while (valuesIndex--) {
@@ -5488,8 +5553,7 @@ module.exports = function (e1, e2) {
      * @private
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} predicate The function invoked per iteration.
-     * @returns {boolean} Returns `true` if all elements pass the predicate check,
-     *  else `false`
+     * @returns {boolean} Returns `true` if all elements pass the predicate check, else `false`
      */
     function baseEvery(collection, predicate) {
       var result = true;
@@ -5497,35 +5561,6 @@ module.exports = function (e1, e2) {
         result = !!predicate(value, index, collection);
         return result;
       });
-      return result;
-    }
-
-    /**
-     * The base implementation of methods like `_.max` and `_.min` which accepts a
-     * `comparator` to determine the extremum value.
-     *
-     * @private
-     * @param {Array} array The array to iterate over.
-     * @param {Function} iteratee The iteratee invoked per iteration.
-     * @param {Function} comparator The comparator used to compare values.
-     * @returns {*} Returns the extremum value.
-     */
-    function baseExtremum(array, iteratee, comparator) {
-      var index = -1,
-          length = array.length;
-
-      while (++index < length) {
-        var value = array[index],
-            current = iteratee(value);
-
-        if (current != null && (computed === undefined
-              ? (current === current && !isSymbol(current))
-              : comparator(current, computed)
-            )) {
-          var computed = current,
-              result = value;
-        }
-      }
       return result;
     }
 
@@ -5581,24 +5616,23 @@ module.exports = function (e1, e2) {
      * @private
      * @param {Array} array The array to flatten.
      * @param {number} depth The maximum recursion depth.
-     * @param {boolean} [predicate=isFlattenable] The function invoked per iteration.
-     * @param {boolean} [isStrict] Restrict to values that pass `predicate` checks.
+     * @param {boolean} [isStrict] Restrict flattening to arrays-like objects.
      * @param {Array} [result=[]] The initial result value.
      * @returns {Array} Returns the new flattened array.
      */
-    function baseFlatten(array, depth, predicate, isStrict, result) {
+    function baseFlatten(array, depth, isStrict, result) {
+      result || (result = []);
+
       var index = -1,
           length = array.length;
 
-      predicate || (predicate = isFlattenable);
-      result || (result = []);
-
       while (++index < length) {
         var value = array[index];
-        if (depth > 0 && predicate(value)) {
+        if (depth > 0 && isArrayLikeObject(value) &&
+            (isStrict || isArray(value) || isArguments(value))) {
           if (depth > 1) {
             // Recursively flatten arrays (susceptible to call stack limits).
-            baseFlatten(value, depth - 1, predicate, isStrict, result);
+            baseFlatten(value, depth - 1, isStrict, result);
           } else {
             arrayPush(result, value);
           }
@@ -5610,9 +5644,10 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * The base implementation of `baseForOwn` which iterates over `object`
-     * properties returned by `keysFunc` and invokes `iteratee` for each property.
-     * Iteratee functions may exit iteration early by explicitly returning `false`.
+     * The base implementation of `baseForIn` and `baseForOwn` which iterates
+     * over `object` properties returned by `keysFunc` invoking `iteratee` for
+     * each property. Iteratee functions may exit iteration early by explicitly
+     * returning `false`.
      *
      * @private
      * @param {Object} object The object to iterate over.
@@ -5633,6 +5668,18 @@ module.exports = function (e1, e2) {
      * @returns {Object} Returns `object`.
      */
     var baseForRight = createBaseFor(true);
+
+    /**
+     * The base implementation of `_.forIn` without support for iteratee shorthands.
+     *
+     * @private
+     * @param {Object} object The object to iterate over.
+     * @param {Function} iteratee The function invoked per iteration.
+     * @returns {Object} Returns `object`.
+     */
+    function baseForIn(object, iteratee) {
+      return object == null ? object : baseFor(object, iteratee, keysIn);
+    }
 
     /**
      * The base implementation of `_.forOwn` without support for iteratee shorthands.
@@ -5682,46 +5729,15 @@ module.exports = function (e1, e2) {
      * @returns {*} Returns the resolved value.
      */
     function baseGet(object, path) {
-      path = isKey(path, object) ? [path] : castPath(path);
+      path = isKey(path, object) ? [path + ''] : baseCastPath(path);
 
       var index = 0,
           length = path.length;
 
       while (object != null && index < length) {
-        object = object[toKey(path[index++])];
+        object = object[path[index++]];
       }
       return (index && index == length) ? object : undefined;
-    }
-
-    /**
-     * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
-     * `keysFunc` and `symbolsFunc` to get the enumerable property names and
-     * symbols of `object`.
-     *
-     * @private
-     * @param {Object} object The object to query.
-     * @param {Function} keysFunc The function to get the keys of `object`.
-     * @param {Function} symbolsFunc The function to get the symbols of `object`.
-     * @returns {Array} Returns the array of property names and symbols.
-     */
-    function baseGetAllKeys(object, keysFunc, symbolsFunc) {
-      var result = keysFunc(object);
-      return isArray(object)
-        ? result
-        : arrayPush(result, symbolsFunc(object));
-    }
-
-    /**
-     * The base implementation of `_.gt` which doesn't coerce arguments to numbers.
-     *
-     * @private
-     * @param {*} value The value to compare.
-     * @param {*} other The other value to compare.
-     * @returns {boolean} Returns `true` if `value` is greater than `other`,
-     *  else `false`.
-     */
-    function baseGt(value, other) {
-      return value > other;
     }
 
     /**
@@ -5737,7 +5753,7 @@ module.exports = function (e1, e2) {
       // that are composed entirely of index properties, return `false` for
       // `hasOwnProperty` checks of them.
       return hasOwnProperty.call(object, key) ||
-        (typeof object == 'object' && key in object && getPrototype(object) === null);
+        (typeof object == 'object' && key in object && getPrototypeOf(object) === null);
     }
 
     /**
@@ -5804,7 +5820,6 @@ module.exports = function (e1, e2) {
         var value = array[index],
             computed = iteratee ? iteratee(value) : value;
 
-        value = (comparator || value !== 0) ? value : 0;
         if (!(seen
               ? cacheHas(seen, computed)
               : includes(result, computed, comparator)
@@ -5858,11 +5873,11 @@ module.exports = function (e1, e2) {
      */
     function baseInvoke(object, path, args) {
       if (!isKey(path, object)) {
-        path = castPath(path);
+        path = baseCastPath(path);
         object = parent(object, path);
         path = last(path);
       }
-      var func = object == null ? object : object[toKey(path)];
+      var func = object == null ? object : object[path];
       return func == null ? undefined : apply(func, object, args);
     }
 
@@ -5901,8 +5916,7 @@ module.exports = function (e1, e2) {
      * @param {Object} other The other object to compare.
      * @param {Function} equalFunc The function to determine equivalents of values.
      * @param {Function} [customizer] The function to customize comparisons.
-     * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual`
-     *  for more details.
+     * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual` for more details.
      * @param {Object} [stack] Tracks traversed `object` and `other` objects.
      * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
      */
@@ -5935,11 +5949,8 @@ module.exports = function (e1, e2) {
             othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
 
         if (objIsWrapped || othIsWrapped) {
-          var objUnwrapped = objIsWrapped ? object.value() : object,
-              othUnwrapped = othIsWrapped ? other.value() : other;
-
           stack || (stack = new Stack);
-          return equalFunc(objUnwrapped, othUnwrapped, customizer, bitmask, stack);
+          return equalFunc(objIsWrapped ? object.value() : object, othIsWrapped ? other.value() : other, customizer, bitmask, stack);
         }
       }
       if (!isSameTag) {
@@ -5988,10 +5999,9 @@ module.exports = function (e1, e2) {
             return false;
           }
         } else {
-          var stack = new Stack;
-          if (customizer) {
-            var result = customizer(objValue, srcValue, key, object, source, stack);
-          }
+          var stack = new Stack,
+              result = customizer ? customizer(objValue, srcValue, key, object, source, stack) : undefined;
+
           if (!(result === undefined
                 ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack)
                 : result
@@ -6011,15 +6021,14 @@ module.exports = function (e1, e2) {
      * @returns {Function} Returns the iteratee.
      */
     function baseIteratee(value) {
-      // Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.
-      // See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.
-      if (typeof value == 'function') {
+      var type = typeof value;
+      if (type == 'function') {
         return value;
       }
       if (value == null) {
         return identity;
       }
-      if (typeof value == 'object') {
+      if (type == 'object') {
         return isArray(value)
           ? baseMatchesProperty(value[0], value[1])
           : baseMatches(value);
@@ -6065,19 +6074,6 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * The base implementation of `_.lt` which doesn't coerce arguments to numbers.
-     *
-     * @private
-     * @param {*} value The value to compare.
-     * @param {*} other The other value to compare.
-     * @returns {boolean} Returns `true` if `value` is less than `other`,
-     *  else `false`.
-     */
-    function baseLt(value, other) {
-      return value < other;
-    }
-
-    /**
      * The base implementation of `_.map` without support for iteratee shorthands.
      *
      * @private
@@ -6105,7 +6101,16 @@ module.exports = function (e1, e2) {
     function baseMatches(source) {
       var matchData = getMatchData(source);
       if (matchData.length == 1 && matchData[0][2]) {
-        return matchesStrictComparable(matchData[0][0], matchData[0][1]);
+        var key = matchData[0][0],
+            value = matchData[0][1];
+
+        return function(object) {
+          if (object == null) {
+            return false;
+          }
+          return object[key] === value &&
+            (value !== undefined || (key in Object(object)));
+        };
       }
       return function(object) {
         return object === source || baseIsMatch(object, source, matchData);
@@ -6121,9 +6126,6 @@ module.exports = function (e1, e2) {
      * @returns {Function} Returns the new function.
      */
     function baseMatchesProperty(path, srcValue) {
-      if (isKey(path) && isStrictComparable(srcValue)) {
-        return matchesStrictComparable(toKey(path), srcValue);
-      }
       return function(object) {
         var objValue = get(object, path);
         return (objValue === undefined && objValue === srcValue)
@@ -6140,16 +6142,16 @@ module.exports = function (e1, e2) {
      * @param {Object} source The source object.
      * @param {number} srcIndex The index of `source`.
      * @param {Function} [customizer] The function to customize merged values.
-     * @param {Object} [stack] Tracks traversed source values and their merged
-     *  counterparts.
+     * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
      */
     function baseMerge(object, source, srcIndex, customizer, stack) {
       if (object === source) {
         return;
       }
-      if (!(isArray(source) || isTypedArray(source))) {
-        var props = keysIn(source);
-      }
+      var props = (isArray(source) || isTypedArray(source))
+        ? undefined
+        : keysIn(source);
+
       arrayEach(props || source, function(srcValue, key) {
         if (props) {
           key = srcValue;
@@ -6184,8 +6186,7 @@ module.exports = function (e1, e2) {
      * @param {number} srcIndex The index of `source`.
      * @param {Function} mergeFunc The function to merge values.
      * @param {Function} [customizer] The function to customize assigned values.
-     * @param {Object} [stack] Tracks traversed source values and their merged
-     *  counterparts.
+     * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
      */
     function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
       var objValue = object[key],
@@ -6213,7 +6214,7 @@ module.exports = function (e1, e2) {
           }
           else {
             isCommon = false;
-            newValue = baseClone(srcValue, true);
+            newValue = baseClone(srcValue, !customizer);
           }
         }
         else if (isPlainObject(srcValue) || isArguments(srcValue)) {
@@ -6222,7 +6223,7 @@ module.exports = function (e1, e2) {
           }
           else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
             isCommon = false;
-            newValue = baseClone(srcValue, true);
+            newValue = baseClone(srcValue, !customizer);
           }
           else {
             newValue = objValue;
@@ -6243,23 +6244,6 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * The base implementation of `_.nth` which doesn't coerce `n` to an integer.
-     *
-     * @private
-     * @param {Array} array The array to query.
-     * @param {number} n The index of the element to return.
-     * @returns {*} Returns the nth element of `array`.
-     */
-    function baseNth(array, n) {
-      var length = array.length;
-      if (!length) {
-        return;
-      }
-      n += n < 0 ? length : 0;
-      return isIndex(n, length) ? array[n] : undefined;
-    }
-
-    /**
      * The base implementation of `_.orderBy` without param guards.
      *
      * @private
@@ -6270,7 +6254,7 @@ module.exports = function (e1, e2) {
      */
     function baseOrderBy(collection, iteratees, orders) {
       var index = -1;
-      iteratees = arrayMap(iteratees.length ? iteratees : [identity], baseUnary(getIteratee()));
+      iteratees = arrayMap(iteratees.length ? iteratees : Array(1), getIteratee());
 
       var result = baseMap(collection, function(value, key, collection) {
         var criteria = arrayMap(iteratees, function(iteratee) {
@@ -6286,11 +6270,11 @@ module.exports = function (e1, e2) {
 
     /**
      * The base implementation of `_.pick` without support for individual
-     * property identifiers.
+     * property names.
      *
      * @private
      * @param {Object} object The source object.
-     * @param {string[]} props The property identifiers to pick.
+     * @param {string[]} props The property names to pick.
      * @returns {Object} Returns the new object.
      */
     function basePick(object, props) {
@@ -6312,19 +6296,12 @@ module.exports = function (e1, e2) {
      * @returns {Object} Returns the new object.
      */
     function basePickBy(object, predicate) {
-      var index = -1,
-          props = getAllKeysIn(object),
-          length = props.length,
-          result = {};
-
-      while (++index < length) {
-        var key = props[index],
-            value = object[key];
-
+      var result = {};
+      baseForIn(object, function(value, key) {
         if (predicate(value, key)) {
           result[key] = value;
         }
-      }
+      });
       return result;
     }
 
@@ -6404,21 +6381,21 @@ module.exports = function (e1, e2) {
 
       while (length--) {
         var index = indexes[length];
-        if (length == lastIndex || index !== previous) {
+        if (lastIndex == length || index != previous) {
           var previous = index;
           if (isIndex(index)) {
             splice.call(array, index, 1);
           }
           else if (!isKey(index, array)) {
-            var path = castPath(index),
+            var path = baseCastPath(index),
                 object = parent(array, path);
 
             if (object != null) {
-              delete object[toKey(last(path))];
+              delete object[last(path)];
             }
           }
           else {
-            delete array[toKey(index)];
+            delete array[index];
           }
         }
       }
@@ -6462,34 +6439,6 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * The base implementation of `_.repeat` which doesn't coerce arguments.
-     *
-     * @private
-     * @param {string} string The string to repeat.
-     * @param {number} n The number of times to repeat the string.
-     * @returns {string} Returns the repeated string.
-     */
-    function baseRepeat(string, n) {
-      var result = '';
-      if (!string || n < 1 || n > MAX_SAFE_INTEGER) {
-        return result;
-      }
-      // Leverage the exponentiation by squaring algorithm for a faster repeat.
-      // See https://en.wikipedia.org/wiki/Exponentiation_by_squaring for more details.
-      do {
-        if (n % 2) {
-          result += string;
-        }
-        n = nativeFloor(n / 2);
-        if (n) {
-          string += string;
-        }
-      } while (n);
-
-      return result;
-    }
-
-    /**
      * The base implementation of `_.set`.
      *
      * @private
@@ -6500,7 +6449,7 @@ module.exports = function (e1, e2) {
      * @returns {Object} Returns `object`.
      */
     function baseSet(object, path, value, customizer) {
-      path = isKey(path, object) ? [path] : castPath(path);
+      path = isKey(path, object) ? [path + ''] : baseCastPath(path);
 
       var index = -1,
           length = path.length,
@@ -6508,7 +6457,7 @@ module.exports = function (e1, e2) {
           nested = object;
 
       while (nested != null && ++index < length) {
-        var key = toKey(path[index]);
+        var key = path[index];
         if (isObject(nested)) {
           var newValue = value;
           if (index != lastIndex) {
@@ -6576,8 +6525,7 @@ module.exports = function (e1, e2) {
      * @private
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} predicate The function invoked per iteration.
-     * @returns {boolean} Returns `true` if any element passes the predicate check,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if any element passes the predicate check, else `false`.
      */
     function baseSome(collection, predicate) {
       var result;
@@ -6610,8 +6558,7 @@ module.exports = function (e1, e2) {
           var mid = (low + high) >>> 1,
               computed = array[mid];
 
-          if (computed !== null && !isSymbol(computed) &&
-              (retHighest ? (computed <= value) : (computed < value))) {
+          if ((retHighest ? (computed <= value) : (computed < value)) && computed !== null) {
             low = mid + 1;
           } else {
             high = mid;
@@ -6632,8 +6579,7 @@ module.exports = function (e1, e2) {
      * @param {*} value The value to evaluate.
      * @param {Function} iteratee The iteratee invoked per element.
      * @param {boolean} [retHighest] Specify returning the highest qualified index.
-     * @returns {number} Returns the index at which `value` should be inserted
-     *  into `array`.
+     * @returns {number} Returns the index at which `value` should be inserted into `array`.
      */
     function baseSortedIndexBy(array, value, iteratee, retHighest) {
       value = iteratee(value);
@@ -6642,26 +6588,21 @@ module.exports = function (e1, e2) {
           high = array ? array.length : 0,
           valIsNaN = value !== value,
           valIsNull = value === null,
-          valIsSymbol = isSymbol(value),
-          valIsUndefined = value === undefined;
+          valIsUndef = value === undefined;
 
       while (low < high) {
         var mid = nativeFloor((low + high) / 2),
             computed = iteratee(array[mid]),
-            othIsDefined = computed !== undefined,
-            othIsNull = computed === null,
-            othIsReflexive = computed === computed,
-            othIsSymbol = isSymbol(computed);
+            isDef = computed !== undefined,
+            isReflexive = computed === computed;
 
         if (valIsNaN) {
-          var setLow = retHighest || othIsReflexive;
-        } else if (valIsUndefined) {
-          setLow = othIsReflexive && (retHighest || othIsDefined);
+          var setLow = isReflexive || retHighest;
         } else if (valIsNull) {
-          setLow = othIsReflexive && othIsDefined && (retHighest || !othIsNull);
-        } else if (valIsSymbol) {
-          setLow = othIsReflexive && othIsDefined && !othIsNull && (retHighest || !othIsSymbol);
-        } else if (othIsNull || othIsSymbol) {
+          setLow = isReflexive && isDef && (retHighest || computed != null);
+        } else if (valIsUndef) {
+          setLow = isReflexive && (retHighest || isDef);
+        } else if (computed == null) {
           setLow = false;
         } else {
           setLow = retHighest ? (computed <= value) : (computed < value);
@@ -6676,68 +6617,44 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * The base implementation of `_.sortedUniq` and `_.sortedUniqBy` without
-     * support for iteratee shorthands.
+     * The base implementation of `_.sortedUniq`.
+     *
+     * @private
+     * @param {Array} array The array to inspect.
+     * @returns {Array} Returns the new duplicate free array.
+     */
+    function baseSortedUniq(array) {
+      return baseSortedUniqBy(array);
+    }
+
+    /**
+     * The base implementation of `_.sortedUniqBy` without support for iteratee
+     * shorthands.
      *
      * @private
      * @param {Array} array The array to inspect.
      * @param {Function} [iteratee] The iteratee invoked per element.
      * @returns {Array} Returns the new duplicate free array.
      */
-    function baseSortedUniq(array, iteratee) {
-      var index = -1,
+    function baseSortedUniqBy(array, iteratee) {
+      var index = 0,
           length = array.length,
-          resIndex = 0,
-          result = [];
+          value = array[0],
+          computed = iteratee ? iteratee(value) : value,
+          seen = computed,
+          resIndex = 1,
+          result = [value];
 
       while (++index < length) {
-        var value = array[index],
-            computed = iteratee ? iteratee(value) : value;
+        value = array[index],
+        computed = iteratee ? iteratee(value) : value;
 
-        if (!index || !eq(computed, seen)) {
-          var seen = computed;
-          result[resIndex++] = value === 0 ? 0 : value;
+        if (!eq(computed, seen)) {
+          seen = computed;
+          result[resIndex++] = value;
         }
       }
       return result;
-    }
-
-    /**
-     * The base implementation of `_.toNumber` which doesn't ensure correct
-     * conversions of binary, hexadecimal, or octal string values.
-     *
-     * @private
-     * @param {*} value The value to process.
-     * @returns {number} Returns the number.
-     */
-    function baseToNumber(value) {
-      if (typeof value == 'number') {
-        return value;
-      }
-      if (isSymbol(value)) {
-        return NAN;
-      }
-      return +value;
-    }
-
-    /**
-     * The base implementation of `_.toString` which doesn't convert nullish
-     * values to empty strings.
-     *
-     * @private
-     * @param {*} value The value to process.
-     * @returns {string} Returns the string.
-     */
-    function baseToString(value) {
-      // Exit early for strings to avoid a performance hit in some environments.
-      if (typeof value == 'string') {
-        return value;
-      }
-      if (isSymbol(value)) {
-        return symbolToString ? symbolToString.call(value) : '';
-      }
-      var result = (value + '');
-      return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
     }
 
     /**
@@ -6778,7 +6695,6 @@ module.exports = function (e1, e2) {
         var value = array[index],
             computed = iteratee ? iteratee(value) : value;
 
-        value = (comparator || value !== 0) ? value : 0;
         if (isCommon && computed === computed) {
           var seenIndex = seen.length;
           while (seenIndex--) {
@@ -6810,11 +6726,10 @@ module.exports = function (e1, e2) {
      * @returns {boolean} Returns `true` if the property is deleted, else `false`.
      */
     function baseUnset(object, path) {
-      path = isKey(path, object) ? [path] : castPath(path);
+      path = isKey(path, object) ? [path + ''] : baseCastPath(path);
       object = parent(object, path);
-
-      var key = toKey(last(path));
-      return !(object != null && baseHas(object, key)) || delete object[key];
+      var key = last(path);
+      return (object != null && has(object, key)) ? delete object[key] : true;
     }
 
     /**
@@ -6903,7 +6818,7 @@ module.exports = function (e1, e2) {
      * This base implementation of `_.zipObject` which assigns values using `assignFunc`.
      *
      * @private
-     * @param {Array} props The property identifiers.
+     * @param {Array} props The property names.
      * @param {Array} values The property values.
      * @param {Function} assignFunc The function to assign values.
      * @returns {Object} Returns the new object.
@@ -6915,58 +6830,9 @@ module.exports = function (e1, e2) {
           result = {};
 
       while (++index < length) {
-        var value = index < valsLength ? values[index] : undefined;
-        assignFunc(result, props[index], value);
+        assignFunc(result, props[index], index < valsLength ? values[index] : undefined);
       }
       return result;
-    }
-
-    /**
-     * Casts `value` to an empty array if it's not an array like object.
-     *
-     * @private
-     * @param {*} value The value to inspect.
-     * @returns {Array|Object} Returns the cast array-like object.
-     */
-    function castArrayLikeObject(value) {
-      return isArrayLikeObject(value) ? value : [];
-    }
-
-    /**
-     * Casts `value` to `identity` if it's not a function.
-     *
-     * @private
-     * @param {*} value The value to inspect.
-     * @returns {Function} Returns cast function.
-     */
-    function castFunction(value) {
-      return typeof value == 'function' ? value : identity;
-    }
-
-    /**
-     * Casts `value` to a path array if it's not one.
-     *
-     * @private
-     * @param {*} value The value to inspect.
-     * @returns {Array} Returns the cast property path array.
-     */
-    function castPath(value) {
-      return isArray(value) ? value : stringToPath(value);
-    }
-
-    /**
-     * Casts `array` to a slice if it's needed.
-     *
-     * @private
-     * @param {Array} array The array to inspect.
-     * @param {number} start The start position.
-     * @param {number} [end=array.length] The end position.
-     * @returns {Array} Returns the cast slice.
-     */
-    function castSlice(array, start, end) {
-      var length = array.length;
-      end = end === undefined ? length : end;
-      return (!start && end >= length) ? array : baseSlice(array, start, end);
     }
 
     /**
@@ -7000,30 +6866,14 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a clone of `dataView`.
-     *
-     * @private
-     * @param {Object} dataView The data view to clone.
-     * @param {boolean} [isDeep] Specify a deep clone.
-     * @returns {Object} Returns the cloned data view.
-     */
-    function cloneDataView(dataView, isDeep) {
-      var buffer = isDeep ? cloneArrayBuffer(dataView.buffer) : dataView.buffer;
-      return new dataView.constructor(buffer, dataView.byteOffset, dataView.byteLength);
-    }
-
-    /**
      * Creates a clone of `map`.
      *
      * @private
      * @param {Object} map The map to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
      * @returns {Object} Returns the cloned map.
      */
-    function cloneMap(map, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(mapToArray(map), true) : mapToArray(map);
-      return arrayReduce(array, addMapEntry, new map.constructor);
+    function cloneMap(map) {
+      return arrayReduce(mapToArray(map), addMapEntry, new map.constructor);
     }
 
     /**
@@ -7044,13 +6894,10 @@ module.exports = function (e1, e2) {
      *
      * @private
      * @param {Object} set The set to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
      * @returns {Object} Returns the cloned set.
      */
-    function cloneSet(set, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(setToArray(set), true) : setToArray(set);
-      return arrayReduce(array, addSetEntry, new set.constructor);
+    function cloneSet(set) {
+      return arrayReduce(setToArray(set), addSetEntry, new set.constructor);
     }
 
     /**
@@ -7075,85 +6922,6 @@ module.exports = function (e1, e2) {
     function cloneTypedArray(typedArray, isDeep) {
       var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
       return new typedArray.constructor(buffer, typedArray.byteOffset, typedArray.length);
-    }
-
-    /**
-     * Compares values to sort them in ascending order.
-     *
-     * @private
-     * @param {*} value The value to compare.
-     * @param {*} other The other value to compare.
-     * @returns {number} Returns the sort order indicator for `value`.
-     */
-    function compareAscending(value, other) {
-      if (value !== other) {
-        var valIsDefined = value !== undefined,
-            valIsNull = value === null,
-            valIsReflexive = value === value,
-            valIsSymbol = isSymbol(value);
-
-        var othIsDefined = other !== undefined,
-            othIsNull = other === null,
-            othIsReflexive = other === other,
-            othIsSymbol = isSymbol(other);
-
-        if ((!othIsNull && !othIsSymbol && !valIsSymbol && value > other) ||
-            (valIsSymbol && othIsDefined && othIsReflexive && !othIsNull && !othIsSymbol) ||
-            (valIsNull && othIsDefined && othIsReflexive) ||
-            (!valIsDefined && othIsReflexive) ||
-            !valIsReflexive) {
-          return 1;
-        }
-        if ((!valIsNull && !valIsSymbol && !othIsSymbol && value < other) ||
-            (othIsSymbol && valIsDefined && valIsReflexive && !valIsNull && !valIsSymbol) ||
-            (othIsNull && valIsDefined && valIsReflexive) ||
-            (!othIsDefined && valIsReflexive) ||
-            !othIsReflexive) {
-          return -1;
-        }
-      }
-      return 0;
-    }
-
-    /**
-     * Used by `_.orderBy` to compare multiple properties of a value to another
-     * and stable sort them.
-     *
-     * If `orders` is unspecified, all values are sorted in ascending order. Otherwise,
-     * specify an order of "desc" for descending or "asc" for ascending sort order
-     * of corresponding values.
-     *
-     * @private
-     * @param {Object} object The object to compare.
-     * @param {Object} other The other object to compare.
-     * @param {boolean[]|string[]} orders The order to sort by for each property.
-     * @returns {number} Returns the sort order indicator for `object`.
-     */
-    function compareMultiple(object, other, orders) {
-      var index = -1,
-          objCriteria = object.criteria,
-          othCriteria = other.criteria,
-          length = objCriteria.length,
-          ordersLength = orders.length;
-
-      while (++index < length) {
-        var result = compareAscending(objCriteria[index], othCriteria[index]);
-        if (result) {
-          if (index >= ordersLength) {
-            return result;
-          }
-          var order = orders[index];
-          return result * (order == 'desc' ? -1 : 1);
-        }
-      }
-      // Fixes an `Array#sort` bug in the JS engine embedded in Adobe applications
-      // that causes it, under certain circumstances, to provide the same value for
-      // `object` and `other`. See https://github.com/jashkenas/underscore/pull/1247
-      // for more details.
-      //
-      // This also ensures a stable sort in V8 and other engines.
-      // See https://bugs.chromium.org/p/v8/issues/detail?id=90 for more details.
-      return object.index - other.index;
     }
 
     /**
@@ -7252,12 +7020,26 @@ module.exports = function (e1, e2) {
      *
      * @private
      * @param {Object} source The object to copy properties from.
-     * @param {Array} props The property identifiers to copy.
+     * @param {Array} props The property names to copy.
+     * @param {Object} [object={}] The object to copy properties to.
+     * @returns {Object} Returns `object`.
+     */
+    function copyObject(source, props, object) {
+      return copyObjectWith(source, props, object);
+    }
+
+    /**
+     * This function is like `copyObject` except that it accepts a function to
+     * customize copied values.
+     *
+     * @private
+     * @param {Object} source The object to copy properties from.
+     * @param {Array} props The property names to copy.
      * @param {Object} [object={}] The object to copy properties to.
      * @param {Function} [customizer] The function to customize copied values.
      * @returns {Object} Returns `object`.
      */
-    function copyObject(source, props, object, customizer) {
+    function copyObjectWith(source, props, object, customizer) {
       object || (object = {});
 
       var index = -1,
@@ -7367,7 +7149,7 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a base function for methods like `_.forIn` and `_.forOwn`.
+     * Creates a base function for methods like `_.forIn`.
      *
      * @private
      * @param {boolean} [fromRight] Specify iterating from right to left.
@@ -7396,8 +7178,7 @@ module.exports = function (e1, e2) {
      *
      * @private
      * @param {Function} func The function to wrap.
-     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper`
-     *  for more details.
+     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper` for more details.
      * @param {*} [thisArg] The `this` binding of `func`.
      * @returns {Function} Returns the new wrapped function.
      */
@@ -7427,13 +7208,8 @@ module.exports = function (e1, e2) {
           ? stringToArray(string)
           : undefined;
 
-        var chr = strSymbols
-          ? strSymbols[0]
-          : string.charAt(0);
-
-        var trailing = strSymbols
-          ? castSlice(strSymbols, 1).join('')
-          : string.slice(1);
+        var chr = strSymbols ? strSymbols[0] : string.charAt(0),
+            trailing = strSymbols ? strSymbols.slice(1).join('') : string.slice(1);
 
         return chr[methodName]() + trailing;
       };
@@ -7448,7 +7224,7 @@ module.exports = function (e1, e2) {
      */
     function createCompounder(callback) {
       return function(string) {
-        return arrayReduce(words(deburr(string).replace(reApos, '')), callback, '');
+        return arrayReduce(words(deburr(string)), callback, '');
       };
     }
 
@@ -7462,8 +7238,8 @@ module.exports = function (e1, e2) {
      */
     function createCtorWrapper(Ctor) {
       return function() {
-        // Use a `switch` statement to work with class constructors. See
-        // http://ecma-international.org/ecma-262/6.0/#sec-ecmascript-function-objects-call-thisargument-argumentslist
+        // Use a `switch` statement to work with class constructors.
+        // See http://ecma-international.org/ecma-262/6.0/#sec-ecmascript-function-objects-call-thisargument-argumentslist
         // for more details.
         var args = arguments;
         switch (args.length) {
@@ -7490,8 +7266,7 @@ module.exports = function (e1, e2) {
      *
      * @private
      * @param {Function} func The function to wrap.
-     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper`
-     *  for more details.
+     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper` for more details.
      * @param {number} arity The arity of `func`.
      * @returns {Function} Returns the new wrapped function.
      */
@@ -7563,9 +7338,7 @@ module.exports = function (e1, e2) {
               ) {
             wrapper = wrapper[getFuncName(data[0])].apply(wrapper, data[3]);
           } else {
-            wrapper = (func.length == 1 && isLaziable(func))
-              ? wrapper[funcName]()
-              : wrapper.thru(func);
+            wrapper = (func.length == 1 && isLaziable(func)) ? wrapper[funcName]() : wrapper.thru(func);
           }
         }
         return function() {
@@ -7593,14 +7366,11 @@ module.exports = function (e1, e2) {
      *
      * @private
      * @param {Function|string} func The function or method name to wrap.
-     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper`
-     *  for more details.
+     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper` for more details.
      * @param {*} [thisArg] The `this` binding of `func`.
-     * @param {Array} [partials] The arguments to prepend to those provided to
-     *  the new function.
+     * @param {Array} [partials] The arguments to prepend to those provided to the new function.
      * @param {Array} [holders] The `partials` placeholder indexes.
-     * @param {Array} [partialsRight] The arguments to append to those provided
-     *  to the new function.
+     * @param {Array} [partialsRight] The arguments to append to those provided to the new function.
      * @param {Array} [holdersRight] The `partialsRight` placeholder indexes.
      * @param {Array} [argPos] The argument positions of the new function.
      * @param {number} [ary] The arity cap of `func`.
@@ -7676,39 +7446,6 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a function that performs a mathematical operation on two values.
-     *
-     * @private
-     * @param {Function} operator The function to perform the operation.
-     * @returns {Function} Returns the new mathematical operation function.
-     */
-    function createMathOperation(operator) {
-      return function(value, other) {
-        var result;
-        if (value === undefined && other === undefined) {
-          return 0;
-        }
-        if (value !== undefined) {
-          result = value;
-        }
-        if (other !== undefined) {
-          if (result === undefined) {
-            return other;
-          }
-          if (typeof value == 'string' || typeof other == 'string') {
-            value = baseToString(value);
-            other = baseToString(other);
-          } else {
-            value = baseToNumber(value);
-            other = baseToNumber(other);
-          }
-          result = operator(value, other);
-        }
-        return result;
-      };
-    }
-
-    /**
      * Creates a function like `_.over`.
      *
      * @private
@@ -7717,10 +7454,7 @@ module.exports = function (e1, e2) {
      */
     function createOver(arrayFunc) {
       return rest(function(iteratees) {
-        iteratees = (iteratees.length == 1 && isArray(iteratees[0]))
-          ? arrayMap(iteratees[0], baseUnary(getIteratee()))
-          : arrayMap(baseFlatten(iteratees, 1, isFlattenableIteratee), baseUnary(getIteratee()));
-
+        iteratees = arrayMap(baseFlatten(iteratees, 1), getIteratee());
         return rest(function(args) {
           var thisArg = this;
           return arrayFunc(iteratees, function(iteratee) {
@@ -7735,34 +7469,37 @@ module.exports = function (e1, e2) {
      * is truncated if the number of characters exceeds `length`.
      *
      * @private
-     * @param {number} length The padding length.
+     * @param {string} string The string to create padding for.
+     * @param {number} [length=0] The padding length.
      * @param {string} [chars=' '] The string used as padding.
      * @returns {string} Returns the padding for `string`.
      */
-    function createPadding(length, chars) {
-      chars = chars === undefined ? ' ' : baseToString(chars);
+    function createPadding(string, length, chars) {
+      length = toInteger(length);
 
-      var charsLength = chars.length;
-      if (charsLength < 2) {
-        return charsLength ? baseRepeat(chars, length) : chars;
+      var strLength = stringSize(string);
+      if (!length || strLength >= length) {
+        return '';
       }
-      var result = baseRepeat(chars, nativeCeil(length / stringSize(chars)));
+      var padLength = length - strLength;
+      chars = chars === undefined ? ' ' : (chars + '');
+
+      var result = repeat(chars, nativeCeil(padLength / stringSize(chars)));
       return reHasComplexSymbol.test(chars)
-        ? castSlice(stringToArray(result), 0, length).join('')
-        : result.slice(0, length);
+        ? stringToArray(result).slice(0, padLength).join('')
+        : result.slice(0, padLength);
     }
 
     /**
-     * Creates a function that wraps `func` to invoke it with the `this` binding
-     * of `thisArg` and `partials` prepended to the arguments it receives.
+     * Creates a function that wraps `func` to invoke it with the optional `this`
+     * binding of `thisArg` and the `partials` prepended to those provided to
+     * the wrapper.
      *
      * @private
      * @param {Function} func The function to wrap.
-     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper`
-     *  for more details.
+     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper` for more details.
      * @param {*} thisArg The `this` binding of `func`.
-     * @param {Array} partials The arguments to prepend to those provided to
-     *  the new function.
+     * @param {Array} partials The arguments to prepend to those provided to the new function.
      * @returns {Function} Returns the new wrapped function.
      */
     function createPartialWrapper(func, bitmask, thisArg, partials) {
@@ -7815,34 +7552,15 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a function that performs a relational operation on two values.
-     *
-     * @private
-     * @param {Function} operator The function to perform the operation.
-     * @returns {Function} Returns the new relational operation function.
-     */
-    function createRelationalOperation(operator) {
-      return function(value, other) {
-        if (!(typeof value == 'string' && typeof other == 'string')) {
-          value = toNumber(value);
-          other = toNumber(other);
-        }
-        return operator(value, other);
-      };
-    }
-
-    /**
      * Creates a function that wraps `func` to continue currying.
      *
      * @private
      * @param {Function} func The function to wrap.
-     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper`
-     *  for more details.
+     * @param {number} bitmask The bitmask of wrapper flags. See `createWrapper` for more details.
      * @param {Function} wrapFunc The function to create the `func` wrapper.
      * @param {*} placeholder The placeholder value.
      * @param {*} [thisArg] The `this` binding of `func`.
-     * @param {Array} [partials] The arguments to prepend to those provided to
-     *  the new function.
+     * @param {Array} [partials] The arguments to prepend to those provided to the new function.
      * @param {Array} [holders] The `partials` placeholder indexes.
      * @param {Array} [argPos] The argument positions of the new function.
      * @param {number} [ary] The arity cap of `func`.
@@ -7851,6 +7569,7 @@ module.exports = function (e1, e2) {
      */
     function createRecurryWrapper(func, bitmask, wrapFunc, placeholder, thisArg, partials, holders, argPos, ary, arity) {
       var isCurry = bitmask & CURRY_FLAG,
+          newArgPos = argPos ? copyArray(argPos) : undefined,
           newHolders = isCurry ? holders : undefined,
           newHoldersRight = isCurry ? undefined : holders,
           newPartials = isCurry ? partials : undefined,
@@ -7864,7 +7583,7 @@ module.exports = function (e1, e2) {
       }
       var newData = [
         func, bitmask, thisArg, newPartials, newHolders, newPartialsRight,
-        newHoldersRight, argPos, ary, arity
+        newHoldersRight, newArgPos, ary, arity
       ];
 
       var result = wrapFunc.apply(undefined, newData);
@@ -7907,7 +7626,7 @@ module.exports = function (e1, e2) {
      * @param {Array} values The values to add to the set.
      * @returns {Object} Returns the new set.
      */
-    var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY) ? noop : function(values) {
+    var createSet = !(Set && new Set([1, 2]).size === 2) ? noop : function(values) {
       return new Set(values);
     };
 
@@ -8000,8 +7719,7 @@ module.exports = function (e1, e2) {
      * @param {Array} other The other array to compare.
      * @param {Function} equalFunc The function to determine equivalents of values.
      * @param {Function} customizer The function to customize comparisons.
-     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-     *  for more details.
+     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual` for more details.
      * @param {Object} stack Tracks traversed `array` and `other` objects.
      * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
      */
@@ -8043,16 +7761,12 @@ module.exports = function (e1, e2) {
         // Recursively compare arrays (susceptible to call stack limits).
         if (isUnordered) {
           if (!arraySome(other, function(othValue) {
-                return arrValue === othValue ||
-                  equalFunc(arrValue, othValue, customizer, bitmask, stack);
+                return arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack);
               })) {
             result = false;
             break;
           }
-        } else if (!(
-              arrValue === othValue ||
-                equalFunc(arrValue, othValue, customizer, bitmask, stack)
-            )) {
+        } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack))) {
           result = false;
           break;
         }
@@ -8074,21 +7788,12 @@ module.exports = function (e1, e2) {
      * @param {string} tag The `toStringTag` of the objects to compare.
      * @param {Function} equalFunc The function to determine equivalents of values.
      * @param {Function} customizer The function to customize comparisons.
-     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-     *  for more details.
+     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual` for more details.
      * @param {Object} stack Tracks traversed `object` and `other` objects.
      * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
      */
     function equalByTag(object, other, tag, equalFunc, customizer, bitmask, stack) {
       switch (tag) {
-        case dataViewTag:
-          if ((object.byteLength != other.byteLength) ||
-              (object.byteOffset != other.byteOffset)) {
-            return false;
-          }
-          object = object.buffer;
-          other = other.buffer;
-
         case arrayBufferTag:
           if ((object.byteLength != other.byteLength) ||
               !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
@@ -8098,9 +7803,8 @@ module.exports = function (e1, e2) {
 
         case boolTag:
         case dateTag:
-          // Coerce dates and booleans to numbers, dates to milliseconds and
-          // booleans to `1` or `0` treating invalid dates coerced to `NaN` as
-          // not equal.
+          // Coerce dates and booleans to numbers, dates to milliseconds and booleans
+          // to `1` or `0` treating invalid dates coerced to `NaN` as not equal.
           return +object == +other;
 
         case errorTag:
@@ -8112,9 +7816,8 @@ module.exports = function (e1, e2) {
 
         case regexpTag:
         case stringTag:
-          // Coerce regexes to strings and treat strings, primitives and objects,
-          // as equal. See http://www.ecma-international.org/ecma-262/6.0/#sec-regexp.prototype.tostring
-          // for more details.
+          // Coerce regexes to strings and treat strings primitives and string
+          // objects as equal. See https://es5.github.io/#x15.10.6.4 for more details.
           return object == (other + '');
 
         case mapTag:
@@ -8132,11 +7835,8 @@ module.exports = function (e1, e2) {
           if (stacked) {
             return stacked == other;
           }
-          bitmask |= UNORDERED_COMPARE_FLAG;
-          stack.set(object, other);
-
           // Recursively compare objects (susceptible to call stack limits).
-          return equalArrays(convert(object), convert(other), equalFunc, customizer, bitmask, stack);
+          return equalArrays(convert(object), convert(other), equalFunc, customizer, bitmask | UNORDERED_COMPARE_FLAG, stack.set(object, other));
 
         case symbolTag:
           if (symbolValueOf) {
@@ -8155,8 +7855,7 @@ module.exports = function (e1, e2) {
      * @param {Object} other The other object to compare.
      * @param {Function} equalFunc The function to determine equivalents of values.
      * @param {Function} customizer The function to customize comparisons.
-     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-     *  for more details.
+     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual` for more details.
      * @param {Object} stack Tracks traversed `object` and `other` objects.
      * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
      */
@@ -8223,29 +7922,6 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates an array of own enumerable property names and symbols of `object`.
-     *
-     * @private
-     * @param {Object} object The object to query.
-     * @returns {Array} Returns the array of property names and symbols.
-     */
-    function getAllKeys(object) {
-      return baseGetAllKeys(object, keys, getSymbols);
-    }
-
-    /**
-     * Creates an array of own and inherited enumerable property names and
-     * symbols of `object`.
-     *
-     * @private
-     * @param {Object} object The object to query.
-     * @returns {Array} Returns the array of property names and symbols.
-     */
-    function getAllKeysIn(object) {
-      return baseGetAllKeys(object, keysIn, getSymbolsIn);
-    }
-
-    /**
      * Gets metadata for `func`.
      *
      * @private
@@ -8279,10 +7955,10 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Gets the appropriate "iteratee" function. If `_.iteratee` is customized,
-     * this function returns the custom method, otherwise it returns `baseIteratee`.
-     * If arguments are provided, the chosen function is invoked with them and
-     * its result is returned.
+     * Gets the appropriate "iteratee" function. If the `_.iteratee` method is
+     * customized this function returns the custom method, otherwise it returns
+     * `baseIteratee`. If arguments are provided the chosen function is invoked
+     * with them and its result is returned.
      *
      * @private
      * @param {*} [value] The value to convert to an iteratee.
@@ -8298,9 +7974,8 @@ module.exports = function (e1, e2) {
     /**
      * Gets the "length" property value of `object`.
      *
-     * **Note:** This function is used to avoid a
-     * [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792) that affects
-     * Safari on at least iOS 8.1-8.3 ARM64.
+     * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+     * that affects Safari on at least iOS 8.1-8.3 ARM64.
      *
      * @private
      * @param {Object} object The object to query.
@@ -8351,51 +8026,14 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Gets the `[[Prototype]]` of `value`.
-     *
-     * @private
-     * @param {*} value The value to query.
-     * @returns {null|Object} Returns the `[[Prototype]]`.
-     */
-    function getPrototype(value) {
-      return nativeGetPrototype(Object(value));
-    }
-
-    /**
-     * Creates an array of the own enumerable symbol properties of `object`.
+     * Creates an array of the own symbol properties of `object`.
      *
      * @private
      * @param {Object} object The object to query.
      * @returns {Array} Returns the array of symbols.
      */
-    function getSymbols(object) {
-      // Coerce `object` to an object to avoid non-object errors in V8.
-      // See https://bugs.chromium.org/p/v8/issues/detail?id=3443 for more details.
-      return getOwnPropertySymbols(Object(object));
-    }
-
-    // Fallback for IE < 11.
-    if (!getOwnPropertySymbols) {
-      getSymbols = function() {
-        return [];
-      };
-    }
-
-    /**
-     * Creates an array of the own and inherited enumerable symbol properties
-     * of `object`.
-     *
-     * @private
-     * @param {Object} object The object to query.
-     * @returns {Array} Returns the array of symbols.
-     */
-    var getSymbolsIn = !getOwnPropertySymbols ? getSymbols : function(object) {
-      var result = [];
-      while (object) {
-        arrayPush(result, getSymbols(object));
-        object = getPrototype(object);
-      }
-      return result;
+    var getSymbols = getOwnPropertySymbols || function() {
+      return [];
     };
 
     /**
@@ -8409,23 +8047,18 @@ module.exports = function (e1, e2) {
       return objectToString.call(value);
     }
 
-    // Fallback for data views, maps, sets, and weak maps in IE 11,
-    // for data views in Edge, and promises in Node.js.
-    if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
-        (Map && getTag(new Map) != mapTag) ||
-        (Promise && getTag(Promise.resolve()) != promiseTag) ||
+    // Fallback for IE 11 providing `toStringTag` values for maps, sets, and weakmaps.
+    if ((Map && getTag(new Map) != mapTag) ||
         (Set && getTag(new Set) != setTag) ||
         (WeakMap && getTag(new WeakMap) != weakMapTag)) {
       getTag = function(value) {
         var result = objectToString.call(value),
-            Ctor = result == objectTag ? value.constructor : undefined,
-            ctorString = Ctor ? toSource(Ctor) : undefined;
+            Ctor = result == objectTag ? value.constructor : null,
+            ctorString = typeof Ctor == 'function' ? funcToString.call(Ctor) : '';
 
         if (ctorString) {
           switch (ctorString) {
-            case dataViewCtorString: return dataViewTag;
             case mapCtorString: return mapTag;
-            case promiseCtorString: return promiseTag;
             case setCtorString: return setTag;
             case weakMapCtorString: return weakMapTag;
           }
@@ -8472,25 +8105,23 @@ module.exports = function (e1, e2) {
      * @returns {boolean} Returns `true` if `path` exists, else `false`.
      */
     function hasPath(object, path, hasFunc) {
-      path = isKey(path, object) ? [path] : castPath(path);
-
-      var result,
-          index = -1,
-          length = path.length;
-
-      while (++index < length) {
-        var key = toKey(path[index]);
-        if (!(result = object != null && hasFunc(object, key))) {
-          break;
+      if (object == null) {
+        return false;
+      }
+      var result = hasFunc(object, path);
+      if (!result && !isKey(path)) {
+        path = baseCastPath(path);
+        object = parent(object, path);
+        if (object != null) {
+          path = last(path);
+          result = hasFunc(object, path);
         }
-        object = object[key];
       }
-      if (result) {
-        return result;
-      }
-      var length = object ? object.length : 0;
-      return !!length && isLength(length) && isIndex(key, length) &&
-        (isArray(object) || isString(object) || isArguments(object));
+      var length = object ? object.length : undefined;
+      return result || (
+        !!length && isLength(length) && isIndex(path, length) &&
+        (isArray(object) || isString(object) || isArguments(object))
+      );
     }
 
     /**
@@ -8521,7 +8152,7 @@ module.exports = function (e1, e2) {
      */
     function initCloneObject(object) {
       return (typeof object.constructor == 'function' && !isPrototype(object))
-        ? baseCreate(getPrototype(object))
+        ? baseCreate(getPrototypeOf(object))
         : {};
     }
 
@@ -8534,11 +8165,10 @@ module.exports = function (e1, e2) {
      * @private
      * @param {Object} object The object to clone.
      * @param {string} tag The `toStringTag` of the object to clone.
-     * @param {Function} cloneFunc The function to clone values.
      * @param {boolean} [isDeep] Specify a deep clone.
      * @returns {Object} Returns the initialized clone.
      */
-    function initCloneByTag(object, tag, cloneFunc, isDeep) {
+    function initCloneByTag(object, tag, isDeep) {
       var Ctor = object.constructor;
       switch (tag) {
         case arrayBufferTag:
@@ -8548,16 +8178,13 @@ module.exports = function (e1, e2) {
         case dateTag:
           return new Ctor(+object);
 
-        case dataViewTag:
-          return cloneDataView(object, isDeep);
-
         case float32Tag: case float64Tag:
         case int8Tag: case int16Tag: case int32Tag:
         case uint8Tag: case uint8ClampedTag: case uint16Tag: case uint32Tag:
           return cloneTypedArray(object, isDeep);
 
         case mapTag:
-          return cloneMap(object, isDeep, cloneFunc);
+          return cloneMap(object);
 
         case numberTag:
         case stringTag:
@@ -8567,7 +8194,7 @@ module.exports = function (e1, e2) {
           return cloneRegExp(object);
 
         case setTag:
-          return cloneSet(object, isDeep, cloneFunc);
+          return cloneSet(object);
 
         case symbolTag:
           return cloneSymbol(object);
@@ -8592,52 +8219,13 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Checks if `value` is a flattenable `arguments` object or array.
-     *
-     * @private
-     * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
-     */
-    function isFlattenable(value) {
-      return isArrayLikeObject(value) && (isArray(value) || isArguments(value));
-    }
-
-    /**
-     * Checks if `value` is a flattenable array and not a `_.matchesProperty`
-     * iteratee shorthand.
-     *
-     * @private
-     * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
-     */
-    function isFlattenableIteratee(value) {
-      return isArray(value) && !(value.length == 2 && !isFunction(value[0]));
-    }
-
-    /**
-     * Checks if `value` is a valid array-like index.
-     *
-     * @private
-     * @param {*} value The value to check.
-     * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
-     * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
-     */
-    function isIndex(value, length) {
-      length = length == null ? MAX_SAFE_INTEGER : length;
-      return !!length &&
-        (typeof value == 'number' || reIsUint.test(value)) &&
-        (value > -1 && value % 1 == 0 && value < length);
-    }
-
-    /**
      * Checks if the given arguments are from an iteratee call.
      *
      * @private
      * @param {*} value The potential iteratee value argument.
      * @param {*} index The potential iteratee index or key argument.
      * @param {*} object The potential iteratee object argument.
-     * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if the arguments are from an iteratee call, else `false`.
      */
     function isIterateeCall(value, index, object) {
       if (!isObject(object)) {
@@ -8645,9 +8233,8 @@ module.exports = function (e1, e2) {
       }
       var type = typeof index;
       if (type == 'number'
-            ? (isArrayLike(object) && isIndex(index, object.length))
-            : (type == 'string' && index in object)
-          ) {
+          ? (isArrayLike(object) && isIndex(index, object.length))
+          : (type == 'string' && index in object)) {
         return eq(object[index], value);
       }
       return false;
@@ -8662,16 +8249,12 @@ module.exports = function (e1, e2) {
      * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
      */
     function isKey(value, object) {
-      if (isArray(value)) {
-        return false;
-      }
-      var type = typeof value;
-      if (type == 'number' || type == 'symbol' || type == 'boolean' ||
-          value == null || isSymbol(value)) {
+      if (typeof value == 'number') {
         return true;
       }
-      return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
-        (object != null && value in Object(object));
+      return !isArray(value) &&
+        (reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
+          (object != null && value in Object(object)));
     }
 
     /**
@@ -8683,9 +8266,8 @@ module.exports = function (e1, e2) {
      */
     function isKeyable(value) {
       var type = typeof value;
-      return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
-        ? (value !== '__proto__')
-        : (value === null);
+      return type == 'number' || type == 'boolean' ||
+        (type == 'string' && value != '__proto__') || value == null;
     }
 
     /**
@@ -8693,8 +8275,7 @@ module.exports = function (e1, e2) {
      *
      * @private
      * @param {Function} func The function to check.
-     * @returns {boolean} Returns `true` if `func` has a lazy counterpart,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `func` has a lazy counterpart, else `false`.
      */
     function isLaziable(func) {
       var funcName = getFuncName(func),
@@ -8737,34 +8318,14 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * A specialized version of `matchesProperty` for source values suitable
-     * for strict equality comparisons, i.e. `===`.
-     *
-     * @private
-     * @param {string} key The key of the property to get.
-     * @param {*} srcValue The value to match.
-     * @returns {Function} Returns the new function.
-     */
-    function matchesStrictComparable(key, srcValue) {
-      return function(object) {
-        if (object == null) {
-          return false;
-        }
-        return object[key] === srcValue &&
-          (srcValue !== undefined || (key in Object(object)));
-      };
-    }
-
-    /**
      * Merges the function metadata of `source` into `data`.
      *
      * Merging metadata reduces the number of wrappers used to invoke a function.
      * This is possible because methods like `_.bind`, `_.curry`, and `_.partial`
-     * may be applied regardless of execution order. Methods like `_.ary` and
-     * `_.rearg` modify function arguments, making the order in which they are
-     * executed important, preventing the merging of metadata. However, we make
-     * an exception for a safe combined case where curried functions have `_.ary`
-     * and or `_.rearg` applied.
+     * may be applied regardless of execution order. Methods like `_.ary` and `_.rearg`
+     * modify function arguments, making the order in which they are executed important,
+     * preventing the merging of metadata. However, we make an exception for a safe
+     * combined case where curried functions have `_.ary` and or `_.rearg` applied.
      *
      * @private
      * @param {Array} data The destination metadata.
@@ -8796,20 +8357,20 @@ module.exports = function (e1, e2) {
       var value = source[3];
       if (value) {
         var partials = data[3];
-        data[3] = partials ? composeArgs(partials, value, source[4]) : value;
-        data[4] = partials ? replaceHolders(data[3], PLACEHOLDER) : source[4];
+        data[3] = partials ? composeArgs(partials, value, source[4]) : copyArray(value);
+        data[4] = partials ? replaceHolders(data[3], PLACEHOLDER) : copyArray(source[4]);
       }
       // Compose partial right arguments.
       value = source[5];
       if (value) {
         partials = data[5];
-        data[5] = partials ? composeArgsRight(partials, value, source[6]) : value;
-        data[6] = partials ? replaceHolders(data[5], PLACEHOLDER) : source[6];
+        data[5] = partials ? composeArgsRight(partials, value, source[6]) : copyArray(value);
+        data[6] = partials ? replaceHolders(data[5], PLACEHOLDER) : copyArray(source[6]);
       }
       // Use source `argPos` if available.
       value = source[7];
       if (value) {
-        data[7] = value;
+        data[7] = copyArray(value);
       }
       // Use source `ary` if it's smaller.
       if (srcBitmask & ARY_FLAG) {
@@ -8835,8 +8396,7 @@ module.exports = function (e1, e2) {
      * @param {string} key The key of the property to merge.
      * @param {Object} object The parent object of `objValue`.
      * @param {Object} source The parent object of `srcValue`.
-     * @param {Object} [stack] Tracks traversed source values and their merged
-     *  counterparts.
+     * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
      * @returns {*} Returns the value to assign.
      */
     function mergeDefaults(objValue, srcValue, key, object, source, stack) {
@@ -8855,7 +8415,7 @@ module.exports = function (e1, e2) {
      * @returns {*} Returns the parent value.
      */
     function parent(object, path) {
-      return path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+      return path.length == 1 ? object : get(object, baseSlice(path, 0, -1));
     }
 
     /**
@@ -8884,9 +8444,8 @@ module.exports = function (e1, e2) {
      * Sets metadata for `func`.
      *
      * **Note:** If this function becomes hot, i.e. is invoked a lot in a short
-     * period of time, it will trip its breaker and transition to an identity
-     * function to avoid garbage collection pauses in V8. See
-     * [V8 issue 2070](https://bugs.chromium.org/p/v8/issues/detail?id=2070)
+     * period of time, it will trip its breaker and transition to an identity function
+     * to avoid garbage collection pauses in V8. See [V8 issue 2070](https://code.google.com/p/v8/issues/detail?id=2070)
      * for more details.
      *
      * @private
@@ -8921,46 +8480,12 @@ module.exports = function (e1, e2) {
      * @param {string} string The string to convert.
      * @returns {Array} Returns the property path array.
      */
-    var stringToPath = memoize(function(string) {
+    function stringToPath(string) {
       var result = [];
       toString(string).replace(rePropName, function(match, number, quote, string) {
         result.push(quote ? string.replace(reEscapeChar, '$1') : (number || match));
       });
       return result;
-    });
-
-    /**
-     * Converts `value` to a string key if it's not a string or symbol.
-     *
-     * @private
-     * @param {*} value The value to inspect.
-     * @returns {string|symbol} Returns the key.
-     */
-    function toKey(value) {
-      if (typeof value == 'string' || isSymbol(value)) {
-        return value;
-      }
-      var result = (value + '');
-      return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-    }
-
-    /**
-     * Converts `func` to its source code.
-     *
-     * @private
-     * @param {Function} func The function to process.
-     * @returns {string} Returns the source code.
-     */
-    function toSource(func) {
-      if (func != null) {
-        try {
-          return funcToString.call(func);
-        } catch (e) {}
-        try {
-          return (func + '');
-        } catch (e) {}
-      }
-      return '';
     }
 
     /**
@@ -8990,11 +8515,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to process.
-     * @param {number} [size=1] The length of each chunk
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param {number} [size=0] The length of each chunk.
      * @returns {Array} Returns the new array containing chunks.
      * @example
      *
@@ -9004,12 +8527,9 @@ module.exports = function (e1, e2) {
      * _.chunk(['a', 'b', 'c', 'd'], 3);
      * // => [['a', 'b', 'c'], ['d']]
      */
-    function chunk(array, size, guard) {
-      if ((guard ? isIterateeCall(array, size, guard) : size === undefined)) {
-        size = 1;
-      } else {
-        size = nativeMax(toInteger(size), 0);
-      }
+    function chunk(array, size) {
+      size = nativeMax(toInteger(size), 0);
+
       var length = array ? array.length : 0;
       if (!length || size < 1) {
         return [];
@@ -9030,7 +8550,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to compact.
      * @returns {Array} Returns the new array of filtered values.
@@ -9060,7 +8579,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to concatenate.
      * @param {...*} [values] The values to concatenate.
@@ -9076,34 +8594,26 @@ module.exports = function (e1, e2) {
      * console.log(array);
      * // => [1]
      */
-    function concat() {
-      var length = arguments.length,
-          array = castArray(arguments[0]);
-
-      if (length < 2) {
-        return length ? copyArray(array) : [];
+    var concat = rest(function(array, values) {
+      if (!isArray(array)) {
+        array = array == null ? [] : [Object(array)];
       }
-      var args = Array(length - 1);
-      while (length--) {
-        args[length - 1] = arguments[length];
-      }
-      return arrayConcat(array, baseFlatten(args, 1));
-    }
+      values = baseFlatten(values, 1);
+      return arrayConcat(array, values);
+    });
 
     /**
-     * Creates an array of unique `array` values not included in the other given
-     * arrays using [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
+     * Creates an array of unique `array` values not included in the other
+     * given arrays using [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
      * for equality comparisons. The order of result values is determined by the
      * order they occur in the first array.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to inspect.
      * @param {...Array} [values] The values to exclude.
      * @returns {Array} Returns the new array of filtered values.
-     * @see _.without, _.xor
      * @example
      *
      * _.difference([3, 2, 1], [4, 2]);
@@ -9111,7 +8621,7 @@ module.exports = function (e1, e2) {
      */
     var difference = rest(function(array, values) {
       return isArrayLikeObject(array)
-        ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true))
+        ? baseDifference(array, baseFlatten(values, 1, true))
         : [];
     });
 
@@ -9123,12 +8633,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to inspect.
      * @param {...Array} [values] The values to exclude.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {Array} Returns the new array of filtered values.
      * @example
      *
@@ -9145,7 +8653,7 @@ module.exports = function (e1, e2) {
         iteratee = undefined;
       }
       return isArrayLikeObject(array)
-        ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true), getIteratee(iteratee))
+        ? baseDifference(array, baseFlatten(values, 1, true), getIteratee(iteratee))
         : [];
     });
 
@@ -9157,7 +8665,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to inspect.
      * @param {...Array} [values] The values to exclude.
@@ -9176,7 +8683,7 @@ module.exports = function (e1, e2) {
         comparator = undefined;
       }
       return isArrayLikeObject(array)
-        ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true), undefined, comparator)
+        ? baseDifference(array, baseFlatten(values, 1, true), undefined, comparator)
         : [];
     });
 
@@ -9185,11 +8692,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.5.0
      * @category Array
      * @param {Array} array The array to query.
      * @param {number} [n=1] The number of elements to drop.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -9219,11 +8725,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to query.
      * @param {number} [n=1] The number of elements to drop.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -9256,11 +8761,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to query.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -9298,11 +8801,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to query.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -9341,7 +8842,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.2.0
      * @category Array
      * @param {Array} array The array to fill.
      * @param {*} value The value to fill `array` with.
@@ -9380,11 +8880,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 1.1.0
      * @category Array
      * @param {Array} array The array to search.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {number} Returns the index of the found element, else `-1`.
      * @example
      *
@@ -9421,11 +8919,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Array
      * @param {Array} array The array to search.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {number} Returns the index of the found element, else `-1`.
      * @example
      *
@@ -9461,7 +8957,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to flatten.
      * @returns {Array} Returns the new flattened array.
@@ -9480,7 +8975,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to flatten.
      * @returns {Array} Returns the new flattened array.
@@ -9499,7 +8993,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.4.0
      * @category Array
      * @param {Array} array The array to flatten.
      * @param {number} [depth=1] The maximum recursion depth.
@@ -9529,7 +9022,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} pairs The key-value pairs.
      * @returns {Object} Returns the new object.
@@ -9555,7 +9047,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @alias first
      * @category Array
      * @param {Array} array The array to query.
@@ -9569,18 +9060,17 @@ module.exports = function (e1, e2) {
      * // => undefined
      */
     function head(array) {
-      return (array && array.length) ? array[0] : undefined;
+      return array ? array[0] : undefined;
     }
 
     /**
      * Gets the index at which the first occurrence of `value` is found in `array`
      * using [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
-     * for equality comparisons. If `fromIndex` is negative, it's used as the
-     * offset from the end of `array`.
+     * for equality comparisons. If `fromIndex` is negative, it's used as the offset
+     * from the end of `array`.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to search.
      * @param {*} value The value to search for.
@@ -9612,7 +9102,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to query.
      * @returns {Array} Returns the slice of `array`.
@@ -9633,7 +9122,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
      * @returns {Array} Returns the new array of intersecting values.
@@ -9643,7 +9131,7 @@ module.exports = function (e1, e2) {
      * // => [2]
      */
     var intersection = rest(function(arrays) {
-      var mapped = arrayMap(arrays, castArrayLikeObject);
+      var mapped = arrayMap(arrays, baseCastArrayLikeObject);
       return (mapped.length && mapped[0] === arrays[0])
         ? baseIntersection(mapped)
         : [];
@@ -9657,11 +9145,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {Array} Returns the new array of intersecting values.
      * @example
      *
@@ -9674,7 +9160,7 @@ module.exports = function (e1, e2) {
      */
     var intersectionBy = rest(function(arrays) {
       var iteratee = last(arrays),
-          mapped = arrayMap(arrays, castArrayLikeObject);
+          mapped = arrayMap(arrays, baseCastArrayLikeObject);
 
       if (iteratee === last(mapped)) {
         iteratee = undefined;
@@ -9694,7 +9180,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
      * @param {Function} [comparator] The comparator invoked per element.
@@ -9709,7 +9194,7 @@ module.exports = function (e1, e2) {
      */
     var intersectionWith = rest(function(arrays) {
       var comparator = last(arrays),
-          mapped = arrayMap(arrays, castArrayLikeObject);
+          mapped = arrayMap(arrays, baseCastArrayLikeObject);
 
       if (comparator === last(mapped)) {
         comparator = undefined;
@@ -9726,7 +9211,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to convert.
      * @param {string} [separator=','] The element separator.
@@ -9745,7 +9229,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to query.
      * @returns {*} Returns the last element of `array`.
@@ -9765,7 +9248,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to search.
      * @param {*} value The value to search for.
@@ -9788,11 +9270,7 @@ module.exports = function (e1, e2) {
       var index = length;
       if (fromIndex !== undefined) {
         index = toInteger(fromIndex);
-        index = (
-          index < 0
-            ? nativeMax(length + index, 0)
-            : nativeMin(index, length - 1)
-        ) + 1;
+        index = (index < 0 ? nativeMax(length + index, 0) : nativeMin(index, length - 1)) + 1;
       }
       if (value !== value) {
         return indexOfNaN(array, index, true);
@@ -9806,31 +9284,6 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Gets the nth element of `array`. If `n` is negative, the nth element
-     * from the end is returned.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.11.0
-     * @category Array
-     * @param {Array} array The array to query.
-     * @param {number} [n=0] The index of the element to return.
-     * @returns {*} Returns the nth element of `array`.
-     * @example
-     *
-     * var array = ['a', 'b', 'c', 'd'];
-     *
-     * _.nth(array, 1);
-     * // => 'b'
-     *
-     * _.nth(array, -2);
-     * // => 'c';
-     */
-    function nth(array, n) {
-      return (array && array.length) ? baseNth(array, toInteger(n)) : undefined;
-    }
-
-    /**
      * Removes all given values from `array` using
      * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
      * for equality comparisons.
@@ -9840,7 +9293,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Array
      * @param {Array} array The array to modify.
      * @param {...*} [values] The values to remove.
@@ -9862,7 +9314,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to modify.
      * @param {Array} values The values to remove.
@@ -9890,12 +9341,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to modify.
      * @param {Array} values The values to remove.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {Array} Returns `array`.
      * @example
      *
@@ -9920,7 +9369,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.6.0
      * @category Array
      * @param {Array} array The array to modify.
      * @param {Array} values The values to remove.
@@ -9948,10 +9396,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to modify.
-     * @param {...(number|number[])} [indexes] The indexes of elements to remove.
+     * @param {...(number|number[])} [indexes] The indexes of elements to remove,
+     *  specified individually or in arrays.
      * @returns {Array} Returns the new array of removed elements.
      * @example
      *
@@ -9965,15 +9413,10 @@ module.exports = function (e1, e2) {
      * // => [10, 20]
      */
     var pullAt = rest(function(array, indexes) {
-      indexes = baseFlatten(indexes, 1);
+      indexes = arrayMap(baseFlatten(indexes, 1), String);
 
-      var length = array ? array.length : 0,
-          result = baseAt(array, indexes);
-
-      basePullAt(array, arrayMap(indexes, function(index) {
-        return isIndex(index, length) ? +index : index;
-      }).sort(compareAscending));
-
+      var result = baseAt(array, indexes);
+      basePullAt(array, indexes.sort(compareAscending));
       return result;
     });
 
@@ -9987,11 +9430,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Array
      * @param {Array} array The array to modify.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new array of removed elements.
      * @example
      *
@@ -10036,9 +9477,7 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
-     * @param {Array} array The array to modify.
      * @returns {Array} Returns `array`.
      * @example
      *
@@ -10057,13 +9496,11 @@ module.exports = function (e1, e2) {
     /**
      * Creates a slice of `array` from `start` up to, but not including, `end`.
      *
-     * **Note:** This method is used instead of
-     * [`Array#slice`](https://mdn.io/Array/slice) to ensure dense arrays are
-     * returned.
+     * **Note:** This method is used instead of [`Array#slice`](https://mdn.io/Array/slice)
+     * to ensure dense arrays are returned.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to slice.
      * @param {number} [start=0] The start position.
@@ -10087,17 +9524,15 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Uses a binary search to determine the lowest index at which `value`
-     * should be inserted into `array` in order to maintain its sort order.
+     * Uses a binary search to determine the lowest index at which `value` should
+     * be inserted into `array` in order to maintain its sort order.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The sorted array to inspect.
      * @param {*} value The value to evaluate.
-     * @returns {number} Returns the index at which `value` should be inserted
-     *  into `array`.
+     * @returns {number} Returns the index at which `value` should be inserted into `array`.
      * @example
      *
      * _.sortedIndex([30, 50], 40);
@@ -10117,14 +9552,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The sorted array to inspect.
      * @param {*} value The value to evaluate.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
-     * @returns {number} Returns the index at which `value` should be inserted
-     *  into `array`.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+     * @returns {number} Returns the index at which `value` should be inserted into `array`.
      * @example
      *
      * var dict = { 'thirty': 30, 'forty': 40, 'fifty': 50 };
@@ -10146,7 +9578,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to search.
      * @param {*} value The value to search for.
@@ -10174,12 +9605,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The sorted array to inspect.
      * @param {*} value The value to evaluate.
-     * @returns {number} Returns the index at which `value` should be inserted
-     *  into `array`.
+     * @returns {number} Returns the index at which `value` should be inserted into `array`.
      * @example
      *
      * _.sortedLastIndex([4, 5], 4);
@@ -10196,14 +9625,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The sorted array to inspect.
      * @param {*} value The value to evaluate.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
-     * @returns {number} Returns the index at which `value` should be inserted
-     *  into `array`.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+     * @returns {number} Returns the index at which `value` should be inserted into `array`.
      * @example
      *
      * // The `_.property` iteratee shorthand.
@@ -10220,7 +9646,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to search.
      * @param {*} value The value to search for.
@@ -10247,7 +9672,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to inspect.
      * @returns {Array} Returns the new duplicate free array.
@@ -10268,7 +9692,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to inspect.
      * @param {Function} [iteratee] The iteratee invoked per element.
@@ -10280,7 +9703,7 @@ module.exports = function (e1, e2) {
      */
     function sortedUniqBy(array, iteratee) {
       return (array && array.length)
-        ? baseSortedUniq(array, getIteratee(iteratee))
+        ? baseSortedUniqBy(array, getIteratee(iteratee))
         : [];
     }
 
@@ -10289,7 +9712,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to query.
      * @returns {Array} Returns the slice of `array`.
@@ -10307,11 +9729,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to query.
      * @param {number} [n=1] The number of elements to take.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -10340,11 +9761,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to query.
      * @param {number} [n=1] The number of elements to take.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -10372,16 +9792,14 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a slice of `array` with elements taken from the end. Elements are
-     * taken until `predicate` returns falsey. The predicate is invoked with
-     * three arguments: (value, index, array).
+     * taken until `predicate` returns falsey. The predicate is invoked with three
+     * arguments: (value, index, array).
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to query.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -10419,11 +9837,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Array
      * @param {Array} array The array to query.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the slice of `array`.
      * @example
      *
@@ -10461,7 +9877,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
      * @returns {Array} Returns the new array of combined values.
@@ -10471,22 +9886,19 @@ module.exports = function (e1, e2) {
      * // => [2, 1, 4]
      */
     var union = rest(function(arrays) {
-      return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true));
+      return baseUniq(baseFlatten(arrays, 1, true));
     });
 
     /**
      * This method is like `_.union` except that it accepts `iteratee` which is
-     * invoked for each element of each `arrays` to generate the criterion by
-     * which uniqueness is computed. The iteratee is invoked with one argument:
-     * (value).
+     * invoked for each element of each `arrays` to generate the criterion by which
+     * uniqueness is computed. The iteratee is invoked with one argument: (value).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {Array} Returns the new array of combined values.
      * @example
      *
@@ -10502,7 +9914,7 @@ module.exports = function (e1, e2) {
       if (isArrayLikeObject(iteratee)) {
         iteratee = undefined;
       }
-      return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true), getIteratee(iteratee));
+      return baseUniq(baseFlatten(arrays, 1, true), getIteratee(iteratee));
     });
 
     /**
@@ -10512,7 +9924,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
      * @param {Function} [comparator] The comparator invoked per element.
@@ -10530,18 +9941,17 @@ module.exports = function (e1, e2) {
       if (isArrayLikeObject(comparator)) {
         comparator = undefined;
       }
-      return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true), undefined, comparator);
+      return baseUniq(baseFlatten(arrays, 1, true), undefined, comparator);
     });
 
     /**
      * Creates a duplicate-free version of an array, using
      * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
-     * for equality comparisons, in which only the first occurrence of each
-     * element is kept.
+     * for equality comparisons, in which only the first occurrence of each element
+     * is kept.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to inspect.
      * @returns {Array} Returns the new duplicate free array.
@@ -10563,11 +9973,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to inspect.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {Array} Returns the new duplicate free array.
      * @example
      *
@@ -10591,7 +9999,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {Array} array The array to inspect.
      * @param {Function} [comparator] The comparator invoked per element.
@@ -10616,7 +10023,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 1.2.0
      * @category Array
      * @param {Array} array The array of grouped elements to process.
      * @returns {Array} Returns the new array of regrouped elements.
@@ -10651,11 +10057,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.8.0
      * @category Array
      * @param {Array} array The array of grouped elements to process.
-     * @param {Function} [iteratee=_.identity] The function to combine
-     *  regrouped values.
+     * @param {Function} [iteratee=_.identity] The function to combine regrouped values.
      * @returns {Array} Returns the new array of regrouped elements.
      * @example
      *
@@ -10685,12 +10089,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {Array} array The array to filter.
      * @param {...*} [values] The values to exclude.
      * @returns {Array} Returns the new array of filtered values.
-     * @see _.difference, _.xor
      * @example
      *
      * _.without([1, 2, 1, 3], 1, 2);
@@ -10703,18 +10105,15 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Creates an array of unique values that is the
-     * [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference)
+     * Creates an array of unique values that is the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference)
      * of the given arrays. The order of result values is determined by the order
      * they occur in the arrays.
      *
      * @static
      * @memberOf _
-     * @since 2.4.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
      * @returns {Array} Returns the new array of values.
-     * @see _.difference, _.without
      * @example
      *
      * _.xor([2, 1], [4, 2]);
@@ -10726,17 +10125,14 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.xor` except that it accepts `iteratee` which is
-     * invoked for each element of each `arrays` to generate the criterion by
-     * which by which they're compared. The iteratee is invoked with one argument:
-     * (value).
+     * invoked for each element of each `arrays` to generate the criterion by which
+     * by which they're compared. The iteratee is invoked with one argument: (value).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {Array} Returns the new array of values.
      * @example
      *
@@ -10762,7 +10158,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
      * @param {Function} [comparator] The comparator invoked per element.
@@ -10784,13 +10179,12 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Creates an array of grouped elements, the first of which contains the
-     * first elements of the given arrays, the second of which contains the
-     * second elements of the given arrays, and so on.
+     * Creates an array of grouped elements, the first of which contains the first
+     * elements of the given arrays, the second of which contains the second elements
+     * of the given arrays, and so on.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Array
      * @param {...Array} [arrays] The arrays to process.
      * @returns {Array} Returns the new array of grouped elements.
@@ -10803,13 +10197,12 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.fromPairs` except that it accepts two arrays,
-     * one of property identifiers and one of corresponding values.
+     * one of property names and one of corresponding values.
      *
      * @static
      * @memberOf _
-     * @since 0.4.0
      * @category Array
-     * @param {Array} [props=[]] The property identifiers.
+     * @param {Array} [props=[]] The property names.
      * @param {Array} [values=[]] The property values.
      * @returns {Object} Returns the new object.
      * @example
@@ -10826,9 +10219,8 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.1.0
      * @category Array
-     * @param {Array} [props=[]] The property identifiers.
+     * @param {Array} [props=[]] The property names.
      * @param {Array} [values=[]] The property values.
      * @returns {Object} Returns the new object.
      * @example
@@ -10847,7 +10239,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.8.0
      * @category Array
      * @param {...Array} [arrays] The arrays to process.
      * @param {Function} [iteratee=_.identity] The function to combine grouped values.
@@ -10870,13 +10261,11 @@ module.exports = function (e1, e2) {
     /*------------------------------------------------------------------------*/
 
     /**
-     * Creates a `lodash` wrapper instance that wraps `value` with explicit method
-     * chain sequences enabled. The result of such sequences must be unwrapped
-     * with `_#value`.
+     * Creates a `lodash` object that wraps `value` with explicit method chaining enabled.
+     * The result of such method chaining must be unwrapped with `_#value`.
      *
      * @static
      * @memberOf _
-     * @since 1.3.0
      * @category Seq
      * @param {*} value The value to wrap.
      * @returns {Object} Returns the new `lodash` wrapper instance.
@@ -10907,11 +10296,10 @@ module.exports = function (e1, e2) {
     /**
      * This method invokes `interceptor` and returns `value`. The interceptor
      * is invoked with one argument; (value). The purpose of this method is to
-     * "tap into" a method chain sequence in order to modify intermediate results.
+     * "tap into" a method chain in order to modify intermediate results.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Seq
      * @param {*} value The value to provide to `interceptor`.
      * @param {Function} interceptor The function to invoke.
@@ -10935,11 +10323,10 @@ module.exports = function (e1, e2) {
     /**
      * This method is like `_.tap` except that it returns the result of `interceptor`.
      * The purpose of this method is to "pass thru" values replacing intermediate
-     * results in a method chain sequence.
+     * results in a method chain.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Seq
      * @param {*} value The value to provide to `interceptor`.
      * @param {Function} interceptor The function to invoke.
@@ -10964,9 +10351,9 @@ module.exports = function (e1, e2) {
      *
      * @name at
      * @memberOf _
-     * @since 1.0.0
      * @category Seq
-     * @param {...(string|string[])} [paths] The property paths of elements to pick.
+     * @param {...(string|string[])} [paths] The property paths of elements to pick,
+     *  specified individually or in arrays.
      * @returns {Object} Returns the new `lodash` wrapper instance.
      * @example
      *
@@ -11004,11 +10391,10 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Creates a `lodash` wrapper instance with explicit method chain sequences enabled.
+     * Enables explicit method chaining on the wrapper object.
      *
      * @name chain
      * @memberOf _
-     * @since 0.1.0
      * @category Seq
      * @returns {Object} Returns the new `lodash` wrapper instance.
      * @example
@@ -11035,11 +10421,10 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Executes the chain sequence and returns the wrapped result.
+     * Executes the chained sequence and returns the wrapped result.
      *
      * @name commit
      * @memberOf _
-     * @since 3.2.0
      * @category Seq
      * @returns {Object} Returns the new `lodash` wrapper instance.
      * @example
@@ -11065,12 +10450,32 @@ module.exports = function (e1, e2) {
     }
 
     /**
+     * This method is the wrapper version of `_.flatMap`.
+     *
+     * @name flatMap
+     * @memberOf _
+     * @category Seq
+     * @param {Function|Object|string} [iteratee=_.identity] The function invoked per iteration.
+     * @returns {Object} Returns the new `lodash` wrapper instance.
+     * @example
+     *
+     * function duplicate(n) {
+     *   return [n, n];
+     * }
+     *
+     * _([1, 2]).flatMap(duplicate).value();
+     * // => [1, 1, 2, 2]
+     */
+    function wrapperFlatMap(iteratee) {
+      return this.map(iteratee).flatten();
+    }
+
+    /**
      * Gets the next value on a wrapped object following the
      * [iterator protocol](https://mdn.io/iteration_protocols#iterator).
      *
      * @name next
      * @memberOf _
-     * @since 4.0.0
      * @category Seq
      * @returns {Object} Returns the next iterator value.
      * @example
@@ -11101,7 +10506,6 @@ module.exports = function (e1, e2) {
      *
      * @name Symbol.iterator
      * @memberOf _
-     * @since 4.0.0
      * @category Seq
      * @returns {Object} Returns the wrapper object.
      * @example
@@ -11119,11 +10523,10 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a clone of the chain sequence planting `value` as the wrapped value.
+     * Creates a clone of the chained sequence planting `value` as the wrapped value.
      *
      * @name plant
      * @memberOf _
-     * @since 3.2.0
      * @category Seq
      * @param {*} value The value to plant.
      * @returns {Object} Returns the new `lodash` wrapper instance.
@@ -11169,7 +10572,6 @@ module.exports = function (e1, e2) {
      *
      * @name reverse
      * @memberOf _
-     * @since 0.1.0
      * @category Seq
      * @returns {Object} Returns the new `lodash` wrapper instance.
      * @example
@@ -11201,11 +10603,10 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Executes the chain sequence to resolve the unwrapped value.
+     * Executes the chained sequence to extract the unwrapped value.
      *
      * @name value
      * @memberOf _
-     * @since 0.1.0
      * @alias toJSON, valueOf
      * @category Seq
      * @returns {*} Returns the resolved unwrapped value.
@@ -11222,17 +10623,15 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates an object composed of keys generated from the results of running
-     * each element of `collection` thru `iteratee`. The corresponding value of
-     * each key is the number of times the key was returned by `iteratee`. The
-     * iteratee is invoked with one argument: (value).
+     * each element of `collection` through `iteratee`. The corresponding value
+     * of each key is the number of times the key was returned by `iteratee`.
+     * The iteratee is invoked with one argument: (value).
      *
      * @static
      * @memberOf _
-     * @since 0.5.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee to transform keys.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
@@ -11253,22 +10652,19 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
-     * @returns {boolean} Returns `true` if all elements pass the predicate check,
-     *  else `false`.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
+     * @returns {boolean} Returns `true` if all elements pass the predicate check, else `false`.
      * @example
      *
      * _.every([true, 1, null, 'yes'], Boolean);
      * // => false
      *
      * var users = [
-     *   { 'user': 'barney', 'age': 36, 'active': false },
-     *   { 'user': 'fred',   'age': 40, 'active': false }
+     *   { 'user': 'barney', 'active': false },
+     *   { 'user': 'fred',   'active': false }
      * ];
      *
      * // The `_.matches` iteratee shorthand.
@@ -11293,18 +10689,15 @@ module.exports = function (e1, e2) {
 
     /**
      * Iterates over elements of `collection`, returning an array of all elements
-     * `predicate` returns truthy for. The predicate is invoked with three
-     * arguments: (value, index|key, collection).
+     * `predicate` returns truthy for. The predicate is invoked with three arguments:
+     * (value, index|key, collection).
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new filtered array.
-     * @see _.reject
      * @example
      *
      * var users = [
@@ -11334,16 +10727,14 @@ module.exports = function (e1, e2) {
 
     /**
      * Iterates over elements of `collection`, returning the first element
-     * `predicate` returns truthy for. The predicate is invoked with three
-     * arguments: (value, index|key, collection).
+     * `predicate` returns truthy for. The predicate is invoked with three arguments:
+     * (value, index|key, collection).
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to search.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {*} Returns the matched element, else `undefined`.
      * @example
      *
@@ -11383,11 +10774,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to search.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {*} Returns the matched element, else `undefined`.
      * @example
      *
@@ -11406,17 +10795,15 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a flattened array of values by running each element in `collection`
-     * thru `iteratee` and flattening the mapped results. The iteratee is invoked
-     * with three arguments: (value, index|key, collection).
+     * Creates an array of flattened values by running each element in `collection`
+     * through `iteratee` and concating its result to the other mapped values.
+     * The iteratee is invoked with three arguments: (value, index|key, collection).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new flattened array.
      * @example
      *
@@ -11432,91 +10819,37 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * This method is like `_.flatMap` except that it recursively flattens the
-     * mapped results.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.7.0
-     * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The function invoked per iteration.
-     * @returns {Array} Returns the new flattened array.
-     * @example
-     *
-     * function duplicate(n) {
-     *   return [[[n, n]]];
-     * }
-     *
-     * _.flatMapDeep([1, 2], duplicate);
-     * // => [1, 1, 2, 2]
-     */
-    function flatMapDeep(collection, iteratee) {
-      return baseFlatten(map(collection, iteratee), INFINITY);
-    }
-
-    /**
-     * This method is like `_.flatMap` except that it recursively flattens the
-     * mapped results up to `depth` times.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.7.0
-     * @category Collection
-     * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The function invoked per iteration.
-     * @param {number} [depth=1] The maximum recursion depth.
-     * @returns {Array} Returns the new flattened array.
-     * @example
-     *
-     * function duplicate(n) {
-     *   return [[[n, n]]];
-     * }
-     *
-     * _.flatMapDepth([1, 2], duplicate, 2);
-     * // => [[1, 1], [2, 2]]
-     */
-    function flatMapDepth(collection, iteratee, depth) {
-      depth = depth === undefined ? 1 : toInteger(depth);
-      return baseFlatten(map(collection, iteratee), depth);
-    }
-
-    /**
-     * Iterates over elements of `collection` and invokes `iteratee` for each element.
+     * Iterates over elements of `collection` invoking `iteratee` for each element.
      * The iteratee is invoked with three arguments: (value, index|key, collection).
      * Iteratee functions may exit iteration early by explicitly returning `false`.
      *
-     * **Note:** As with other "Collections" methods, objects with a "length"
-     * property are iterated like arrays. To avoid this behavior use `_.forIn`
-     * or `_.forOwn` for object iteration.
+     * **Note:** As with other "Collections" methods, objects with a "length" property
+     * are iterated like arrays. To avoid this behavior use `_.forIn` or `_.forOwn`
+     * for object iteration.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @alias each
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array|Object} Returns `collection`.
-     * @see _.forEachRight
      * @example
      *
      * _([1, 2]).forEach(function(value) {
      *   console.log(value);
      * });
-     * // => Logs `1` then `2`.
+     * // => logs `1` then `2`
      *
      * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
      *   console.log(key);
      * });
-     * // => Logs 'a' then 'b' (iteration order is not guaranteed).
+     * // => logs 'a' then 'b' (iteration order is not guaranteed)
      */
     function forEach(collection, iteratee) {
       return (typeof iteratee == 'function' && isArray(collection))
         ? arrayEach(collection, iteratee)
-        : baseEach(collection, getIteratee(iteratee));
+        : baseEach(collection, baseCastFunction(iteratee));
     }
 
     /**
@@ -11525,40 +10858,35 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @alias eachRight
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array|Object} Returns `collection`.
-     * @see _.forEach
      * @example
      *
      * _.forEachRight([1, 2], function(value) {
      *   console.log(value);
      * });
-     * // => Logs `2` then `1`.
+     * // => logs `2` then `1`
      */
     function forEachRight(collection, iteratee) {
       return (typeof iteratee == 'function' && isArray(collection))
         ? arrayEachRight(collection, iteratee)
-        : baseEachRight(collection, getIteratee(iteratee));
+        : baseEachRight(collection, baseCastFunction(iteratee));
     }
 
     /**
      * Creates an object composed of keys generated from the results of running
-     * each element of `collection` thru `iteratee`. The order of grouped values
-     * is determined by the order they occur in `collection`. The corresponding
-     * value of each key is an array of elements responsible for generating the
-     * key. The iteratee is invoked with one argument: (value).
+     * each element of `collection` through `iteratee`. The corresponding value
+     * of each key is an array of elements responsible for generating the key.
+     * The iteratee is invoked with one argument: (value).
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee to transform keys.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
@@ -11578,20 +10906,18 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Checks if `value` is in `collection`. If `collection` is a string, it's
-     * checked for a substring of `value`, otherwise
-     * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
+     * Checks if `value` is in `collection`. If `collection` is a string it's checked
+     * for a substring of `value`, otherwise [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
      * is used for equality comparisons. If `fromIndex` is negative, it's used as
      * the offset from the end of `collection`.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object|string} collection The collection to search.
      * @param {*} value The value to search for.
      * @param {number} [fromIndex=0] The index to search from.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.reduce`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.reduce`.
      * @returns {boolean} Returns `true` if `value` is found, else `false`.
      * @example
      *
@@ -11623,12 +10949,11 @@ module.exports = function (e1, e2) {
     /**
      * Invokes the method at `path` of each element in `collection`, returning
      * an array of the results of each invoked method. Any additional arguments
-     * are provided to each invoked method. If `methodName` is a function, it's
-     * invoked for and `this` bound to, each element in `collection`.
+     * are provided to each invoked method. If `methodName` is a function it's
+     * invoked for, and `this` bound to, each element in `collection`.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Array|Function|string} path The path of the method to invoke or
@@ -11658,17 +10983,15 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates an object composed of keys generated from the results of running
-     * each element of `collection` thru `iteratee`. The corresponding value of
-     * each key is the last element responsible for generating the key. The
+     * each element of `collection` through `iteratee`. The corresponding value
+     * of each key is the last element responsible for generating the key. The
      * iteratee is invoked with one argument: (value).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee to transform keys.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
@@ -11690,7 +11013,7 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Creates an array of values by running each element in `collection` thru
+     * Creates an array of values by running each element in `collection` through
      * `iteratee`. The iteratee is invoked with three arguments:
      * (value, index|key, collection).
      *
@@ -11698,18 +11021,16 @@ module.exports = function (e1, e2) {
      * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
      *
      * The guarded methods are:
-     * `ary`, `chunk`, `curry`, `curryRight`, `drop`, `dropRight`, `every`,
-     * `fill`, `invert`, `parseInt`, `random`, `range`, `rangeRight`, `repeat`,
-     * `sampleSize`, `slice`, `some`, `sortBy`, `split`, `take`, `takeRight`,
-     * `template`, `trim`, `trimEnd`, `trimStart`, and `words`
+     * `ary`, `curry`, `curryRight`, `drop`, `dropRight`, `every`, `fill`,
+     * `invert`, `parseInt`, `random`, `range`, `rangeRight`, `slice`, `some`,
+     * `sortBy`, `take`, `takeRight`, `template`, `trim`, `trimEnd`, `trimStart`,
+     * and `words`
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new mapped array.
      * @example
      *
@@ -11745,26 +11066,24 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array[]|Function[]|Object[]|string[]} [iteratees=[_.identity]]
-     *  The iteratees to sort by.
+     * @param {Function[]|Object[]|string[]} [iteratees=[_.identity]] The iteratees to sort by.
      * @param {string[]} [orders] The sort orders of `iteratees`.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.reduce`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.reduce`.
      * @returns {Array} Returns the new sorted array.
      * @example
      *
      * var users = [
      *   { 'user': 'fred',   'age': 48 },
      *   { 'user': 'barney', 'age': 34 },
-     *   { 'user': 'fred',   'age': 40 },
+     *   { 'user': 'fred',   'age': 42 },
      *   { 'user': 'barney', 'age': 36 }
      * ];
      *
      * // Sort by `user` in ascending order and by `age` in descending order.
      * _.orderBy(users, ['user', 'age'], ['asc', 'desc']);
-     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 42]]
      */
     function orderBy(collection, iteratees, orders, guard) {
       if (collection == null) {
@@ -11788,11 +11107,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the array of grouped elements.
      * @example
      *
@@ -11823,9 +11140,9 @@ module.exports = function (e1, e2) {
 
     /**
      * Reduces `collection` to a value which is the accumulated result of running
-     * each element in `collection` thru `iteratee`, where each successive
+     * each element in `collection` through `iteratee`, where each successive
      * invocation is supplied the return value of the previous. If `accumulator`
-     * is not given, the first element of `collection` is used as the initial
+     * is not given the first element of `collection` is used as the initial
      * value. The iteratee is invoked with four arguments:
      * (accumulator, value, index|key, collection).
      *
@@ -11838,13 +11155,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @param {*} [accumulator] The initial value.
      * @returns {*} Returns the accumulated value.
-     * @see _.reduceRight
      * @example
      *
      * _.reduce([1, 2], function(sum, n) {
@@ -11871,13 +11186,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @param {*} [accumulator] The initial value.
      * @returns {*} Returns the accumulated value.
-     * @see _.reduce
      * @example
      *
      * var array = [[0, 1], [2, 3], [4, 5]];
@@ -11900,13 +11213,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
      * @returns {Array} Returns the new filtered array.
-     * @see _.filter
      * @example
      *
      * var users = [
@@ -11942,7 +11252,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to sample.
      * @returns {*} Returns the random element.
@@ -11964,11 +11273,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Collection
      * @param {Array|Object} collection The collection to sample.
-     * @param {number} [n=1] The number of elements to sample.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param {number} [n=0] The number of elements to sample.
      * @returns {Array} Returns the random elements.
      * @example
      *
@@ -11978,17 +11285,13 @@ module.exports = function (e1, e2) {
      * _.sampleSize([1, 2, 3], 4);
      * // => [2, 3, 1]
      */
-    function sampleSize(collection, n, guard) {
+    function sampleSize(collection, n) {
       var index = -1,
           result = toArray(collection),
           length = result.length,
           lastIndex = length - 1;
 
-      if ((guard ? isIterateeCall(collection, n, guard) : n === undefined)) {
-        n = 1;
-      } else {
-        n = baseClamp(toInteger(n), 0, length);
-      }
+      n = baseClamp(toInteger(n), 0, length);
       while (++index < n) {
         var rand = baseRandom(index, lastIndex),
             value = result[rand];
@@ -12006,7 +11309,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to shuffle.
      * @returns {Array} Returns the new shuffled array.
@@ -12021,11 +11323,10 @@ module.exports = function (e1, e2) {
 
     /**
      * Gets the size of `collection` by returning its length for array-like
-     * values or the number of own enumerable string keyed properties for objects.
+     * values or the number of own enumerable properties for objects.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to inspect.
      * @returns {number} Returns the collection size.
@@ -12048,12 +11349,6 @@ module.exports = function (e1, e2) {
         var result = collection.length;
         return (result && isString(collection)) ? stringSize(collection) : result;
       }
-      if (isObjectLike(collection)) {
-        var tag = getTag(collection);
-        if (tag == mapTag || tag == setTag) {
-          return collection.size;
-        }
-      }
       return keys(collection).length;
     }
 
@@ -12064,14 +11359,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
-     * @returns {boolean} Returns `true` if any element passes the predicate check,
-     *  else `false`.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
+     * @returns {boolean} Returns `true` if any element passes the predicate check, else `false`.
      * @example
      *
      * _.some([null, 0, 'yes', false], Boolean);
@@ -12104,37 +11396,36 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates an array of elements, sorted in ascending order by the results of
-     * running each element in a collection thru each iteratee. This method
+     * running each element in a collection through each iteratee. This method
      * performs a stable sort, that is, it preserves the original sort order of
      * equal elements. The iteratees are invoked with one argument: (value).
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {...(Array|Array[]|Function|Function[]|Object|Object[]|string|string[])}
-     *  [iteratees=[_.identity]] The iteratees to sort by.
+     * @param {...(Function|Function[]|Object|Object[]|string|string[])} [iteratees=[_.identity]]
+     *  The iteratees to sort by, specified individually or in arrays.
      * @returns {Array} Returns the new sorted array.
      * @example
      *
      * var users = [
      *   { 'user': 'fred',   'age': 48 },
      *   { 'user': 'barney', 'age': 36 },
-     *   { 'user': 'fred',   'age': 40 },
+     *   { 'user': 'fred',   'age': 42 },
      *   { 'user': 'barney', 'age': 34 }
      * ];
      *
      * _.sortBy(users, function(o) { return o.user; });
-     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 42]]
      *
      * _.sortBy(users, ['user', 'age']);
-     * // => objects for [['barney', 34], ['barney', 36], ['fred', 40], ['fred', 48]]
+     * // => objects for [['barney', 34], ['barney', 36], ['fred', 42], ['fred', 48]]
      *
      * _.sortBy(users, 'user', function(o) {
      *   return Math.floor(o.age / 10);
      * });
-     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 42]]
      */
     var sortBy = rest(function(collection, iteratees) {
       if (collection == null) {
@@ -12144,13 +11435,9 @@ module.exports = function (e1, e2) {
       if (length > 1 && isIterateeCall(collection, iteratees[0], iteratees[1])) {
         iteratees = [];
       } else if (length > 2 && isIterateeCall(iteratees[0], iteratees[1], iteratees[2])) {
-        iteratees = [iteratees[0]];
+        iteratees.length = 1;
       }
-      iteratees = (iteratees.length == 1 && isArray(iteratees[0]))
-        ? iteratees[0]
-        : baseFlatten(iteratees, 1, isFlattenableIteratee);
-
-      return baseOrderBy(collection, iteratees, []);
+      return baseOrderBy(collection, baseFlatten(iteratees, 1), []);
     });
 
     /*------------------------------------------------------------------------*/
@@ -12161,7 +11448,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.4.0
      * @type {Function}
      * @category Date
      * @returns {number} Returns the timestamp.
@@ -12170,7 +11456,7 @@ module.exports = function (e1, e2) {
      * _.defer(function(stamp) {
      *   console.log(_.now() - stamp);
      * }, _.now());
-     * // => Logs the number of milliseconds it took for the deferred function to be invoked.
+     * // => logs the number of milliseconds it took for the deferred function to be invoked
      */
     var now = Date.now;
 
@@ -12182,7 +11468,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {number} n The number of calls before `func` is invoked.
      * @param {Function} func The function to restrict.
@@ -12198,7 +11483,7 @@ module.exports = function (e1, e2) {
      * _.forEach(saves, function(type) {
      *   asyncSave({ 'type': type, 'complete': done });
      * });
-     * // => Logs 'done saving!' after the two async saves have completed.
+     * // => logs 'done saving!' after the two async saves have completed
      */
     function after(n, func) {
       if (typeof func != 'function') {
@@ -12213,16 +11498,15 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a function that invokes `func`, with up to `n` arguments,
-     * ignoring any additional arguments.
+     * Creates a function that accepts up to `n` arguments, ignoring any
+     * additional arguments.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Function
      * @param {Function} func The function to cap arguments for.
      * @param {number} [n=func.length] The arity cap.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Function} Returns the new function.
      * @example
      *
@@ -12242,7 +11526,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Function
      * @param {number} n The number of calls at which `func` is no longer invoked.
      * @param {Function} func The function to restrict.
@@ -12271,7 +11554,8 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a function that invokes `func` with the `this` binding of `thisArg`
-     * and `partials` prepended to the arguments it receives.
+     * and prepends any additional `_.bind` arguments to those provided to the
+     * bound function.
      *
      * The `_.bind.placeholder` value, which defaults to `_` in monolithic builds,
      * may be used as a placeholder for partially applied arguments.
@@ -12281,7 +11565,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {Function} func The function to bind.
      * @param {*} thisArg The `this` binding of `func`.
@@ -12314,12 +11597,12 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Creates a function that invokes the method at `object[key]` with `partials`
-     * prepended to the arguments it receives.
+     * Creates a function that invokes the method at `object[key]` and prepends
+     * any additional `_.bindKey` arguments to those provided to the bound function.
      *
      * This method differs from `_.bind` by allowing bound functions to reference
-     * methods that may be redefined or don't yet exist. See
-     * [Peter Michaux's article](http://peter.michaux.ca/articles/lazy-function-definition-pattern)
+     * methods that may be redefined or don't yet exist.
+     * See [Peter Michaux's article](http://peter.michaux.ca/articles/lazy-function-definition-pattern)
      * for more details.
      *
      * The `_.bindKey.placeholder` value, which defaults to `_` in monolithic
@@ -12327,7 +11610,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.10.0
      * @category Function
      * @param {Object} object The object to invoke the method on.
      * @param {string} key The key of the method.
@@ -12381,11 +11663,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Function
      * @param {Function} func The function to curry.
      * @param {number} [arity=func.length] The arity of `func`.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Function} Returns the new curried function.
      * @example
      *
@@ -12426,11 +11707,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Function
      * @param {Function} func The function to curry.
      * @param {number} [arity=func.length] The arity of `func`.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Function} Returns the new curried function.
      * @example
      *
@@ -12474,22 +11754,21 @@ module.exports = function (e1, e2) {
      * on the trailing edge of the timeout only if the debounced function is
      * invoked more than once during the `wait` timeout.
      *
-     * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+     * See [David Corbacho's article](http://drupalmotion.com/article/debounce-and-throttle-visual-explanation)
      * for details over the differences between `_.debounce` and `_.throttle`.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {Function} func The function to debounce.
      * @param {number} [wait=0] The number of milliseconds to delay.
-     * @param {Object} [options={}] The options object.
-     * @param {boolean} [options.leading=false]
-     *  Specify invoking on the leading edge of the timeout.
-     * @param {number} [options.maxWait]
-     *  The maximum time `func` is allowed to be delayed before it's invoked.
-     * @param {boolean} [options.trailing=true]
-     *  Specify invoking on the trailing edge of the timeout.
+     * @param {Object} [options] The options object.
+     * @param {boolean} [options.leading=false] Specify invoking on the leading
+     *  edge of the timeout.
+     * @param {number} [options.maxWait] The maximum time `func` is allowed to be
+     *  delayed before it's invoked.
+     * @param {boolean} [options.trailing=true] Specify invoking on the trailing
+     *  edge of the timeout.
      * @returns {Function} Returns the new debounced function.
      * @example
      *
@@ -12511,15 +11790,16 @@ module.exports = function (e1, e2) {
      * jQuery(window).on('popstate', debounced.cancel);
      */
     function debounce(func, wait, options) {
-      var lastArgs,
-          lastThis,
-          maxWait,
+      var args,
+          maxTimeoutId,
           result,
-          timerId,
-          lastCallTime = 0,
-          lastInvokeTime = 0,
+          stamp,
+          thisArg,
+          timeoutId,
+          trailingCall,
+          lastCalled = 0,
           leading = false,
-          maxing = false,
+          maxWait = false,
           trailing = true;
 
       if (typeof func != 'function') {
@@ -12528,104 +11808,96 @@ module.exports = function (e1, e2) {
       wait = toNumber(wait) || 0;
       if (isObject(options)) {
         leading = !!options.leading;
-        maxing = 'maxWait' in options;
-        maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+        maxWait = 'maxWait' in options && nativeMax(toNumber(options.maxWait) || 0, wait);
         trailing = 'trailing' in options ? !!options.trailing : trailing;
       }
 
-      function invokeFunc(time) {
-        var args = lastArgs,
-            thisArg = lastThis;
-
-        lastArgs = lastThis = undefined;
-        lastInvokeTime = time;
-        result = func.apply(thisArg, args);
-        return result;
-      }
-
-      function leadingEdge(time) {
-        // Reset any `maxWait` timer.
-        lastInvokeTime = time;
-        // Start the timer for the trailing edge.
-        timerId = setTimeout(timerExpired, wait);
-        // Invoke the leading edge.
-        return leading ? invokeFunc(time) : result;
-      }
-
-      function remainingWait(time) {
-        var timeSinceLastCall = time - lastCallTime,
-            timeSinceLastInvoke = time - lastInvokeTime,
-            result = wait - timeSinceLastCall;
-
-        return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
-      }
-
-      function shouldInvoke(time) {
-        var timeSinceLastCall = time - lastCallTime,
-            timeSinceLastInvoke = time - lastInvokeTime;
-
-        // Either this is the first call, activity has stopped and we're at the
-        // trailing edge, the system time has gone backwards and we're treating
-        // it as the trailing edge, or we've hit the `maxWait` limit.
-        return (!lastCallTime || (timeSinceLastCall >= wait) ||
-          (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
-      }
-
-      function timerExpired() {
-        var time = now();
-        if (shouldInvoke(time)) {
-          return trailingEdge(time);
-        }
-        // Restart the timer.
-        timerId = setTimeout(timerExpired, remainingWait(time));
-      }
-
-      function trailingEdge(time) {
-        clearTimeout(timerId);
-        timerId = undefined;
-
-        // Only invoke if we have `lastArgs` which means `func` has been
-        // debounced at least once.
-        if (trailing && lastArgs) {
-          return invokeFunc(time);
-        }
-        lastArgs = lastThis = undefined;
-        return result;
-      }
-
       function cancel() {
-        if (timerId !== undefined) {
-          clearTimeout(timerId);
+        if (timeoutId) {
+          clearTimeout(timeoutId);
         }
-        lastCallTime = lastInvokeTime = 0;
-        lastArgs = lastThis = timerId = undefined;
+        if (maxTimeoutId) {
+          clearTimeout(maxTimeoutId);
+        }
+        lastCalled = 0;
+        args = maxTimeoutId = thisArg = timeoutId = trailingCall = undefined;
+      }
+
+      function complete(isCalled, id) {
+        if (id) {
+          clearTimeout(id);
+        }
+        maxTimeoutId = timeoutId = trailingCall = undefined;
+        if (isCalled) {
+          lastCalled = now();
+          result = func.apply(thisArg, args);
+          if (!timeoutId && !maxTimeoutId) {
+            args = thisArg = undefined;
+          }
+        }
+      }
+
+      function delayed() {
+        var remaining = wait - (now() - stamp);
+        if (remaining <= 0 || remaining > wait) {
+          complete(trailingCall, maxTimeoutId);
+        } else {
+          timeoutId = setTimeout(delayed, remaining);
+        }
       }
 
       function flush() {
-        return timerId === undefined ? result : trailingEdge(now());
+        if ((timeoutId && trailingCall) || (maxTimeoutId && trailing)) {
+          result = func.apply(thisArg, args);
+        }
+        cancel();
+        return result;
+      }
+
+      function maxDelayed() {
+        complete(trailing, timeoutId);
       }
 
       function debounced() {
-        var time = now(),
-            isInvoking = shouldInvoke(time);
+        args = arguments;
+        stamp = now();
+        thisArg = this;
+        trailingCall = trailing && (timeoutId || !leading);
 
-        lastArgs = arguments;
-        lastThis = this;
-        lastCallTime = time;
-
-        if (isInvoking) {
-          if (timerId === undefined) {
-            return leadingEdge(lastCallTime);
+        if (maxWait === false) {
+          var leadingCall = leading && !timeoutId;
+        } else {
+          if (!lastCalled && !maxTimeoutId && !leading) {
+            lastCalled = stamp;
           }
-          if (maxing) {
-            // Handle invocations in a tight loop.
-            clearTimeout(timerId);
-            timerId = setTimeout(timerExpired, wait);
-            return invokeFunc(lastCallTime);
+          var remaining = maxWait - (stamp - lastCalled);
+
+          var isCalled = (remaining <= 0 || remaining > maxWait) &&
+            (leading || maxTimeoutId);
+
+          if (isCalled) {
+            if (maxTimeoutId) {
+              maxTimeoutId = clearTimeout(maxTimeoutId);
+            }
+            lastCalled = stamp;
+            result = func.apply(thisArg, args);
+          }
+          else if (!maxTimeoutId) {
+            maxTimeoutId = setTimeout(maxDelayed, remaining);
           }
         }
-        if (timerId === undefined) {
-          timerId = setTimeout(timerExpired, wait);
+        if (isCalled && timeoutId) {
+          timeoutId = clearTimeout(timeoutId);
+        }
+        else if (!timeoutId && wait !== maxWait) {
+          timeoutId = setTimeout(delayed, wait);
+        }
+        if (leadingCall) {
+          isCalled = true;
+          result = func.apply(thisArg, args);
+        }
+        if (isCalled && !timeoutId && !maxTimeoutId) {
+          args = thisArg = undefined;
         }
         return result;
       }
@@ -12640,7 +11912,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {Function} func The function to defer.
      * @param {...*} [args] The arguments to invoke `func` with.
@@ -12650,7 +11921,7 @@ module.exports = function (e1, e2) {
      * _.defer(function(text) {
      *   console.log(text);
      * }, 'deferred');
-     * // => Logs 'deferred' after one or more milliseconds.
+     * // => logs 'deferred' after one or more milliseconds
      */
     var defer = rest(function(func, args) {
       return baseDelay(func, 1, args);
@@ -12662,7 +11933,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {Function} func The function to delay.
      * @param {number} wait The number of milliseconds to delay invocation.
@@ -12673,7 +11943,7 @@ module.exports = function (e1, e2) {
      * _.delay(function(text) {
      *   console.log(text);
      * }, 1000, 'later');
-     * // => Logs 'later' after one second.
+     * // => logs 'later' after one second
      */
     var delay = rest(function(func, wait, args) {
       return baseDelay(func, toNumber(wait) || 0, args);
@@ -12684,7 +11954,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Function
      * @param {Function} func The function to flip arguments for.
      * @returns {Function} Returns the new function.
@@ -12703,20 +11972,18 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a function that memoizes the result of `func`. If `resolver` is
-     * provided, it determines the cache key for storing the result based on the
+     * provided it determines the cache key for storing the result based on the
      * arguments provided to the memoized function. By default, the first argument
      * provided to the memoized function is used as the map cache key. The `func`
      * is invoked with the `this` binding of the memoized function.
      *
      * **Note:** The cache is exposed as the `cache` property on the memoized
      * function. Its creation may be customized by replacing the `_.memoize.Cache`
-     * constructor with one whose instances implement the
-     * [`Map`](http://ecma-international.org/ecma-262/6.0/#sec-properties-of-the-map-prototype-object)
+     * constructor with one whose instances implement the [`Map`](http://ecma-international.org/ecma-262/6.0/#sec-properties-of-the-map-prototype-object)
      * method interface of `delete`, `get`, `has`, and `set`.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {Function} func The function to have its output memoized.
      * @param {Function} [resolver] The function to resolve the cache key.
@@ -12761,12 +12028,9 @@ module.exports = function (e1, e2) {
         memoized.cache = cache.set(key, result);
         return result;
       };
-      memoized.cache = new (memoize.Cache || MapCache);
+      memoized.cache = new memoize.Cache;
       return memoized;
     }
-
-    // Assign cache to `_.memoize`.
-    memoize.Cache = MapCache;
 
     /**
      * Creates a function that negates the result of the predicate `func`. The
@@ -12775,7 +12039,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Function
      * @param {Function} predicate The predicate to negate.
      * @returns {Function} Returns the new function.
@@ -12804,7 +12067,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {Function} func The function to restrict.
      * @returns {Function} Returns the new restricted function.
@@ -12824,12 +12086,11 @@ module.exports = function (e1, e2) {
      * corresponding `transforms`.
      *
      * @static
-     * @since 4.0.0
      * @memberOf _
      * @category Function
      * @param {Function} func The function to wrap.
-     * @param {...(Array|Array[]|Function|Function[]|Object|Object[]|string|string[])}
-     *  [transforms[_.identity]] The functions to transform.
+     * @param {...(Function|Function[])} [transforms] The functions to transform
+     * arguments, specified individually or in arrays.
      * @returns {Function} Returns the new function.
      * @example
      *
@@ -12852,9 +12113,7 @@ module.exports = function (e1, e2) {
      * // => [100, 10]
      */
     var overArgs = rest(function(func, transforms) {
-      transforms = (transforms.length == 1 && isArray(transforms[0]))
-        ? arrayMap(transforms[0], baseUnary(getIteratee()))
-        : arrayMap(baseFlatten(transforms, 1, isFlattenableIteratee), baseUnary(getIteratee()));
+      transforms = arrayMap(baseFlatten(transforms, 1), getIteratee());
 
       var funcsLength = transforms.length;
       return rest(function(args) {
@@ -12869,9 +12128,9 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Creates a function that invokes `func` with `partials` prepended to the
-     * arguments it receives. This method is like `_.bind` except it does **not**
-     * alter the `this` binding.
+     * Creates a function that invokes `func` with `partial` arguments prepended
+     * to those provided to the new function. This method is like `_.bind` except
+     * it does **not** alter the `this` binding.
      *
      * The `_.partial.placeholder` value, which defaults to `_` in monolithic
      * builds, may be used as a placeholder for partially applied arguments.
@@ -12881,7 +12140,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.2.0
      * @category Function
      * @param {Function} func The function to partially apply arguments to.
      * @param {...*} [partials] The arguments to be partially applied.
@@ -12908,7 +12166,7 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.partial` except that partially applied arguments
-     * are appended to the arguments it receives.
+     * are appended to those provided to the new function.
      *
      * The `_.partialRight.placeholder` value, which defaults to `_` in monolithic
      * builds, may be used as a placeholder for partially applied arguments.
@@ -12918,7 +12176,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 1.0.0
      * @category Function
      * @param {Function} func The function to partially apply arguments to.
      * @param {...*} [partials] The arguments to be partially applied.
@@ -12945,16 +12202,16 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a function that invokes `func` with arguments arranged according
-     * to the specified `indexes` where the argument value at the first index is
+     * to the specified indexes where the argument value at the first index is
      * provided as the first argument, the argument value at the second index is
      * provided as the second argument, and so on.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Function
      * @param {Function} func The function to rearrange arguments for.
-     * @param {...(number|number[])} indexes The arranged argument indexes.
+     * @param {...(number|number[])} indexes The arranged argument indexes,
+     *  specified individually or in arrays.
      * @returns {Function} Returns the new function.
      * @example
      *
@@ -12971,15 +12228,12 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a function that invokes `func` with the `this` binding of the
-     * created function and arguments from `start` and beyond provided as
-     * an array.
+     * created function and arguments from `start` and beyond provided as an array.
      *
-     * **Note:** This method is based on the
-     * [rest parameter](https://mdn.io/rest_parameters).
+     * **Note:** This method is based on the [rest parameter](https://mdn.io/rest_parameters).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Function
      * @param {Function} func The function to apply a rest parameter to.
      * @param {number} [start=func.length-1] The start position of the rest parameter.
@@ -13024,16 +12278,13 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a function that invokes `func` with the `this` binding of the
-     * create function and an array of arguments much like
-     * [`Function#apply`](http://www.ecma-international.org/ecma-262/6.0/#sec-function.prototype.apply).
+     * Creates a function that invokes `func` with the `this` binding of the created
+     * function and an array of arguments much like [`Function#apply`](https://es5.github.io/#x15.3.4.3).
      *
-     * **Note:** This method is based on the
-     * [spread operator](https://mdn.io/spread_operator).
+     * **Note:** This method is based on the [spread operator](https://mdn.io/spread_operator).
      *
      * @static
      * @memberOf _
-     * @since 3.2.0
      * @category Function
      * @param {Function} func The function to spread arguments over.
      * @param {number} [start=0] The start position of the spread.
@@ -13064,7 +12315,7 @@ module.exports = function (e1, e2) {
       start = start === undefined ? 0 : nativeMax(toInteger(start), 0);
       return rest(function(args) {
         var array = args[start],
-            otherArgs = castSlice(args, 0, start);
+            otherArgs = args.slice(0, start);
 
         if (array) {
           arrayPush(otherArgs, array);
@@ -13083,24 +12334,23 @@ module.exports = function (e1, e2) {
      * throttled function. Subsequent calls to the throttled function return the
      * result of the last `func` invocation.
      *
-     * **Note:** If `leading` and `trailing` options are `true`, `func` is
-     * invoked on the trailing edge of the timeout only if the throttled function
-     * is invoked more than once during the `wait` timeout.
+     * **Note:** If `leading` and `trailing` options are `true`, `func` is invoked
+     * on the trailing edge of the timeout only if the throttled function is
+     * invoked more than once during the `wait` timeout.
      *
-     * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+     * See [David Corbacho's article](http://drupalmotion.com/article/debounce-and-throttle-visual-explanation)
      * for details over the differences between `_.throttle` and `_.debounce`.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {Function} func The function to throttle.
      * @param {number} [wait=0] The number of milliseconds to throttle invocations to.
-     * @param {Object} [options={}] The options object.
-     * @param {boolean} [options.leading=true]
-     *  Specify invoking on the leading edge of the timeout.
-     * @param {boolean} [options.trailing=true]
-     *  Specify invoking on the trailing edge of the timeout.
+     * @param {Object} [options] The options object.
+     * @param {boolean} [options.leading=true] Specify invoking on the leading
+     *  edge of the timeout.
+     * @param {boolean} [options.trailing=true] Specify invoking on the trailing
+     *  edge of the timeout.
      * @returns {Function} Returns the new throttled function.
      * @example
      *
@@ -13138,7 +12388,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Function
      * @param {Function} func The function to cap arguments for.
      * @returns {Function} Returns the new function.
@@ -13159,7 +12408,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Function
      * @param {*} value The value to wrap.
      * @param {Function} [wrapper=identity] The wrapper function.
@@ -13185,7 +12433,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.4.0
      * @category Lang
      * @param {*} value The value to inspect.
      * @returns {Array} Returns the cast array.
@@ -13234,11 +12481,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to clone.
      * @returns {*} Returns the cloned value.
-     * @see _.cloneDeep
      * @example
      *
      * var objects = [{ 'a': 1 }, { 'b': 2 }];
@@ -13253,18 +12498,16 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.clone` except that it accepts `customizer` which
-     * is invoked to produce the cloned value. If `customizer` returns `undefined`,
+     * is invoked to produce the cloned value. If `customizer` returns `undefined`
      * cloning is handled by the method instead. The `customizer` is invoked with
      * up to four arguments; (value [, index|key, object, stack]).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to clone.
      * @param {Function} [customizer] The function to customize cloning.
      * @returns {*} Returns the cloned value.
-     * @see _.cloneDeepWith
      * @example
      *
      * function customizer(value) {
@@ -13291,11 +12534,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 1.0.0
      * @category Lang
      * @param {*} value The value to recursively clone.
      * @returns {*} Returns the deep cloned value.
-     * @see _.clone
      * @example
      *
      * var objects = [{ 'a': 1 }, { 'b': 2 }];
@@ -13313,12 +12554,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to recursively clone.
      * @param {Function} [customizer] The function to customize cloning.
      * @returns {*} Returns the deep cloned value.
-     * @see _.cloneWith
      * @example
      *
      * function customizer(value) {
@@ -13341,13 +12580,11 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Performs a
-     * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
+     * Performs a [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
      * comparison between two values to determine if they are equivalent.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to compare.
      * @param {*} other The other value to compare.
@@ -13381,13 +12618,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.9.0
      * @category Lang
      * @param {*} value The value to compare.
      * @param {*} other The other value to compare.
-     * @returns {boolean} Returns `true` if `value` is greater than `other`,
-     *  else `false`.
-     * @see _.lt
+     * @returns {boolean} Returns `true` if `value` is greater than `other`, else `false`.
      * @example
      *
      * _.gt(3, 1);
@@ -13399,20 +12633,19 @@ module.exports = function (e1, e2) {
      * _.gt(1, 3);
      * // => false
      */
-    var gt = createRelationalOperation(baseGt);
+    function gt(value, other) {
+      return value > other;
+    }
 
     /**
      * Checks if `value` is greater than or equal to `other`.
      *
      * @static
      * @memberOf _
-     * @since 3.9.0
      * @category Lang
      * @param {*} value The value to compare.
      * @param {*} other The other value to compare.
-     * @returns {boolean} Returns `true` if `value` is greater than or equal to
-     *  `other`, else `false`.
-     * @see _.lte
+     * @returns {boolean} Returns `true` if `value` is greater than or equal to `other`, else `false`.
      * @example
      *
      * _.gte(3, 1);
@@ -13424,20 +12657,18 @@ module.exports = function (e1, e2) {
      * _.gte(1, 3);
      * // => false
      */
-    var gte = createRelationalOperation(function(value, other) {
+    function gte(value, other) {
       return value >= other;
-    });
+    }
 
     /**
      * Checks if `value` is likely an `arguments` object.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isArguments(function() { return arguments; }());
@@ -13457,12 +12688,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @type {Function}
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isArray([1, 2, 3]);
@@ -13484,11 +12713,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.3.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isArrayBuffer(new ArrayBuffer(2));
@@ -13508,7 +12735,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
@@ -13536,11 +12762,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is an array-like object,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is an array-like object, else `false`.
      * @example
      *
      * _.isArrayLikeObject([1, 2, 3]);
@@ -13564,11 +12788,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isBoolean(false);
@@ -13587,7 +12809,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.3.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
@@ -13608,11 +12829,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isDate(new Date);
@@ -13630,11 +12849,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a DOM element,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is a DOM element, else `false`.
      * @example
      *
      * _.isElement(document.body);
@@ -13648,18 +12865,12 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Checks if `value` is an empty object, collection, map, or set.
-     *
-     * Objects are considered empty if they have no own enumerable string keyed
-     * properties.
-     *
-     * Array-like values such as `arguments` objects, arrays, buffers, strings, or
-     * jQuery-like collections are considered empty if they have a `length` of `0`.
-     * Similarly, maps and sets are considered empty if they have a `size` of `0`.
+     * Checks if `value` is an empty collection or object. A value is considered
+     * empty if it's an `arguments` object, array, string, or jQuery-like collection
+     * with a length of `0` or has no own enumerable properties.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is empty, else `false`.
@@ -13682,22 +12893,16 @@ module.exports = function (e1, e2) {
      */
     function isEmpty(value) {
       if (isArrayLike(value) &&
-          (isArray(value) || isString(value) || isFunction(value.splice) ||
-            isArguments(value) || isBuffer(value))) {
+          (isArray(value) || isString(value) ||
+            isFunction(value.splice) || isArguments(value))) {
         return !value.length;
-      }
-      if (isObjectLike(value)) {
-        var tag = getTag(value);
-        if (tag == mapTag || tag == setTag) {
-          return !value.size;
-        }
       }
       for (var key in value) {
         if (hasOwnProperty.call(value, key)) {
           return false;
         }
       }
-      return !(nonEnumShadows && keys(value).length);
+      return true;
     }
 
     /**
@@ -13712,12 +12917,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to compare.
      * @param {*} other The other value to compare.
-     * @returns {boolean} Returns `true` if the values are equivalent,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
      * @example
      *
      * var object = { 'user': 'fred' };
@@ -13735,19 +12938,17 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.isEqual` except that it accepts `customizer` which
-     * is invoked to compare values. If `customizer` returns `undefined`, comparisons
+     * is invoked to compare values. If `customizer` returns `undefined` comparisons
      * are handled by the method instead. The `customizer` is invoked with up to
      * six arguments: (objValue, othValue [, index|key, object, other, stack]).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to compare.
      * @param {*} other The other value to compare.
      * @param {Function} [customizer] The function to customize comparisons.
-     * @returns {boolean} Returns `true` if the values are equivalent,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
      * @example
      *
      * function isGreeting(value) {
@@ -13778,11 +12979,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is an error object,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is an error object, else `false`.
      * @example
      *
      * _.isError(new Error);
@@ -13802,16 +13001,13 @@ module.exports = function (e1, e2) {
     /**
      * Checks if `value` is a finite primitive number.
      *
-     * **Note:** This method is based on
-     * [`Number.isFinite`](https://mdn.io/Number/isFinite).
+     * **Note:** This method is based on [`Number.isFinite`](https://mdn.io/Number/isFinite).
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a finite number,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is a finite number, else `false`.
      * @example
      *
      * _.isFinite(3);
@@ -13835,11 +13031,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isFunction(_);
@@ -13859,12 +13053,10 @@ module.exports = function (e1, e2) {
     /**
      * Checks if `value` is an integer.
      *
-     * **Note:** This method is based on
-     * [`Number.isInteger`](https://mdn.io/Number/isInteger).
+     * **Note:** This method is based on [`Number.isInteger`](https://mdn.io/Number/isInteger).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is an integer, else `false`.
@@ -13889,16 +13081,13 @@ module.exports = function (e1, e2) {
     /**
      * Checks if `value` is a valid array-like length.
      *
-     * **Note:** This function is loosely based on
-     * [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+     * **Note:** This function is loosely based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a valid length,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
      * @example
      *
      * _.isLength(3);
@@ -13919,13 +13108,11 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Checks if `value` is the
-     * [language type](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
-     * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+     * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+     * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is an object, else `false`.
@@ -13954,7 +13141,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
@@ -13981,11 +13167,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.3.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isMap(new Map);
@@ -14007,7 +13191,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Lang
      * @param {Object} object The object to inspect.
      * @param {Object} source The object of property values to match.
@@ -14028,13 +13211,12 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.isMatch` except that it accepts `customizer` which
-     * is invoked to compare values. If `customizer` returns `undefined`, comparisons
+     * is invoked to compare values. If `customizer` returns `undefined` comparisons
      * are handled by the method instead. The `customizer` is invoked with five
      * arguments: (objValue, srcValue, index|key, object, source).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {Object} object The object to inspect.
      * @param {Object} source The object of property values to match.
@@ -14066,14 +13248,11 @@ module.exports = function (e1, e2) {
     /**
      * Checks if `value` is `NaN`.
      *
-     * **Note:** This method is based on
-     * [`Number.isNaN`](https://mdn.io/Number/isNaN) and is not the same as
-     * global [`isNaN`](https://mdn.io/isNaN) which returns `true` for
-     * `undefined` and other non-number values.
+     * **Note:** This method is not the same as [`isNaN`](https://es5.github.io/#x15.1.2.4)
+     * which returns `true` for `undefined` and other non-numeric values.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is `NaN`, else `false`.
@@ -14093,8 +13272,7 @@ module.exports = function (e1, e2) {
      */
     function isNaN(value) {
       // An `NaN` primitive is the only value that is not equal to itself.
-      // Perform the `toStringTag` check first to avoid errors with some
-      // ActiveX objects in IE.
+      // Perform the `toStringTag` check first to avoid errors with some ActiveX objects in IE.
       return isNumber(value) && value != +value;
     }
 
@@ -14103,11 +13281,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a native function,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
      * @example
      *
      * _.isNative(Array.prototype.push);
@@ -14117,11 +13293,14 @@ module.exports = function (e1, e2) {
      * // => false
      */
     function isNative(value) {
-      if (!isObject(value)) {
+      if (value == null) {
         return false;
       }
-      var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
-      return pattern.test(toSource(value));
+      if (isFunction(value)) {
+        return reIsNative.test(funcToString.call(value));
+      }
+      return isObjectLike(value) &&
+        (isHostObject(value) ? reIsNative : reIsHostCtor).test(value);
     }
 
     /**
@@ -14129,7 +13308,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is `null`, else `false`.
@@ -14150,7 +13328,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is nullish, else `false`.
@@ -14172,16 +13349,14 @@ module.exports = function (e1, e2) {
     /**
      * Checks if `value` is classified as a `Number` primitive or object.
      *
-     * **Note:** To exclude `Infinity`, `-Infinity`, and `NaN`, which are
-     * classified as numbers, use the `_.isFinite` method.
+     * **Note:** To exclude `Infinity`, `-Infinity`, and `NaN`, which are classified
+     * as numbers, use the `_.isFinite` method.
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isNumber(3);
@@ -14207,11 +13382,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.8.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a plain object,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
      * @example
      *
      * function Foo() {
@@ -14235,11 +13408,11 @@ module.exports = function (e1, e2) {
           objectToString.call(value) != objectTag || isHostObject(value)) {
         return false;
       }
-      var proto = getPrototype(value);
+      var proto = getPrototypeOf(value);
       if (proto === null) {
         return true;
       }
-      var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+      var Ctor = proto.constructor;
       return (typeof Ctor == 'function' &&
         Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
     }
@@ -14249,11 +13422,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 0.1.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isRegExp(/abc/);
@@ -14270,16 +13441,13 @@ module.exports = function (e1, e2) {
      * Checks if `value` is a safe integer. An integer is safe if it's an IEEE-754
      * double precision number which isn't the result of a rounded unsafe integer.
      *
-     * **Note:** This method is based on
-     * [`Number.isSafeInteger`](https://mdn.io/Number/isSafeInteger).
+     * **Note:** This method is based on [`Number.isSafeInteger`](https://mdn.io/Number/isSafeInteger).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a safe integer,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is a safe integer, else `false`.
      * @example
      *
      * _.isSafeInteger(3);
@@ -14303,11 +13471,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.3.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isSet(new Set);
@@ -14324,12 +13490,10 @@ module.exports = function (e1, e2) {
      * Checks if `value` is classified as a `String` primitive or object.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isString('abc');
@@ -14348,11 +13512,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isSymbol(Symbol.iterator);
@@ -14371,11 +13533,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isTypedArray(new Uint8Array);
@@ -14393,7 +13553,6 @@ module.exports = function (e1, e2) {
      * Checks if `value` is `undefined`.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Lang
      * @param {*} value The value to check.
@@ -14415,11 +13574,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.3.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isWeakMap(new WeakMap);
@@ -14437,11 +13594,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.3.0
      * @category Lang
      * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is correctly classified,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
      * @example
      *
      * _.isWeakSet(new WeakSet);
@@ -14459,13 +13614,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.9.0
      * @category Lang
      * @param {*} value The value to compare.
      * @param {*} other The other value to compare.
-     * @returns {boolean} Returns `true` if `value` is less than `other`,
-     *  else `false`.
-     * @see _.gt
+     * @returns {boolean} Returns `true` if `value` is less than `other`, else `false`.
      * @example
      *
      * _.lt(1, 3);
@@ -14477,20 +13629,19 @@ module.exports = function (e1, e2) {
      * _.lt(3, 1);
      * // => false
      */
-    var lt = createRelationalOperation(baseLt);
+    function lt(value, other) {
+      return value < other;
+    }
 
     /**
      * Checks if `value` is less than or equal to `other`.
      *
      * @static
      * @memberOf _
-     * @since 3.9.0
      * @category Lang
      * @param {*} value The value to compare.
      * @param {*} other The other value to compare.
-     * @returns {boolean} Returns `true` if `value` is less than or equal to
-     *  `other`, else `false`.
-     * @see _.gte
+     * @returns {boolean} Returns `true` if `value` is less than or equal to `other`, else `false`.
      * @example
      *
      * _.lte(1, 3);
@@ -14502,15 +13653,14 @@ module.exports = function (e1, e2) {
      * _.lte(3, 1);
      * // => false
      */
-    var lte = createRelationalOperation(function(value, other) {
+    function lte(value, other) {
       return value <= other;
-    });
+    }
 
     /**
      * Converts `value` to an array.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Lang
      * @param {*} value The value to convert.
@@ -14548,12 +13698,10 @@ module.exports = function (e1, e2) {
     /**
      * Converts `value` to an integer.
      *
-     * **Note:** This function is loosely based on
-     * [`ToInteger`](http://www.ecma-international.org/ecma-262/6.0/#sec-tointeger).
+     * **Note:** This function is loosely based on [`ToInteger`](http://www.ecma-international.org/ecma-262/6.0/#sec-tointeger).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to convert.
      * @returns {number} Returns the converted integer.
@@ -14588,12 +13736,10 @@ module.exports = function (e1, e2) {
      * Converts `value` to an integer suitable for use as the length of an
      * array-like object.
      *
-     * **Note:** This method is based on
-     * [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+     * **Note:** This method is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to convert.
      * @returns {number} Returns the converted integer.
@@ -14620,7 +13766,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to process.
      * @returns {number} Returns the number.
@@ -14639,12 +13784,6 @@ module.exports = function (e1, e2) {
      * // => 3
      */
     function toNumber(value) {
-      if (typeof value == 'number') {
-        return value;
-      }
-      if (isSymbol(value)) {
-        return NAN;
-      }
       if (isObject(value)) {
         var other = isFunction(value.valueOf) ? value.valueOf() : value;
         value = isObject(other) ? (other + '') : other;
@@ -14660,12 +13799,11 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Converts `value` to a plain object flattening inherited enumerable string
-     * keyed properties of `value` to own properties of the plain object.
+     * Converts `value` to a plain object flattening inherited enumerable
+     * properties of `value` to own properties of the plain object.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Lang
      * @param {*} value The value to convert.
      * @returns {Object} Returns the converted plain object.
@@ -14693,7 +13831,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to convert.
      * @returns {number} Returns the converted integer.
@@ -14716,12 +13853,11 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Converts `value` to a string. An empty string is returned for `null`
-     * and `undefined` values. The sign of `-0` is preserved.
+     * Converts `value` to a string if it's not one. An empty string is returned
+     * for `null` and `undefined` values. The sign of `-0` is preserved.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Lang
      * @param {*} value The value to process.
      * @returns {string} Returns the string.
@@ -14737,27 +13873,36 @@ module.exports = function (e1, e2) {
      * // => '1,2,3'
      */
     function toString(value) {
-      return value == null ? '' : baseToString(value);
+      // Exit early for strings to avoid a performance hit in some environments.
+      if (typeof value == 'string') {
+        return value;
+      }
+      if (value == null) {
+        return '';
+      }
+      if (isSymbol(value)) {
+        return symbolToString ? symbolToString.call(value) : '';
+      }
+      var result = (value + '');
+      return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
     }
 
     /*------------------------------------------------------------------------*/
 
     /**
-     * Assigns own enumerable string keyed properties of source objects to the
-     * destination object. Source objects are applied from left to right.
-     * Subsequent sources overwrite property assignments of previous sources.
+     * Assigns own enumerable properties of source objects to the destination
+     * object. Source objects are applied from left to right. Subsequent sources
+     * overwrite property assignments of previous sources.
      *
      * **Note:** This method mutates `object` and is loosely based on
      * [`Object.assign`](https://mdn.io/Object/assign).
      *
      * @static
      * @memberOf _
-     * @since 0.10.0
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
-     * @see _.assignIn
      * @example
      *
      * function Foo() {
@@ -14794,13 +13939,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @alias extend
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
-     * @see _.assign
      * @example
      *
      * function Foo() {
@@ -14828,23 +13971,21 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * This method is like `_.assignIn` except that it accepts `customizer`
-     * which is invoked to produce the assigned values. If `customizer` returns
-     * `undefined`, assignment is handled by the method instead. The `customizer`
-     * is invoked with five arguments: (objValue, srcValue, key, object, source).
+     * This method is like `_.assignIn` except that it accepts `customizer` which
+     * is invoked to produce the assigned values. If `customizer` returns `undefined`
+     * assignment is handled by the method instead. The `customizer` is invoked
+     * with five arguments: (objValue, srcValue, key, object, source).
      *
      * **Note:** This method mutates `object`.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @alias extendWith
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} sources The source objects.
      * @param {Function} [customizer] The function to customize assigned values.
      * @returns {Object} Returns `object`.
-     * @see _.assignWith
      * @example
      *
      * function customizer(objValue, srcValue) {
@@ -14857,26 +13998,24 @@ module.exports = function (e1, e2) {
      * // => { 'a': 1, 'b': 2 }
      */
     var assignInWith = createAssigner(function(object, source, srcIndex, customizer) {
-      copyObject(source, keysIn(source), object, customizer);
+      copyObjectWith(source, keysIn(source), object, customizer);
     });
 
     /**
-     * This method is like `_.assign` except that it accepts `customizer`
-     * which is invoked to produce the assigned values. If `customizer` returns
-     * `undefined`, assignment is handled by the method instead. The `customizer`
-     * is invoked with five arguments: (objValue, srcValue, key, object, source).
+     * This method is like `_.assign` except that it accepts `customizer` which
+     * is invoked to produce the assigned values. If `customizer` returns `undefined`
+     * assignment is handled by the method instead. The `customizer` is invoked
+     * with five arguments: (objValue, srcValue, key, object, source).
      *
      * **Note:** This method mutates `object`.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} sources The source objects.
      * @param {Function} [customizer] The function to customize assigned values.
      * @returns {Object} Returns `object`.
-     * @see _.assignInWith
      * @example
      *
      * function customizer(objValue, srcValue) {
@@ -14889,7 +14028,7 @@ module.exports = function (e1, e2) {
      * // => { 'a': 1, 'b': 2 }
      */
     var assignWith = createAssigner(function(object, source, srcIndex, customizer) {
-      copyObject(source, keys(source), object, customizer);
+      copyObjectWith(source, keys(source), object, customizer);
     });
 
     /**
@@ -14897,10 +14036,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 1.0.0
      * @category Object
      * @param {Object} object The object to iterate over.
-     * @param {...(string|string[])} [paths] The property paths of elements to pick.
+     * @param {...(string|string[])} [paths] The property paths of elements to pick,
+     *  specified individually or in arrays.
      * @returns {Array} Returns the new array of picked elements.
      * @example
      *
@@ -14917,13 +14056,11 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Creates an object that inherits from the `prototype` object. If a
-     * `properties` object is given, its own enumerable string keyed properties
-     * are assigned to the created object.
+     * Creates an object that inherits from the `prototype` object. If a `properties`
+     * object is given its own enumerable properties are assigned to the created object.
      *
      * @static
      * @memberOf _
-     * @since 2.3.0
      * @category Object
      * @param {Object} prototype The object to inherit from.
      * @param {Object} [properties] The properties to assign to the object.
@@ -14956,21 +14093,19 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Assigns own and inherited enumerable string keyed properties of source
-     * objects to the destination object for all destination properties that
-     * resolve to `undefined`. Source objects are applied from left to right.
-     * Once a property is set, additional values of the same property are ignored.
+     * Assigns own and inherited enumerable properties of source objects to the
+     * destination object for all destination properties that resolve to `undefined`.
+     * Source objects are applied from left to right. Once a property is set,
+     * additional values of the same property are ignored.
      *
      * **Note:** This method mutates `object`.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
-     * @see _.defaultsDeep
      * @example
      *
      * _.defaults({ 'user': 'barney' }, { 'age': 36 }, { 'user': 'fred' });
@@ -14989,12 +14124,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.10.0
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
-     * @see _.defaults
      * @example
      *
      * _.defaultsDeep({ 'user': { 'name': 'barney' } }, { 'user': { 'name': 'fred', 'age': 36 } });
@@ -15012,13 +14145,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 1.1.0
      * @category Object
      * @param {Object} object The object to search.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
-     * @returns {string|undefined} Returns the key of the matched element,
-     *  else `undefined`.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
+     * @returns {string|undefined} Returns the key of the matched element, else `undefined`.
      * @example
      *
      * var users = {
@@ -15052,13 +14182,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Object
      * @param {Object} object The object to search.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per iteration.
-     * @returns {string|undefined} Returns the key of the matched element,
-     *  else `undefined`.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
+     * @returns {string|undefined} Returns the key of the matched element, else `undefined`.
      * @example
      *
      * var users = {
@@ -15087,19 +14214,17 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Iterates over own and inherited enumerable string keyed properties of an
-     * object and invokes `iteratee` for each property. The iteratee is invoked
-     * with three arguments: (value, key, object). Iteratee functions may exit
-     * iteration early by explicitly returning `false`.
+     * Iterates over own and inherited enumerable properties of an object invoking
+     * `iteratee` for each property. The iteratee is invoked with three arguments:
+     * (value, key, object). Iteratee functions may exit iteration early by explicitly
+     * returning `false`.
      *
      * @static
      * @memberOf _
-     * @since 0.3.0
      * @category Object
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
-     * @see _.forInRight
      * @example
      *
      * function Foo() {
@@ -15112,12 +14237,12 @@ module.exports = function (e1, e2) {
      * _.forIn(new Foo, function(value, key) {
      *   console.log(key);
      * });
-     * // => Logs 'a', 'b', then 'c' (iteration order is not guaranteed).
+     * // => logs 'a', 'b', then 'c' (iteration order is not guaranteed)
      */
     function forIn(object, iteratee) {
       return object == null
         ? object
-        : baseFor(object, getIteratee(iteratee), keysIn);
+        : baseFor(object, baseCastFunction(iteratee), keysIn);
     }
 
     /**
@@ -15126,12 +14251,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Object
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
-     * @see _.forIn
      * @example
      *
      * function Foo() {
@@ -15144,28 +14267,26 @@ module.exports = function (e1, e2) {
      * _.forInRight(new Foo, function(value, key) {
      *   console.log(key);
      * });
-     * // => Logs 'c', 'b', then 'a' assuming `_.forIn` logs 'a', 'b', then 'c'.
+     * // => logs 'c', 'b', then 'a' assuming `_.forIn` logs 'a', 'b', then 'c'
      */
     function forInRight(object, iteratee) {
       return object == null
         ? object
-        : baseForRight(object, getIteratee(iteratee), keysIn);
+        : baseForRight(object, baseCastFunction(iteratee), keysIn);
     }
 
     /**
-     * Iterates over own enumerable string keyed properties of an object and
-     * invokes `iteratee` for each property. The iteratee is invoked with three
-     * arguments: (value, key, object). Iteratee functions may exit iteration
-     * early by explicitly returning `false`.
+     * Iterates over own enumerable properties of an object invoking `iteratee`
+     * for each property. The iteratee is invoked with three arguments:
+     * (value, key, object). Iteratee functions may exit iteration early by
+     * explicitly returning `false`.
      *
      * @static
      * @memberOf _
-     * @since 0.3.0
      * @category Object
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
-     * @see _.forOwnRight
      * @example
      *
      * function Foo() {
@@ -15178,10 +14299,10 @@ module.exports = function (e1, e2) {
      * _.forOwn(new Foo, function(value, key) {
      *   console.log(key);
      * });
-     * // => Logs 'a' then 'b' (iteration order is not guaranteed).
+     * // => logs 'a' then 'b' (iteration order is not guaranteed)
      */
     function forOwn(object, iteratee) {
-      return object && baseForOwn(object, getIteratee(iteratee));
+      return object && baseForOwn(object, baseCastFunction(iteratee));
     }
 
     /**
@@ -15190,12 +14311,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.0.0
      * @category Object
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
-     * @see _.forOwn
      * @example
      *
      * function Foo() {
@@ -15208,10 +14327,10 @@ module.exports = function (e1, e2) {
      * _.forOwnRight(new Foo, function(value, key) {
      *   console.log(key);
      * });
-     * // => Logs 'b' then 'a' assuming `_.forOwn` logs 'a' then 'b'.
+     * // => logs 'b' then 'a' assuming `_.forOwn` logs 'a' then 'b'
      */
     function forOwnRight(object, iteratee) {
-      return object && baseForOwnRight(object, getIteratee(iteratee));
+      return object && baseForOwnRight(object, baseCastFunction(iteratee));
     }
 
     /**
@@ -15219,12 +14338,10 @@ module.exports = function (e1, e2) {
      * of `object`.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The object to inspect.
      * @returns {Array} Returns the new array of property names.
-     * @see _.functionsIn
      * @example
      *
      * function Foo() {
@@ -15247,11 +14364,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The object to inspect.
      * @returns {Array} Returns the new array of property names.
-     * @see _.functions
      * @example
      *
      * function Foo() {
@@ -15270,15 +14385,14 @@ module.exports = function (e1, e2) {
 
     /**
      * Gets the value at `path` of `object`. If the resolved value is
-     * `undefined`, the `defaultValue` is used in its place.
+     * `undefined` the `defaultValue` is used in its place.
      *
      * @static
      * @memberOf _
-     * @since 3.7.0
      * @category Object
      * @param {Object} object The object to query.
      * @param {Array|string} path The path of the property to get.
-     * @param {*} [defaultValue] The value returned for `undefined` resolved values.
+     * @param {*} [defaultValue] The value returned if the resolved value is `undefined`.
      * @returns {*} Returns the resolved value.
      * @example
      *
@@ -15302,7 +14416,6 @@ module.exports = function (e1, e2) {
      * Checks if `path` is a direct property of `object`.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The object to query.
@@ -15310,23 +14423,23 @@ module.exports = function (e1, e2) {
      * @returns {boolean} Returns `true` if `path` exists, else `false`.
      * @example
      *
-     * var object = { 'a': { 'b': 2 } };
-     * var other = _.create({ 'a': _.create({ 'b': 2 }) });
+     * var object = { 'a': { 'b': { 'c': 3 } } };
+     * var other = _.create({ 'a': _.create({ 'b': _.create({ 'c': 3 }) }) });
      *
      * _.has(object, 'a');
      * // => true
      *
-     * _.has(object, 'a.b');
+     * _.has(object, 'a.b.c');
      * // => true
      *
-     * _.has(object, ['a', 'b']);
+     * _.has(object, ['a', 'b', 'c']);
      * // => true
      *
      * _.has(other, 'a');
      * // => false
      */
     function has(object, path) {
-      return object != null && hasPath(object, path, baseHas);
+      return hasPath(object, path, baseHas);
     }
 
     /**
@@ -15334,39 +14447,37 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The object to query.
      * @param {Array|string} path The path to check.
      * @returns {boolean} Returns `true` if `path` exists, else `false`.
      * @example
      *
-     * var object = _.create({ 'a': _.create({ 'b': 2 }) });
+     * var object = _.create({ 'a': _.create({ 'b': _.create({ 'c': 3 }) }) });
      *
      * _.hasIn(object, 'a');
      * // => true
      *
-     * _.hasIn(object, 'a.b');
+     * _.hasIn(object, 'a.b.c');
      * // => true
      *
-     * _.hasIn(object, ['a', 'b']);
+     * _.hasIn(object, ['a', 'b', 'c']);
      * // => true
      *
      * _.hasIn(object, 'b');
      * // => false
      */
     function hasIn(object, path) {
-      return object != null && hasPath(object, path, baseHasIn);
+      return hasPath(object, path, baseHasIn);
     }
 
     /**
      * Creates an object composed of the inverted keys and values of `object`.
-     * If `object` contains duplicate values, subsequent values overwrite
-     * property assignments of previous values.
+     * If `object` contains duplicate values, subsequent values overwrite property
+     * assignments of previous values.
      *
      * @static
      * @memberOf _
-     * @since 0.7.0
      * @category Object
      * @param {Object} object The object to invert.
      * @returns {Object} Returns the new inverted object.
@@ -15383,18 +14494,16 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.invert` except that the inverted object is generated
-     * from the results of running each element of `object` thru `iteratee`. The
-     * corresponding inverted value of each inverted key is an array of keys
+     * from the results of running each element of `object` through `iteratee`.
+     * The corresponding inverted value of each inverted key is an array of keys
      * responsible for generating the inverted value. The iteratee is invoked
      * with one argument: (value).
      *
      * @static
      * @memberOf _
-     * @since 4.1.0
      * @category Object
      * @param {Object} object The object to invert.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {Object} Returns the new inverted object.
      * @example
      *
@@ -15421,7 +14530,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The object to query.
      * @param {Array|string} path The path of the method to invoke.
@@ -15444,7 +14552,6 @@ module.exports = function (e1, e2) {
      * for more details.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The object to query.
@@ -15491,7 +14598,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Object
      * @param {Object} object The object to query.
      * @returns {Array} Returns the array of property names.
@@ -15530,18 +14636,15 @@ module.exports = function (e1, e2) {
     /**
      * The opposite of `_.mapValues`; this method creates an object with the
      * same values as `object` and keys generated by running each own enumerable
-     * string keyed property of `object` thru `iteratee`. The iteratee is invoked
-     * with three arguments: (value, key, object).
+     * property of `object` through `iteratee`. The iteratee is invoked with
+     * three arguments: (value, key, object).
      *
      * @static
      * @memberOf _
-     * @since 3.8.0
      * @category Object
      * @param {Object} object The object to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns the new mapped object.
-     * @see _.mapValues
      * @example
      *
      * _.mapKeys({ 'a': 1, 'b': 2 }, function(value, key) {
@@ -15560,20 +14663,16 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates an object with the same keys as `object` and values generated
-     * by running each own enumerable string keyed property of `object` thru
-     * `iteratee`. The iteratee is invoked with three arguments:
-     * (value, key, object).
+     * Creates an object with the same keys as `object` and values generated by
+     * running each own enumerable property of `object` through `iteratee`. The
+     * iteratee is invoked with three arguments: (value, key, object).
      *
      * @static
      * @memberOf _
-     * @since 2.4.0
      * @category Object
      * @param {Object} object The object to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The function invoked per iteration.
+     * @param {Function|Object|string} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns the new mapped object.
-     * @see _.mapKeys
      * @example
      *
      * var users = {
@@ -15600,18 +14699,17 @@ module.exports = function (e1, e2) {
 
     /**
      * This method is like `_.assign` except that it recursively merges own and
-     * inherited enumerable string keyed properties of source objects into the
-     * destination object. Source properties that resolve to `undefined` are
-     * skipped if a destination value exists. Array and plain object properties
-     * are merged recursively.Other objects and value types are overridden by
-     * assignment. Source objects are applied from left to right. Subsequent
-     * sources overwrite property assignments of previous sources.
+     * inherited enumerable properties of source objects into the destination
+     * object. Source properties that resolve to `undefined` are skipped if a
+     * destination value exists. Array and plain object properties are merged
+     * recursively.Other objects and value types are overridden by assignment.
+     * Source objects are applied from left to right. Subsequent sources
+     * overwrite property assignments of previous sources.
      *
      * **Note:** This method mutates `object`.
      *
      * @static
      * @memberOf _
-     * @since 0.5.0
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
@@ -15636,7 +14734,7 @@ module.exports = function (e1, e2) {
     /**
      * This method is like `_.merge` except that it accepts `customizer` which
      * is invoked to produce the merged values of the destination and source
-     * properties. If `customizer` returns `undefined`, merging is handled by the
+     * properties. If `customizer` returns `undefined` merging is handled by the
      * method instead. The `customizer` is invoked with seven arguments:
      * (objValue, srcValue, key, object, source, stack).
      *
@@ -15644,7 +14742,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The destination object.
      * @param {...Object} sources The source objects.
@@ -15677,15 +14774,14 @@ module.exports = function (e1, e2) {
 
     /**
      * The opposite of `_.pick`; this method creates an object composed of the
-     * own and inherited enumerable string keyed properties of `object` that are
-     * not omitted.
+     * own and inherited enumerable properties of `object` that are not omitted.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The source object.
-     * @param {...(string|string[])} [props] The property identifiers to omit.
+     * @param {...(string|string[])} [props] The property names to omit, specified
+     *  individually or in arrays.
      * @returns {Object} Returns the new object.
      * @example
      *
@@ -15698,23 +14794,21 @@ module.exports = function (e1, e2) {
       if (object == null) {
         return {};
       }
-      props = arrayMap(baseFlatten(props, 1), toKey);
-      return basePick(object, baseDifference(getAllKeysIn(object), props));
+      props = arrayMap(baseFlatten(props, 1), String);
+      return basePick(object, baseDifference(keysIn(object), props));
     });
 
     /**
      * The opposite of `_.pickBy`; this method creates an object composed of
-     * the own and inherited enumerable string keyed properties of `object` that
-     * `predicate` doesn't return truthy for. The predicate is invoked with two
-     * arguments: (value, key).
+     * the own and inherited enumerable properties of `object` that `predicate`
+     * doesn't return truthy for. The predicate is invoked with two arguments:
+     * (value, key).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The source object.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per property.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per property.
      * @returns {Object} Returns the new object.
      * @example
      *
@@ -15734,11 +14828,11 @@ module.exports = function (e1, e2) {
      * Creates an object composed of the picked `object` properties.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The source object.
-     * @param {...(string|string[])} [props] The property identifiers to pick.
+     * @param {...(string|string[])} [props] The property names to pick, specified
+     *  individually or in arrays.
      * @returns {Object} Returns the new object.
      * @example
      *
@@ -15748,7 +14842,7 @@ module.exports = function (e1, e2) {
      * // => { 'a': 1, 'c': 3 }
      */
     var pick = rest(function(object, props) {
-      return object == null ? {} : basePick(object, arrayMap(baseFlatten(props, 1), toKey));
+      return object == null ? {} : basePick(object, baseFlatten(props, 1));
     });
 
     /**
@@ -15757,11 +14851,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The source object.
-     * @param {Array|Function|Object|string} [predicate=_.identity]
-     *  The function invoked per property.
+     * @param {Function|Object|string} [predicate=_.identity] The function invoked per property.
      * @returns {Object} Returns the new object.
      * @example
      *
@@ -15775,17 +14867,16 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * This method is like `_.get` except that if the resolved value is a
-     * function it's invoked with the `this` binding of its parent object and
-     * its result is returned.
+     * This method is like `_.get` except that if the resolved value is a function
+     * it's invoked with the `this` binding of its parent object and its result
+     * is returned.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The object to query.
      * @param {Array|string} path The path of the property to resolve.
-     * @param {*} [defaultValue] The value returned for `undefined` resolved values.
+     * @param {*} [defaultValue] The value returned if the resolved value is `undefined`.
      * @returns {*} Returns the resolved value.
      * @example
      *
@@ -15804,29 +14895,21 @@ module.exports = function (e1, e2) {
      * // => 'default'
      */
     function result(object, path, defaultValue) {
-      path = isKey(path, object) ? [path] : castPath(path);
-
-      var index = -1,
-          length = path.length;
-
-      // Ensure the loop is entered when path is empty.
-      if (!length) {
-        object = undefined;
-        length = 1;
+      if (!isKey(path, object)) {
+        path = baseCastPath(path);
+        var result = get(object, path);
+        object = parent(object, path);
+      } else {
+        result = object == null ? undefined : object[path];
       }
-      while (++index < length) {
-        var value = object == null ? undefined : object[toKey(path[index])];
-        if (value === undefined) {
-          index = length;
-          value = defaultValue;
-        }
-        object = isFunction(value) ? value.call(object) : value;
+      if (result === undefined) {
+        result = defaultValue;
       }
-      return object;
+      return isFunction(result) ? result.call(object) : result;
     }
 
     /**
-     * Sets the value at `path` of `object`. If a portion of `path` doesn't exist,
+     * Sets the value at `path` of `object`. If a portion of `path` doesn't exist
      * it's created. Arrays are created for missing index properties while objects
      * are created for all other missing properties. Use `_.setWith` to customize
      * `path` creation.
@@ -15835,7 +14918,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.7.0
      * @category Object
      * @param {Object} object The object to modify.
      * @param {Array|string} path The path of the property to set.
@@ -15849,7 +14931,7 @@ module.exports = function (e1, e2) {
      * console.log(object.a[0].b.c);
      * // => 4
      *
-     * _.set(object, ['x', '0', 'y', 'z'], 5);
+     * _.set(object, 'x[0].y.z', 5);
      * console.log(object.x[0].y.z);
      * // => 5
      */
@@ -15867,7 +14949,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The object to modify.
      * @param {Array|string} path The path of the property to set.
@@ -15887,13 +14968,11 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates an array of own enumerable string keyed-value pairs for `object`
-     * which can be consumed by `_.fromPairs`.
+     * Creates an array of own enumerable key-value pairs for `object` which
+     * can be consumed by `_.fromPairs`.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
-     * @alias entries
      * @category Object
      * @param {Object} object The object to query.
      * @returns {Array} Returns the new array of key-value pairs.
@@ -15914,13 +14993,11 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates an array of own and inherited enumerable string keyed-value pairs
-     * for `object` which can be consumed by `_.fromPairs`.
+     * Creates an array of own and inherited enumerable key-value pairs for
+     * `object` which can be consumed by `_.fromPairs`.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
-     * @alias entriesIn
      * @category Object
      * @param {Object} object The object to query.
      * @returns {Array} Returns the new array of key-value pairs.
@@ -15942,15 +15019,14 @@ module.exports = function (e1, e2) {
 
     /**
      * An alternative to `_.reduce`; this method transforms `object` to a new
-     * `accumulator` object which is the result of running each of its own
-     * enumerable string keyed properties thru `iteratee`, with each invocation
-     * potentially mutating the `accumulator` object. The iteratee is invoked
-     * with four arguments: (accumulator, value, key, object). Iteratee functions
-     * may exit iteration early by explicitly returning `false`.
+     * `accumulator` object which is the result of running each of its own enumerable
+     * properties through `iteratee`, with each invocation potentially mutating
+     * the `accumulator` object. The iteratee is invoked with four arguments:
+     * (accumulator, value, key, object). Iteratee functions may exit iteration
+     * early by explicitly returning `false`.
      *
      * @static
      * @memberOf _
-     * @since 1.3.0
      * @category Object
      * @param {Array|Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
@@ -15979,7 +15055,7 @@ module.exports = function (e1, e2) {
           if (isArr) {
             accumulator = isArray(object) ? new Ctor : [];
           } else {
-            accumulator = isFunction(Ctor) ? baseCreate(getPrototype(object)) : {};
+            accumulator = isFunction(Ctor) ? baseCreate(getPrototypeOf(object)) : {};
           }
         } else {
           accumulator = {};
@@ -15998,7 +15074,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Object
      * @param {Object} object The object to modify.
      * @param {Array|string} path The path of the property to unset.
@@ -16012,7 +15087,7 @@ module.exports = function (e1, e2) {
      * console.log(object);
      * // => { 'a': [{ 'b': {} }] };
      *
-     * _.unset(object, ['a', '0', 'b', 'c']);
+     * _.unset(object, 'a[0].b.c');
      * // => true
      *
      * console.log(object);
@@ -16031,7 +15106,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.6.0
      * @category Object
      * @param {Object} object The object to modify.
      * @param {Array|string} path The path of the property to set.
@@ -16050,7 +15124,7 @@ module.exports = function (e1, e2) {
      * // => 0
      */
     function update(object, path, updater) {
-      return object == null ? object : baseUpdate(object, path, castFunction(updater));
+      return object == null ? object : baseUpdate(object, path, baseCastFunction(updater));
     }
 
     /**
@@ -16063,7 +15137,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.6.0
      * @category Object
      * @param {Object} object The object to modify.
      * @param {Array|string} path The path of the property to set.
@@ -16079,16 +15152,15 @@ module.exports = function (e1, e2) {
      */
     function updateWith(object, path, updater, customizer) {
       customizer = typeof customizer == 'function' ? customizer : undefined;
-      return object == null ? object : baseUpdate(object, path, castFunction(updater), customizer);
+      return object == null ? object : baseUpdate(object, path, baseCastFunction(updater), customizer);
     }
 
     /**
-     * Creates an array of the own enumerable string keyed property values of `object`.
+     * Creates an array of the own enumerable property values of `object`.
      *
      * **Note:** Non-object values are coerced to objects.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Object
      * @param {Object} object The object to query.
@@ -16113,14 +15185,12 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates an array of the own and inherited enumerable string keyed property
-     * values of `object`.
+     * Creates an array of the own and inherited enumerable property values of `object`.
      *
      * **Note:** Non-object values are coerced to objects.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Object
      * @param {Object} object The object to query.
      * @returns {Array} Returns the array of property values.
@@ -16147,7 +15217,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Number
      * @param {number} number The number to clamp.
      * @param {number} [lower] The lower bound.
@@ -16178,20 +15247,18 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Checks if `n` is between `start` and up to, but not including, `end`. If
-     * `end` is not specified, it's set to `start` with `start` then set to `0`.
+     * Checks if `n` is between `start` and up to but not including, `end`. If
+     * `end` is not specified it's set to `start` with `start` then set to `0`.
      * If `start` is greater than `end` the params are swapped to support
      * negative ranges.
      *
      * @static
      * @memberOf _
-     * @since 3.3.0
      * @category Number
      * @param {number} number The number to check.
      * @param {number} [start=0] The start of the range.
      * @param {number} end The end of the range.
      * @returns {boolean} Returns `true` if `number` is in the range, else `false`.
-     * @see _.range, _.rangeRight
      * @example
      *
      * _.inRange(3, 2, 4);
@@ -16230,15 +15297,14 @@ module.exports = function (e1, e2) {
     /**
      * Produces a random number between the inclusive `lower` and `upper` bounds.
      * If only one argument is provided a number between `0` and the given number
-     * is returned. If `floating` is `true`, or either `lower` or `upper` are
-     * floats, a floating-point number is returned instead of an integer.
+     * is returned. If `floating` is `true`, or either `lower` or `upper` are floats,
+     * a floating-point number is returned instead of an integer.
      *
      * **Note:** JavaScript follows the IEEE-754 standard for resolving
      * floating-point values which can produce unexpected results.
      *
      * @static
      * @memberOf _
-     * @since 0.7.0
      * @category Number
      * @param {number} [lower=0] The lower bound.
      * @param {number} [upper=1] The upper bound.
@@ -16304,7 +15370,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the camel cased string.
@@ -16313,10 +15378,10 @@ module.exports = function (e1, e2) {
      * _.camelCase('Foo Bar');
      * // => 'fooBar'
      *
-     * _.camelCase('--foo-bar--');
+     * _.camelCase('--foo-bar');
      * // => 'fooBar'
      *
-     * _.camelCase('__FOO_BAR__');
+     * _.camelCase('__foo_bar__');
      * // => 'fooBar'
      */
     var camelCase = createCompounder(function(result, word, index) {
@@ -16330,7 +15395,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to capitalize.
      * @returns {string} Returns the capitalized string.
@@ -16344,14 +15408,11 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Deburrs `string` by converting
-     * [latin-1 supplementary letters](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
-     * to basic latin letters and removing
-     * [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
+     * Deburrs `string` by converting [latin-1 supplementary letters](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
+     * to basic latin letters and removing [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to deburr.
      * @returns {string} Returns the deburred string.
@@ -16370,13 +15431,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to search.
      * @param {string} [target] The string to search for.
      * @param {number} [position=string.length] The position to search from.
-     * @returns {boolean} Returns `true` if `string` ends with `target`,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `string` ends with `target`, else `false`.
      * @example
      *
      * _.endsWith('abc', 'c');
@@ -16390,7 +15449,7 @@ module.exports = function (e1, e2) {
      */
     function endsWith(string, target, position) {
       string = toString(string);
-      target = baseToString(target);
+      target = typeof target == 'string' ? target : (target + '');
 
       var length = string.length;
       position = position === undefined
@@ -16410,22 +15469,20 @@ module.exports = function (e1, e2) {
      *
      * Though the ">" character is escaped for symmetry, characters like
      * ">" and "/" don't need escaping in HTML and have no special meaning
-     * unless they're part of a tag or unquoted attribute value. See
-     * [Mathias Bynens's article](https://mathiasbynens.be/notes/ambiguous-ampersands)
+     * unless they're part of a tag or unquoted attribute value.
+     * See [Mathias Bynens's article](https://mathiasbynens.be/notes/ambiguous-ampersands)
      * (under "semi-related fun fact") for more details.
      *
      * Backticks are escaped because in IE < 9, they can break out of
      * attribute values or HTML comments. See [#59](https://html5sec.org/#59),
      * [#102](https://html5sec.org/#102), [#108](https://html5sec.org/#108), and
-     * [#133](https://html5sec.org/#133) of the
-     * [HTML5 Security Cheatsheet](https://html5sec.org/) for more details.
+     * [#133](https://html5sec.org/#133) of the [HTML5 Security Cheatsheet](https://html5sec.org/)
+     * for more details.
      *
-     * When working with HTML you should always
-     * [quote attribute values](http://wonko.com/post/html-escaping) to reduce
-     * XSS vectors.
+     * When working with HTML you should always [quote attribute values](http://wonko.com/post/html-escaping)
+     * to reduce XSS vectors.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category String
      * @param {string} [string=''] The string to escape.
@@ -16448,7 +15505,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to escape.
      * @returns {string} Returns the escaped string.
@@ -16465,12 +15521,10 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Converts `string` to
-     * [kebab case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles).
+     * Converts `string` to [kebab case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles).
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the kebab cased string.
@@ -16482,7 +15536,7 @@ module.exports = function (e1, e2) {
      * _.kebabCase('fooBar');
      * // => 'foo-bar'
      *
-     * _.kebabCase('__FOO_BAR__');
+     * _.kebabCase('__foo_bar__');
      * // => 'foo-bar'
      */
     var kebabCase = createCompounder(function(result, word, index) {
@@ -16494,13 +15548,12 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the lower cased string.
      * @example
      *
-     * _.lowerCase('--Foo-Bar--');
+     * _.lowerCase('--Foo-Bar');
      * // => 'foo bar'
      *
      * _.lowerCase('fooBar');
@@ -16518,7 +15571,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the converted string.
@@ -16533,12 +15585,29 @@ module.exports = function (e1, e2) {
     var lowerFirst = createCaseFirst('toLowerCase');
 
     /**
+     * Converts the first character of `string` to upper case.
+     *
+     * @static
+     * @memberOf _
+     * @category String
+     * @param {string} [string=''] The string to convert.
+     * @returns {string} Returns the converted string.
+     * @example
+     *
+     * _.upperFirst('fred');
+     * // => 'Fred'
+     *
+     * _.upperFirst('FRED');
+     * // => 'FRED'
+     */
+    var upperFirst = createCaseFirst('toUpperCase');
+
+    /**
      * Pads `string` on the left and right sides if it's shorter than `length`.
      * Padding characters are truncated if they can't be evenly divided by `length`.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to pad.
      * @param {number} [length=0] The padding length.
@@ -16559,16 +15628,15 @@ module.exports = function (e1, e2) {
       string = toString(string);
       length = toInteger(length);
 
-      var strLength = length ? stringSize(string) : 0;
+      var strLength = stringSize(string);
       if (!length || strLength >= length) {
         return string;
       }
-      var mid = (length - strLength) / 2;
-      return (
-        createPadding(nativeFloor(mid), chars) +
-        string +
-        createPadding(nativeCeil(mid), chars)
-      );
+      var mid = (length - strLength) / 2,
+          leftLength = nativeFloor(mid),
+          rightLength = nativeCeil(mid);
+
+      return createPadding('', leftLength, chars) + string + createPadding('', rightLength, chars);
     }
 
     /**
@@ -16577,7 +15645,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to pad.
      * @param {number} [length=0] The padding length.
@@ -16596,12 +15663,7 @@ module.exports = function (e1, e2) {
      */
     function padEnd(string, length, chars) {
       string = toString(string);
-      length = toInteger(length);
-
-      var strLength = length ? stringSize(string) : 0;
-      return (length && strLength < length)
-        ? (string + createPadding(length - strLength, chars))
-        : string;
+      return string + createPadding(string, length, chars);
     }
 
     /**
@@ -16610,7 +15672,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to pad.
      * @param {number} [length=0] The padding length.
@@ -16629,29 +15690,23 @@ module.exports = function (e1, e2) {
      */
     function padStart(string, length, chars) {
       string = toString(string);
-      length = toInteger(length);
-
-      var strLength = length ? stringSize(string) : 0;
-      return (length && strLength < length)
-        ? (createPadding(length - strLength, chars) + string)
-        : string;
+      return createPadding(string, length, chars) + string;
     }
 
     /**
      * Converts `string` to an integer of the specified radix. If `radix` is
-     * `undefined` or `0`, a `radix` of `10` is used unless `value` is a
-     * hexadecimal, in which case a `radix` of `16` is used.
+     * `undefined` or `0`, a `radix` of `10` is used unless `value` is a hexadecimal,
+     * in which case a `radix` of `16` is used.
      *
-     * **Note:** This method aligns with the
-     * [ES5 implementation](https://es5.github.io/#x15.1.2.2) of `parseInt`.
+     * **Note:** This method aligns with the [ES5 implementation](https://es5.github.io/#x15.1.2.2)
+     * of `parseInt`.
      *
      * @static
      * @memberOf _
-     * @since 1.1.0
      * @category String
      * @param {string} string The string to convert.
      * @param {number} [radix=10] The radix to interpret `value` by.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {number} Returns the converted integer.
      * @example
      *
@@ -16663,7 +15718,7 @@ module.exports = function (e1, e2) {
      */
     function parseInt(string, radix, guard) {
       // Chrome fails to trim leading <BOM> whitespace characters.
-      // See https://bugs.chromium.org/p/v8/issues/detail?id=3109 for more details.
+      // See https://code.google.com/p/v8/issues/detail?id=3109 for more details.
       if (guard || radix == null) {
         radix = 0;
       } else if (radix) {
@@ -16678,11 +15733,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to repeat.
-     * @param {number} [n=1] The number of times to repeat the string.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param {number} [n=0] The number of times to repeat the string.
      * @returns {string} Returns the repeated string.
      * @example
      *
@@ -16695,24 +15748,34 @@ module.exports = function (e1, e2) {
      * _.repeat('abc', 0);
      * // => ''
      */
-    function repeat(string, n, guard) {
-      if ((guard ? isIterateeCall(string, n, guard) : n === undefined)) {
-        n = 1;
-      } else {
-        n = toInteger(n);
+    function repeat(string, n) {
+      string = toString(string);
+      n = toInteger(n);
+
+      var result = '';
+      if (!string || n < 1 || n > MAX_SAFE_INTEGER) {
+        return result;
       }
-      return baseRepeat(toString(string), n);
+      // Leverage the exponentiation by squaring algorithm for a faster repeat.
+      // See https://en.wikipedia.org/wiki/Exponentiation_by_squaring for more details.
+      do {
+        if (n % 2) {
+          result += string;
+        }
+        n = nativeFloor(n / 2);
+        string += string;
+      } while (n);
+
+      return result;
     }
 
     /**
      * Replaces matches for `pattern` in `string` with `replacement`.
      *
-     * **Note:** This method is based on
-     * [`String#replace`](https://mdn.io/String/replace).
+     * **Note:** This method is based on [`String#replace`](https://mdn.io/String/replace).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to modify.
      * @param {RegExp|string} pattern The pattern to replace.
@@ -16727,16 +15790,14 @@ module.exports = function (e1, e2) {
       var args = arguments,
           string = toString(args[0]);
 
-      return args.length < 3 ? string : nativeReplace.call(string, args[1], args[2]);
+      return args.length < 3 ? string : string.replace(args[1], args[2]);
     }
 
     /**
-     * Converts `string` to
-     * [snake case](https://en.wikipedia.org/wiki/Snake_case).
+     * Converts `string` to [snake case](https://en.wikipedia.org/wiki/Snake_case).
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the snake cased string.
@@ -16748,7 +15809,7 @@ module.exports = function (e1, e2) {
      * _.snakeCase('fooBar');
      * // => 'foo_bar'
      *
-     * _.snakeCase('--FOO-BAR--');
+     * _.snakeCase('--foo-bar');
      * // => 'foo_bar'
      */
     var snakeCase = createCompounder(function(result, word, index) {
@@ -16758,12 +15819,10 @@ module.exports = function (e1, e2) {
     /**
      * Splits `string` by `separator`.
      *
-     * **Note:** This method is based on
-     * [`String#split`](https://mdn.io/String/split).
+     * **Note:** This method is based on [`String#split`](https://mdn.io/String/split).
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to split.
      * @param {RegExp|string} separator The separator pattern to split by.
@@ -16775,49 +15834,30 @@ module.exports = function (e1, e2) {
      * // => ['a', 'b']
      */
     function split(string, separator, limit) {
-      if (limit && typeof limit != 'number' && isIterateeCall(string, separator, limit)) {
-        separator = limit = undefined;
-      }
-      limit = limit === undefined ? MAX_ARRAY_LENGTH : limit >>> 0;
-      if (!limit) {
-        return [];
-      }
-      string = toString(string);
-      if (string && (
-            typeof separator == 'string' ||
-            (separator != null && !isRegExp(separator))
-          )) {
-        separator = baseToString(separator);
-        if (separator == '' && reHasComplexSymbol.test(string)) {
-          return castSlice(stringToArray(string), 0, limit);
-        }
-      }
-      return nativeSplit.call(string, separator, limit);
+      return toString(string).split(separator, limit);
     }
 
     /**
-     * Converts `string` to
-     * [start case](https://en.wikipedia.org/wiki/Letter_case#Stylistic_or_specialised_usage).
+     * Converts `string` to [start case](https://en.wikipedia.org/wiki/Letter_case#Stylistic_or_specialised_usage).
      *
      * @static
      * @memberOf _
-     * @since 3.1.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the start cased string.
      * @example
      *
-     * _.startCase('--foo-bar--');
+     * _.startCase('--foo-bar');
      * // => 'Foo Bar'
      *
      * _.startCase('fooBar');
      * // => 'Foo Bar'
      *
-     * _.startCase('__FOO_BAR__');
-     * // => 'FOO BAR'
+     * _.startCase('__foo_bar__');
+     * // => 'Foo Bar'
      */
     var startCase = createCompounder(function(result, word, index) {
-      return result + (index ? ' ' : '') + upperFirst(word);
+      return result + (index ? ' ' : '') + capitalize(word);
     });
 
     /**
@@ -16825,13 +15865,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to search.
      * @param {string} [target] The string to search for.
      * @param {number} [position=0] The position to search from.
-     * @returns {boolean} Returns `true` if `string` starts with `target`,
-     *  else `false`.
+     * @returns {boolean} Returns `true` if `string` starts with `target`, else `false`.
      * @example
      *
      * _.startsWith('abc', 'a');
@@ -16846,7 +15884,7 @@ module.exports = function (e1, e2) {
     function startsWith(string, target, position) {
       string = toString(string);
       position = baseClamp(toInteger(position), 0, string.length);
-      return string.lastIndexOf(baseToString(target), position) == position;
+      return string.lastIndexOf(target, position) == position;
     }
 
     /**
@@ -16854,7 +15892,7 @@ module.exports = function (e1, e2) {
      * in "interpolate" delimiters, HTML-escape interpolated data properties in
      * "escape" delimiters, and execute JavaScript in "evaluate" delimiters. Data
      * properties may be accessed as free variables in the template. If a setting
-     * object is given, it takes precedence over `_.templateSettings` values.
+     * object is given it takes precedence over `_.templateSettings` values.
      *
      * **Note:** In the development build `_.template` utilizes
      * [sourceURLs](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl)
@@ -16867,24 +15905,17 @@ module.exports = function (e1, e2) {
      * [Chrome's extensions documentation](https://developer.chrome.com/extensions/sandboxingEval).
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category String
      * @param {string} [string=''] The template string.
-     * @param {Object} [options={}] The options object.
-     * @param {RegExp} [options.escape=_.templateSettings.escape]
-     *  The HTML "escape" delimiter.
-     * @param {RegExp} [options.evaluate=_.templateSettings.evaluate]
-     *  The "evaluate" delimiter.
-     * @param {Object} [options.imports=_.templateSettings.imports]
-     *  An object to import into the template as free variables.
-     * @param {RegExp} [options.interpolate=_.templateSettings.interpolate]
-     *  The "interpolate" delimiter.
-     * @param {string} [options.sourceURL='lodash.templateSources[n]']
-     *  The sourceURL of the compiled template.
-     * @param {string} [options.variable='obj']
-     *  The data object variable name.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param {Object} [options] The options object.
+     * @param {RegExp} [options.escape] The HTML "escape" delimiter.
+     * @param {RegExp} [options.evaluate] The "evaluate" delimiter.
+     * @param {Object} [options.imports] An object to import into the template as free variables.
+     * @param {RegExp} [options.interpolate] The "interpolate" delimiter.
+     * @param {string} [options.sourceURL] The sourceURL of the template's compiled source.
+     * @param {string} [options.variable] The data object variable name.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Function} Returns the compiled template function.
      * @example
      *
@@ -16933,7 +15964,7 @@ module.exports = function (e1, e2) {
      * // Use the `sourceURL` option to specify a custom sourceURL for the template.
      * var compiled = _.template('hello <%= user %>!', { 'sourceURL': '/basic/greeting.jst' });
      * compiled(data);
-     * // => Find the source of "greeting.jst" under the Sources tab or Resources panel of the web inspector.
+     * // => find the source of "greeting.jst" under the Sources tab or Resources panel of the web inspector
      *
      * // Use the `variable` option to ensure a with-statement isn't used in the compiled template.
      * var compiled = _.template('hi <%= data.user %>!', { 'variable': 'data' });
@@ -16953,8 +15984,7 @@ module.exports = function (e1, e2) {
      * ');
      */
     function template(string, options, guard) {
-      // Based on John Resig's `tmpl` implementation
-      // (http://ejohn.org/blog/javascript-micro-templating/)
+      // Based on John Resig's `tmpl` implementation (http://ejohn.org/blog/javascript-micro-templating/)
       // and Laura Doktorova's doT.js (https://github.com/olado/doT).
       var settings = lodash.templateSettings;
 
@@ -17066,14 +16096,13 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the lower cased string.
      * @example
      *
-     * _.toLower('--Foo-Bar--');
-     * // => '--foo-bar--'
+     * _.toLower('--Foo-Bar');
+     * // => '--foo-bar'
      *
      * _.toLower('fooBar');
      * // => 'foobar'
@@ -17091,14 +16120,13 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the upper cased string.
      * @example
      *
-     * _.toUpper('--foo-bar--');
-     * // => '--FOO-BAR--'
+     * _.toUpper('--foo-bar');
+     * // => '--FOO-BAR'
      *
      * _.toUpper('fooBar');
      * // => 'FOOBAR'
@@ -17115,11 +16143,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to trim.
      * @param {string} [chars=whitespace] The characters to trim.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {string} Returns the trimmed string.
      * @example
      *
@@ -17134,18 +16161,22 @@ module.exports = function (e1, e2) {
      */
     function trim(string, chars, guard) {
       string = toString(string);
-      if (string && (guard || chars === undefined)) {
+      if (!string) {
+        return string;
+      }
+      if (guard || chars === undefined) {
         return string.replace(reTrim, '');
       }
-      if (!string || !(chars = baseToString(chars))) {
+      chars = (chars + '');
+      if (!chars) {
         return string;
       }
       var strSymbols = stringToArray(string),
-          chrSymbols = stringToArray(chars),
-          start = charsStartIndex(strSymbols, chrSymbols),
-          end = charsEndIndex(strSymbols, chrSymbols) + 1;
+          chrSymbols = stringToArray(chars);
 
-      return castSlice(strSymbols, start, end).join('');
+      return strSymbols
+        .slice(charsStartIndex(strSymbols, chrSymbols), charsEndIndex(strSymbols, chrSymbols) + 1)
+        .join('');
     }
 
     /**
@@ -17153,11 +16184,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to trim.
      * @param {string} [chars=whitespace] The characters to trim.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {string} Returns the trimmed string.
      * @example
      *
@@ -17169,16 +16199,20 @@ module.exports = function (e1, e2) {
      */
     function trimEnd(string, chars, guard) {
       string = toString(string);
-      if (string && (guard || chars === undefined)) {
-        return string.replace(reTrimEnd, '');
-      }
-      if (!string || !(chars = baseToString(chars))) {
+      if (!string) {
         return string;
       }
-      var strSymbols = stringToArray(string),
-          end = charsEndIndex(strSymbols, stringToArray(chars)) + 1;
-
-      return castSlice(strSymbols, 0, end).join('');
+      if (guard || chars === undefined) {
+        return string.replace(reTrimEnd, '');
+      }
+      chars = (chars + '');
+      if (!chars) {
+        return string;
+      }
+      var strSymbols = stringToArray(string);
+      return strSymbols
+        .slice(0, charsEndIndex(strSymbols, stringToArray(chars)) + 1)
+        .join('');
     }
 
     /**
@@ -17186,11 +16220,10 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to trim.
      * @param {string} [chars=whitespace] The characters to trim.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {string} Returns the trimmed string.
      * @example
      *
@@ -17202,16 +16235,20 @@ module.exports = function (e1, e2) {
      */
     function trimStart(string, chars, guard) {
       string = toString(string);
-      if (string && (guard || chars === undefined)) {
-        return string.replace(reTrimStart, '');
-      }
-      if (!string || !(chars = baseToString(chars))) {
+      if (!string) {
         return string;
       }
-      var strSymbols = stringToArray(string),
-          start = charsStartIndex(strSymbols, stringToArray(chars));
-
-      return castSlice(strSymbols, start).join('');
+      if (guard || chars === undefined) {
+        return string.replace(reTrimStart, '');
+      }
+      chars = (chars + '');
+      if (!chars) {
+        return string;
+      }
+      var strSymbols = stringToArray(string);
+      return strSymbols
+        .slice(charsStartIndex(strSymbols, stringToArray(chars)))
+        .join('');
     }
 
     /**
@@ -17221,10 +16258,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to truncate.
-     * @param {Object} [options={}] The options object.
+     * @param {Object} [options=({})] The options object.
      * @param {number} [options.length=30] The maximum string length.
      * @param {string} [options.omission='...'] The string to indicate text is omitted.
      * @param {RegExp|string} [options.separator] The separator pattern to truncate to.
@@ -17258,7 +16294,7 @@ module.exports = function (e1, e2) {
       if (isObject(options)) {
         var separator = 'separator' in options ? options.separator : separator;
         length = 'length' in options ? toInteger(options.length) : length;
-        omission = 'omission' in options ? baseToString(options.omission) : omission;
+        omission = 'omission' in options ? toString(options.omission) : omission;
       }
       string = toString(string);
 
@@ -17275,7 +16311,7 @@ module.exports = function (e1, e2) {
         return omission;
       }
       var result = strSymbols
-        ? castSlice(strSymbols, 0, end).join('')
+        ? strSymbols.slice(0, end).join('')
         : string.slice(0, end);
 
       if (separator === undefined) {
@@ -17298,7 +16334,7 @@ module.exports = function (e1, e2) {
           }
           result = result.slice(0, newEnd === undefined ? end : newEnd);
         }
-      } else if (string.indexOf(baseToString(separator), end) != end) {
+      } else if (string.indexOf(separator, end) != end) {
         var index = result.lastIndexOf(separator);
         if (index > -1) {
           result = result.slice(0, index);
@@ -17309,15 +16345,14 @@ module.exports = function (e1, e2) {
 
     /**
      * The inverse of `_.escape`; this method converts the HTML entities
-     * `&amp;`, `&lt;`, `&gt;`, `&quot;`, `&#39;`, and `&#96;` in `string` to
-     * their corresponding characters.
+     * `&amp;`, `&lt;`, `&gt;`, `&quot;`, `&#39;`, and `&#96;` in `string` to their
+     * corresponding characters.
      *
-     * **Note:** No other HTML entities are unescaped. To unescape additional
-     * HTML entities use a third-party library like [_he_](https://mths.be/he).
+     * **Note:** No other HTML entities are unescaped. To unescape additional HTML
+     * entities use a third-party library like [_he_](https://mths.be/he).
      *
      * @static
      * @memberOf _
-     * @since 0.6.0
      * @category String
      * @param {string} [string=''] The string to unescape.
      * @returns {string} Returns the unescaped string.
@@ -17338,7 +16373,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category String
      * @param {string} [string=''] The string to convert.
      * @returns {string} Returns the upper cased string.
@@ -17358,34 +16392,14 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Converts the first character of `string` to upper case.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.0.0
-     * @category String
-     * @param {string} [string=''] The string to convert.
-     * @returns {string} Returns the converted string.
-     * @example
-     *
-     * _.upperFirst('fred');
-     * // => 'Fred'
-     *
-     * _.upperFirst('FRED');
-     * // => 'FRED'
-     */
-    var upperFirst = createCaseFirst('toUpperCase');
-
-    /**
      * Splits `string` into an array of its words.
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category String
      * @param {string} [string=''] The string to inspect.
      * @param {RegExp|string} [pattern] The pattern to match words.
-     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Array} Returns the words of `string`.
      * @example
      *
@@ -17413,10 +16427,8 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Util
      * @param {Function} func The function to attempt.
-     * @param {...*} [args] The arguments to invoke `func` with.
      * @returns {*} Returns the `func` result or error object.
      * @example
      *
@@ -17444,11 +16456,11 @@ module.exports = function (e1, e2) {
      * **Note:** This method doesn't set the "length" property of bound functions.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Util
      * @param {Object} object The object to bind and assign the bound methods to.
-     * @param {...(string|string[])} methodNames The object method names to bind.
+     * @param {...(string|string[])} methodNames The object method names to bind,
+     *  specified individually or in arrays.
      * @returns {Object} Returns `object`.
      * @example
      *
@@ -17461,25 +16473,23 @@ module.exports = function (e1, e2) {
      *
      * _.bindAll(view, 'onClick');
      * jQuery(element).on('click', view.onClick);
-     * // => Logs 'clicked docs' when clicked.
+     * // => logs 'clicked docs' when clicked
      */
     var bindAll = rest(function(object, methodNames) {
       arrayEach(baseFlatten(methodNames, 1), function(key) {
-        key = toKey(key);
         object[key] = bind(object[key], object);
       });
       return object;
     });
 
     /**
-     * Creates a function that iterates over `pairs` and invokes the corresponding
+     * Creates a function that iterates over `pairs` invoking the corresponding
      * function of the first predicate to return truthy. The predicate-function
      * pairs are invoked with the `this` binding and arguments of the created
      * function.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
      * @param {Array} pairs The predicate-function pairs.
      * @returns {Function} Returns the new function.
@@ -17529,7 +16539,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
      * @param {Object} source The object of property predicates to conform to.
      * @returns {Function} Returns the new function.
@@ -17552,7 +16561,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.4.0
      * @category Util
      * @param {*} value The value to return from the new function.
      * @returns {Function} Returns the new function.
@@ -17577,11 +16585,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Util
      * @param {...(Function|Function[])} [funcs] Functions to invoke.
      * @returns {Function} Returns the new function.
-     * @see _.flowRight
      * @example
      *
      * function square(n) {
@@ -17599,12 +16605,10 @@ module.exports = function (e1, e2) {
      * invokes the given functions from right to left.
      *
      * @static
-     * @since 3.0.0
      * @memberOf _
      * @category Util
      * @param {...(Function|Function[])} [funcs] Functions to invoke.
      * @returns {Function} Returns the new function.
-     * @see _.flow
      * @example
      *
      * function square(n) {
@@ -17621,7 +16625,6 @@ module.exports = function (e1, e2) {
      * This method returns the first argument given to it.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Util
      * @param {*} value Any value.
@@ -17639,13 +16642,12 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a function that invokes `func` with the arguments of the created
-     * function. If `func` is a property name, the created function returns the
-     * property value for a given element. If `func` is an array or object, the
-     * created function returns `true` for elements that contain the equivalent
-     * source properties, otherwise it returns `false`.
+     * function. If `func` is a property name the created callback returns the
+     * property value for a given element. If `func` is an object the created
+     * callback returns `true` for elements that contain the equivalent object
+     * properties, otherwise it returns `false`.
      *
      * @static
-     * @since 4.0.0
      * @memberOf _
      * @category Util
      * @param {*} [func=_.identity] The value to convert to a callback.
@@ -17653,31 +16655,20 @@ module.exports = function (e1, e2) {
      * @example
      *
      * var users = [
-     *   { 'user': 'barney', 'age': 36, 'active': true },
-     *   { 'user': 'fred',   'age': 40, 'active': false }
+     *   { 'user': 'barney', 'age': 36 },
+     *   { 'user': 'fred',   'age': 40 }
      * ];
      *
-     * // The `_.matches` iteratee shorthand.
-     * _.filter(users, _.iteratee({ 'user': 'barney', 'active': true }));
-     * // => [{ 'user': 'barney', 'age': 36, 'active': true }]
-     *
-     * // The `_.matchesProperty` iteratee shorthand.
-     * _.filter(users, _.iteratee(['user', 'fred']));
-     * // => [{ 'user': 'fred', 'age': 40 }]
-     *
-     * // The `_.property` iteratee shorthand.
-     * _.map(users, _.iteratee('user'));
-     * // => ['barney', 'fred']
-     *
      * // Create custom iteratee shorthands.
-     * _.iteratee = _.wrap(_.iteratee, function(iteratee, func) {
-     *   return !_.isRegExp(func) ? iteratee(func) : function(string) {
-     *     return func.test(string);
+     * _.iteratee = _.wrap(_.iteratee, function(callback, func) {
+     *   var p = /^(\S+)\s*([<>])\s*(\S+)$/.exec(func);
+     *   return !p ? callback(func) : function(object) {
+     *     return (p[2] == '>' ? object[p[1]] > p[3] : object[p[1]] < p[3]);
      *   };
      * });
      *
-     * _.filter(['abc', 'def'], /ef/);
-     * // => ['def']
+     * _.filter(users, 'age > 36');
+     * // => [{ 'user': 'fred', 'age': 40 }]
      */
     function iteratee(func) {
       return baseIteratee(typeof func == 'function' ? func : baseClone(func, true));
@@ -17693,7 +16684,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Util
      * @param {Object} source The object of property values to match.
      * @returns {Function} Returns the new function.
@@ -17720,7 +16710,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.2.0
      * @category Util
      * @param {Array|string} path The path of the property to get.
      * @param {*} srcValue The value to match.
@@ -17745,7 +16734,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.7.0
      * @category Util
      * @param {Array|string} path The path of the method to invoke.
      * @param {...*} [args] The arguments to invoke the method with.
@@ -17753,15 +16741,15 @@ module.exports = function (e1, e2) {
      * @example
      *
      * var objects = [
-     *   { 'a': { 'b': _.constant(2) } },
-     *   { 'a': { 'b': _.constant(1) } }
+     *   { 'a': { 'b': { 'c': _.constant(2) } } },
+     *   { 'a': { 'b': { 'c': _.constant(1) } } }
      * ];
      *
-     * _.map(objects, _.method('a.b'));
+     * _.map(objects, _.method('a.b.c'));
      * // => [2, 1]
      *
-     * _.map(objects, _.method(['a', 'b']));
-     * // => [2, 1]
+     * _.invokeMap(_.sortBy(objects, _.method(['a', 'b', 'c'])), 'a.b.c');
+     * // => [1, 2]
      */
     var method = rest(function(path, args) {
       return function(object) {
@@ -17776,7 +16764,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.7.0
      * @category Util
      * @param {Object} object The object to query.
      * @param {...*} [args] The arguments to invoke the method with.
@@ -17799,21 +16786,21 @@ module.exports = function (e1, e2) {
     });
 
     /**
-     * Adds all own enumerable string keyed function properties of a source
-     * object to the destination object. If `object` is a function, then methods
-     * are added to its prototype as well.
+     * Adds all own enumerable function properties of a source object to the
+     * destination object. If `object` is a function then methods are added to
+     * its prototype as well.
      *
      * **Note:** Use `_.runInContext` to create a pristine `lodash` function to
      * avoid conflicts caused by modifying the original.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Util
      * @param {Function|Object} [object=lodash] The destination object.
      * @param {Object} source The object of functions to add.
-     * @param {Object} [options={}] The options object.
-     * @param {boolean} [options.chain=true] Specify whether mixins are chainable.
+     * @param {Object} [options] The options object.
+     * @param {boolean} [options.chain=true] Specify whether the functions added
+     *  are chainable.
      * @returns {Function|Object} Returns `object`.
      * @example
      *
@@ -17845,7 +16832,7 @@ module.exports = function (e1, e2) {
         object = this;
         methodNames = baseFunctions(source, keys(source));
       }
-      var chain = !(isObject(options) && 'chain' in options) || !!options.chain,
+      var chain = (isObject(options) && 'chain' in options) ? options.chain : true,
           isFunc = isFunction(object);
 
       arrayEach(methodNames, function(methodName) {
@@ -17875,7 +16862,6 @@ module.exports = function (e1, e2) {
      * the `lodash` function.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Util
      * @returns {Function} Returns the `lodash` function.
@@ -17896,7 +16882,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.3.0
      * @category Util
      * @example
      *
@@ -17910,42 +16895,35 @@ module.exports = function (e1, e2) {
     }
 
     /**
-     * Creates a function that returns its nth argument. If `n` is negative,
-     * the nth argument from the end is returned.
+     * Creates a function that returns its nth argument.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
      * @param {number} [n=0] The index of the argument to return.
      * @returns {Function} Returns the new function.
      * @example
      *
      * var func = _.nthArg(1);
-     * func('a', 'b', 'c', 'd');
-     * // => 'b'
      *
-     * var func = _.nthArg(-2);
-     * func('a', 'b', 'c', 'd');
-     * // => 'c'
+     * func('a', 'b', 'c');
+     * // => 'b'
      */
     function nthArg(n) {
       n = toInteger(n);
-      return rest(function(args) {
-        return baseNth(args, n);
-      });
+      return function() {
+        return arguments[n];
+      };
     }
 
     /**
-     * Creates a function that invokes `iteratees` with the arguments it receives
-     * and returns their results.
+     * Creates a function that invokes `iteratees` with the arguments provided
+     * to the created function and returns their results.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
-     * @param {...(Array|Array[]|Function|Function[]|Object|Object[]|string|string[])}
-     *  [iteratees=[_.identity]] The iteratees to invoke.
+     * @param {...(Function|Function[])} iteratees The iteratees to invoke.
      * @returns {Function} Returns the new function.
      * @example
      *
@@ -17958,14 +16936,12 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a function that checks if **all** of the `predicates` return
-     * truthy when invoked with the arguments it receives.
+     * truthy when invoked with the arguments provided to the created function.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
-     * @param {...(Array|Array[]|Function|Function[]|Object|Object[]|string|string[])}
-     *  [predicates=[_.identity]] The predicates to check.
+     * @param {...(Function|Function[])} predicates The predicates to check.
      * @returns {Function} Returns the new function.
      * @example
      *
@@ -17984,14 +16960,12 @@ module.exports = function (e1, e2) {
 
     /**
      * Creates a function that checks if **any** of the `predicates` return
-     * truthy when invoked with the arguments it receives.
+     * truthy when invoked with the arguments provided to the created function.
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
-     * @param {...(Array|Array[]|Function|Function[]|Object|Object[]|string|string[])}
-     *  [predicates=[_.identity]] The predicates to check.
+     * @param {...(Function|Function[])} predicates The predicates to check.
      * @returns {Function} Returns the new function.
      * @example
      *
@@ -18013,25 +16987,24 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 2.4.0
      * @category Util
      * @param {Array|string} path The path of the property to get.
      * @returns {Function} Returns the new function.
      * @example
      *
      * var objects = [
-     *   { 'a': { 'b': 2 } },
-     *   { 'a': { 'b': 1 } }
+     *   { 'a': { 'b': { 'c': 2 } } },
+     *   { 'a': { 'b': { 'c': 1 } } }
      * ];
      *
-     * _.map(objects, _.property('a.b'));
+     * _.map(objects, _.property('a.b.c'));
      * // => [2, 1]
      *
-     * _.map(_.sortBy(objects, _.property(['a', 'b'])), 'a.b');
+     * _.map(_.sortBy(objects, _.property(['a', 'b', 'c'])), 'a.b.c');
      * // => [1, 2]
      */
     function property(path) {
-      return isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path);
+      return isKey(path) ? baseProperty(path) : basePropertyDeep(path);
     }
 
     /**
@@ -18040,7 +17013,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.0.0
      * @category Util
      * @param {Object} object The object to query.
      * @returns {Function} Returns the new function.
@@ -18064,21 +17036,19 @@ module.exports = function (e1, e2) {
     /**
      * Creates an array of numbers (positive and/or negative) progressing from
      * `start` up to, but not including, `end`. A step of `-1` is used if a negative
-     * `start` is specified without an `end` or `step`. If `end` is not specified,
+     * `start` is specified without an `end` or `step`. If `end` is not specified
      * it's set to `start` with `start` then set to `0`.
      *
      * **Note:** JavaScript follows the IEEE-754 standard for resolving
      * floating-point values which can produce unexpected results.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Util
      * @param {number} [start=0] The start of the range.
      * @param {number} end The end of the range.
      * @param {number} [step=1] The value to increment or decrement by.
      * @returns {Array} Returns the new array of numbers.
-     * @see _.inRange, _.rangeRight
      * @example
      *
      * _.range(4);
@@ -18110,13 +17080,11 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
      * @param {number} [start=0] The start of the range.
      * @param {number} end The end of the range.
      * @param {number} [step=1] The value to increment or decrement by.
      * @returns {Array} Returns the new array of numbers.
-     * @see _.inRange, _.range
      * @example
      *
      * _.rangeRight(4);
@@ -18147,7 +17115,6 @@ module.exports = function (e1, e2) {
      * each invocation. The iteratee is invoked with one argument; (index).
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Util
      * @param {number} n The number of times to invoke `iteratee`.
@@ -18169,7 +17136,7 @@ module.exports = function (e1, e2) {
       var index = MAX_ARRAY_LENGTH,
           length = nativeMin(n, MAX_ARRAY_LENGTH);
 
-      iteratee = getIteratee(iteratee);
+      iteratee = baseCastFunction(iteratee);
       n -= MAX_ARRAY_LENGTH;
 
       var result = baseTimes(length, iteratee);
@@ -18184,7 +17151,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Util
      * @param {*} value The value to convert.
      * @returns {Array} Returns the new property path array.
@@ -18206,17 +17172,13 @@ module.exports = function (e1, e2) {
      * // => false
      */
     function toPath(value) {
-      if (isArray(value)) {
-        return arrayMap(value, toKey);
-      }
-      return isSymbol(value) ? [value] : copyArray(stringToPath(value));
+      return isArray(value) ? arrayMap(value, String) : stringToPath(value);
     }
 
     /**
-     * Generates a unique ID. If `prefix` is given, the ID is appended to it.
+     * Generates a unique ID. If `prefix` is given the ID is appended to it.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Util
      * @param {string} [prefix=''] The value to prefix the ID with.
@@ -18241,7 +17203,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 3.4.0
      * @category Math
      * @param {number} augend The first number in an addition.
      * @param {number} addend The second number in an addition.
@@ -18251,16 +17212,25 @@ module.exports = function (e1, e2) {
      * _.add(6, 4);
      * // => 10
      */
-    var add = createMathOperation(function(augend, addend) {
-      return augend + addend;
-    });
+    function add(augend, addend) {
+      var result;
+      if (augend === undefined && addend === undefined) {
+        return 0;
+      }
+      if (augend !== undefined) {
+        result = augend;
+      }
+      if (addend !== undefined) {
+        result = result === undefined ? addend : (result + addend);
+      }
+      return result;
+    }
 
     /**
      * Computes `number` rounded up to `precision`.
      *
      * @static
      * @memberOf _
-     * @since 3.10.0
      * @category Math
      * @param {number} number The number to round up.
      * @param {number} [precision=0] The precision to round up to.
@@ -18279,30 +17249,10 @@ module.exports = function (e1, e2) {
     var ceil = createRound('ceil');
 
     /**
-     * Divide two numbers.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.7.0
-     * @category Math
-     * @param {number} dividend The first number in a division.
-     * @param {number} divisor The second number in a division.
-     * @returns {number} Returns the quotient.
-     * @example
-     *
-     * _.divide(6, 4);
-     * // => 1.5
-     */
-    var divide = createMathOperation(function(dividend, divisor) {
-      return dividend / divisor;
-    });
-
-    /**
      * Computes `number` rounded down to `precision`.
      *
      * @static
      * @memberOf _
-     * @since 3.10.0
      * @category Math
      * @param {number} number The number to round down.
      * @param {number} [precision=0] The precision to round down to.
@@ -18321,11 +17271,10 @@ module.exports = function (e1, e2) {
     var floor = createRound('floor');
 
     /**
-     * Computes the maximum value of `array`. If `array` is empty or falsey,
+     * Computes the maximum value of `array`. If `array` is empty or falsey
      * `undefined` is returned.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Math
      * @param {Array} array The array to iterate over.
@@ -18340,7 +17289,7 @@ module.exports = function (e1, e2) {
      */
     function max(array) {
       return (array && array.length)
-        ? baseExtremum(array, identity, baseGt)
+        ? baseExtremum(array, identity, gt)
         : undefined;
     }
 
@@ -18351,11 +17300,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Math
      * @param {Array} array The array to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {*} Returns the maximum value.
      * @example
      *
@@ -18370,7 +17317,7 @@ module.exports = function (e1, e2) {
      */
     function maxBy(array, iteratee) {
       return (array && array.length)
-        ? baseExtremum(array, getIteratee(iteratee), baseGt)
+        ? baseExtremum(array, getIteratee(iteratee), gt)
         : undefined;
     }
 
@@ -18379,7 +17326,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Math
      * @param {Array} array The array to iterate over.
      * @returns {number} Returns the mean.
@@ -18389,43 +17335,14 @@ module.exports = function (e1, e2) {
      * // => 5
      */
     function mean(array) {
-      return baseMean(array, identity);
+      return sum(array) / (array ? array.length : 0);
     }
 
     /**
-     * This method is like `_.mean` except that it accepts `iteratee` which is
-     * invoked for each element in `array` to generate the value to be averaged.
-     * The iteratee is invoked with one argument: (value).
-     *
-     * @static
-     * @memberOf _
-     * @since 4.7.0
-     * @category Math
-     * @param {Array} array The array to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
-     * @returns {number} Returns the mean.
-     * @example
-     *
-     * var objects = [{ 'n': 4 }, { 'n': 2 }, { 'n': 8 }, { 'n': 6 }];
-     *
-     * _.meanBy(objects, function(o) { return o.n; });
-     * // => 5
-     *
-     * // The `_.property` iteratee shorthand.
-     * _.meanBy(objects, 'n');
-     * // => 5
-     */
-    function meanBy(array, iteratee) {
-      return baseMean(array, getIteratee(iteratee));
-    }
-
-    /**
-     * Computes the minimum value of `array`. If `array` is empty or falsey,
+     * Computes the minimum value of `array`. If `array` is empty or falsey
      * `undefined` is returned.
      *
      * @static
-     * @since 0.1.0
      * @memberOf _
      * @category Math
      * @param {Array} array The array to iterate over.
@@ -18440,7 +17357,7 @@ module.exports = function (e1, e2) {
      */
     function min(array) {
       return (array && array.length)
-        ? baseExtremum(array, identity, baseLt)
+        ? baseExtremum(array, identity, lt)
         : undefined;
     }
 
@@ -18451,11 +17368,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Math
      * @param {Array} array The array to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {*} Returns the minimum value.
      * @example
      *
@@ -18470,35 +17385,15 @@ module.exports = function (e1, e2) {
      */
     function minBy(array, iteratee) {
       return (array && array.length)
-        ? baseExtremum(array, getIteratee(iteratee), baseLt)
+        ? baseExtremum(array, getIteratee(iteratee), lt)
         : undefined;
     }
-
-    /**
-     * Multiply two numbers.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.7.0
-     * @category Math
-     * @param {number} multiplier The first number in a multiplication.
-     * @param {number} multiplicand The second number in a multiplication.
-     * @returns {number} Returns the product.
-     * @example
-     *
-     * _.multiply(6, 4);
-     * // => 24
-     */
-    var multiply = createMathOperation(function(multiplier, multiplicand) {
-      return multiplier * multiplicand;
-    });
 
     /**
      * Computes `number` rounded to `precision`.
      *
      * @static
      * @memberOf _
-     * @since 3.10.0
      * @category Math
      * @param {number} number The number to round.
      * @param {number} [precision=0] The precision to round to.
@@ -18521,7 +17416,6 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Math
      * @param {number} minuend The first number in a subtraction.
      * @param {number} subtrahend The second number in a subtraction.
@@ -18531,16 +17425,25 @@ module.exports = function (e1, e2) {
      * _.subtract(6, 4);
      * // => 2
      */
-    var subtract = createMathOperation(function(minuend, subtrahend) {
-      return minuend - subtrahend;
-    });
+    function subtract(minuend, subtrahend) {
+      var result;
+      if (minuend === undefined && subtrahend === undefined) {
+        return 0;
+      }
+      if (minuend !== undefined) {
+        result = minuend;
+      }
+      if (subtrahend !== undefined) {
+        result = result === undefined ? subtrahend : (result - subtrahend);
+      }
+      return result;
+    }
 
     /**
      * Computes the sum of the values in `array`.
      *
      * @static
      * @memberOf _
-     * @since 3.4.0
      * @category Math
      * @param {Array} array The array to iterate over.
      * @returns {number} Returns the sum.
@@ -18562,11 +17465,9 @@ module.exports = function (e1, e2) {
      *
      * @static
      * @memberOf _
-     * @since 4.0.0
      * @category Math
      * @param {Array} array The array to iterate over.
-     * @param {Array|Function|Object|string} [iteratee=_.identity]
-     *  The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
      * @returns {number} Returns the sum.
      * @example
      *
@@ -18587,7 +17488,40 @@ module.exports = function (e1, e2) {
 
     /*------------------------------------------------------------------------*/
 
-    // Add methods that return wrapped values in chain sequences.
+    // Ensure wrappers are instances of `baseLodash`.
+    lodash.prototype = baseLodash.prototype;
+    lodash.prototype.constructor = lodash;
+
+    LodashWrapper.prototype = baseCreate(baseLodash.prototype);
+    LodashWrapper.prototype.constructor = LodashWrapper;
+
+    LazyWrapper.prototype = baseCreate(baseLodash.prototype);
+    LazyWrapper.prototype.constructor = LazyWrapper;
+
+    // Avoid inheriting from `Object.prototype` when possible.
+    Hash.prototype = nativeCreate ? nativeCreate(null) : objectProto;
+
+    // Add functions to the `MapCache`.
+    MapCache.prototype.clear = mapClear;
+    MapCache.prototype['delete'] = mapDelete;
+    MapCache.prototype.get = mapGet;
+    MapCache.prototype.has = mapHas;
+    MapCache.prototype.set = mapSet;
+
+    // Add functions to the `SetCache`.
+    SetCache.prototype.push = cachePush;
+
+    // Add functions to the `Stack` cache.
+    Stack.prototype.clear = stackClear;
+    Stack.prototype['delete'] = stackDelete;
+    Stack.prototype.get = stackGet;
+    Stack.prototype.has = stackHas;
+    Stack.prototype.set = stackSet;
+
+    // Assign cache to `_.memoize`.
+    memoize.Cache = MapCache;
+
+    // Add functions that return wrapped values when chaining.
     lodash.after = after;
     lodash.ary = ary;
     lodash.assign = assign;
@@ -18626,8 +17560,6 @@ module.exports = function (e1, e2) {
     lodash.fill = fill;
     lodash.filter = filter;
     lodash.flatMap = flatMap;
-    lodash.flatMapDeep = flatMapDeep;
-    lodash.flatMapDepth = flatMapDepth;
     lodash.flatten = flatten;
     lodash.flattenDeep = flattenDeep;
     lodash.flattenDepth = flattenDepth;
@@ -18739,17 +17671,15 @@ module.exports = function (e1, e2) {
     lodash.zipWith = zipWith;
 
     // Add aliases.
-    lodash.entries = toPairs;
-    lodash.entriesIn = toPairsIn;
     lodash.extend = assignIn;
     lodash.extendWith = assignInWith;
 
-    // Add methods to `lodash.prototype`.
+    // Add functions to `lodash.prototype`.
     mixin(lodash, lodash);
 
     /*------------------------------------------------------------------------*/
 
-    // Add methods that return unwrapped values in chain sequences.
+    // Add functions that return unwrapped values when chaining.
     lodash.add = add;
     lodash.attempt = attempt;
     lodash.camelCase = camelCase;
@@ -18761,7 +17691,6 @@ module.exports = function (e1, e2) {
     lodash.cloneDeepWith = cloneDeepWith;
     lodash.cloneWith = cloneWith;
     lodash.deburr = deburr;
-    lodash.divide = divide;
     lodash.endsWith = endsWith;
     lodash.eq = eq;
     lodash.escape = escape;
@@ -18839,11 +17768,8 @@ module.exports = function (e1, e2) {
     lodash.max = max;
     lodash.maxBy = maxBy;
     lodash.mean = mean;
-    lodash.meanBy = meanBy;
     lodash.min = min;
     lodash.minBy = minBy;
-    lodash.multiply = multiply;
-    lodash.nth = nth;
     lodash.noConflict = noConflict;
     lodash.noop = noop;
     lodash.now = now;
@@ -19083,7 +18009,7 @@ module.exports = function (e1, e2) {
       };
     });
 
-    // Add `Array` methods to `lodash.prototype`.
+    // Add `Array` and `String` methods to `lodash.prototype`.
     arrayEach(['pop', 'push', 'shift', 'sort', 'splice', 'unshift'], function(methodName) {
       var func = arrayProto[methodName],
           chainName = /^(?:push|sort|unshift)$/.test(methodName) ? 'tap' : 'thru',
@@ -19092,16 +18018,15 @@ module.exports = function (e1, e2) {
       lodash.prototype[methodName] = function() {
         var args = arguments;
         if (retUnwrapped && !this.__chain__) {
-          var value = this.value();
-          return func.apply(isArray(value) ? value : [], args);
+          return func.apply(this.value(), args);
         }
         return this[chainName](function(value) {
-          return func.apply(isArray(value) ? value : [], args);
+          return func.apply(value, args);
         });
       };
     });
 
-    // Map minified method names to their real names.
+    // Map minified function names to their real names.
     baseForOwn(LazyWrapper.prototype, function(func, methodName) {
       var lodashFunc = lodash[methodName];
       if (lodashFunc) {
@@ -19117,15 +18042,16 @@ module.exports = function (e1, e2) {
       'func': undefined
     }];
 
-    // Add methods to `LazyWrapper`.
+    // Add functions to the lazy wrapper.
     LazyWrapper.prototype.clone = lazyClone;
     LazyWrapper.prototype.reverse = lazyReverse;
     LazyWrapper.prototype.value = lazyValue;
 
-    // Add chain sequence methods to the `lodash` wrapper.
+    // Add chaining functions to the `lodash` wrapper.
     lodash.prototype.at = wrapperAt;
     lodash.prototype.chain = wrapperChain;
     lodash.prototype.commit = wrapperCommit;
+    lodash.prototype.flatMap = wrapperFlatMap;
     lodash.prototype.next = wrapperNext;
     lodash.prototype.plant = wrapperPlant;
     lodash.prototype.reverse = wrapperReverse;
@@ -19142,11 +18068,9 @@ module.exports = function (e1, e2) {
   // Export lodash.
   var _ = runInContext();
 
-  // Expose Lodash on the free variable `window` or `self` when available so it's
-  // globally accessible, even when bundled with Browserify, Webpack, etc. This
-  // also prevents errors in cases where Lodash is loaded by a script tag in the
-  // presence of an AMD loader. See http://requirejs.org/docs/errors.html#mismatch
-  // for more details. Use `_.noConflict` to remove Lodash from the global object.
+  // Expose lodash on the free variable `window` or `self` when available. This
+  // prevents errors in cases where lodash is loaded by a script tag in the presence
+  // of an AMD loader. See http://requirejs.org/docs/errors.html#mismatch for more details.
   (freeWindow || freeSelf || {})._ = _;
 
   // Some AMD build optimizers like r.js check for condition patterns like the following:
@@ -21255,7 +20179,7 @@ function merge(target, source, deep) {
 },{}],119:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.21
+ * Vue.js v1.0.18
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -21900,7 +20824,7 @@ function processFilterArg(arg) {
  *   ]
  * }
  *
- * @param {String} s
+ * @param {String} str
  * @return {Object}
  */
 
@@ -21992,7 +20916,7 @@ function compileRegex() {
   var close = escapeRegex(config.delimiters[1]);
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
-  tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
+  tagRE = new RegExp(unsafeOpen + '(.+?)' + unsafeClose + '|' + open + '(.+?)' + close, 'g');
   htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
@@ -22017,6 +20941,7 @@ function parseText(text) {
   if (hit) {
     return hit;
   }
+  text = text.replace(/\n/g, '');
   if (!tagRE.test(text)) {
     return null;
   }
@@ -22232,21 +21157,22 @@ var config = Object.defineProperties({
 });
 
 var warn = undefined;
-var formatComponentName = undefined;
 
 if (process.env.NODE_ENV !== 'production') {
   (function () {
     var hasConsole = typeof console !== 'undefined';
-
-    warn = function (msg, vm) {
-      if (hasConsole && !config.silent) {
-        console.error('[Vue warn]: ' + msg + (vm ? formatComponentName(vm) : ''));
+    warn = function (msg, e) {
+      if (hasConsole && (!config.silent || config.debug)) {
+        console.warn('[Vue warn]: ' + msg);
+        /* istanbul ignore if */
+        if (config.debug) {
+          if (e) {
+            throw e;
+          } else {
+            console.warn(new Error('Warning Stack Trace').stack);
+          }
+        }
       }
-    };
-
-    formatComponentName = function (vm) {
-      var name = vm._isVue ? vm.$options.name : vm.name;
-      return name ? ' (found in component: <' + hyphenate(name) + '>)' : '';
     };
   })();
 }
@@ -22504,22 +21430,6 @@ function off(el, event, cb) {
 }
 
 /**
- * For IE9 compat: when both class and :class are present
- * getAttribute('class') returns wrong value...
- *
- * @param {Element} el
- * @return {String}
- */
-
-function getClass(el) {
-  var classname = el.className;
-  if (typeof classname === 'object') {
-    classname = classname.baseVal || '';
-  }
-  return classname;
-}
-
-/**
  * In IE9, setAttribute('class') will result in empty class
  * if the element also has the :class attribute; However in
  * PhantomJS, setting `className` does not work on SVG elements...
@@ -22549,7 +21459,7 @@ function addClass(el, cls) {
   if (el.classList) {
     el.classList.add(cls);
   } else {
-    var cur = ' ' + getClass(el) + ' ';
+    var cur = ' ' + (el.getAttribute('class') || '') + ' ';
     if (cur.indexOf(' ' + cls + ' ') < 0) {
       setClass(el, (cur + cls).trim());
     }
@@ -22567,7 +21477,7 @@ function removeClass(el, cls) {
   if (el.classList) {
     el.classList.remove(cls);
   } else {
-    var cur = ' ' + getClass(el) + ' ';
+    var cur = ' ' + (el.getAttribute('class') || '') + ' ';
     var tar = ' ' + cls + ' ';
     while (cur.indexOf(tar) >= 0) {
       cur = cur.replace(tar, ' ');
@@ -22766,6 +21676,344 @@ function getOuterHTML(el) {
   }
 }
 
+var uid$1 = 0;
+
+/**
+ * A dep is an observable that can have multiple
+ * directives subscribing to it.
+ *
+ * @constructor
+ */
+function Dep() {
+  this.id = uid$1++;
+  this.subs = [];
+}
+
+// the current target watcher being evaluated.
+// this is globally unique because there could be only one
+// watcher being evaluated at any time.
+Dep.target = null;
+
+/**
+ * Add a directive subscriber.
+ *
+ * @param {Directive} sub
+ */
+
+Dep.prototype.addSub = function (sub) {
+  this.subs.push(sub);
+};
+
+/**
+ * Remove a directive subscriber.
+ *
+ * @param {Directive} sub
+ */
+
+Dep.prototype.removeSub = function (sub) {
+  this.subs.$remove(sub);
+};
+
+/**
+ * Add self as a dependency to the target watcher.
+ */
+
+Dep.prototype.depend = function () {
+  Dep.target.addDep(this);
+};
+
+/**
+ * Notify all subscribers of a new value.
+ */
+
+Dep.prototype.notify = function () {
+  // stablize the subscriber list first
+  var subs = toArray(this.subs);
+  for (var i = 0, l = subs.length; i < l; i++) {
+    subs[i].update();
+  }
+};
+
+var arrayProto = Array.prototype;
+var arrayMethods = Object.create(arrayProto)
+
+/**
+ * Intercept mutating methods and emit events
+ */
+
+;['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
+  // cache original method
+  var original = arrayProto[method];
+  def(arrayMethods, method, function mutator() {
+    // avoid leaking arguments:
+    // http://jsperf.com/closure-with-arguments
+    var i = arguments.length;
+    var args = new Array(i);
+    while (i--) {
+      args[i] = arguments[i];
+    }
+    var result = original.apply(this, args);
+    var ob = this.__ob__;
+    var inserted;
+    switch (method) {
+      case 'push':
+        inserted = args;
+        break;
+      case 'unshift':
+        inserted = args;
+        break;
+      case 'splice':
+        inserted = args.slice(2);
+        break;
+    }
+    if (inserted) ob.observeArray(inserted);
+    // notify change
+    ob.dep.notify();
+    return result;
+  });
+});
+
+/**
+ * Swap the element at the given index with a new value
+ * and emits corresponding event.
+ *
+ * @param {Number} index
+ * @param {*} val
+ * @return {*} - replaced element
+ */
+
+def(arrayProto, '$set', function $set(index, val) {
+  if (index >= this.length) {
+    this.length = Number(index) + 1;
+  }
+  return this.splice(index, 1, val)[0];
+});
+
+/**
+ * Convenience method to remove the element at given index.
+ *
+ * @param {Number} index
+ * @param {*} val
+ */
+
+def(arrayProto, '$remove', function $remove(item) {
+  /* istanbul ignore if */
+  if (!this.length) return;
+  var index = indexOf(this, item);
+  if (index > -1) {
+    return this.splice(index, 1);
+  }
+});
+
+var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
+
+/**
+ * Observer class that are attached to each observed
+ * object. Once attached, the observer converts target
+ * object's property keys into getter/setters that
+ * collect dependencies and dispatches updates.
+ *
+ * @param {Array|Object} value
+ * @constructor
+ */
+
+function Observer(value) {
+  this.value = value;
+  this.dep = new Dep();
+  def(value, '__ob__', this);
+  if (isArray(value)) {
+    var augment = hasProto ? protoAugment : copyAugment;
+    augment(value, arrayMethods, arrayKeys);
+    this.observeArray(value);
+  } else {
+    this.walk(value);
+  }
+}
+
+// Instance methods
+
+/**
+ * Walk through each property and convert them into
+ * getter/setters. This method should only be called when
+ * value type is Object.
+ *
+ * @param {Object} obj
+ */
+
+Observer.prototype.walk = function (obj) {
+  var keys = Object.keys(obj);
+  for (var i = 0, l = keys.length; i < l; i++) {
+    this.convert(keys[i], obj[keys[i]]);
+  }
+};
+
+/**
+ * Observe a list of Array items.
+ *
+ * @param {Array} items
+ */
+
+Observer.prototype.observeArray = function (items) {
+  for (var i = 0, l = items.length; i < l; i++) {
+    observe(items[i]);
+  }
+};
+
+/**
+ * Convert a property into getter/setter so we can emit
+ * the events when the property is accessed/changed.
+ *
+ * @param {String} key
+ * @param {*} val
+ */
+
+Observer.prototype.convert = function (key, val) {
+  defineReactive(this.value, key, val);
+};
+
+/**
+ * Add an owner vm, so that when $set/$delete mutations
+ * happen we can notify owner vms to proxy the keys and
+ * digest the watchers. This is only called when the object
+ * is observed as an instance's root $data.
+ *
+ * @param {Vue} vm
+ */
+
+Observer.prototype.addVm = function (vm) {
+  (this.vms || (this.vms = [])).push(vm);
+};
+
+/**
+ * Remove an owner vm. This is called when the object is
+ * swapped out as an instance's $data object.
+ *
+ * @param {Vue} vm
+ */
+
+Observer.prototype.removeVm = function (vm) {
+  this.vms.$remove(vm);
+};
+
+// helpers
+
+/**
+ * Augment an target Object or Array by intercepting
+ * the prototype chain using __proto__
+ *
+ * @param {Object|Array} target
+ * @param {Object} proto
+ */
+
+function protoAugment(target, src) {
+  /* eslint-disable no-proto */
+  target.__proto__ = src;
+  /* eslint-enable no-proto */
+}
+
+/**
+ * Augment an target Object or Array by defining
+ * hidden properties.
+ *
+ * @param {Object|Array} target
+ * @param {Object} proto
+ */
+
+function copyAugment(target, src, keys) {
+  for (var i = 0, l = keys.length; i < l; i++) {
+    var key = keys[i];
+    def(target, key, src[key]);
+  }
+}
+
+/**
+ * Attempt to create an observer instance for a value,
+ * returns the new observer if successfully observed,
+ * or the existing observer if the value already has one.
+ *
+ * @param {*} value
+ * @param {Vue} [vm]
+ * @return {Observer|undefined}
+ * @static
+ */
+
+function observe(value, vm) {
+  if (!value || typeof value !== 'object') {
+    return;
+  }
+  var ob;
+  if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
+    ob = value.__ob__;
+  } else if ((isArray(value) || isPlainObject(value)) && Object.isExtensible(value) && !value._isVue) {
+    ob = new Observer(value);
+  }
+  if (ob && vm) {
+    ob.addVm(vm);
+  }
+  return ob;
+}
+
+/**
+ * Define a reactive property on an Object.
+ *
+ * @param {Object} obj
+ * @param {String} key
+ * @param {*} val
+ * @param {Boolean} doNotObserve
+ */
+
+function defineReactive(obj, key, val, doNotObserve) {
+  var dep = new Dep();
+
+  var property = Object.getOwnPropertyDescriptor(obj, key);
+  if (property && property.configurable === false) {
+    return;
+  }
+
+  // cater for pre-defined getter/setters
+  var getter = property && property.get;
+  var setter = property && property.set;
+
+  // if doNotObserve is true, only use the child value observer
+  // if it already exists, and do not attempt to create it.
+  // this allows freezing a large object from the root and
+  // avoid unnecessary observation inside v-for fragments.
+  var childOb = doNotObserve ? isObject(val) && val.__ob__ : observe(val);
+  Object.defineProperty(obj, key, {
+    enumerable: true,
+    configurable: true,
+    get: function reactiveGetter() {
+      var value = getter ? getter.call(obj) : val;
+      if (Dep.target) {
+        dep.depend();
+        if (childOb) {
+          childOb.dep.depend();
+        }
+        if (isArray(value)) {
+          for (var e, i = 0, l = value.length; i < l; i++) {
+            e = value[i];
+            e && e.__ob__ && e.__ob__.dep.depend();
+          }
+        }
+      }
+      return value;
+    },
+    set: function reactiveSetter(newVal) {
+      var value = getter ? getter.call(obj) : val;
+      if (newVal === value) {
+        return;
+      }
+      if (setter) {
+        setter.call(obj, newVal);
+      } else {
+        val = newVal;
+      }
+      childOb = doNotObserve ? isObject(newVal) && newVal.__ob__ : observe(newVal);
+      dep.notify();
+    }
+  });
+}
+
 var commonTagRE = /^(div|p|span|img|a|b|i|br|ul|ol|li|h1|h2|h3|h4|h5|h6|code|pre|table|th|td|tr|form|label|input|select|option|nav|article|section|header|footer)$/i;
 var reservedTagRE = /^(slot|partial|component)$/i;
 
@@ -22839,6 +22087,128 @@ function getIsBinding(el) {
 }
 
 /**
+ * Set a prop's initial value on a vm and its data object.
+ *
+ * @param {Vue} vm
+ * @param {Object} prop
+ * @param {*} value
+ */
+
+function initProp(vm, prop, value) {
+  var key = prop.path;
+  value = coerceProp(prop, value);
+  if (value === undefined) {
+    value = getPropDefaultValue(vm, prop.options);
+  }
+  if (assertProp(prop, value)) {
+    defineReactive(vm, key, value, true /* doNotObserve */);
+  }
+}
+
+/**
+ * Get the default value of a prop.
+ *
+ * @param {Vue} vm
+ * @param {Object} options
+ * @return {*}
+ */
+
+function getPropDefaultValue(vm, options) {
+  // no default, return undefined
+  if (!hasOwn(options, 'default')) {
+    // absent boolean value defaults to false
+    return options.type === Boolean ? false : undefined;
+  }
+  var def = options['default'];
+  // warn against non-factory defaults for Object & Array
+  if (isObject(def)) {
+    process.env.NODE_ENV !== 'production' && warn('Object/Array as default prop values will be shared ' + 'across multiple instances. Use a factory function ' + 'to return the default value instead.');
+  }
+  // call factory function for non-Function types
+  return typeof def === 'function' && options.type !== Function ? def.call(vm) : def;
+}
+
+/**
+ * Assert whether a prop is valid.
+ *
+ * @param {Object} prop
+ * @param {*} value
+ */
+
+function assertProp(prop, value) {
+  if (!prop.options.required && ( // non-required
+  prop.raw === null || // abscent
+  value == null) // null or undefined
+  ) {
+      return true;
+    }
+  var options = prop.options;
+  var type = options.type;
+  var valid = true;
+  var expectedType;
+  if (type) {
+    if (type === String) {
+      expectedType = 'string';
+      valid = typeof value === expectedType;
+    } else if (type === Number) {
+      expectedType = 'number';
+      valid = typeof value === 'number';
+    } else if (type === Boolean) {
+      expectedType = 'boolean';
+      valid = typeof value === 'boolean';
+    } else if (type === Function) {
+      expectedType = 'function';
+      valid = typeof value === 'function';
+    } else if (type === Object) {
+      expectedType = 'object';
+      valid = isPlainObject(value);
+    } else if (type === Array) {
+      expectedType = 'array';
+      valid = isArray(value);
+    } else {
+      valid = value instanceof type;
+    }
+  }
+  if (!valid) {
+    process.env.NODE_ENV !== 'production' && warn('Invalid prop: type check failed for ' + prop.path + '="' + prop.raw + '".' + ' Expected ' + formatType(expectedType) + ', got ' + formatValue(value) + '.');
+    return false;
+  }
+  var validator = options.validator;
+  if (validator) {
+    if (!validator(value)) {
+      process.env.NODE_ENV !== 'production' && warn('Invalid prop: custom validator check failed for ' + prop.path + '="' + prop.raw + '"');
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Force parsing value with coerce option.
+ *
+ * @param {*} value
+ * @param {Object} options
+ * @return {*}
+ */
+
+function coerceProp(prop, value) {
+  var coerce = prop.options.coerce;
+  if (!coerce) {
+    return value;
+  }
+  // coerce is a function
+  return coerce(value);
+}
+
+function formatType(val) {
+  return val ? val.charAt(0).toUpperCase() + val.slice(1) : 'custom type';
+}
+
+function formatValue(val) {
+  return Object.prototype.toString.call(val).slice(8, -1);
+}
+
+/**
  * Option overwriting strategies are functions that handle
  * how to merge a parent option value and a child option
  * value into the final value.
@@ -22881,7 +22251,7 @@ strats.data = function (parentVal, childVal, vm) {
       return parentVal;
     }
     if (typeof childVal !== 'function') {
-      process.env.NODE_ENV !== 'production' && warn('The "data" option should be a function ' + 'that returns a per-instance value in component ' + 'definitions.', vm);
+      process.env.NODE_ENV !== 'production' && warn('The "data" option should be a function ' + 'that returns a per-instance value in component ' + 'definitions.');
       return parentVal;
     }
     if (!parentVal) {
@@ -22915,7 +22285,7 @@ strats.data = function (parentVal, childVal, vm) {
 
 strats.el = function (parentVal, childVal, vm) {
   if (!vm && childVal && typeof childVal !== 'function') {
-    process.env.NODE_ENV !== 'production' && warn('The "el" option should be a function ' + 'that returns a per-instance value in component ' + 'definitions.', vm);
+    process.env.NODE_ENV !== 'production' && warn('The "el" option should be a function ' + 'that returns a per-instance value in component ' + 'definitions.');
     return;
   }
   var ret = childVal || parentVal;
@@ -22929,6 +22299,15 @@ strats.el = function (parentVal, childVal, vm) {
 
 strats.init = strats.created = strats.ready = strats.attached = strats.detached = strats.beforeCompile = strats.compiled = strats.beforeDestroy = strats.destroyed = strats.activate = function (parentVal, childVal) {
   return childVal ? parentVal ? parentVal.concat(childVal) : isArray(childVal) ? childVal : [childVal] : parentVal;
+};
+
+/**
+ * 0.11 deprecation warning
+ */
+
+strats.paramAttributes = function () {
+  /* istanbul ignore next */
+  process.env.NODE_ENV !== 'production' && warn('"paramAttributes" option has been deprecated in 0.12. ' + 'Use "props" instead.');
 };
 
 /**
@@ -23129,376 +22508,31 @@ function mergeOptions(parent, child, vm) {
  * @param {Object} options
  * @param {String} type
  * @param {String} id
- * @param {Boolean} warnMissing
  * @return {Object|Function}
  */
 
-function resolveAsset(options, type, id, warnMissing) {
+function resolveAsset(options, type, id) {
   /* istanbul ignore if */
   if (typeof id !== 'string') {
     return;
   }
   var assets = options[type];
   var camelizedId;
-  var res = assets[id] ||
+  return assets[id] ||
   // camelCase ID
   assets[camelizedId = camelize(id)] ||
   // Pascal Case ID
   assets[camelizedId.charAt(0).toUpperCase() + camelizedId.slice(1)];
-  if (process.env.NODE_ENV !== 'production' && warnMissing && !res) {
-    warn('Failed to resolve ' + type.slice(0, -1) + ': ' + id, options);
-  }
-  return res;
-}
-
-var uid$1 = 0;
-
-/**
- * A dep is an observable that can have multiple
- * directives subscribing to it.
- *
- * @constructor
- */
-function Dep() {
-  this.id = uid$1++;
-  this.subs = [];
-}
-
-// the current target watcher being evaluated.
-// this is globally unique because there could be only one
-// watcher being evaluated at any time.
-Dep.target = null;
-
-/**
- * Add a directive subscriber.
- *
- * @param {Directive} sub
- */
-
-Dep.prototype.addSub = function (sub) {
-  this.subs.push(sub);
-};
-
-/**
- * Remove a directive subscriber.
- *
- * @param {Directive} sub
- */
-
-Dep.prototype.removeSub = function (sub) {
-  this.subs.$remove(sub);
-};
-
-/**
- * Add self as a dependency to the target watcher.
- */
-
-Dep.prototype.depend = function () {
-  Dep.target.addDep(this);
-};
-
-/**
- * Notify all subscribers of a new value.
- */
-
-Dep.prototype.notify = function () {
-  // stablize the subscriber list first
-  var subs = toArray(this.subs);
-  for (var i = 0, l = subs.length; i < l; i++) {
-    subs[i].update();
-  }
-};
-
-var arrayProto = Array.prototype;
-var arrayMethods = Object.create(arrayProto)
-
-/**
- * Intercept mutating methods and emit events
- */
-
-;['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
-  // cache original method
-  var original = arrayProto[method];
-  def(arrayMethods, method, function mutator() {
-    // avoid leaking arguments:
-    // http://jsperf.com/closure-with-arguments
-    var i = arguments.length;
-    var args = new Array(i);
-    while (i--) {
-      args[i] = arguments[i];
-    }
-    var result = original.apply(this, args);
-    var ob = this.__ob__;
-    var inserted;
-    switch (method) {
-      case 'push':
-        inserted = args;
-        break;
-      case 'unshift':
-        inserted = args;
-        break;
-      case 'splice':
-        inserted = args.slice(2);
-        break;
-    }
-    if (inserted) ob.observeArray(inserted);
-    // notify change
-    ob.dep.notify();
-    return result;
-  });
-});
-
-/**
- * Swap the element at the given index with a new value
- * and emits corresponding event.
- *
- * @param {Number} index
- * @param {*} val
- * @return {*} - replaced element
- */
-
-def(arrayProto, '$set', function $set(index, val) {
-  if (index >= this.length) {
-    this.length = Number(index) + 1;
-  }
-  return this.splice(index, 1, val)[0];
-});
-
-/**
- * Convenience method to remove the element at given index or target element reference.
- *
- * @param {*} item
- */
-
-def(arrayProto, '$remove', function $remove(item) {
-  /* istanbul ignore if */
-  if (!this.length) return;
-  var index = indexOf(this, item);
-  if (index > -1) {
-    return this.splice(index, 1);
-  }
-});
-
-var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
-
-/**
- * By default, when a reactive property is set, the new value is
- * also converted to become reactive. However in certain cases, e.g.
- * v-for scope alias and props, we don't want to force conversion
- * because the value may be a nested value under a frozen data structure.
- *
- * So whenever we want to set a reactive property without forcing
- * conversion on the new value, we wrap that call inside this function.
- */
-
-var shouldConvert = true;
-
-function withoutConversion(fn) {
-  shouldConvert = false;
-  fn();
-  shouldConvert = true;
 }
 
 /**
- * Observer class that are attached to each observed
- * object. Once attached, the observer converts target
- * object's property keys into getter/setters that
- * collect dependencies and dispatches updates.
- *
- * @param {Array|Object} value
- * @constructor
+ * Assert asset exists
  */
 
-function Observer(value) {
-  this.value = value;
-  this.dep = new Dep();
-  def(value, '__ob__', this);
-  if (isArray(value)) {
-    var augment = hasProto ? protoAugment : copyAugment;
-    augment(value, arrayMethods, arrayKeys);
-    this.observeArray(value);
-  } else {
-    this.walk(value);
+function assertAsset(val, type, id) {
+  if (!val) {
+    process.env.NODE_ENV !== 'production' && warn('Failed to resolve ' + type + ': ' + id);
   }
-}
-
-// Instance methods
-
-/**
- * Walk through each property and convert them into
- * getter/setters. This method should only be called when
- * value type is Object.
- *
- * @param {Object} obj
- */
-
-Observer.prototype.walk = function (obj) {
-  var keys = Object.keys(obj);
-  for (var i = 0, l = keys.length; i < l; i++) {
-    this.convert(keys[i], obj[keys[i]]);
-  }
-};
-
-/**
- * Observe a list of Array items.
- *
- * @param {Array} items
- */
-
-Observer.prototype.observeArray = function (items) {
-  for (var i = 0, l = items.length; i < l; i++) {
-    observe(items[i]);
-  }
-};
-
-/**
- * Convert a property into getter/setter so we can emit
- * the events when the property is accessed/changed.
- *
- * @param {String} key
- * @param {*} val
- */
-
-Observer.prototype.convert = function (key, val) {
-  defineReactive(this.value, key, val);
-};
-
-/**
- * Add an owner vm, so that when $set/$delete mutations
- * happen we can notify owner vms to proxy the keys and
- * digest the watchers. This is only called when the object
- * is observed as an instance's root $data.
- *
- * @param {Vue} vm
- */
-
-Observer.prototype.addVm = function (vm) {
-  (this.vms || (this.vms = [])).push(vm);
-};
-
-/**
- * Remove an owner vm. This is called when the object is
- * swapped out as an instance's $data object.
- *
- * @param {Vue} vm
- */
-
-Observer.prototype.removeVm = function (vm) {
-  this.vms.$remove(vm);
-};
-
-// helpers
-
-/**
- * Augment an target Object or Array by intercepting
- * the prototype chain using __proto__
- *
- * @param {Object|Array} target
- * @param {Object} src
- */
-
-function protoAugment(target, src) {
-  /* eslint-disable no-proto */
-  target.__proto__ = src;
-  /* eslint-enable no-proto */
-}
-
-/**
- * Augment an target Object or Array by defining
- * hidden properties.
- *
- * @param {Object|Array} target
- * @param {Object} proto
- */
-
-function copyAugment(target, src, keys) {
-  for (var i = 0, l = keys.length; i < l; i++) {
-    var key = keys[i];
-    def(target, key, src[key]);
-  }
-}
-
-/**
- * Attempt to create an observer instance for a value,
- * returns the new observer if successfully observed,
- * or the existing observer if the value already has one.
- *
- * @param {*} value
- * @param {Vue} [vm]
- * @return {Observer|undefined}
- * @static
- */
-
-function observe(value, vm) {
-  if (!value || typeof value !== 'object') {
-    return;
-  }
-  var ob;
-  if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
-    ob = value.__ob__;
-  } else if (shouldConvert && (isArray(value) || isPlainObject(value)) && Object.isExtensible(value) && !value._isVue) {
-    ob = new Observer(value);
-  }
-  if (ob && vm) {
-    ob.addVm(vm);
-  }
-  return ob;
-}
-
-/**
- * Define a reactive property on an Object.
- *
- * @param {Object} obj
- * @param {String} key
- * @param {*} val
- */
-
-function defineReactive(obj, key, val) {
-  var dep = new Dep();
-
-  var property = Object.getOwnPropertyDescriptor(obj, key);
-  if (property && property.configurable === false) {
-    return;
-  }
-
-  // cater for pre-defined getter/setters
-  var getter = property && property.get;
-  var setter = property && property.set;
-
-  var childOb = observe(val);
-  Object.defineProperty(obj, key, {
-    enumerable: true,
-    configurable: true,
-    get: function reactiveGetter() {
-      var value = getter ? getter.call(obj) : val;
-      if (Dep.target) {
-        dep.depend();
-        if (childOb) {
-          childOb.dep.depend();
-        }
-        if (isArray(value)) {
-          for (var e, i = 0, l = value.length; i < l; i++) {
-            e = value[i];
-            e && e.__ob__ && e.__ob__.dep.depend();
-          }
-        }
-      }
-      return value;
-    },
-    set: function reactiveSetter(newVal) {
-      var value = getter ? getter.call(obj) : val;
-      if (newVal === value) {
-        return;
-      }
-      if (setter) {
-        setter.call(obj, newVal);
-      } else {
-        val = newVal;
-      }
-      childOb = observe(newVal);
-      dep.notify();
-    }
-  });
 }
 
 
@@ -23564,7 +22598,11 @@ var util = Object.freeze({
 	getOuterHTML: getOuterHTML,
 	mergeOptions: mergeOptions,
 	resolveAsset: resolveAsset,
+	assertAsset: assertAsset,
 	checkComponentAttr: checkComponentAttr,
+	initProp: initProp,
+	assertProp: assertProp,
+	coerceProp: coerceProp,
 	commonTagRE: commonTagRE,
 	reservedTagRE: reservedTagRE,
 	get warn () { return warn; }
@@ -23950,8 +22988,8 @@ function getPath(obj, path) {
 
 var warnNonExistent;
 if (process.env.NODE_ENV !== 'production') {
-  warnNonExistent = function (path, vm) {
-    warn('You are setting a non-existent path "' + path.raw + '" ' + 'on a vm instance. Consider pre-initializing the property ' + 'with the "data" option for more reliable reactivity ' + 'and better performance.', vm);
+  warnNonExistent = function (path) {
+    warn('You are setting a non-existent path "' + path.raw + '" ' + 'on a vm instance. Consider pre-initializing the property ' + 'with the "data" option for more reliable reactivity ' + 'and better performance.');
   };
 }
 
@@ -23983,7 +23021,7 @@ function setPath(obj, path, val) {
       if (!isObject(obj)) {
         obj = {};
         if (process.env.NODE_ENV !== 'production' && last._isVue) {
-          warnNonExistent(path, last);
+          warnNonExistent(path);
         }
         set(last, key, obj);
       }
@@ -23994,7 +23032,7 @@ function setPath(obj, path, val) {
         obj[key] = val;
       } else {
         if (process.env.NODE_ENV !== 'production' && obj._isVue) {
-          warnNonExistent(path, obj);
+          warnNonExistent(path);
         }
         set(obj, key, val);
       }
@@ -24261,8 +23299,8 @@ function runBatcherQueue(queue) {
     if (process.env.NODE_ENV !== 'production' && has[id] != null) {
       circular[id] = (circular[id] || 0) + 1;
       if (circular[id] > config._maxUpdateCount) {
-        warn('You may have an infinite update loop for watcher ' + 'with expression "' + watcher.expression + '"', watcher.vm);
-        break;
+        queue.splice(has[id], 1);
+        warn('You may have an infinite update loop for watcher ' + 'with expression: ' + watcher.expression);
       }
     }
   }
@@ -24308,7 +23346,7 @@ var uid$2 = 0;
  * This is used for both the $watch() api and directives.
  *
  * @param {Vue} vm
- * @param {String|Function} expOrFn
+ * @param {String} expression
  * @param {Function} cb
  * @param {Object} options
  *                 - {Array} filters
@@ -24366,7 +23404,7 @@ Watcher.prototype.get = function () {
     value = this.getter.call(scope, scope);
   } catch (e) {
     if (process.env.NODE_ENV !== 'production' && config.warnExpressionErrors) {
-      warn('Error when evaluating expression ' + '"' + this.expression + '": ' + e.toString(), this.vm);
+      warn('Error when evaluating expression "' + this.expression + '". ' + (config.debug ? '' : 'Turn on debug mode to see stack trace.'), e);
     }
   }
   // "touch" every property so they are all tracked as
@@ -24402,14 +23440,14 @@ Watcher.prototype.set = function (value) {
     this.setter.call(scope, scope, value);
   } catch (e) {
     if (process.env.NODE_ENV !== 'production' && config.warnExpressionErrors) {
-      warn('Error when evaluating setter ' + '"' + this.expression + '": ' + e.toString(), this.vm);
+      warn('Error when evaluating setter "' + this.expression + '"', e);
     }
   }
   // two-way sync for v-for alias
   var forContext = scope.$forContext;
   if (forContext && forContext.alias === this.expression) {
     if (forContext.filters) {
-      process.env.NODE_ENV !== 'production' && warn('It seems you are using two-way binding on ' + 'a v-for alias (' + this.expression + '), and the ' + 'v-for has filters. This will not work properly. ' + 'Either remove the filters or use an array of ' + 'objects and bind to object properties instead.', this.vm);
+      process.env.NODE_ENV !== 'production' && warn('It seems you are using two-way binding on ' + 'a v-for alias (' + this.expression + '), and the ' + 'v-for has filters. This will not work properly. ' + 'Either remove the filters or use an array of ' + 'objects and bind to object properties instead.');
       return;
     }
     forContext._withLock(function () {
@@ -24910,7 +23948,6 @@ var html = {
  * @param {DocumentFragment} frag
  * @param {Vue} [host]
  * @param {Object} [scope]
- * @param {Fragment} [parentFrag]
  */
 function Fragment(linker, vm, frag, host, scope, parentFrag) {
   this.children = [];
@@ -25149,16 +24186,15 @@ var TRANSITION = 1100;
 var EL = 1500;
 var COMPONENT = 1500;
 var PARTIAL = 1750;
-var IF = 2100;
-var FOR = 2200;
-var SLOT = 2300;
+var FOR = 2000;
+var IF = 2000;
+var SLOT = 2100;
 
 var uid$3 = 0;
 
 var vFor = {
 
   priority: FOR,
-  terminal: true,
 
   params: ['track-by', 'stagger', 'enter-stagger', 'leave-stagger'],
 
@@ -25177,7 +24213,7 @@ var vFor = {
     }
 
     if (!this.alias) {
-      process.env.NODE_ENV !== 'production' && warn('Invalid v-for expression "' + this.descriptor.raw + '": ' + 'alias is required.', this.vm);
+      process.env.NODE_ENV !== 'production' && warn('Alias is required in v-for.');
       return;
     }
 
@@ -25268,9 +24304,7 @@ var vFor = {
         // update data for track-by, object repeat &
         // primitive values.
         if (trackByKey || convertedFromObject || primitive) {
-          withoutConversion(function () {
-            frag.scope[alias] = value;
-          });
+          frag.scope[alias] = value;
         }
       } else {
         // new isntance
@@ -25360,11 +24394,7 @@ var vFor = {
     // for two-way binding on alias
     scope.$forContext = this;
     // define scope properties
-    // important: define the scope alias without forced conversion
-    // so that frozen data structures remain non-reactive.
-    withoutConversion(function () {
-      defineReactive(scope, alias, value);
-    });
+    defineReactive(scope, alias, value, true /* do not observe */);
     defineReactive(scope, '$index', index);
     if (key) {
       defineReactive(scope, '$key', key);
@@ -25519,7 +24549,7 @@ var vFor = {
     var primitive = !isObject(value);
     var id;
     if (key || trackByKey || primitive) {
-      id = trackByKey ? trackByKey === '$index' ? index : getPath(value, trackByKey) : key || value;
+      id = trackByKey ? trackByKey === '$index' ? index : value[trackByKey] : key || value;
       if (!cache[id]) {
         cache[id] = frag;
       } else if (trackByKey !== '$index') {
@@ -25554,7 +24584,7 @@ var vFor = {
     var primitive = !isObject(value);
     var frag;
     if (key || trackByKey || primitive) {
-      var id = trackByKey ? trackByKey === '$index' ? index : getPath(value, trackByKey) : key || value;
+      var id = trackByKey ? trackByKey === '$index' ? index : value[trackByKey] : key || value;
       frag = this.cache[id];
     } else {
       frag = value[this.id];
@@ -25581,7 +24611,7 @@ var vFor = {
     var key = hasOwn(scope, '$key') && scope.$key;
     var primitive = !isObject(value);
     if (trackByKey || key || primitive) {
-      var id = trackByKey ? trackByKey === '$index' ? index : getPath(value, trackByKey) : key || value;
+      var id = trackByKey ? trackByKey === '$index' ? index : value[trackByKey] : key || value;
       this.cache[id] = null;
     } else {
       value[this.id] = null;
@@ -25733,14 +24763,13 @@ function range(n) {
 
 if (process.env.NODE_ENV !== 'production') {
   vFor.warnDuplicate = function (value) {
-    warn('Duplicate value found in v-for="' + this.descriptor.raw + '": ' + JSON.stringify(value) + '. Use track-by="$index" if ' + 'you are expecting duplicate values.', this.vm);
+    warn('Duplicate value found in v-for="' + this.descriptor.raw + '": ' + JSON.stringify(value) + '. Use track-by="$index" if ' + 'you are expecting duplicate values.');
   };
 }
 
 var vIf = {
 
   priority: IF,
-  terminal: true,
 
   bind: function bind() {
     var el = this.el;
@@ -25755,7 +24784,7 @@ var vIf = {
       this.anchor = createAnchor('v-if');
       replace(el, this.anchor);
     } else {
-      process.env.NODE_ENV !== 'production' && warn('v-if="' + this.expression + '" cannot be ' + 'used on an instance root element.', this.vm);
+      process.env.NODE_ENV !== 'production' && warn('v-if="' + this.expression + '" cannot be ' + 'used on an instance root element.');
       this.invalid = true;
     }
   },
@@ -26188,7 +25217,7 @@ var model = {
     // friendly warning...
     this.checkFilters();
     if (this.hasRead && !this.hasWrite) {
-      process.env.NODE_ENV !== 'production' && warn('It seems you are using a read-only filter with ' + 'v-model="' + this.descriptor.raw + '". ' + 'You might want to use a two-way filter to ensure correct behavior.', this.vm);
+      process.env.NODE_ENV !== 'production' && warn('It seems you are using a read-only filter with ' + 'v-model. You might want to use a two-way filter ' + 'to ensure correct behavior.');
     }
     var el = this.el;
     var tag = el.tagName;
@@ -26200,7 +25229,7 @@ var model = {
     } else if (tag === 'TEXTAREA') {
       handler = handlers.text;
     } else {
-      process.env.NODE_ENV !== 'production' && warn('v-model does not support element type: ' + tag, this.vm);
+      process.env.NODE_ENV !== 'production' && warn('v-model does not support element type: ' + tag);
       return;
     }
     el.__v_model = this;
@@ -26316,7 +25345,7 @@ var on$1 = {
     }
 
     if (typeof handler !== 'function') {
-      process.env.NODE_ENV !== 'production' && warn('v-on:' + this.arg + '="' + this.expression + '" expects a function value, ' + 'got ' + handler, this.vm);
+      process.env.NODE_ENV !== 'production' && warn('v-on:' + this.arg + '="' + this.expression + '" expects a function value, ' + 'got ' + handler);
       return;
     }
 
@@ -26409,17 +25438,11 @@ var style = {
     if (value) {
       var isImportant = importantRE.test(value) ? 'important' : '';
       if (isImportant) {
-        /* istanbul ignore if */
-        if (process.env.NODE_ENV !== 'production') {
-          warn('It\'s probably a bad idea to use !important with inline rules. ' + 'This feature will be deprecated in a future version of Vue.');
-        }
         value = value.replace(importantRE, '').trim();
-        this.el.style.setProperty(prop.kebab, value, isImportant);
-      } else {
-        this.el.style[prop.camel] = value;
       }
+      this.el.style.setProperty(prop, value, isImportant);
     } else {
-      this.el.style[prop.camel] = '';
+      this.el.style.removeProperty(prop);
     }
   }
 
@@ -26464,17 +25487,11 @@ function prefix(prop) {
   while (i--) {
     prefixed = camelPrefixes[i] + upper;
     if (prefixed in testEl.style) {
-      return {
-        kebab: prefixes[i] + prop,
-        camel: prefixed
-      };
+      return prefixes[i] + prop;
     }
   }
   if (camel in testEl.style) {
-    return {
-      kebab: prop,
-      camel: camel
-    };
+    return prop;
   }
 }
 
@@ -26521,7 +25538,7 @@ var bind$1 = {
 
       // only allow binding on native attributes
       if (disallowedInterpAttrRE.test(attr) || attr === 'name' && (tag === 'PARTIAL' || tag === 'SLOT')) {
-        process.env.NODE_ENV !== 'production' && warn(attr + '="' + descriptor.raw + '": ' + 'attribute interpolation is not allowed in Vue.js ' + 'directives and special attributes.', this.vm);
+        process.env.NODE_ENV !== 'production' && warn(attr + '="' + descriptor.raw + '": ' + 'attribute interpolation is not allowed in Vue.js ' + 'directives and special attributes.');
         this.el.removeAttribute(attr);
         this.invalid = true;
       }
@@ -26531,12 +25548,12 @@ var bind$1 = {
         var raw = attr + '="' + descriptor.raw + '": ';
         // warn src
         if (attr === 'src') {
-          warn(raw + 'interpolation in "src" attribute will cause ' + 'a 404 request. Use v-bind:src instead.', this.vm);
+          warn(raw + 'interpolation in "src" attribute will cause ' + 'a 404 request. Use v-bind:src instead.');
         }
 
         // warn style
         if (attr === 'style') {
-          warn(raw + 'interpolation in "style" attribute will cause ' + 'the attribute to be discarded in Internet Explorer. ' + 'Use v-bind:style instead.', this.vm);
+          warn(raw + 'interpolation in "style" attribute will cause ' + 'the attribute to be discarded in Internet Explorer. ' + 'Use v-bind:style instead.');
         }
       }
     }
@@ -26632,7 +25649,7 @@ var el = {
 
 var ref = {
   bind: function bind() {
-    process.env.NODE_ENV !== 'production' && warn('v-ref:' + this.arg + ' must be used on a child ' + 'component. Found on <' + this.el.tagName.toLowerCase() + '>.', this.vm);
+    process.env.NODE_ENV !== 'production' && warn('v-ref:' + this.arg + ' must be used on a child ' + 'component. Found on <' + this.el.tagName.toLowerCase() + '>.');
   }
 };
 
@@ -26678,83 +25695,52 @@ var vClass = {
 
   handleObject: function handleObject(value) {
     this.cleanup(value);
-    this.prevKeys = Object.keys(value);
-    setObjectClasses(this.el, value);
+    var keys = this.prevKeys = Object.keys(value);
+    for (var i = 0, l = keys.length; i < l; i++) {
+      var key = keys[i];
+      if (value[key]) {
+        addClass(this.el, key);
+      } else {
+        removeClass(this.el, key);
+      }
+    }
   },
 
   handleArray: function handleArray(value) {
     this.cleanup(value);
     for (var i = 0, l = value.length; i < l; i++) {
-      var val = value[i];
-      if (val && isPlainObject(val)) {
-        setObjectClasses(this.el, val);
-      } else if (val && typeof val === 'string') {
-        addClass(this.el, val);
+      if (value[i]) {
+        addClass(this.el, value[i]);
       }
     }
     this.prevKeys = value.slice();
   },
 
   cleanup: function cleanup(value) {
-    if (!this.prevKeys) return;
-
-    var i = this.prevKeys.length;
-    while (i--) {
-      var key = this.prevKeys[i];
-      if (!key) continue;
-
-      var keys = isPlainObject(key) ? Object.keys(key) : [key];
-      for (var j = 0, l = keys.length; j < l; j++) {
-        toggleClasses(this.el, keys[j], removeClass);
+    if (this.prevKeys) {
+      var i = this.prevKeys.length;
+      while (i--) {
+        var key = this.prevKeys[i];
+        if (key && (!value || !contains(value, key))) {
+          removeClass(this.el, key);
+        }
       }
     }
   }
 };
 
-function setObjectClasses(el, obj) {
-  var keys = Object.keys(obj);
-  for (var i = 0, l = keys.length; i < l; i++) {
-    var key = keys[i];
-    if (!obj[key]) continue;
-    toggleClasses(el, key, addClass);
-  }
-}
-
 function stringToObject(value) {
   var res = {};
   var keys = value.trim().split(/\s+/);
-  for (var i = 0, l = keys.length; i < l; i++) {
+  var i = keys.length;
+  while (i--) {
     res[keys[i]] = true;
   }
   return res;
 }
 
-/**
- * Add or remove a class/classes on an element
- *
- * @param {Element} el
- * @param {String} key The class name. This may or may not
- *                     contain a space character, in such a
- *                     case we'll deal with multiple class
- *                     names at once.
- * @param {Function} fn
- */
-
-function toggleClasses(el, key, fn) {
-  key = key.trim();
-
-  if (key.indexOf(' ') === -1) {
-    fn(el, key);
-    return;
-  }
-
-  // The key contains one or more space characters.
-  // Since a class name doesn't accept such characters, we
-  // treat it as multiple classes.
-  var keys = key.split(/\s+/);
-  for (var i = 0, l = keys.length; i < l; i++) {
-    fn(el, keys[i]);
-  }
+function contains(value, key) {
+  return isArray(value) ? value.indexOf(key) > -1 : hasOwn(value, key);
 }
 
 var component = {
@@ -26853,19 +25839,16 @@ var component = {
   /**
    * Resolve the component constructor to use when creating
    * the child vm.
-   *
-   * @param {String|Function} value
-   * @param {Function} cb
    */
 
-  resolveComponent: function resolveComponent(value, cb) {
+  resolveComponent: function resolveComponent(id, cb) {
     var self = this;
     this.pendingComponentCb = cancellable(function (Component) {
-      self.ComponentName = Component.options.name || (typeof value === 'string' ? value : null);
+      self.ComponentName = Component.options.name || id;
       self.Component = Component;
       cb();
     });
-    this.vm._resolveComponent(value, this.pendingComponentCb);
+    this.vm._resolveComponent(id, this.pendingComponentCb);
   },
 
   /**
@@ -26972,7 +25955,7 @@ var component = {
       }
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && this.el.hasAttribute('transition') && child._isFragment) {
-        warn('Transitions will not work on a fragment instance. ' + 'Template: ' + child.$options.template, child);
+        warn('Transitions will not work on a fragment instance. ' + 'Template: ' + child.$options.template);
       }
       return child;
     }
@@ -26997,9 +25980,7 @@ var component = {
 
   unbuild: function unbuild(defer) {
     if (this.waitingFor) {
-      if (!this.keepAlive) {
-        this.waitingFor.$destroy();
-      }
+      this.waitingFor.$destroy();
       this.waitingFor = null;
     }
     var child = this.childVM;
@@ -27118,372 +26099,6 @@ function callActivateHooks(hooks, vm, cb) {
   }
 }
 
-var propBindingModes = config._propBindingModes;
-var empty = {};
-
-// regexes
-var identRE$1 = /^[$_a-zA-Z]+[\w$]*$/;
-var settablePathRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\[\]]+\])*$/;
-
-/**
- * Compile props on a root element and return
- * a props link function.
- *
- * @param {Element|DocumentFragment} el
- * @param {Array} propOptions
- * @param {Vue} vm
- * @return {Function} propsLinkFn
- */
-
-function compileProps(el, propOptions, vm) {
-  var props = [];
-  var names = Object.keys(propOptions);
-  var i = names.length;
-  var options, name, attr, value, path, parsed, prop;
-  while (i--) {
-    name = names[i];
-    options = propOptions[name] || empty;
-
-    if (process.env.NODE_ENV !== 'production' && name === '$data') {
-      warn('Do not use $data as prop.', vm);
-      continue;
-    }
-
-    // props could contain dashes, which will be
-    // interpreted as minus calculations by the parser
-    // so we need to camelize the path here
-    path = camelize(name);
-    if (!identRE$1.test(path)) {
-      process.env.NODE_ENV !== 'production' && warn('Invalid prop key: "' + name + '". Prop keys ' + 'must be valid identifiers.', vm);
-      continue;
-    }
-
-    prop = {
-      name: name,
-      path: path,
-      options: options,
-      mode: propBindingModes.ONE_WAY,
-      raw: null
-    };
-
-    attr = hyphenate(name);
-    // first check dynamic version
-    if ((value = getBindAttr(el, attr)) === null) {
-      if ((value = getBindAttr(el, attr + '.sync')) !== null) {
-        prop.mode = propBindingModes.TWO_WAY;
-      } else if ((value = getBindAttr(el, attr + '.once')) !== null) {
-        prop.mode = propBindingModes.ONE_TIME;
-      }
-    }
-    if (value !== null) {
-      // has dynamic binding!
-      prop.raw = value;
-      parsed = parseDirective(value);
-      value = parsed.expression;
-      prop.filters = parsed.filters;
-      // check binding type
-      if (isLiteral(value) && !parsed.filters) {
-        // for expressions containing literal numbers and
-        // booleans, there's no need to setup a prop binding,
-        // so we can optimize them as a one-time set.
-        prop.optimizedLiteral = true;
-      } else {
-        prop.dynamic = true;
-        // check non-settable path for two-way bindings
-        if (process.env.NODE_ENV !== 'production' && prop.mode === propBindingModes.TWO_WAY && !settablePathRE.test(value)) {
-          prop.mode = propBindingModes.ONE_WAY;
-          warn('Cannot bind two-way prop with non-settable ' + 'parent path: ' + value, vm);
-        }
-      }
-      prop.parentPath = value;
-
-      // warn required two-way
-      if (process.env.NODE_ENV !== 'production' && options.twoWay && prop.mode !== propBindingModes.TWO_WAY) {
-        warn('Prop "' + name + '" expects a two-way binding type.', vm);
-      }
-    } else if ((value = getAttr(el, attr)) !== null) {
-      // has literal binding!
-      prop.raw = value;
-    } else if (process.env.NODE_ENV !== 'production') {
-      // check possible camelCase prop usage
-      var lowerCaseName = path.toLowerCase();
-      value = /[A-Z\-]/.test(name) && (el.getAttribute(lowerCaseName) || el.getAttribute(':' + lowerCaseName) || el.getAttribute('v-bind:' + lowerCaseName) || el.getAttribute(':' + lowerCaseName + '.once') || el.getAttribute('v-bind:' + lowerCaseName + '.once') || el.getAttribute(':' + lowerCaseName + '.sync') || el.getAttribute('v-bind:' + lowerCaseName + '.sync'));
-      if (value) {
-        warn('Possible usage error for prop `' + lowerCaseName + '` - ' + 'did you mean `' + attr + '`? HTML is case-insensitive, remember to use ' + 'kebab-case for props in templates.', vm);
-      } else if (options.required) {
-        // warn missing required
-        warn('Missing required prop: ' + name, vm);
-      }
-    }
-    // push prop
-    props.push(prop);
-  }
-  return makePropsLinkFn(props);
-}
-
-/**
- * Build a function that applies props to a vm.
- *
- * @param {Array} props
- * @return {Function} propsLinkFn
- */
-
-function makePropsLinkFn(props) {
-  return function propsLinkFn(vm, scope) {
-    // store resolved props info
-    vm._props = {};
-    var i = props.length;
-    var prop, path, options, value, raw;
-    while (i--) {
-      prop = props[i];
-      raw = prop.raw;
-      path = prop.path;
-      options = prop.options;
-      vm._props[path] = prop;
-      if (raw === null) {
-        // initialize absent prop
-        initProp(vm, prop, undefined);
-      } else if (prop.dynamic) {
-        // dynamic prop
-        if (prop.mode === propBindingModes.ONE_TIME) {
-          // one time binding
-          value = (scope || vm._context || vm).$get(prop.parentPath);
-          initProp(vm, prop, value);
-        } else {
-          if (vm._context) {
-            // dynamic binding
-            vm._bindDir({
-              name: 'prop',
-              def: propDef,
-              prop: prop
-            }, null, null, scope); // el, host, scope
-          } else {
-              // root instance
-              initProp(vm, prop, vm.$get(prop.parentPath));
-            }
-        }
-      } else if (prop.optimizedLiteral) {
-        // optimized literal, cast it and just set once
-        var stripped = stripQuotes(raw);
-        value = stripped === raw ? toBoolean(toNumber(raw)) : stripped;
-        initProp(vm, prop, value);
-      } else {
-        // string literal, but we need to cater for
-        // Boolean props with no value, or with same
-        // literal value (e.g. disabled="disabled")
-        // see https://github.com/vuejs/vue-loader/issues/182
-        value = options.type === Boolean && (raw === '' || raw === hyphenate(prop.name)) ? true : raw;
-        initProp(vm, prop, value);
-      }
-    }
-  };
-}
-
-/**
- * Process a prop with a rawValue, applying necessary coersions,
- * default values & assertions and call the given callback with
- * processed value.
- *
- * @param {Vue} vm
- * @param {Object} prop
- * @param {*} rawValue
- * @param {Function} fn
- */
-
-function processPropValue(vm, prop, rawValue, fn) {
-  var isSimple = prop.dynamic && isSimplePath(prop.parentPath);
-  var value = rawValue;
-  if (value === undefined) {
-    value = getPropDefaultValue(vm, prop);
-  }
-  value = coerceProp(prop, value);
-  var coerced = value !== rawValue;
-  if (!assertProp(prop, value, vm)) {
-    value = undefined;
-  }
-  if (isSimple && !coerced) {
-    withoutConversion(function () {
-      fn(value);
-    });
-  } else {
-    fn(value);
-  }
-}
-
-/**
- * Set a prop's initial value on a vm and its data object.
- *
- * @param {Vue} vm
- * @param {Object} prop
- * @param {*} value
- */
-
-function initProp(vm, prop, value) {
-  processPropValue(vm, prop, value, function (value) {
-    defineReactive(vm, prop.path, value);
-  });
-}
-
-/**
- * Update a prop's value on a vm.
- *
- * @param {Vue} vm
- * @param {Object} prop
- * @param {*} value
- */
-
-function updateProp(vm, prop, value) {
-  processPropValue(vm, prop, value, function (value) {
-    vm[prop.path] = value;
-  });
-}
-
-/**
- * Get the default value of a prop.
- *
- * @param {Vue} vm
- * @param {Object} prop
- * @return {*}
- */
-
-function getPropDefaultValue(vm, prop) {
-  // no default, return undefined
-  var options = prop.options;
-  if (!hasOwn(options, 'default')) {
-    // absent boolean value defaults to false
-    return options.type === Boolean ? false : undefined;
-  }
-  var def = options['default'];
-  // warn against non-factory defaults for Object & Array
-  if (isObject(def)) {
-    process.env.NODE_ENV !== 'production' && warn('Invalid default value for prop "' + prop.name + '": ' + 'Props with type Object/Array must use a factory function ' + 'to return the default value.', vm);
-  }
-  // call factory function for non-Function types
-  return typeof def === 'function' && options.type !== Function ? def.call(vm) : def;
-}
-
-/**
- * Assert whether a prop is valid.
- *
- * @param {Object} prop
- * @param {*} value
- * @param {Vue} vm
- */
-
-function assertProp(prop, value, vm) {
-  if (!prop.options.required && ( // non-required
-  prop.raw === null || // abscent
-  value == null) // null or undefined
-  ) {
-      return true;
-    }
-  var options = prop.options;
-  var type = options.type;
-  var valid = !type;
-  var expectedTypes = [];
-  if (type) {
-    if (!isArray(type)) {
-      type = [type];
-    }
-    for (var i = 0; i < type.length && !valid; i++) {
-      var assertedType = assertType(value, type[i]);
-      expectedTypes.push(assertedType.expectedType);
-      valid = assertedType.valid;
-    }
-  }
-  if (!valid) {
-    if (process.env.NODE_ENV !== 'production') {
-      warn('Invalid prop: type check failed for prop "' + prop.name + '".' + ' Expected ' + expectedTypes.map(formatType).join(', ') + ', got ' + formatValue(value) + '.', vm);
-    }
-    return false;
-  }
-  var validator = options.validator;
-  if (validator) {
-    if (!validator(value)) {
-      process.env.NODE_ENV !== 'production' && warn('Invalid prop: custom validator check failed for prop "' + prop.name + '".', vm);
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
- * Force parsing value with coerce option.
- *
- * @param {*} value
- * @param {Object} options
- * @return {*}
- */
-
-function coerceProp(prop, value) {
-  var coerce = prop.options.coerce;
-  if (!coerce) {
-    return value;
-  }
-  // coerce is a function
-  return coerce(value);
-}
-
-/**
- * Assert the type of a value
- *
- * @param {*} value
- * @param {Function} type
- * @return {Object}
- */
-
-function assertType(value, type) {
-  var valid;
-  var expectedType;
-  if (type === String) {
-    expectedType = 'string';
-    valid = typeof value === expectedType;
-  } else if (type === Number) {
-    expectedType = 'number';
-    valid = typeof value === expectedType;
-  } else if (type === Boolean) {
-    expectedType = 'boolean';
-    valid = typeof value === expectedType;
-  } else if (type === Function) {
-    expectedType = 'function';
-    valid = typeof value === expectedType;
-  } else if (type === Object) {
-    expectedType = 'object';
-    valid = isPlainObject(value);
-  } else if (type === Array) {
-    expectedType = 'array';
-    valid = isArray(value);
-  } else {
-    valid = value instanceof type;
-  }
-  return {
-    valid: valid,
-    expectedType: expectedType
-  };
-}
-
-/**
- * Format type for output
- *
- * @param {String} type
- * @return {String}
- */
-
-function formatType(type) {
-  return type ? type.charAt(0).toUpperCase() + type.slice(1) : 'custom type';
-}
-
-/**
- * Format value
- *
- * @param {*} value
- * @return {String}
- */
-
-function formatValue(val) {
-  return Object.prototype.toString.call(val).slice(8, -1);
-}
-
 var bindingModes = config._propBindingModes;
 
 var propDef = {
@@ -27498,7 +26113,10 @@ var propDef = {
     var twoWay = prop.mode === bindingModes.TWO_WAY;
 
     var parentWatcher = this.parentWatcher = new Watcher(parent, parentKey, function (val) {
-      updateProp(child, prop, val);
+      val = coerceProp(prop, val);
+      if (assertProp(prop, val)) {
+        child[childKey] = val;
+      }
     }, {
       twoWay: twoWay,
       filters: prop.filters,
@@ -27577,32 +26195,6 @@ var transDurationProp = transitionProp + 'Duration';
 var animDurationProp = animationProp + 'Duration';
 
 /**
- * If a just-entered element is applied the
- * leave class while its enter transition hasn't started yet,
- * and the transitioned property has the same value for both
- * enter/leave, then the leave transition will be skipped and
- * the transitionend event never fires. This function ensures
- * its callback to be called after a transition has started
- * by waiting for double raf.
- *
- * It falls back to setTimeout on devices that support CSS
- * transitions but not raf (e.g. Android 4.2 browser) - since
- * these environments are usually slow, we are giving it a
- * relatively large timeout.
- */
-
-var raf = inBrowser && window.requestAnimationFrame;
-var waitForTransitionStart = raf
-/* istanbul ignore next */
-? function (fn) {
-  raf(function () {
-    raf(fn);
-  });
-} : function (fn) {
-  setTimeout(fn, 50);
-};
-
-/**
  * A Transition object that encapsulates the state and logic
  * of the transition.
  *
@@ -27628,7 +26220,7 @@ function Transition(el, id, hooks, vm) {
   /* istanbul ignore if */
   if (process.env.NODE_ENV !== 'production') {
     if (this.type && this.type !== TYPE_TRANSITION && this.type !== TYPE_ANIMATION) {
-      warn('invalid CSS transition type for transition="' + this.id + '": ' + this.type, vm);
+      warn('invalid CSS transition type for transition="' + this.id + '": ' + this.type);
     }
   }
   // bind
@@ -27686,13 +26278,19 @@ p$1.enter = function (op, cb) {
  */
 
 p$1.enterNextTick = function () {
-  var _this = this;
-
-  // prevent transition skipping
+  // Important hack:
+  // in Chrome, if a just-entered element is applied the
+  // leave class while its interpolated property still has
+  // a very small value (within one frame), Chrome will
+  // skip the leave transition entirely and not firing the
+  // transtionend event. Therefore we need to protected
+  // against such cases using a one-frame timeout.
   this.justEntered = true;
-  waitForTransitionStart(function () {
-    _this.justEntered = false;
-  });
+  var self = this;
+  setTimeout(function () {
+    self.justEntered = false;
+  }, 17);
+
   var enterDone = this.enterDone;
   var type = this.getCssTransitionType(this.enterClass);
   if (!this.pendingJsCb) {
@@ -27969,6 +26567,164 @@ var internalDirectives = {
   transition: transition$1
 };
 
+var propBindingModes = config._propBindingModes;
+var empty = {};
+
+// regexes
+var identRE$1 = /^[$_a-zA-Z]+[\w$]*$/;
+var settablePathRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\[\]]+\])*$/;
+
+/**
+ * Compile props on a root element and return
+ * a props link function.
+ *
+ * @param {Element|DocumentFragment} el
+ * @param {Array} propOptions
+ * @return {Function} propsLinkFn
+ */
+
+function compileProps(el, propOptions) {
+  var props = [];
+  var names = Object.keys(propOptions);
+  var i = names.length;
+  var options, name, attr, value, path, parsed, prop;
+  while (i--) {
+    name = names[i];
+    options = propOptions[name] || empty;
+
+    if (process.env.NODE_ENV !== 'production' && name === '$data') {
+      warn('Do not use $data as prop.');
+      continue;
+    }
+
+    // props could contain dashes, which will be
+    // interpreted as minus calculations by the parser
+    // so we need to camelize the path here
+    path = camelize(name);
+    if (!identRE$1.test(path)) {
+      process.env.NODE_ENV !== 'production' && warn('Invalid prop key: "' + name + '". Prop keys ' + 'must be valid identifiers.');
+      continue;
+    }
+
+    prop = {
+      name: name,
+      path: path,
+      options: options,
+      mode: propBindingModes.ONE_WAY,
+      raw: null
+    };
+
+    attr = hyphenate(name);
+    // first check dynamic version
+    if ((value = getBindAttr(el, attr)) === null) {
+      if ((value = getBindAttr(el, attr + '.sync')) !== null) {
+        prop.mode = propBindingModes.TWO_WAY;
+      } else if ((value = getBindAttr(el, attr + '.once')) !== null) {
+        prop.mode = propBindingModes.ONE_TIME;
+      }
+    }
+    if (value !== null) {
+      // has dynamic binding!
+      prop.raw = value;
+      parsed = parseDirective(value);
+      value = parsed.expression;
+      prop.filters = parsed.filters;
+      // check binding type
+      if (isLiteral(value) && !parsed.filters) {
+        // for expressions containing literal numbers and
+        // booleans, there's no need to setup a prop binding,
+        // so we can optimize them as a one-time set.
+        prop.optimizedLiteral = true;
+      } else {
+        prop.dynamic = true;
+        // check non-settable path for two-way bindings
+        if (process.env.NODE_ENV !== 'production' && prop.mode === propBindingModes.TWO_WAY && !settablePathRE.test(value)) {
+          prop.mode = propBindingModes.ONE_WAY;
+          warn('Cannot bind two-way prop with non-settable ' + 'parent path: ' + value);
+        }
+      }
+      prop.parentPath = value;
+
+      // warn required two-way
+      if (process.env.NODE_ENV !== 'production' && options.twoWay && prop.mode !== propBindingModes.TWO_WAY) {
+        warn('Prop "' + name + '" expects a two-way binding type.');
+      }
+    } else if ((value = getAttr(el, attr)) !== null) {
+      // has literal binding!
+      prop.raw = value;
+    } else if (process.env.NODE_ENV !== 'production') {
+      // check possible camelCase prop usage
+      var lowerCaseName = path.toLowerCase();
+      value = /[A-Z\-]/.test(name) && (el.getAttribute(lowerCaseName) || el.getAttribute(':' + lowerCaseName) || el.getAttribute('v-bind:' + lowerCaseName) || el.getAttribute(':' + lowerCaseName + '.once') || el.getAttribute('v-bind:' + lowerCaseName + '.once') || el.getAttribute(':' + lowerCaseName + '.sync') || el.getAttribute('v-bind:' + lowerCaseName + '.sync'));
+      if (value) {
+        warn('Possible usage error for prop `' + lowerCaseName + '` - ' + 'did you mean `' + attr + '`? HTML is case-insensitive, remember to use ' + 'kebab-case for props in templates.');
+      } else if (options.required) {
+        // warn missing required
+        warn('Missing required prop: ' + name);
+      }
+    }
+    // push prop
+    props.push(prop);
+  }
+  return makePropsLinkFn(props);
+}
+
+/**
+ * Build a function that applies props to a vm.
+ *
+ * @param {Array} props
+ * @return {Function} propsLinkFn
+ */
+
+function makePropsLinkFn(props) {
+  return function propsLinkFn(vm, scope) {
+    // store resolved props info
+    vm._props = {};
+    var i = props.length;
+    var prop, path, options, value, raw;
+    while (i--) {
+      prop = props[i];
+      raw = prop.raw;
+      path = prop.path;
+      options = prop.options;
+      vm._props[path] = prop;
+      if (raw === null) {
+        // initialize absent prop
+        initProp(vm, prop, undefined);
+      } else if (prop.dynamic) {
+        // dynamic prop
+        if (prop.mode === propBindingModes.ONE_TIME) {
+          // one time binding
+          value = (scope || vm._context || vm).$get(prop.parentPath);
+          initProp(vm, prop, value);
+        } else {
+          if (vm._context) {
+            // dynamic binding
+            vm._bindDir({
+              name: 'prop',
+              def: propDef,
+              prop: prop
+            }, null, null, scope); // el, host, scope
+          } else {
+              // root instance
+              initProp(vm, prop, vm.$get(prop.parentPath));
+            }
+        }
+      } else if (prop.optimizedLiteral) {
+        // optimized literal, cast it and just set once
+        var stripped = stripQuotes(raw);
+        value = stripped === raw ? toBoolean(toNumber(raw)) : stripped;
+        initProp(vm, prop, value);
+      } else {
+        // string literal, but we need to cater for
+        // Boolean props with no value
+        value = options.type === Boolean && raw === '' ? true : raw;
+        initProp(vm, prop, value);
+      }
+    }
+  };
+}
+
 // special binding prefixes
 var bindRE = /^v-bind:|^:/;
 var onRE = /^v-on:|^@/;
@@ -27976,9 +26732,11 @@ var dirAttrRE = /^v-([^:]+)(?:$|:(.*)$)/;
 var modifierRE = /\.[^\.]+/g;
 var transitionRE = /^(v-bind:|:)?transition$/;
 
+// terminal directives
+var terminalDirectives = ['for', 'if'];
+
 // default directive priority
 var DEFAULT_PRIORITY = 1000;
-var DEFAULT_TERMINAL_PRIORITY = 2000;
 
 /**
  * Compile a template and return a reusable composite link
@@ -28125,7 +26883,7 @@ function teardownDirs(vm, dirs, destroying) {
  */
 
 function compileAndLinkProps(vm, el, props, scope) {
-  var propsLinkFn = compileProps(el, props, vm);
+  var propsLinkFn = compileProps(el, props);
   var propDirs = linkAndCapture(function () {
     propsLinkFn(vm, scope);
   }, vm);
@@ -28251,10 +27009,9 @@ function compileElement(el, options) {
   }
   var linkFn;
   var hasAttrs = el.hasAttributes();
-  var attrs = hasAttrs && toArray(el.attributes);
   // check terminal directives (for & if)
   if (hasAttrs) {
-    linkFn = checkTerminalDirectives(el, attrs, options);
+    linkFn = checkTerminalDirectives(el, options);
   }
   // check element directives
   if (!linkFn) {
@@ -28266,7 +27023,7 @@ function compileElement(el, options) {
   }
   // normal directives
   if (!linkFn && hasAttrs) {
-    linkFn = compileDirectives(attrs, options);
+    linkFn = compileDirectives(el.attributes, options);
   }
   return linkFn;
 }
@@ -28495,12 +27252,11 @@ function checkComponent(el, options) {
  * If it finds one, return a terminal link function.
  *
  * @param {Element} el
- * @param {Array} attrs
  * @param {Object} options
  * @return {Function} terminalLinkFn
  */
 
-function checkTerminalDirectives(el, attrs, options) {
+function checkTerminalDirectives(el, options) {
   // skip v-pre
   if (getAttr(el, 'v-pre') !== null) {
     return skip;
@@ -28512,28 +27268,13 @@ function checkTerminalDirectives(el, attrs, options) {
       return skip;
     }
   }
-
-  var attr, name, value, modifiers, matched, dirName, rawName, arg, def, termDef;
-  for (var i = 0, j = attrs.length; i < j; i++) {
-    attr = attrs[i];
-    modifiers = parseModifiers(attr.name);
-    name = attr.name.replace(modifierRE, '');
-    if (matched = name.match(dirAttrRE)) {
-      def = resolveAsset(options, 'directives', matched[1]);
-      if (def && def.terminal) {
-        if (!termDef || (def.priority || DEFAULT_TERMINAL_PRIORITY) > termDef.priority) {
-          termDef = def;
-          rawName = attr.name;
-          value = attr.value;
-          dirName = matched[1];
-          arg = matched[2];
-        }
-      }
+  var value, dirName;
+  for (var i = 0, l = terminalDirectives.length; i < l; i++) {
+    dirName = terminalDirectives[i];
+    value = el.getAttribute('v-' + dirName);
+    if (value != null) {
+      return makeTerminalNodeLinkFn(el, dirName, value, options);
     }
-  }
-
-  if (termDef) {
-    return makeTerminalNodeLinkFn(el, dirName, value, options, termDef, rawName, arg, modifiers);
   }
 }
 
@@ -28550,24 +27291,20 @@ skip.terminal = true;
  * @param {String} dirName
  * @param {String} value
  * @param {Object} options
- * @param {Object} def
- * @param {String} [rawName]
- * @param {String} [arg]
- * @param {Object} [modifiers]
+ * @param {Object} [def]
  * @return {Function} terminalLinkFn
  */
 
-function makeTerminalNodeLinkFn(el, dirName, value, options, def, rawName, arg, modifiers) {
+function makeTerminalNodeLinkFn(el, dirName, value, options, def) {
   var parsed = parseDirective(value);
   var descriptor = {
     name: dirName,
-    arg: arg,
     expression: parsed.expression,
     filters: parsed.filters,
     raw: value,
-    attr: rawName,
-    modifiers: modifiers,
-    def: def
+    // either an element directive, or if/for
+    // #2366 or custom terminal directive
+    def: def || resolveAsset(options, 'directives', dirName)
   };
   // check ref for v-for and router-view
   if (dirName === 'for' || dirName === 'router-view') {
@@ -28616,7 +27353,7 @@ function compileDirectives(attrs, options) {
         if (name === 'class' && Array.prototype.some.call(attrs, function (attr) {
           return attr.name === ':class' || attr.name === 'v-bind:class';
         })) {
-          warn('class="' + rawValue + '": Do not mix mustache interpolation ' + 'and v-bind for "class" on the same element. Use one or the other.', options);
+          warn('class="' + rawValue + '": Do not mix mustache interpolation ' + 'and v-bind for "class" on the same element. Use one or the other.');
         }
       }
     } else
@@ -28654,7 +27391,12 @@ function compileDirectives(attrs, options) {
                 continue;
               }
 
-              dirDef = resolveAsset(options, 'directives', dirName, true);
+              dirDef = resolveAsset(options, 'directives', dirName);
+
+              if (process.env.NODE_ENV !== 'production') {
+                assertAsset(dirDef, 'directive', dirName);
+              }
+
               if (dirDef) {
                 pushDir(dirName, dirDef);
               }
@@ -28905,9 +27647,6 @@ function resolveSlots(vm, content) {
       (contents[name] || (contents[name] = [])).push(el);
     }
     /* eslint-enable no-cond-assign */
-    if (process.env.NODE_ENV !== 'production' && getBindAttr(el, 'slot')) {
-      warn('The "slot" attribute must be static.', vm.$parent);
-    }
   }
   for (name in contents) {
     contents[name] = extractFragment(contents[name], content);
@@ -28944,6 +27683,7 @@ var compiler = Object.freeze({
 	compile: compile,
 	compileAndLinkProps: compileAndLinkProps,
 	compileRoot: compileRoot,
+	terminalDirectives: terminalDirectives,
 	transclude: transclude,
 	resolveSlots: resolveSlots
 });
@@ -28991,7 +27731,7 @@ function stateMixin (Vue) {
     var el = options.el;
     var props = options.props;
     if (props && !el) {
-      process.env.NODE_ENV !== 'production' && warn('Props will not be compiled if no `el` option is ' + 'provided at instantiation.', this);
+      process.env.NODE_ENV !== 'production' && warn('Props will not be compiled if no `el` option is ' + 'provided at instantiation.');
     }
     // make sure to convert string selectors into element now
     el = options.el = query(el);
@@ -29007,10 +27747,6 @@ function stateMixin (Vue) {
   Vue.prototype._initData = function () {
     var dataFn = this.$options.data;
     var data = this._data = dataFn ? dataFn() : {};
-    if (!isPlainObject(data)) {
-      data = {};
-      process.env.NODE_ENV !== 'production' && warn('data functions should return an object.', this);
-    }
     var props = this._props;
     var runtimeData = this._runtimeData ? typeof this._runtimeData === 'function' ? this._runtimeData() : this._runtimeData : null;
     // proxy data on instance
@@ -29026,7 +27762,7 @@ function stateMixin (Vue) {
       if (!props || !hasOwn(props, key) || runtimeData && hasOwn(runtimeData, key) && props[key].raw === null) {
         this._proxy(key);
       } else if (process.env.NODE_ENV !== 'production') {
-        warn('Data field "' + key + '" is already defined ' + 'as a prop. Use prop default value instead.', this);
+        warn('Data field "' + key + '" is already defined ' + 'as a prop. Use prop default value instead.');
       }
     }
     // observe data
@@ -29226,7 +27962,7 @@ function eventsMixin (Vue) {
           handler._fromParent = true;
           vm.$on(name.replace(eventRE), handler);
         } else if (process.env.NODE_ENV !== 'production') {
-          warn('v-on:' + name + '="' + attrs[i].value + '" ' + 'expects a function value, got ' + handler, vm);
+          warn('v-on:' + name + '="' + attrs[i].value + '"' + (vm.$options.name ? ' on component <' + vm.$options.name + '>' : '') + ' expects a function value, got ' + handler);
         }
       }
     }
@@ -29275,7 +28011,7 @@ function eventsMixin (Vue) {
       if (method) {
         vm[action](key, method, options);
       } else {
-        process.env.NODE_ENV !== 'production' && warn('Unknown method: "' + handler + '" when ' + 'registering callback for ' + action + ': "' + key + '".', vm);
+        process.env.NODE_ENV !== 'production' && warn('Unknown method: "' + handler + '" when ' + 'registering callback for ' + action + ': "' + key + '".');
       }
     } else if (handler && type === 'object') {
       register(vm, action, key, handler.handler, handler);
@@ -29363,21 +28099,18 @@ function noop() {}
  * It registers a watcher with the expression and calls
  * the DOM update function when a change is triggered.
  *
+ * @param {String} name
+ * @param {Node} el
+ * @param {Vue} vm
  * @param {Object} descriptor
  *                 - {String} name
  *                 - {Object} def
  *                 - {String} expression
  *                 - {Array<Object>} [filters]
- *                 - {Object} [modifiers]
  *                 - {Boolean} literal
  *                 - {String} attr
- *                 - {String} arg
  *                 - {String} raw
- *                 - {String} [ref]
- *                 - {Array<Object>} [interp]
- *                 - {Boolean} [hasOneTime]
- * @param {Vue} vm
- * @param {Node} el
+ * @param {Object} def - directive definition object
  * @param {Vue} [host] - transclusion host component
  * @param {Object} [scope] - v-for scope
  * @param {Fragment} [frag] - owner fragment
@@ -29413,6 +28146,8 @@ function Directive(descriptor, vm, el, host, scope, frag) {
  * Initialize the directive, mixin definition properties,
  * setup the watcher, call definition bind() and update()
  * if present.
+ *
+ * @param {Object} def
  */
 
 Directive.prototype._bind = function () {
@@ -29493,7 +28228,7 @@ Directive.prototype._setupParams = function () {
   var i = params.length;
   var key, val, mappedKey;
   while (i--) {
-    key = hyphenate(params[i]);
+    key = params[i];
     mappedKey = camelize(key);
     val = getBindAttr(this.el, key);
     if (val != null) {
@@ -29771,8 +28506,10 @@ function lifecycleMixin (Vue) {
   /**
    * Create and bind a directive to an element.
    *
-   * @param {Object} descriptor - parsed directive descriptor
+   * @param {String} name - directive name
    * @param {Node} node   - target node
+   * @param {Object} desc - parsed directive descriptor
+   * @param {Object} def  - directive definition object
    * @param {Vue} [host] - transclusion host component
    * @param {Object} [scope] - v-for scope
    * @param {Fragment} [frag] - owner fragment
@@ -29915,8 +28652,11 @@ function miscMixin (Vue) {
   Vue.prototype._applyFilters = function (value, oldValue, filters, write) {
     var filter, fn, args, arg, offset, i, l, j, k;
     for (i = 0, l = filters.length; i < l; i++) {
-      filter = filters[write ? l - i - 1 : i];
-      fn = resolveAsset(this.$options, 'filters', filter.name, true);
+      filter = filters[i];
+      fn = resolveAsset(this.$options, 'filters', filter.name);
+      if (process.env.NODE_ENV !== 'production') {
+        assertAsset(fn, 'filter', filter.name);
+      }
       if (!fn) continue;
       fn = write ? fn.write : fn.read || fn;
       if (typeof fn !== 'function') continue;
@@ -29940,16 +28680,14 @@ function miscMixin (Vue) {
    * resolves asynchronously and caches the resolved
    * constructor on the factory.
    *
-   * @param {String|Function} value
+   * @param {String} id
    * @param {Function} cb
    */
 
-  Vue.prototype._resolveComponent = function (value, cb) {
-    var factory;
-    if (typeof value === 'function') {
-      factory = value;
-    } else {
-      factory = resolveAsset(this.$options, 'components', value, true);
+  Vue.prototype._resolveComponent = function (id, cb) {
+    var factory = resolveAsset(this.$options, 'components', id);
+    if (process.env.NODE_ENV !== 'production') {
+      assertAsset(factory, 'component', id);
     }
     if (!factory) {
       return;
@@ -29976,7 +28714,7 @@ function miscMixin (Vue) {
             cbs[i](res);
           }
         }, function reject(reason) {
-          process.env.NODE_ENV !== 'production' && warn('Failed to resolve async component' + (typeof value === 'string' ? ': ' + value : '') + '. ' + (reason ? '\nReason: ' + reason : ''));
+          process.env.NODE_ENV !== 'production' && warn('Failed to resolve async component: ' + id + '. ' + (reason ? '\nReason: ' + reason : ''));
         });
       }
     } else {
@@ -30551,7 +29289,7 @@ function lifecycleAPI (Vue) {
 
   Vue.prototype.$mount = function (el) {
     if (this._isCompiled) {
-      process.env.NODE_ENV !== 'production' && warn('$mount() should be called only once.', this);
+      process.env.NODE_ENV !== 'production' && warn('$mount() should be called only once.');
       return;
     }
     el = query(el);
@@ -30582,9 +29320,6 @@ function lifecycleAPI (Vue) {
   /**
    * Teardown the instance, simply delegate to the internal
    * _destroy.
-   *
-   * @param {Boolean} remove
-   * @param {Boolean} deferCleanup
    */
 
   Vue.prototype.$destroy = function (remove, deferCleanup) {
@@ -30597,8 +29332,6 @@ function lifecycleAPI (Vue) {
    *
    * @param {Element|DocumentFragment} el
    * @param {Vue} [host]
-   * @param {Object} [scope]
-   * @param {Fragment} [frag]
    * @return {Function}
    */
 
@@ -30710,7 +29443,10 @@ var partial = {
   },
 
   insert: function insert(id) {
-    var partial = resolveAsset(this.vm.$options, 'partials', id, true);
+    var partial = resolveAsset(this.vm.$options, 'partials', id);
+    if (process.env.NODE_ENV !== 'production') {
+      assertAsset(partial, 'partial', id);
+    }
     if (partial) {
       this.factory = new FragmentFactory(this.vm, partial);
       vIf.insert.call(this);
@@ -30766,7 +29502,9 @@ function filterBy(arr, search, delimiter) {
   // because why not
   var n = delimiter === 'in' ? 3 : 2;
   // extract and flatten keys
-  var keys = Array.prototype.concat.apply([], toArray(arguments, n));
+  var keys = toArray(arguments, n).reduce(function (prev, cur) {
+    return prev.concat(cur);
+  }, []);
   var res = [];
   var item, key, val, j;
   for (var i = 0, l = arr.length; i < l; i++) {
@@ -30776,12 +29514,12 @@ function filterBy(arr, search, delimiter) {
     if (j) {
       while (j--) {
         key = keys[j];
-        if (key === '$key' && contains(item.$key, search) || contains(getPath(val, key), search)) {
+        if (key === '$key' && contains$1(item.$key, search) || contains$1(getPath(val, key), search)) {
           res.push(item);
           break;
         }
       }
-    } else if (contains(item, search)) {
+    } else if (contains$1(item, search)) {
       res.push(item);
     }
   }
@@ -30791,58 +29529,26 @@ function filterBy(arr, search, delimiter) {
 /**
  * Filter filter for arrays
  *
- * @param {String|Array<String>|Function} ...sortKeys
- * @param {Number} [order]
+ * @param {String} sortKey
+ * @param {String} reverse
  */
 
-function orderBy(arr) {
-  var comparator = null;
-  var sortKeys = undefined;
+function orderBy(arr, sortKey, reverse) {
   arr = convertArray(arr);
-
-  // determine order (last argument)
-  var args = toArray(arguments, 1);
-  var order = args[args.length - 1];
-  if (typeof order === 'number') {
-    order = order < 0 ? -1 : 1;
-    args = args.length > 1 ? args.slice(0, -1) : args;
-  } else {
-    order = 1;
-  }
-
-  // determine sortKeys & comparator
-  var firstArg = args[0];
-  if (!firstArg) {
+  if (!sortKey) {
     return arr;
-  } else if (typeof firstArg === 'function') {
-    // custom comparator
-    comparator = function (a, b) {
-      return firstArg(a, b) * order;
-    };
-  } else {
-    // string keys. flatten first
-    sortKeys = Array.prototype.concat.apply([], args);
-    comparator = function (a, b, i) {
-      i = i || 0;
-      return i >= sortKeys.length - 1 ? baseCompare(a, b, i) : baseCompare(a, b, i) || comparator(a, b, i + 1);
-    };
   }
-
-  function baseCompare(a, b, sortKeyIndex) {
-    var sortKey = sortKeys[sortKeyIndex];
-    if (sortKey) {
-      if (sortKey !== '$key') {
-        if (isObject(a) && '$value' in a) a = a.$value;
-        if (isObject(b) && '$value' in b) b = b.$value;
-      }
-      a = isObject(a) ? getPath(a, sortKey) : a;
-      b = isObject(b) ? getPath(b, sortKey) : b;
-    }
-    return a === b ? 0 : a > b ? order : -order;
-  }
-
+  var order = reverse && reverse < 0 ? -1 : 1;
   // sort on a copy to avoid mutating original array
-  return arr.slice().sort(comparator);
+  return arr.slice().sort(function (a, b) {
+    if (sortKey !== '$key') {
+      if (isObject(a) && '$value' in a) a = a.$value;
+      if (isObject(b) && '$value' in b) b = b.$value;
+    }
+    a = isObject(a) ? getPath(a, sortKey) : a;
+    b = isObject(b) ? getPath(b, sortKey) : b;
+    return a === b ? 0 : a > b ? order : -order;
+  });
 }
 
 /**
@@ -30852,20 +29558,20 @@ function orderBy(arr) {
  * @param {String} search
  */
 
-function contains(val, search) {
+function contains$1(val, search) {
   var i;
   if (isPlainObject(val)) {
     var keys = Object.keys(val);
     i = keys.length;
     while (i--) {
-      if (contains(val[keys[i]], search)) {
+      if (contains$1(val[keys[i]], search)) {
         return true;
       }
     }
   } else if (isArray(val)) {
     i = val.length;
     while (i--) {
-      if (contains(val[i], search)) {
+      if (contains$1(val[i], search)) {
         return true;
       }
     }
@@ -31162,19 +29868,17 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.21';
+Vue.version = '1.0.18';
 
 // devtools global hook
 /* istanbul ignore next */
-setTimeout(function () {
-  if (config.devtools) {
-    if (devtools) {
-      devtools.emit('init', Vue);
-    } else if (process.env.NODE_ENV !== 'production' && inBrowser && /Chrome\/\d+/.test(window.navigator.userAgent)) {
-      console.log('Download the Vue Devtools for a better development experience:\n' + 'https://github.com/vuejs/vue-devtools');
-    }
+if (config.devtools) {
+  if (devtools) {
+    devtools.emit('init', Vue);
+  } else if (process.env.NODE_ENV !== 'production' && inBrowser && /Chrome\/\d+/.test(window.navigator.userAgent)) {
+    console.log('Download the Vue Devtools for a better development experience:\n' + 'https://github.com/vuejs/vue-devtools');
   }
-}, 0);
+}
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
@@ -31258,7 +29962,7 @@ new _vue2.default({
 	}
 });
 
-},{"./vuejs/components/booking/ManageBooking.vue":123,"./vuejs/components/booking/NewBooking.vue":124,"./vuejs/components/club/ClubSetting.vue":126,"./vuejs/components/header/HeaderMain.vue":139,"./vuejs/components/super/SuperSetting.vue":143,"./vuejs/components/user/UserSetting.vue":147,"deferred":29,"lodash":88,"vue":119,"vue-async-data":93,"vue-resource":108}],122:[function(require,module,exports){
+},{"./vuejs/components/booking/ManageBooking.vue":123,"./vuejs/components/booking/NewBooking.vue":124,"./vuejs/components/club/ClubSetting.vue":126,"./vuejs/components/header/HeaderMain.vue":139,"./vuejs/components/super/SuperSetting.vue":143,"./vuejs/components/user/UserSetting.vue":150,"deferred":29,"lodash":88,"vue":119,"vue-async-data":93,"vue-resource":108}],122:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31288,15 +29992,7 @@ exports.default = {
             now: new Date(),
             courts: [],
             dataOfClub: [],
-            booking_detail: null,
-            billing_info: {
-                first_name: null,
-                last_name: null,
-                email: null,
-                phone: null,
-                address1: null
-            },
-            payment_info: null,
+            booking: [],
             info_grid_available: null,
             make_time_unavailable: {
                 hour: null,
@@ -31406,7 +30102,7 @@ exports.default = {
             var def = deferred();
             $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.dataOfClub'), { date: this.dateChooise, club_id: this.clubSettingId }).then(function (res) {
-                if (res.data.success) {
+                if (res.data.error == false) {
                     def.resolve(res.data.data);
                 }
                 _this3.submit = false;
@@ -31428,16 +30124,12 @@ exports.default = {
         fetchDataOfBooking: function fetchDataOfBooking(booking_id) {
             var _this4 = this;
 
-            this.booking_detail = null;
-            this.billing_info = null;
-            this.payment_info = null;
+            this.booking = [];
             $("#md-booking-content-expand").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.view', { one: booking_id })).then(function (res) {
                 $("#md-booking-content-expand .loading").remove();
-                if (res.data.success) {
-                    _this4.booking_detail = res.data.booking;
-                    _this4.billing_info = JSON.parse(_this4.booking_detail['billing_info']);
-                    _this4.payment_info = JSON.parse(_this4.booking_detail['payment_info']);
+                if (res.data.error == false) {
+                    _this4.booking = res.data.booking;
                 }
             }, function (res) {
                 $("#md-booking-content-expand .loading").remove();
@@ -31452,7 +30144,7 @@ exports.default = {
             $("#md-available-content-expand").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.infoGridAvailable', { court_id: court_id, hour: hour, date: this.dateChooise })).then(function (res) {
                 $("#md-available-content-expand .loading").remove();
-                if (res.data.success) {
+                if (res.data.error == false) {
                     _this5.info_grid_available = res.data.data;
                     _this5.make_time_unavailable.court_id = _this5.deal.court_id = court_id;
                     _this5.make_time_unavailable.hour = _this5.deal.hour = hour;
@@ -31465,8 +30157,8 @@ exports.default = {
             var _this6 = this;
 
             this.$http.get(laroute.route('booking.acceptPayment', { one: booking_id }), function (data) {
-                if (data.success) {
-                    _this6.booking_detail.status = "paid";
+                if (data.error == false) {
+                    _this6.booking.status = "paid";
                     showNotice('success', "Update accept payment success!", 'Update Success!');
                 }
             }).error(function (data) {});
@@ -31477,11 +30169,16 @@ exports.default = {
         cancelBooking: function cancelBooking(booking_id) {
             var parent = this;
             $('#confirm-booking-delete').modal({ backdrop: 'static', keyboard: false }).one('click', '#booking-delete', function (e) {
-                parent.$http.put(laroute.route('booking.delete', { one: booking_id }), function (data) {
-                    if (data.success) {
+                $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                parent.$http.get(laroute.route('booking.cancel', { one: booking_id }), function (data) {
+                    console.log(data);
+                    if (data.error == false) {
                         parent.flagChangeDataOfDate = Math.random();
-                        showNotice('success', "Delete success!", 'Delete Success!');
+                        showNotice('success', "Cancel booking success!", 'Cancel Success!');
+                    } else {
+                        showNotice('error', data.message, 'Error!');
                     }
+                    $("body .loading").remove();
                 }).error(function (data) {});
             });
         },
@@ -31497,7 +30194,7 @@ exports.default = {
             this.$set('make_time_unavailable.date', this.dateChooise);
             var make_time_unavailable = this.make_time_unavailable;
             this.$http.post(laroute.route('booking.makeTimeUnavailable', make_time_unavailable)).then(function (res) {
-                if (res.data.success) {
+                if (res.data.error == false) {
                     $("#mb-make-time-unavailable .btn-in-expand").click();
                     _this7.flagChangeDataOfDate = Math.random();
                     showNotice('success', "Make Time Unavailable success", 'Update Success!');
@@ -31519,7 +30216,7 @@ exports.default = {
             $('#md-new-deal').modal('show');
             $("#md-new-deal .modal-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.get(laroute.route('booking.getInfoGridForDeal', deal)).then(function (res) {
-                if (res.data.success) {
+                if (res.data.error == false) {
                     var data = res.data.data;
                     _this8.deal.date_text = data['date_text'];
                     _this8.deal.time = data['time'];
@@ -31537,7 +30234,7 @@ exports.default = {
 
             var deal = this.deal;
             this.$http.post(laroute.route('booking.newDeal', deal)).then(function (res) {
-                if (res.data.success) {
+                if (res.data.error == false) {
                     _this9.flagChangeDataOfDate = Math.random();
                     $('#md-new-deal').modal('hide');
                     showNotice('success', "New deal success", 'Update Success!');
@@ -31562,7 +30259,7 @@ exports.default = {
             data.append('grids_selected', JSON.stringify(this.grids_selected));
             $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(laroute.route('booking.makeTimeUnavailable'), data).then(function (res) {
-                if (res.data.success) {
+                if (res.data.error == false) {
                     $("#multi_make_time_unavailable .btn-in-expand").click();
                     _this10.flagChangeDataOfDate = Math.random();
                     _this.grids_selected = [];
@@ -31588,7 +30285,7 @@ exports.default = {
             data.append('grids_selected', JSON.stringify(this.grids_selected));
             var _this = this;
             this.$http.post(laroute.route('booking.newDeal'), data).then(function (res) {
-                if (res.data.success) {
+                if (res.data.error == false) {
                     _this11.flagChangeDataOfDate = Math.random();
                     $('#md-multi-new-deal').modal('hide');
                     showNotice('success', "New multi deal success", 'Update Success!');
@@ -31668,12 +30365,12 @@ exports.default = {
     beforeDestroy: function beforeDestroy() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<section class=\"col-xs-12 col-md-12\" id=\"calendar_bookings\">\n\n    <div id=\"manageMultiTimes\" class=\"hide text-center\">\n        <button type=\"button\" class=\"close-md close\" @click.prevent=\"closeMultiTimes()\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n        <h2>Multi-Day Management</h2>\n        <p>Select the day from the grid below you want to manage and choose and option below to update all\n        the selected times.</p>\n        <div class=\"col-xs-12\">\n            <div id=\"mb-multi-make-time-unavailable\" class=\"col-md-6\">\n                <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\">\n                    <div class=\"btn btn-primary btn-mb-ex btn-in-expand fright icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                    <div class=\"show-expand\">\n                        <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                        <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" v-model=\"multi_make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                        <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"multiMakeTimeUnavailable()\">\n                    </div>\n                </form>\n            </div>\n\n            <div id=\"mb-multi-create-deal\" style=\"float: left\" class=\"col-md-6\">\n                <div class=\"btn btn-primary btn-mb-ex icon-fa-star btn-in-expand icon-fa-angle-down\">Create Deal</div>\n                <div class=\"show-expand\">\n                    <h4>Create A New Deal</h4>\n\n                        <div class=\"form-group\">\n                            <label>New Price for Member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_member\">\n                        </div>\n                        <div class=\"form-group\">\n                            <label>New Price for Non member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_nonmember\">\n                        </div>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createMultiDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div class=\"days-in-month-wrap\">\n        <div class=\"days\">\n            <div v-for=\"(index,date) in dates\" @click=\"changeDay('cal_day'+index,date.dayFullFormat)\" id=\"cal_day{{index}}\" class=\"day-item {{date.status}}\" data-value=\"{{ date.dayFullFormat}}\">\n                {{ days[date.day_of_week] }} <br>\n                <span>{{ date.day + \" \" + months[date.month] + \" \" + date.year % 100 }} </span>\n            </div>\n        </div>\n        <div class=\"days-in-month-control\">\n            <div id=\"next-day-in-month\"> &gt; </div>\n            <div id=\"prev-day-in-month\"> &lt; </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div id=\"day-view-content\" class=\"day-view-content\">\n        <div class=\"cld-wrapper\">\n            <div class=\"grid-row col-hour\">\n                <div class=\"grid grid-null\"></div>\n                <div v-for=\"item in hours\" class=\"grid court-name row-hour-name\" @click.prevent=\"rowHourClick(item.key)\">{{item.value}}</div>\n            </div>\n            <div class=\"grid-content-box\">\n                <div class=\"grid-wrap\">\n                    <div class=\"court-name-wrap\">\n                        <div v-for=\"(index,court) in dataOfClub\" class=\"grid court-name col-court-name\" @click.prevent=\"colCourtClick(court['id'])\">{{court['name']}}</div>\n                    </div>\n                    <div class=\"clearfix\"></div>\n                    <div class=\"grid-content-wap\">\n                        <template v-for=\"(index,court) in dataOfClub\">\n                            <div class=\"grid-row court{{court['id']}}\" data-court=\"{{court['id']}}\">\n                                <template v-for=\"(index,grid) in court['hours']\">\n                                    <div v-if=\"grid.g_start || grid.g_end\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" class=\"day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\">\n                                        <div v-if=\" !grid.g_end\">\n                                    <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                        ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status}}\n                                    </span>\n                                            <template v-if=\"grid.status != 'available'\">{{grid.content}}</template>\n                                        </div>\n                                    </div>\n                                    <div v-else=\"\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\" class=\"test day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\">\n                                <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                     ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status}}\n                                </span>\n                                        <template v-if=\"grid.status != 'available'\">{{grid.content}}</template>\n                                    </div>\n                                </template>\n                            </div>\n                        </template>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"md-expand\">\n            <div id=\"md-booking-content-expand\" style=\"display: none\">\n                <!-- court booking-expanded -->\n                <div class=\"court-booking-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div class=\"col-xs-3\">\n                        <h3 class=\"title-part\">Customer Details</h3>\n                        <table v-if=\"billing_info\">\n                            <tbody><tr>\n                                <td align=\"right\">Name</td>\n                                <td>\n                                    <div class=\"editable_\">{{billing_info['first_name']}}</div>\n                                    <div class=\"editable_\">{{billing_info['last_name']}}</div>\n                                </td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Email</td>\n                                <td><div class=\"editable_\">{{billing_info['email']}}</div></td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Phone</td>\n                                <td><div class=\"editable_\">{{billing_info['phone']}}</div></td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Address</td>\n                                <td><div class=\"editable_\">{{billing_info['address1']}}</div></td>\n                            </tr>\n                        </tbody></table>\n                    </div>\n                    <template v-if=\"booking_detail\">\n                    <div class=\"col-xs-3\">\n                        <h3 class=\"title-part\">Booking Details</h3>\n\n                        <table>\n                            <tbody><tr>\n                                <td align=\"right\">Booking Type</td>\n                                <td>{{booking_detail['type']}}</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Court:</td>\n                                <td>{{booking_detail['court']['name']}}</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Start Time</td>\n                                <td>{{booking_detail['hour'] + \" - \" + (booking_detail['hour'] + booking_detail['hour_length'])}}</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Length</td>\n                                <td>{{booking_detail['hour_length']}} Hour</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Players</td>\n                                <td>{{booking_detail['num_player']}}</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Create Time</td>\n                                <td>{{booking_detail['created_at']}}</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Booking By</td>\n                                <td>Court-Connect.com</td>\n                            </tr>\n                        </tbody></table>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <h3 class=\"title-part\">Payment Details</h3>\n                        <table v-if=\"payment_info\">\n                            <tbody><tr>\n                                <td align=\"right\">Status</td>\n                                <td v-if=\"booking_detail['status'] == 'required'\" style=\"text-transform: capitalize\"><span style=\"color:red\">Payment Required</span></td>\n                                <td v-else=\"\" style=\"text-transform: capitalize\">{{booking_detail['status']}}</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Tender</td>\n                                <td style=\"text-transform: capitalize\">{{payment_info['type']}}</td>\n                            </tr>\n                            <tr>\n                                <td align=\"right\">Total Due</td>\n                                <td>{{booking_detail['total_price']}}</td>\n                            </tr>\n                        </tbody></table>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <div id=\"mb-print-receipt\" class=\"btn btn-primary btn-mb-ex icon-fa-print\">Print Receipt</div>\n                        <div v-if=\"booking_detail['status'] == 'required'\" @click=\"acceptPayment(booking_detail['id'])\" id=\"mb-accept-payment\" class=\"btn btn-primary btn-mb-ex icon-fa-accept\">Accept Payment</div>\n                        <div v-else=\"\" id=\"mb-check-players-in\" class=\"btn btn-primary btn-mb-ex icon-fa-check\">Check Players In</div>\n                        <div id=\"mb-edit-booking\" @click=\"editBooking(booking_detail['id'])\" class=\"btn btn-primary btn-mb-ex icon-fa-edit\">Edit Booking</div>\n                        <div id=\"mb-cancel-booking\" @click=\"cancelBooking(booking_detail['id'])\" class=\"btn btn-primary btn-mb-ex btn-custom icon-fa-cancel\">Cancel Booking</div>\n                    </div>\n                    </template>\n                </div>\n                <!-- end court booking-expanded -->\n            </div>\n            <div id=\"md-available-content-expand\" style=\"display: none\">\n                <!-- available-slot-expanded -->\n                <div v-if=\"info_grid_available\" class=\"available-slot-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div class=\"col-xs-8\">\n                        <table class=\"table\">\n                            <thead>\n                                <tr>\n                                    <th>Quick Quotes</th>\n                                    <th v-for=\"item in info_grid_available.lb_hour\">{{ item }}</th>\n                                </tr>\n                            </thead>\n                            <tbody>\n                            <tr>\n                                <td>Member ($): </td>\n                                <td v-for=\"itemmember in info_grid_available.price_member\">{{itemmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Non Member ($): </td>\n                                <td v-for=\"itemnonmember in info_grid_available.price_nonmember\">{{itemnonmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Lesson ($): </td>\n                            </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <div id=\"mb-make-time-unavailable\">\n                            <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\" id=\"form_make_unavailable\" enctype=\"multipart/form-data\">\n                                <div class=\"btn btn-primary btn-mb-ex btn-in-expand icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                                <div class=\"show-expand\">\n                                    <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                                    <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" id=\"input-reason\" v-model=\"make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                                    <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"makeTimeUnavailable()\">\n                                </div>\n                            </form>\n                        </div>\n\n                        <div id=\"mb-create-deal\" @click.prevent=\"openModalDeal()\" style=\"margin-left: 20px\" class=\"btn btn-primary btn-mb-ex icon-fa-star\">Create Deal</div>\n                    </div>\n                </div>\n                <!-- end available-slot-expanded -->\n            </div>\n        </div>\n    </div>\n</section>\n\n<div id=\"confirm-booking-delete\" class=\"modal fade\">\n    <div class=\"modal-body\">\n        Are you sure delete?\n    </div>\n    <div class=\"modal-footer\">\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn btn-primary\" id=\"booking-delete\">Delete</button>\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn\">Cancel</button>\n    </div>\n</div>\n\n<div id=\"md-new-deal\" class=\"modal fade mb-modal\" role=\"dialog\" aria-labelledby=\"myModalLabel\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Create A New Deal</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div>\n                    <table>\n                        <tbody><tr>\n                            <td>Date Selected: </td>\n                            <td> {{deal.date_text}}</td>\n                        </tr>\n                        <tr>\n                            <td>Time Selected: </td>\n                            <td>{{deal.time}}</td>\n                        </tr>\n                        <tr>\n                            <td>Court Selected: </td>\n                            <td> {{deal.court_name}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Member): </td>\n                            <td>{{deal.price_member}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Non member): </td>\n                            <td>{{deal.price_nonmember}}</td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_member\"><br></td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Non member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_nonmember\"></td>\n                        </tr>\n                    </tbody></table>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<section class=\"col-xs-12 col-md-12\" id=\"calendar_bookings\">\n\n    <div id=\"manageMultiTimes\" class=\"hide text-center\">\n        <button type=\"button\" class=\"close-md close\" @click.prevent=\"closeMultiTimes()\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n        <h2>Multi-Day Management</h2>\n        <p>Select the day from the grid below you want to manage and choose and option below to update all\n        the selected times.</p>\n        <div class=\"col-xs-12\">\n            <div id=\"mb-multi-make-time-unavailable\" class=\"col-md-6\">\n                <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\">\n                    <div class=\"btn btn-primary btn-mb-ex btn-in-expand fright icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                    <div class=\"show-expand\">\n                        <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                        <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" v-model=\"multi_make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                        <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"multiMakeTimeUnavailable()\">\n                    </div>\n                </form>\n            </div>\n\n            <div id=\"mb-multi-create-deal\" style=\"float: left\" class=\"col-md-6\">\n                <div class=\"btn btn-primary btn-mb-ex icon-fa-star btn-in-expand icon-fa-angle-down\">Create Deal</div>\n                <div class=\"show-expand\">\n                    <h4>Create A New Deal</h4>\n\n                        <div class=\"form-group\">\n                            <label>New Price for Member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_member\">\n                        </div>\n                        <div class=\"form-group\">\n                            <label>New Price for Non member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_nonmember\">\n                        </div>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createMultiDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div class=\"days-in-month-wrap\">\n        <div class=\"days\">\n            <div v-for=\"(index,date) in dates\" @click=\"changeDay('cal_day'+index,date.dayFullFormat)\" id=\"cal_day{{index}}\" class=\"day-item {{date.status}}\" data-value=\"{{ date.dayFullFormat}}\">\n                {{ days[date.day_of_week] }} <br>\n                <span>{{ date.day + \" \" + months[date.month] + \" \" + date.year % 100 }} </span>\n            </div>\n        </div>\n        <div class=\"days-in-month-control\">\n            <div id=\"next-day-in-month\"> &gt; </div>\n            <div id=\"prev-day-in-month\"> &lt; </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div id=\"day-view-content\" class=\"day-view-content\">\n        <div class=\"cld-wrapper\">\n            <div class=\"grid-row col-hour\">\n                <div class=\"grid grid-null\"></div>\n                <div v-for=\"item in hours\" class=\"grid court-name row-hour-name\" @click.prevent=\"rowHourClick(item.key)\">{{item.value}}</div>\n            </div>\n            <div class=\"grid-content-box\">\n                <div class=\"grid-wrap\">\n                    <div class=\"court-name-wrap\">\n                        <div v-for=\"(index,court) in dataOfClub\" class=\"grid court-name col-court-name\" @click.prevent=\"colCourtClick(court['id'])\">{{court['name']}}</div>\n                    </div>\n                    <div class=\"clearfix\"></div>\n                    <div class=\"grid-content-wap\">\n                        <template v-for=\"(index,court) in dataOfClub\">\n                            <div class=\"grid-row court{{court['id']}}\" data-court=\"{{court['id']}}\">\n                                <template v-for=\"(index,grid) in court['hours']\">\n                                    <div v-if=\"grid.g_start || grid.g_end\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" class=\"day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\">\n                                        <div v-if=\" !grid.g_end\">\n                                    <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                        ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status}}\n                                    </span>\n                                            <template v-if=\"grid.status != 'available'\">{{grid.content}}</template>\n                                        </div>\n                                    </div>\n                                    <div v-else=\"\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\" class=\"test day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\">\n                                <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                     ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status}}\n                                </span>\n                                        <template v-if=\"grid.status != 'available'\">{{grid.content}}</template>\n                                    </div>\n                                </template>\n                            </div>\n                        </template>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"md-expand\">\n            <div id=\"md-booking-content-expand\" style=\"display: none\">\n                <!-- court booking-expanded -->\n                <div class=\"court-booking-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div v-if=\"booking\">\n                        <div class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Customer Details</h3>\n                            <table v-if=\"booking['billing_info']\">\n                                <tbody><tr>\n                                    <td align=\"right\">Name</td>\n                                    <td>\n                                        <div class=\"editable_\">{{booking['billing_info']['first_name']}}</div>\n                                        <div class=\"editable_\">{{booking['billing_info']['last_name']}}</div>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Email</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['email']}}</div></td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Phone</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['phone']}}</div></td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Address</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['address1']}}</div></td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div v-if=\"booking['court']\" class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Booking Details</h3>\n                            <table>\n                                <tbody><tr>\n                                    <td align=\"right\">Booking Type</td>\n                                    <td>{{booking['type']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Court:</td>\n                                    <td>{{booking['court']['name']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Start Time</td>\n                                    <td>{{booking['hour'] + \" - \" + (booking['hour'] + booking['hour_length'])}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Length</td>\n                                    <td>{{booking['hour_length']}} Hour</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Players</td>\n                                    <td>{{booking['num_player']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Create Time</td>\n                                    <td>{{booking['created_at']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Booking By</td>\n                                    <td>Court-Connect.com</td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Payment Details</h3>\n                            <table>\n                                <tbody><tr>\n                                    <td align=\"right\">Status</td>\n                                    <td v-if=\"booking['status'] == 'required'\" style=\"text-transform: capitalize\"><span style=\"color:red\">Payment Required</span></td>\n                                    <td v-else=\"\" style=\"text-transform: capitalize\">{{booking['status']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Tender</td>\n                                    <td style=\"text-transform: capitalize\">{{booking['type']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Total Due</td>\n                                    <td>{{booking['total_price']}}</td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div class=\"col-xs-3\">\n                            <div id=\"mb-print-receipt\" class=\"btn btn-primary btn-mb-ex icon-fa-print\">Print Receipt</div>\n                            <div v-if=\"booking['status'] == 'required'\" @click=\"acceptPayment(booking['id'])\" id=\"mb-accept-payment\" class=\"btn btn-primary btn-mb-ex icon-fa-accept\">Accept Payment</div>\n                            <div v-else=\"\" id=\"mb-check-players-in\" class=\"btn btn-primary btn-mb-ex icon-fa-check\">Check Players In</div>\n                            <div id=\"mb-edit-booking\" @click=\"editBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex icon-fa-edit\">Edit Booking</div>\n                            <div id=\"mb-cancel-booking\" @click=\"cancelBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex btn-custom icon-fa-cancel\">Cancel Booking</div>\n                        </div>\n                    </div>\n                </div>\n                <!-- end court booking-expanded -->\n            </div>\n            <div id=\"md-available-content-expand\" style=\"display: none\">\n                <!-- available-slot-expanded -->\n                <div v-if=\"info_grid_available\" class=\"available-slot-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div class=\"col-xs-8\">\n                        <table class=\"table\">\n                            <thead>\n                                <tr>\n                                    <th>Quick Quotes</th>\n                                    <th v-for=\"item in info_grid_available.lb_hour\">{{ item }}</th>\n                                </tr>\n                            </thead>\n                            <tbody>\n                            <tr>\n                                <td>Member ($): </td>\n                                <td v-for=\"itemmember in info_grid_available.price_member\">{{itemmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Non Member ($): </td>\n                                <td v-for=\"itemnonmember in info_grid_available.price_nonmember\">{{itemnonmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Lesson ($): </td>\n                            </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <div id=\"mb-make-time-unavailable\">\n                            <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\" id=\"form_make_unavailable\" enctype=\"multipart/form-data\">\n                                <div class=\"btn btn-primary btn-mb-ex btn-in-expand icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                                <div class=\"show-expand\">\n                                    <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                                    <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" id=\"input-reason\" v-model=\"make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                                    <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"makeTimeUnavailable()\">\n                                </div>\n                            </form>\n                        </div>\n\n                        <div id=\"mb-create-deal\" @click.prevent=\"openModalDeal()\" style=\"margin-left: 20px\" class=\"btn btn-primary btn-mb-ex icon-fa-star\">Create Deal</div>\n                    </div>\n                </div>\n                <!-- end available-slot-expanded -->\n            </div>\n        </div>\n    </div>\n</section>\n\n<div id=\"confirm-booking-delete\" class=\"modal fade\">\n    <div class=\"modal-body\">\n        Are you sure delete?\n    </div>\n    <div class=\"modal-footer\">\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn btn-primary\" id=\"booking-delete\">Delete</button>\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn\">Cancel</button>\n    </div>\n</div>\n\n<div id=\"md-new-deal\" class=\"modal fade mb-modal\" role=\"dialog\" aria-labelledby=\"myModalLabel\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Create A New Deal</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div>\n                    <table>\n                        <tbody><tr>\n                            <td>Date Selected: </td>\n                            <td> {{deal.date_text}}</td>\n                        </tr>\n                        <tr>\n                            <td>Time Selected: </td>\n                            <td>{{deal.time}}</td>\n                        </tr>\n                        <tr>\n                            <td>Court Selected: </td>\n                            <td> {{deal.court_name}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Member): </td>\n                            <td>{{deal.price_member}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Non member): </td>\n                            <td>{{deal.price_nonmember}}</td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_member\"><br></td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Non member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_nonmember\"></td>\n                        </tr>\n                    </tbody></table>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\CalendarBooking.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\CalendarBooking.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -31748,7 +30445,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\ManageBooking.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\ManageBooking.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -31862,7 +30559,7 @@ exports.default = {
                 return;
             }
             this.$http.get(laroute.route('contracts.getView', { one: this.inputBookingDetail.contract_id })).then(function (res) {
-                if (res.data.success) {
+                if (res.data.error == false) {
                     _this2.info_contract = res.data.data;
                 } else {
                     var msg = "";
@@ -31884,10 +30581,24 @@ exports.default = {
 
             var def = deferred(),
                 url = laroute.route('booking.viewPriceOrder');
+            $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(url, input).then(function (res) {
+                $("#mb-create-new-booking .loading").remove();
                 if (res.data.error) {
                     var msg = "";
-                    $.each(res.data.messages, function (k, v) {
+                    if (res.data.status) {
+                        console.log("abc");
+                        switch (res.data.status) {
+                            case 'booking':
+                                msg = "This was book. Please select another time or date";break;
+                            case 'unavailable':
+                                msg = "Unavailable. Please select another time or date";break;
+                            case 'close':
+                                msg = "Close. Please select another time or date";break;
+                            default:
+                                msg = res.data.status;
+                        }
+                    } else $.each(res.data.messages, function (k, v) {
                         msg += "<div>" + v + "</div>";
                     });
                     _this3.total_price = "NaN";
@@ -31909,10 +30620,24 @@ exports.default = {
             // check validate data
             var def = deferred(),
                 url = laroute.route('booking.postCheckCourtBooking');
+
+            $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(url, input).then(function (res) {
+                $("#mb-create-new-booking .loading").remove();
                 if (res.data.error) {
                     var msg = "";
-                    $.each(res.data.messages, function (k, v) {
+                    if (res.data.status) {
+                        switch (res.data.status) {
+                            case 'booking':
+                                msg = "This was book. Please select another time or date";break;
+                            case 'unavailable':
+                                msg = "Unavailable. Please select another time or date";break;
+                            case 'close':
+                                msg = "Close. Please select another time or date";break;
+                            default:
+                                msg = res.data.status;
+                        }
+                    } else $.each(res.data.messages, function (k, v) {
                         msg += "<div>" + v + "</div>";
                     });
                     _this4.total_price = "NaN";
@@ -31927,10 +30652,16 @@ exports.default = {
         nextPayment: function nextPayment() {
             var _this5 = this;
 
+            this.$set('customerDetail.address1', $("#input-address1").val());
+            this.$set('customerDetail.state', $("#input-state").val());
+            this.$set('customerDetail.city', $("#input-city").val());
+            this.$set('customerDetail.zip_code', $("#input-zip_code").val());
             if (this.inputBookingDetail.member == 1) {
                 this.customerDetail.player_id = $("#player_id").val();
+                $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                 this.$http.post(laroute.route('booking.checkPlayerforBooking', { one: this.customerDetail.player_id })).then(function (res) {
-                    if (res.data.success) {
+                    $("#mb-create-new-booking loading").remove();
+                    if (!res.data.error) {
                         var player = res.data.player;console.log(player);
                         _this5.customerDetail.first_name = player.first_name;
                         _this5.customerDetail.last_name = player.last_name;
@@ -31942,7 +30673,18 @@ exports.default = {
                         _this5.tabClick("mb-payment-details-content");
                     } else {
                         var msg = "";
-                        $.each(res.data.messages, function (k, v) {
+                        if (res.data.status) {
+                            switch (res.data.status) {
+                                case 'booking':
+                                    msg = "This was book. Please select another time or date";break;
+                                case 'unavailable':
+                                    msg = "Unavailable. Please select another time or date";break;
+                                case 'close':
+                                    msg = "Close. Please select another time or date";break;
+                                default:
+                                    msg = res.data.status;
+                            }
+                        } else $.each(res.data.messages, function (k, v) {
                             msg += "<div>" + v + "</div>";
                         });
                         showNotice('error', msg, 'Error!');
@@ -31953,10 +30695,23 @@ exports.default = {
                 // check validate customer
                 var def = deferred(),
                     url = laroute.route('booking.checkInputCustomer');
+                $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                 this.$http.post(url, customer).then(function (res) {
+                    $("#mb-create-new-booking .loading").remove();
                     if (res.data.error) {
                         var msg = "";
-                        $.each(res.data.messages, function (k, v) {
+                        if (res.data.status) {
+                            switch (res.data.status) {
+                                case 'booking':
+                                    msg = "This was book. Please select another time or date";break;
+                                case 'unavailable':
+                                    msg = "Unavailable. Please select another time or date";break;
+                                case 'close':
+                                    msg = "Close. Please select another time or date";break;
+                                default:
+                                    msg = res.data.status;
+                            }
+                        } else $.each(res.data.messages, function (k, v) {
                             msg += "<div>" + v + "</div>";
                         });
                         showNotice('error', msg, 'Error!');
@@ -31980,7 +30735,18 @@ exports.default = {
             this.$http.post('/sadmin/booking/payment', data).then(function (res) {
                 if (res.data.error) {
                     var msg = "";
-                    $.each(res.data.messages, function (k, v) {
+                    if (res.data.status) {
+                        switch (res.data.status) {
+                            case 'booking':
+                                msg = "This was book. Please select another time or date";break;
+                            case 'unavailable':
+                                msg = "Unavailable. Please select another time or date";break;
+                            case 'close':
+                                msg = "Close. Please select another time or date";break;
+                            default:
+                                msg = res.data.status;
+                        }
+                    } else $.each(res.data.messages, function (k, v) {
                         msg += "<div>" + v + "</div>";
                     });
                     showNotice('error', msg, 'Error!');
@@ -32053,23 +30819,6 @@ exports.default = {
                 total_week: null,
                 extras: []
             };
-        },
-        address_lookup: function address_lookup() {
-            var _this7 = this;
-
-            this.$http.get(laroute.route('booking.address_lookup', { one: this.customerDetail.zipcode })).then(function (res) {
-                if (res.data.error) {
-                    var msg = "";
-                    $.each(res.data.messages, function (k, v) {
-                        msg += "<div>" + v + "</div>";
-                    });
-                    showNotice('error', msg, 'Error!');
-                } else {
-                    console.log(res.data);
-                    _this7.customerDetail.state = res.data.state;
-                    _this7.customerDetail.city = res.data.city;
-                }
-            }, function (res) {});
         }
     }, ready: function ready() {
         //test model open
@@ -32102,16 +30851,47 @@ exports.default = {
             hasGrid: true,
             hideMinMax: true
         });
+
+        //lookup address
+        $("body").on('click', '.btn-get-address-lookup', function () {
+            var zipcode;
+            if ($("#input-zip_code").length) zipcode = $("#input-zip_code").val();else zipcode = $("input[name=zipcode]").val();
+            console.log(zipcode);
+            $.ajax({
+                url: "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:" + zipcode + "&sensor=false",
+                method: "post",
+                success: function success(data) {
+                    $("input[name=state], #input-state").val(data.results[0].address_components[2].long_name);
+                    $("input[name=city], #input-city").val(data.results[0].address_components[3].long_name);
+                }
+            });
+        });
+
+        $("#input-address1").geocomplete().bind("geocode:result", function (event, result) {
+            $.each(result.address_components, function (index, val) {
+                if (typeof val.types[0] != "undefined") {
+                    if (val.types[0] == "locality") {
+                        $("#input-city").val(val.long_name);
+                    }
+                    if (val.types[0] == 'administrative_area_level_1') {
+                        $("#input-state").val(val.long_name);
+                    }
+                    if (val.types[0] == "postal_code") {
+                        $("#input-zip_code").val(val.long_name);
+                    }
+                }
+            });
+        });
     },
     beforeDestroy: function beforeDestroy() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div class=\"modal fade mb-modal\" style=\"display: none;\" id=\"myModal\" role=\"dialog\" aria-labelledby=\"myModalLabel\">\n        <div class=\"modal-dialog\" role=\"document\">\n            <div class=\"modal-content\">\n                <div class=\"modal-header\">\n                    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                    <h4 class=\"modal-title\" id=\"myModalLabel\">Create A New Booking</h4>\n                </div>\n                <div class=\"modal-body\">\n                    <div id=\"mb-create-new-booking\">\n                        <!-- Nav tabs -->\n                        <ul class=\"nav nav-tabs mb-tabs\" role=\"tablist\">\n                            <li role=\"presentation\" class=\"li-first active\">\n                                <a class=\"a-first\" href=\"#mb-booking-detail-content\" aria-controls=\"mb-booking-detail-content\" role=\"tab\" data-toggle=\"tab\">Booking detail</a>\n                            </li>\n                            <li role=\"presentation\" class=\"tab-disabled\">\n                                <a href=\"#mb-customer-details-content\" aria-controls=\"mb-customer-details-content\" role=\"tab\" data-toggle=\"tab\">Customer Detail</a>\n                            </li>\n                            <li role=\"presentation\" class=\"tab-disabled\">\n                                <a href=\"#mb-payment-details-content\" aria-controls=\"mb-payment-details-content\" role=\"tab\" data-toggle=\"tab\">Payment Detail</a>\n                            </li>\n                            <li role=\"presentation\" class=\"tab-disabled\">\n                                <a href=\"#mb-confirmation-content\" aria-controls=\"mb-confirmation-content\" role=\"tab\" data-toggle=\"tab\">Confirmation</a>\n                            </li>\n                        </ul>\n                        <!-- Tab panes -->\n                        <div class=\"mb-tab-content tab-content\">\n                            <div role=\"tabpanel\" class=\"tab-pane active\" id=\"mb-booking-detail-content\">\n                                <form action=\"\">\n                                    <div class=\"slc-type mb-group-sl\">\n                                        <h4 class=\"mb-title-h4-modal text-center\">Select a Booking Type</h4>\n                                        <div class=\"col-xs-12 col-md-4\">\n                                            <input type=\"radio\" name=\"book-type\" value=\"open\" id=\"book-type-open\" v-model=\"inputBookingDetail.type\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-type-open\">Open Time</label>\n                                        </div>\n                                        <div class=\"col-xs-12 col-md-4\">\n                                            <input type=\"radio\" name=\"book-type\" value=\"contract\" id=\"book-type-contract\" v-model=\"inputBookingDetail.type\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-type-contract\">Contract Time</label>\n                                        </div>\n                                        <div class=\"col-xs-12 col-md-4\">\n                                            <input type=\"radio\" name=\"book-type\" value=\"lesson\" id=\"book-type-lesson\" v-model=\"inputBookingDetail.type\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-type-lesson\">Lesson</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"slc-member mb-group-sl\">\n                                        <h4 class=\"mb-title-h4-modal text-center\">Member?</h4>\n                                        <div class=\"col-sm-6\">\n                                            <input type=\"radio\" value=\"1\" name=\"book-member\" id=\"book-member-yes\" v-model=\"inputBookingDetail.member\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-member-yes\">Yes</label>\n                                        </div>\n                                        <div class=\"col-sm-6\">\n                                            <input type=\"radio\" value=\"0\" checked=\"checked\" name=\"book-member\" id=\"book-member-no\" v-model=\"inputBookingDetail.member\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-member-no\">No</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"slc-day-hour\">\n                                        <div class=\"col-xs-12 col-md-6\">\n                                            <div class=\"slc-type-open slc-type-lesson slc-type-group\">\n                                                <h4 class=\"mb-title-h4-modal text-center\">Select a Date</h4>\n                                                <input type=\"text\" class=\"form-control\" name=\"mb-book-day-open\" id=\"mb-book-day-open\" v-model=\"inputBookingDetail.date\">\n                                            </div>\n                                            <div class=\"slc-type-contract slc-type-group\">\n                                                <h4 class=\"mb-title-h4-modal text-center\">Select a Date Period</h4>\n                                                <select name=\"mb-book-day-contract\" class=\"form-control\" v-model=\"inputBookingDetail.contract_id\" v-on:change=\"changeContract\">\n                                                    <option value=\"\">--Select--</option>\n                                                    <option v-for=\"item in contracts\" value=\"{{item.id}}\">{{item.start_date + \" - \" + item.end_date}}</option>\n                                                </select>\n                                                <h4 class=\"mb-title-h4-modal text-center\">Start Day</h4>\n                                                <select name=\"mb-book-start-day-contract\" class=\"form-control\" v-model=\"inputBookingDetail.dayOfWeek\">\n                                                    <option value=\"1\">Monday</option>\n                                                    <option value=\"2\">Tuesday</option>\n                                                    <option value=\"3\">Wednesday</option>\n                                                    <option value=\"4\">Thursday</option>\n                                                    <option value=\"5\">Friday</option>\n                                                    <option value=\"6\">Saturday</option>\n                                                    <option value=\"7\">Sunday</option>\n                                                </select>\n                                            </div>\n                                        </div>\n                                        <div class=\"col-xs-12 col-md-6\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Select a Time</h4>\n                                            <select name=\"mb-book-hour\" class=\"form-control\" v-model=\"inputBookingDetail.hour_start\">\n                                                <option v-for=\"item in hours\" value=\"{{item.key}}\">{{item.value}}</option>\n                                            </select>\n                                            <h4 class=\"mb-title-h4-modal text-center\">length</h4>\n                                            <input id=\"mb-book-in-hour\" class=\"ionslider\" type=\"text\" name=\"mb-book-in-hour\">\n                                        </div>\n                                    </div>\n\n                                    <div class=\"clearfix\"></div>\n                                    <div class=\"mb-group-sl slc-type-contract slc-type-group\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <span>Total day: {{info_contract.total_week}}</span>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"mb-group-sl\">\n                                        <div class=\"col-xs-12 col-md-12\" style=\"margin: 20px 0px\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Select a Court</h4>\n                                            <select name=\"mb-book-court\" class=\"form-control\" v-model=\"inputBookingDetail.court_id\">\n                                                <option v-for=\"(index,court) in courts\" value=\"{{ court.id }}\">{{ court.name }}</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"mb-group-sl slc-type-contract slc-type-group\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Extras</h4>\n                                                <div v-for=\"item in info_contract.extras\">\n                                                    <input type=\"checkbox\" class=\"styled\" value=\"{{item.name}}\" v-model=\"inputBookingDetail.extra_id\">\n                                                    <label for=\"\">{{item.name + \"(\"+item.value+\")\"}}</label>\n                                                </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"mb-group-sl slc-type-lesson slc-type-group\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Choose a Teacher</h4>\n                                            <select name=\"mb-book-teacher\" class=\"form-control\" v-model=\"inputBookingDetail.teacher_id\">\n                                                @for($i=1; $i&lt;110; $i++)\n                                                <option value=\"{{$i}}\">Teacher #{{$i}}</option>\n                                                @endfor\n                                            </select>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"clearfix\"></div>\n                                    <div class=\"mb-group-sl\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Order Total: <strong class=\"price\" style=\"\">${{total_price}} </strong></h4>\n                                            <div id=\"viewPriceOrder\" class=\"btn\" @click.prevent=\"viewPriceOrder()\">View price</div>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"clearfix\"></div>\n                                    <div class=\"mb-group-sl\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <div class=\"pull-right\">\n                                                <input type=\"button\" value=\"Next\" class=\"btn btn-primary\" @click.prevent=\"nextCustomerDetail()\">\n                                            </div>\n                                        </div>\n                                    </div>\n                                </form>\n                            </div>\n                            <div role=\"tabpanel\" class=\"tab-pane \" id=\"mb-customer-details-content\">\n                                <div class=\"info-booking-details\">\n                                    <h4 class=\"bold pull-left\">Booking Details</h4>\n                                    <a href=\"\" id=\"mb-edit-booking-details\" class=\"btn btn-primary pull-right\" @click.prevent=\"preBookingDetail()\">Edit</a>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                </div>\n                                <div class=\"clearfix\"></div>\n                                <table class=\"tbl-info-booking-details\" style=\"width: 100%\">\n                                    <tbody><tr>\n                                        <td>\n                                            <div>Booking Type: <b style=\"text-transform: capitalize\">{{inputBookingDetail.type}}</b></div>\n                                            <div>Member: <b>{{inputBookingDetail.member == 1 ? \"Yes\" : \"No\"}}</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div v-if=\"inputBookingDetail.type != 'contract'\">\n                                                Date: <b>{{inputBookingDetail.date}}</b>\n                                            </div>\n                                            <div v-else=\"\">\n                                                Date Period: <br><b>{{info_contract.start_date + \" - \" + info_contract.end_date}}</b>\n                                            </div>\n                                            <div>Time: <b>{{inputBookingDetail.hour_start &lt;= 12 ? inputBookingDetail.hour_start + \" am\" : (inputBookingDetail.hour_start - 12) + \" pm\"}}</b></div>\n                                            <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div>Court: <b>{{court_detail.name}}</b></div>\n                                        </td>\n                                        <td>\n                                            <div>Cost: <b>${{total_price}}</b></div>\n                                        </td>\n                                    </tr>\n                                </tbody></table>\n                                <div class=\"info-customers-details\">\n                                    <h4 class=\"pull-left bold\">Customer Details</h4>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" enctype=\"multipart/form-data\">\n\n                                        <div style=\"width: 300px; margin: 0px auto\" class=\"{{inputBookingDetail.member == 1 ? 'block' :'hidden'}}\">\n                                            <label>Select a player member for booking</label>\n                                            <select class=\"js-data-user-ajax\" name=\"player_id\" id=\"player_id\" v-model=\"customerDetail.player_id\">\n                                                <option value=\"\">Select user member</option>\n                                            </select>\n                                        </div>\n                                        <div class=\"{{inputBookingDetail.member == 1 ? 'hidden' :'block'}}\">\n                                            <div class=\"form-group\">\n                                                <label for=\"surname\" class=\"col-sm-4 control-label\">Customer Lookup</label>\n                                                <div class=\"col-sm-8\">\n                                                    <input class=\"form-control\" placeholder=\"Surname\" name=\"surname\" type=\"text\" value=\"\" id=\"surname\" v-model=\"customerDetail.surname\">\n                                                </div>\n                                            </div>\n                                            <div class=\"clearfix\" style=\"padding-bottom: 20px;\"></div>\n                                            <div class=\"form-group\">\n                                                <div class=\"col-sm-4\">\n                                                    <label for=\"title\">Title *</label>\n                                                    <input class=\"form-control\" placeholder=\"Title\" name=\"title\" type=\"text\" value=\"\" id=\"title\" v-model=\"customerDetail.title\">\n                                                </div>\n                                                <div class=\"col-sm-4\">\n                                                    <label for=\"firstname\">Fist Name *</label>\n                                                    <input class=\"form-control\" placeholder=\"First name\" name=\"first_name\" type=\"text\" value=\"\" id=\"firstname\" v-model=\"customerDetail.first_name\">\n                                                </div>\n                                                <div class=\"col-sm-4\">\n                                                    <label for=\"lastname\">Last Name *</label>\n                                                    <input class=\"form-control\" placeholder=\"Lastname\" name=\"lastname\" type=\"text\" value=\"\" id=\"lastname\" v-model=\"customerDetail.last_name\">\n                                                </div>\n                                            </div>\n                                            <div class=\"clearfix\" style=\"padding-bottom: 20px;\"></div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"zipcode\" class=\"col-sm-2 control-label\">Zipcode *</label>\n                                                <div class=\"col-sm-7\">\n                                                    <input class=\"form-control\" placeholder=\"Enter Zip Code\" style=\"width: 50%; margin-right: 10px;\" name=\"Zipcode\" type=\"text\" value=\"\" id=\"zipcode\" v-model=\"customerDetail.zip_code\">\n                                                </div>\n                                                <div class=\"col-sm-3\">\n                                                    <button class=\"btn btn-primary\" type=\"button\" @click=\"address_lookup()\">Address Lookup</button>\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"address1\" class=\"col-sm-2 control-label\">Address 1 *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Address Line 1\" name=\"address1\" type=\"text\" value=\"\" id=\"address1\" v-model=\"customerDetail.address1\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"address2\" class=\"col-sm-2 control-label\">Address 2</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Address Line 2\" name=\"address2\" type=\"text\" value=\"\" id=\"address2\" v-model=\"customerDetail.address2\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"city\" class=\"col-sm-2 control-label\">City *</label>\n                                                <div class=\" col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"City\" name=\"city\" type=\"text\" value=\"\" id=\"city\" v-model=\"customerDetail.city\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"state\" class=\"col-sm-2 control-label\">State *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"State\" name=\"state\" type=\"text\" value=\"\" id=\"state\" v-model=\"customerDetail.state\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"email\" class=\"col-sm-2 control-label\">Email *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" value=\"\" id=\"email\" v-model=\"customerDetail.email\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"phone\" class=\"col-sm-2 control-label\">Phone *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Phone\" name=\"phone\" type=\"text\" value=\"\" id=\"phone\" v-model=\"customerDetail.phone\">\n                                                </div>\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <input type=\"button\" class=\"btn btn-primary pull-right\" value=\"Next\" @click.prevent=\"nextPayment()\">\n                                        </div>\n\n                                    </form>\n                                </div>\n                            </div>\n                            <div role=\"tabpanel\" class=\"tab-pane \" id=\"mb-payment-details-content\">\n                                <div class=\"info-booking-details\">\n                                    <h4 class=\"bold pull-left\">Booking Details</h4>\n                                    <a href=\"\" id=\"mb-edit-booking-details\" class=\"btn btn-primary pull-right\" @click.prevent=\"preBookingDetail()\">Edit</a>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                </div>\n\n                                <div class=\"clearfix\"></div>\n                                <table class=\"tbl-info-booking-details\" style=\"width: 100%\">\n                                    <tbody><tr>\n                                        <td>\n                                            <div>Booking Type: <b style=\"text-transform: capitalize\">{{inputBookingDetail.type}}</b></div>\n                                            <div>Member: <b>{{inputBookingDetail.member == 1 ? \"Yes\" : \"No\"}}</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div v-if=\"inputBookingDetail.type != 'contract'\">\n                                                Date: <b>{{inputBookingDetail.date}}</b>\n                                            </div>\n                                            <div v-else=\"\">\n                                                Date Period: <br><b>{{info_contract.start_date + \" - \" + info_contract.end_date}}</b>\n                                            </div>\n                                            <div>Time: <b>{{inputBookingDetail.hour_start &lt;= 12 ? inputBookingDetail.hour_start + \" am\" : (inputBookingDetail.hour_start - 12) + \" pm\"}}</b></div>\n                                            <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div>Court: <b>{{court_detail.name}}</b></div>\n                                        </td>\n                                        <td>\n                                            <div>Cost: <b>${{total_price}}</b></div>\n                                        </td>\n                                    </tr>\n                                </tbody></table>\n                                <div class=\"info-customers-details\">\n                                    <div class=\"info-booking-details\">\n                                        <h4 class=\"bold pull-left\">Customer Details</h4>\n                                        <a href=\"\" id=\"mb-edit-booking-details\" class=\"btn btn-primary pull-right\" @click.prevent=\"preCustomerDetail()\">Edit</a>\n                                        <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    </div>\n                                    <div class=\"clearfix\"></div>\n                                    <table style=\"width: 100%\">\n                                        <tbody><tr>\n                                            <td>Name: </td>\n                                            <td>{{customerDetail.first_name + \" \" + customerDetail.last_name}}</td>\n                                        </tr>\n                                        <tr>\n                                            <td>Address: </td>\n                                            <td>{{customerDetail.address1 + \", \" + customerDetail.city + \", \"+ customerDetail.state}}</td>\n                                        </tr>\n                                        <tr>\n                                            <td>Email: </td>\n                                            <td>{{customerDetail.email}}</td>\n                                        </tr>\n                                        <tr>\n                                            <td>Tel: </td>\n                                            <td>{{customerDetail.phone}}</td>\n                                        </tr>\n                                    </tbody></table>\n                                </div>\n\n                                <div class=\"info-payment-details\">\n                                    <h4 class=\"bold pull-left\">Payment Details</h4>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    <div class=\"clearfix\"></div>\n                                    <form method=\"POST\" action=\"/sadmin/booking/abc\" accept-charset=\"UTF-8\" enctype=\"multipart/form-data\"><input name=\"_token\" type=\"hidden\" value=\"DbSaxkk2WraIAh6Jav0pV8o8wIgYs4NIANN5oPpv\">\n                                        <div class=\"form-group\">\n                                            <div class=\"col-xs-12 col-md-3\">\n                                                <label for=\"cost-adjustment\">Cost Adjustment</label>\n                                                <input class=\"form-control\" placeholder=\"-$10\" name=\"cost-adjustment\" type=\"text\" value=\"\" id=\"cost-adjustment\" v-model=\"paymentDetail.cost_adj\">\n                                            </div>\n                                            <div class=\"col-xs-12 col-md-9\">\n                                                <label for=\"adjustment-reason\">Adjustment Reason</label>\n                                                <input class=\"form-control\" placeholder=\"eg. Manager Discount\" name=\"adjustment-reason\" type=\"text\" value=\"\" id=\"adjustment-reason\" v-model=\"paymentDetail.adj_reason\">\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_mastercard.png\" alt=\"mastercard\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"mastercard\" id=\"mastercard\" v-model=\"paymentDetail.type\">\n                                                <label for=\"mastercard\">Mastercard</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_visa.png\" alt=\"visa\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"visa\" id=\"visa\" v-model=\"paymentDetail.type\">\n                                                <label for=\"visa\">Visa</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\" style=\"width: 32%\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_emerican_express.png\" alt=\"american-express\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"american-express\" id=\"american-express\" v-model=\"paymentDetail.type\">\n                                                <label for=\"mastercard\">American Express</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_discover.png\" alt=\"discover\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"discover\" id=\"discover\" v-model=\"paymentDetail.type\">\n                                                <label for=\"discover\">Discover</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_cash.png\" alt=\"cash\">\n                                                </div>\n                                                <input name=\"cash\" type=\"radio\" value=\"cash\" id=\"cash\" v-model=\"paymentDetail.type\">\n                                                <label for=\"mastercard\">Cash</label>\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <div class=\"pull-left\">\n                                                <label for=\"card-number\">Card Number</label>\n                                                <input type=\"text\" name=\"card-number\" class=\"form-control\" id=\"card-number\" placeholder=\"12345672234566\" v-model=\"paymentDetail.card_number\" style=\"width: 240px;\">\n                                            </div>\n                                            <div class=\"pull-left\" style=\"position: relative\">\n                                                <label for=\"card-expiry\">Expiry</label>\n                                                <input type=\"text\" name=\"card-expiry\" class=\"form-control\" id=\"card-expiry\" placeholder=\"06/17\" v-model=\"paymentDetail.expiry\" style=\"width: 120px; margin: 0px 10px;\">\n                                            </div>\n                                            <div class=\"pull-left\">\n                                                <label for=\"card-cvv\">CVV*</label>\n                                                <input type=\"text\" name=\"card-cvv\" class=\"form-control\" id=\"card-cvv\" placeholder=\"123\" v-model=\"paymentDetail.cvv\" style=\"width: 100px; margin-right: 10px;\">\n                                            </div>\n                                            <div class=\"pull-right\">\n                                                <img src=\"/resources/admin/img/icon_payment-cart.png\" alt=\"card\" style=\"margin-top: 25px;\">\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <input type=\"submit\" value=\"Next\" class=\"btn btn-primary pull-right\" @click.prevent=\"nextConfirmation()\">\n                                        </div>\n                                    </form>\n                                </div>\n                            </div>\n                            <div role=\"tabpanel\" class=\"tab-pane \" id=\"mb-confirmation-content\">\n                                <h3 class=\"text-center\">Complete!</h3>\n                                <div id=\"print-receipt\" class=\"btn btn-primary btn-md-cpl\" onclick=\"partPrint('#InfoOrderComplete');\">\n                                    <i class=\"fa fa-print\" aria-hidden=\"true\"></i>Print Receipt\n                                </div>\n                                <div id=\"email-receipt\" class=\"btn btn-primary btn-md-cpl\">\n                                    <i class=\"fa fa-envelope-o\" aria-hidden=\"true\"></i>Email Receipt\n                                </div>\n\n                                <div id=\"InfoOrderComplete\">\n                                    <div class=\"info-booking-details\">\n                                        <h4 class=\"bold pull-left\">Booking Details</h4>\n                                        <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    </div>\n                                    <table class=\"tbl-info-booking-details\" style=\"width: 100%\">\n                                        <tbody><tr>\n                                            <td>\n                                                <div>Booking Type: <b style=\"text-transform: capitalize\">{{inputBookingDetail.type}}</b></div>\n                                                <div>Member: <b>{{inputBookingDetail.member == 1 ? \"Yes\" : \"No\"}}</b></div>\n                                            </td>\n\n                                            <td>\n                                                <div v-if=\"inputBookingDetail.type != 'contract'\">\n                                                    Date: <b>{{inputBookingDetail.date}}</b>\n                                                </div>\n                                                <div v-else=\"\">\n                                                    Date Period: <br><b>{{info_contract.start_date + \" - \" + info_contract.end_date}}</b>\n                                                </div>\n                                                <div>Time: <b>{{inputBookingDetail.hour_start &lt;= 12 ? inputBookingDetail.hour_start + \" am\" : (inputBookingDetail.hour_start - 12) + \" pm\"}}</b></div>\n                                                <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>\n                                            </td>\n\n                                            <td>\n                                                <div>Court: <b>{{court_detail.name}}</b></div>\n                                            </td>\n                                            <td>\n                                                <div>Cost: <b>${{total_price}}</b></div>\n                                            </td>\n                                        </tr>\n                                    </tbody></table>\n                                    <div class=\"info-customers-details\">\n                                        <div class=\"info-booking-details\">\n                                            <h4 class=\"bold pull-left\">Customer Details</h4>\n                                            <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                        </div>\n                                        <div class=\"clearfix\"></div>\n                                        <table style=\"width: 100%\">\n                                            <tbody><tr>\n                                                <td>Name: </td>\n                                                <td>{{customerDetail.first_name + \" \" + customerDetail.last_name}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Address: </td>\n                                                <td>{{customerDetail.address1 + \", \" + customerDetail.city + \", \"+ customerDetail.state}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Email: </td>\n                                                <td>{{customerDetail.email}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Tel: </td>\n                                                <td>{{customerDetail.phone}}</td>\n                                            </tr>\n                                        </tbody></table>\n                                    </div>\n\n                                    <div class=\"info-payment-details\">\n                                        <div class=\"info-booking-details\">\n                                            <h4 class=\"bold pull-left\">Payment Details</h4>\n                                            <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                        </div>\n                                        <div class=\"clearfix\"></div>\n                                        <table style=\"width: 100%\">\n                                            <tbody><tr>\n                                                <td>Type: </td>\n                                                <td>{{paymentDetail.type}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Card Number: </td>\n                                                <td>{{paymentDetail.card_number}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Payment Reference: </td>\n                                                <td>#{{booking_reference}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Amount: </td>\n                                                <td>${{total_price}}</td>\n                                            </tr>\n                                        </tbody></table>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n</div>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div class=\"modal fade mb-modal\" style=\"display: none;\" id=\"myModal\" role=\"dialog\" aria-labelledby=\"myModalLabel\">\n        <div class=\"modal-dialog\" role=\"document\">\n            <div class=\"modal-content\">\n                <div class=\"modal-header\">\n                    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                    <h4 class=\"modal-title\" id=\"myModalLabel\">Create A New Booking</h4>\n                </div>\n                <div class=\"modal-body\">\n                    <div id=\"mb-create-new-booking\">\n                        <!-- Nav tabs -->\n                        <ul class=\"nav nav-tabs mb-tabs\" role=\"tablist\">\n                            <li role=\"presentation\" class=\"li-first active\">\n                                <a class=\"a-first\" href=\"#mb-booking-detail-content\" aria-controls=\"mb-booking-detail-content\" role=\"tab\" data-toggle=\"tab\">Booking detail</a>\n                            </li>\n                            <li role=\"presentation\" class=\"tab-disabled\">\n                                <a href=\"#mb-customer-details-content\" aria-controls=\"mb-customer-details-content\" role=\"tab\" data-toggle=\"tab\">Customer Detail</a>\n                            </li>\n                            <li role=\"presentation\" class=\"tab-disabled\">\n                                <a href=\"#mb-payment-details-content\" aria-controls=\"mb-payment-details-content\" role=\"tab\" data-toggle=\"tab\">Payment Detail</a>\n                            </li>\n                            <li role=\"presentation\" class=\"tab-disabled\">\n                                <a href=\"#mb-confirmation-content\" aria-controls=\"mb-confirmation-content\" role=\"tab\" data-toggle=\"tab\">Confirmation</a>\n                            </li>\n                        </ul>\n                        <!-- Tab panes -->\n                        <div class=\"mb-tab-content tab-content\">\n                            <div role=\"tabpanel\" class=\"tab-pane active\" id=\"mb-booking-detail-content\">\n                                <form action=\"\">\n                                    <div class=\"slc-type mb-group-sl\">\n                                        <h4 class=\"mb-title-h4-modal text-center\">Select a Booking Type</h4>\n                                        <div class=\"col-xs-12 col-md-4\">\n                                            <input type=\"radio\" name=\"book-type\" value=\"open\" id=\"book-type-open\" v-model=\"inputBookingDetail.type\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-type-open\">Open Time</label>\n                                        </div>\n                                        <div class=\"col-xs-12 col-md-4\">\n                                            <input type=\"radio\" name=\"book-type\" value=\"contract\" id=\"book-type-contract\" v-model=\"inputBookingDetail.type\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-type-contract\">Contract Time</label>\n                                        </div>\n                                        <div class=\"col-xs-12 col-md-4\">\n                                            <input type=\"radio\" name=\"book-type\" value=\"lesson\" id=\"book-type-lesson\" v-model=\"inputBookingDetail.type\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-type-lesson\">Lesson</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"slc-member mb-group-sl\">\n                                        <h4 class=\"mb-title-h4-modal text-center\">Member?</h4>\n                                        <div class=\"col-sm-6\">\n                                            <input type=\"radio\" value=\"1\" name=\"book-member\" id=\"book-member-yes\" v-model=\"inputBookingDetail.member\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-member-yes\">Yes</label>\n                                        </div>\n                                        <div class=\"col-sm-6\">\n                                            <input type=\"radio\" value=\"0\" checked=\"checked\" name=\"book-member\" id=\"book-member-no\" v-model=\"inputBookingDetail.member\" v-on:change=\"changeBookingType\">\n                                            <label for=\"book-member-no\">No</label>\n                                        </div>\n                                    </div>\n                                    <div class=\"slc-day-hour\">\n                                        <div class=\"col-xs-12 col-md-6\">\n                                            <div class=\"slc-type-open slc-type-lesson slc-type-group\">\n                                                <h4 class=\"mb-title-h4-modal text-center\">Select a Date</h4>\n                                                <input type=\"text\" class=\"form-control\" name=\"mb-book-day-open\" id=\"mb-book-day-open\" v-model=\"inputBookingDetail.date\">\n                                            </div>\n                                            <div class=\"slc-type-contract slc-type-group\">\n                                                <h4 class=\"mb-title-h4-modal text-center\">Select a Date Period</h4>\n                                                <select name=\"mb-book-day-contract\" class=\"form-control\" v-model=\"inputBookingDetail.contract_id\" v-on:change=\"changeContract\">\n                                                    <option value=\"\">--Select--</option>\n                                                    <option v-for=\"item in contracts\" value=\"{{item.id}}\">{{item.start_date + \" - \" + item.end_date}}</option>\n                                                </select>\n                                                <h4 class=\"mb-title-h4-modal text-center\">Start Day</h4>\n                                                <select name=\"mb-book-start-day-contract\" class=\"form-control\" v-model=\"inputBookingDetail.dayOfWeek\">\n                                                    <option value=\"1\">Monday</option>\n                                                    <option value=\"2\">Tuesday</option>\n                                                    <option value=\"3\">Wednesday</option>\n                                                    <option value=\"4\">Thursday</option>\n                                                    <option value=\"5\">Friday</option>\n                                                    <option value=\"6\">Saturday</option>\n                                                    <option value=\"7\">Sunday</option>\n                                                </select>\n                                            </div>\n                                        </div>\n                                        <div class=\"col-xs-12 col-md-6\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Select a Time</h4>\n                                            <select name=\"mb-book-hour\" class=\"form-control\" v-model=\"inputBookingDetail.hour_start\">\n                                                <option v-for=\"item in hours\" value=\"{{item.key}}\">{{item.value}}</option>\n                                            </select>\n                                            <h4 class=\"mb-title-h4-modal text-center\">length</h4>\n                                            <input id=\"mb-book-in-hour\" class=\"ionslider\" type=\"text\" name=\"mb-book-in-hour\">\n                                        </div>\n                                    </div>\n\n                                    <div class=\"clearfix\"></div>\n                                    <div class=\"mb-group-sl slc-type-contract slc-type-group\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <span>Total day: {{info_contract.total_week}}</span>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"mb-group-sl\">\n                                        <div class=\"col-xs-12 col-md-12\" style=\"margin: 20px 0px\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Select a Court</h4>\n                                            <select name=\"mb-book-court\" class=\"form-control\" v-model=\"inputBookingDetail.court_id\">\n                                                <option v-for=\"(index,court) in courts\" value=\"{{ court.id }}\">{{ court.name }}</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"mb-group-sl slc-type-contract slc-type-group\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Extras</h4>\n                                                <div v-for=\"item in info_contract.extras\">\n                                                    <input type=\"checkbox\" class=\"styled\" value=\"{{item.name}}\" v-model=\"inputBookingDetail.extra_id\">\n                                                    <label for=\"\">{{item.name + \"(\"+item.value+\")\"}}</label>\n                                                </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"mb-group-sl slc-type-lesson slc-type-group\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Choose a Teacher</h4>\n                                            <select name=\"mb-book-teacher\" class=\"form-control\" v-model=\"inputBookingDetail.teacher_id\">\n                                                @for($i=1; $i&lt;110; $i++)\n                                                <option value=\"{{$i}}\">Teacher #{{$i}}</option>\n                                                @endfor\n                                            </select>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"clearfix\"></div>\n                                    <div class=\"mb-group-sl\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <h4 class=\"mb-title-h4-modal text-center\">Order Total: <strong class=\"price\" style=\"\">${{total_price}} </strong></h4>\n                                            <div id=\"viewPriceOrder\" class=\"btn\" @click.prevent=\"viewPriceOrder()\">View price</div>\n                                        </div>\n                                    </div>\n\n                                    <div class=\"clearfix\"></div>\n                                    <div class=\"mb-group-sl\">\n                                        <div class=\"col-xs-12 col-md-12\">\n                                            <div class=\"pull-right\">\n                                                <input type=\"button\" value=\"Next\" class=\"btn btn-primary\" @click.prevent=\"nextCustomerDetail()\">\n                                            </div>\n                                        </div>\n                                    </div>\n                                </form>\n                            </div>\n                            <div role=\"tabpanel\" class=\"tab-pane \" id=\"mb-customer-details-content\">\n                                <div class=\"info-booking-details\">\n                                    <h4 class=\"bold pull-left\">Booking Details</h4>\n                                    <a href=\"\" id=\"mb-edit-booking-details\" class=\"btn btn-primary pull-right\" @click.prevent=\"preBookingDetail()\">Edit</a>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                </div>\n                                <div class=\"clearfix\"></div>\n                                <table class=\"tbl-info-booking-details\" style=\"width: 100%\">\n                                    <tbody><tr>\n                                        <td>\n                                            <div>Booking Type: <b style=\"text-transform: capitalize\">{{inputBookingDetail.type}}</b></div>\n                                            <div>Member: <b>{{inputBookingDetail.member == 1 ? \"Yes\" : \"No\"}}</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div v-if=\"inputBookingDetail.type != 'contract'\">\n                                                Date: <b>{{inputBookingDetail.date}}</b>\n                                            </div>\n                                            <div v-else=\"\">\n                                                Date Period: <br><b>{{info_contract.start_date + \" - \" + info_contract.end_date}}</b>\n                                            </div>\n                                            <div>Time: <b>{{inputBookingDetail.hour_start &lt;= 12 ? inputBookingDetail.hour_start + \" am\" : (inputBookingDetail.hour_start - 12) + \" pm\"}}</b></div>\n                                            <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div>Court: <b>{{court_detail.name}}</b></div>\n                                        </td>\n                                        <td>\n                                            <div>Cost: <b>${{total_price}}</b></div>\n                                        </td>\n                                    </tr>\n                                </tbody></table>\n                                <div class=\"info-customers-details\">\n                                    <h4 class=\"pull-left bold\">Customer Details</h4>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" enctype=\"multipart/form-data\">\n\n                                        <div style=\"width: 300px; margin: 0px auto\" class=\"{{inputBookingDetail.member == 1 ? 'block' :'hidden'}}\">\n                                            <label>Select a player member for booking</label>\n                                            <select class=\"js-data-user-ajax\" name=\"player_id\" id=\"player_id\" v-model=\"customerDetail.player_id\">\n                                                <option value=\"\">Select user member</option>\n                                            </select>\n                                        </div>\n                                        <div class=\"{{inputBookingDetail.member == 1 ? 'hidden' :'block'}}\">\n                                            <div class=\"form-group\">\n                                                <label for=\"surname\" class=\"col-sm-4 control-label\">Customer Lookup</label>\n                                                <div class=\"col-sm-8\">\n                                                    <input class=\"form-control\" placeholder=\"Surname\" name=\"surname\" type=\"text\" value=\"\" id=\"surname\" v-model=\"customerDetail.surname\">\n                                                </div>\n                                            </div>\n                                            <div class=\"clearfix\" style=\"padding-bottom: 20px;\"></div>\n                                            <div class=\"form-group\">\n                                                <div class=\"col-sm-4\">\n                                                    <label for=\"title\">Title *</label>\n                                                    <input class=\"form-control\" placeholder=\"Title\" name=\"title\" type=\"text\" value=\"\" id=\"title\" v-model=\"customerDetail.title\">\n                                                </div>\n                                                <div class=\"col-sm-4\">\n                                                    <label for=\"firstname\">Fist Name *</label>\n                                                    <input class=\"form-control\" placeholder=\"First name\" name=\"first_name\" type=\"text\" value=\"\" id=\"firstname\" v-model=\"customerDetail.first_name\">\n                                                </div>\n                                                <div class=\"col-sm-4\">\n                                                    <label for=\"lastname\">Last Name *</label>\n                                                    <input class=\"form-control\" placeholder=\"Lastname\" name=\"lastname\" type=\"text\" value=\"\" id=\"lastname\" v-model=\"customerDetail.last_name\">\n                                                </div>\n                                            </div>\n                                            <div class=\"clearfix\" style=\"padding-bottom: 20px;\"></div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"zipcode\" class=\"col-sm-2 control-label\">Zipcode *</label>\n                                                <div class=\"col-sm-7\">\n                                                    <input class=\"form-control\" placeholder=\"Enter Zip Code\" style=\"width: 50%; margin-right: 10px;\" name=\"zipcode\" type=\"text\" value=\"\" id=\"input-zip_code\" v-model=\"customerDetail.zip_code\">\n                                                </div>\n                                                <div class=\"col-sm-3\">\n                                                    <button class=\"btn btn-primary btn-get-address-lookup\" type=\"button\">Address Lookup</button>\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"address1\" class=\"col-sm-2 control-label\">Address 1 *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Address Line 1\" name=\"address1\" type=\"text\" value=\"\" id=\"input-address1\" v-model=\"customerDetail.address1\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"address2\" class=\"col-sm-2 control-label\">Address 2</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Address Line 2\" name=\"address2\" type=\"text\" value=\"\" id=\"address2\" v-model=\"customerDetail.address2\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"city\" class=\"col-sm-2 control-label\">City *</label>\n                                                <div class=\" col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"City\" name=\"city\" type=\"text\" value=\"\" id=\"input-city\" v-model=\"customerDetail.city\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"state\" class=\"col-sm-2 control-label\">State *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"State\" name=\"state\" type=\"text\" value=\"\" id=\"input-state\" v-model=\"customerDetail.state\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"email\" class=\"col-sm-2 control-label\">Email *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" value=\"\" id=\"email\" v-model=\"customerDetail.email\">\n                                                </div>\n                                            </div>\n                                            <div class=\"form-group clearfix\">\n                                                <label for=\"phone\" class=\"col-sm-2 control-label\">Phone *</label>\n                                                <div class=\"col-sm-10\">\n                                                    <input class=\"form-control\" placeholder=\"Phone\" name=\"phone\" type=\"text\" value=\"\" id=\"phone\" v-model=\"customerDetail.phone\">\n                                                </div>\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <input type=\"button\" class=\"btn btn-primary pull-right\" value=\"Next\" @click.prevent=\"nextPayment()\">\n                                        </div>\n\n                                    </form>\n                                </div>\n                            </div>\n                            <div role=\"tabpanel\" class=\"tab-pane \" id=\"mb-payment-details-content\">\n                                <div class=\"info-booking-details\">\n                                    <h4 class=\"bold pull-left\">Booking Details</h4>\n                                    <a href=\"\" id=\"mb-edit-booking-details\" class=\"btn btn-primary pull-right\" @click.prevent=\"preBookingDetail()\">Edit</a>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                </div>\n\n                                <div class=\"clearfix\"></div>\n                                <table class=\"tbl-info-booking-details\" style=\"width: 100%\">\n                                    <tbody><tr>\n                                        <td>\n                                            <div>Booking Type: <b style=\"text-transform: capitalize\">{{inputBookingDetail.type}}</b></div>\n                                            <div>Member: <b>{{inputBookingDetail.member == 1 ? \"Yes\" : \"No\"}}</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div v-if=\"inputBookingDetail.type != 'contract'\">\n                                                Date: <b>{{inputBookingDetail.date}}</b>\n                                            </div>\n                                            <div v-else=\"\">\n                                                Date Period: <br><b>{{info_contract.start_date + \" - \" + info_contract.end_date}}</b>\n                                            </div>\n                                            <div>Time: <b>{{inputBookingDetail.hour_start &lt;= 12 ? inputBookingDetail.hour_start + \" am\" : (inputBookingDetail.hour_start - 12) + \" pm\"}}</b></div>\n                                            <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>\n                                        </td>\n\n                                        <td>\n                                            <div>Court: <b>{{court_detail.name}}</b></div>\n                                        </td>\n                                        <td>\n                                            <div>Cost: <b>${{total_price}}</b></div>\n                                        </td>\n                                    </tr>\n                                </tbody></table>\n                                <div class=\"info-customers-details\">\n                                    <div class=\"info-booking-details\">\n                                        <h4 class=\"bold pull-left\">Customer Details</h4>\n                                        <a href=\"\" id=\"mb-edit-booking-details\" class=\"btn btn-primary pull-right\" @click.prevent=\"preCustomerDetail()\">Edit</a>\n                                        <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    </div>\n                                    <div class=\"clearfix\"></div>\n                                    <table style=\"width: 100%\">\n                                        <tbody><tr>\n                                            <td>Name: </td>\n                                            <td>{{customerDetail.first_name + \" \" + customerDetail.last_name}}</td>\n                                        </tr>\n                                        <tr>\n                                            <td>Address: </td>\n                                            <td>{{customerDetail.address1 + \", \" + customerDetail.city + \", \"+ customerDetail.state}}</td>\n                                        </tr>\n                                        <tr>\n                                            <td>Email: </td>\n                                            <td>{{customerDetail.email}}</td>\n                                        </tr>\n                                        <tr>\n                                            <td>Tel: </td>\n                                            <td>{{customerDetail.phone}}</td>\n                                        </tr>\n                                    </tbody></table>\n                                </div>\n\n                                <div class=\"info-payment-details\">\n                                    <h4 class=\"bold pull-left\">Payment Details</h4>\n                                    <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    <div class=\"clearfix\"></div>\n                                    <form method=\"POST\" action=\"/sadmin/booking/abc\" accept-charset=\"UTF-8\" enctype=\"multipart/form-data\"><input name=\"_token\" type=\"hidden\" value=\"DbSaxkk2WraIAh6Jav0pV8o8wIgYs4NIANN5oPpv\">\n                                        <div class=\"form-group\">\n                                            <div class=\"col-xs-12 col-md-3\">\n                                                <label for=\"cost-adjustment\">Cost Adjustment</label>\n                                                <input class=\"form-control\" placeholder=\"-$10\" name=\"cost-adjustment\" type=\"text\" value=\"\" id=\"cost-adjustment\" v-model=\"paymentDetail.cost_adj\">\n                                            </div>\n                                            <div class=\"col-xs-12 col-md-9\">\n                                                <label for=\"adjustment-reason\">Adjustment Reason</label>\n                                                <input class=\"form-control\" placeholder=\"eg. Manager Discount\" name=\"adjustment-reason\" type=\"text\" value=\"\" id=\"adjustment-reason\" v-model=\"paymentDetail.adj_reason\">\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_mastercard.png\" alt=\"mastercard\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"mastercard\" id=\"mastercard\" v-model=\"paymentDetail.type\">\n                                                <label for=\"mastercard\">Mastercard</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_visa.png\" alt=\"visa\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"visa\" id=\"visa\" v-model=\"paymentDetail.type\">\n                                                <label for=\"visa\">Visa</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\" style=\"width: 32%\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_emerican_express.png\" alt=\"american-express\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"american-express\" id=\"american-express\" v-model=\"paymentDetail.type\">\n                                                <label for=\"mastercard\">American Express</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_discover.png\" alt=\"discover\">\n                                                </div>\n                                                <input name=\"payment\" type=\"radio\" value=\"discover\" id=\"discover\" v-model=\"paymentDetail.type\">\n                                                <label for=\"discover\">Discover</label>\n                                            </div>\n                                            <div class=\"pull-left payment-item\">\n                                                <div class=\"img-wrap\">\n                                                    <img src=\"/resources/admin/img/icon_payment_cash.png\" alt=\"cash\">\n                                                </div>\n                                                <input name=\"cash\" type=\"radio\" value=\"cash\" id=\"cash\" v-model=\"paymentDetail.type\">\n                                                <label for=\"mastercard\">Cash</label>\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <div class=\"pull-left\">\n                                                <label for=\"card-number\">Card Number</label>\n                                                <input type=\"text\" name=\"card-number\" class=\"form-control\" id=\"card-number\" placeholder=\"12345672234566\" v-model=\"paymentDetail.card_number\" style=\"width: 240px;\">\n                                            </div>\n                                            <div class=\"pull-left\" style=\"position: relative\">\n                                                <label for=\"card-expiry\">Expiry</label>\n                                                <input type=\"text\" name=\"card-expiry\" class=\"form-control\" id=\"card-expiry\" placeholder=\"06/17\" v-model=\"paymentDetail.expiry\" style=\"width: 120px; margin: 0px 10px;\">\n                                            </div>\n                                            <div class=\"pull-left\">\n                                                <label for=\"card-cvv\">CVV*</label>\n                                                <input type=\"text\" name=\"card-cvv\" class=\"form-control\" id=\"card-cvv\" placeholder=\"123\" v-model=\"paymentDetail.cvv\" style=\"width: 100px; margin-right: 10px;\">\n                                            </div>\n                                            <div class=\"pull-right\">\n                                                <img src=\"/resources/admin/img/icon_payment-cart.png\" alt=\"card\" style=\"margin-top: 25px;\">\n                                            </div>\n                                        </div>\n\n                                        <div class=\"form-group clearfix\">\n                                            <input type=\"submit\" value=\"Next\" class=\"btn btn-primary pull-right\" @click.prevent=\"nextConfirmation()\">\n                                        </div>\n                                    </form>\n                                </div>\n                            </div>\n                            <div role=\"tabpanel\" class=\"tab-pane \" id=\"mb-confirmation-content\">\n                                <h3 class=\"text-center\">Complete!</h3>\n                                <div id=\"print-receipt\" class=\"btn btn-primary btn-md-cpl\" onclick=\"partPrint('#InfoOrderComplete');\">\n                                    <i class=\"fa fa-print\" aria-hidden=\"true\"></i>Print Receipt\n                                </div>\n                                <div id=\"email-receipt\" class=\"btn btn-primary btn-md-cpl\">\n                                    <i class=\"fa fa-envelope-o\" aria-hidden=\"true\"></i>Email Receipt\n                                </div>\n\n                                <div id=\"InfoOrderComplete\">\n                                    <div class=\"info-booking-details\">\n                                        <h4 class=\"bold pull-left\">Booking Details</h4>\n                                        <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                    </div>\n                                    <table class=\"tbl-info-booking-details\" style=\"width: 100%\">\n                                        <tbody><tr>\n                                            <td>\n                                                <div>Booking Type: <b style=\"text-transform: capitalize\">{{inputBookingDetail.type}}</b></div>\n                                                <div>Member: <b>{{inputBookingDetail.member == 1 ? \"Yes\" : \"No\"}}</b></div>\n                                            </td>\n\n                                            <td>\n                                                <div v-if=\"inputBookingDetail.type != 'contract'\">\n                                                    Date: <b>{{inputBookingDetail.date}}</b>\n                                                </div>\n                                                <div v-else=\"\">\n                                                    Date Period: <br><b>{{info_contract.start_date + \" - \" + info_contract.end_date}}</b>\n                                                </div>\n                                                <div>Time: <b>{{inputBookingDetail.hour_start &lt;= 12 ? inputBookingDetail.hour_start + \" am\" : (inputBookingDetail.hour_start - 12) + \" pm\"}}</b></div>\n                                                <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>\n                                            </td>\n\n                                            <td>\n                                                <div>Court: <b>{{court_detail.name}}</b></div>\n                                            </td>\n                                            <td>\n                                                <div>Cost: <b>${{total_price}}</b></div>\n                                            </td>\n                                        </tr>\n                                    </tbody></table>\n                                    <div class=\"info-customers-details\">\n                                        <div class=\"info-booking-details\">\n                                            <h4 class=\"bold pull-left\">Customer Details</h4>\n                                            <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                        </div>\n                                        <div class=\"clearfix\"></div>\n                                        <table style=\"width: 100%\">\n                                            <tbody><tr>\n                                                <td>Name: </td>\n                                                <td>{{customerDetail.first_name + \" \" + customerDetail.last_name}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Address: </td>\n                                                <td>{{customerDetail.address1 + \", \" + customerDetail.city + \", \"+ customerDetail.state}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Email: </td>\n                                                <td>{{customerDetail.email}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Tel: </td>\n                                                <td>{{customerDetail.phone}}</td>\n                                            </tr>\n                                        </tbody></table>\n                                    </div>\n\n                                    <div class=\"info-payment-details\">\n                                        <div class=\"info-booking-details\">\n                                            <h4 class=\"bold pull-left\">Payment Details</h4>\n                                            <hr style=\"clear: both; margin-top: 0px; border: 1px solid #ddd;\">\n                                        </div>\n                                        <div class=\"clearfix\"></div>\n                                        <table style=\"width: 100%\">\n                                            <tbody><tr>\n                                                <td>Type: </td>\n                                                <td>{{paymentDetail.type}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Card Number: </td>\n                                                <td>{{paymentDetail.card_number}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Payment Reference: </td>\n                                                <td>#{{booking_reference}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Amount: </td>\n                                                <td>${{total_price}}</td>\n                                            </tr>\n                                        </tbody></table>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n</div>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\NewBooking.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\NewBooking.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -32129,15 +30909,88 @@ Object.defineProperty(exports, "__esModule", {
 var _ = require('lodash'),
     deferred = require('deferred');
 exports.default = {
-    props: ['clubSettingId', 'dateChooise']
+    props: ['clubSettingId', 'dateChooise'],
+    data: function data() {
+        return {
+            search_reference: null,
+            search_name: null,
+            search_result: [],
+            booking: []
+        };
+    },
+
+    methods: {
+        searchFindBooking: function searchFindBooking() {
+            var _this = this;
+
+            $("#result_search").addClass('hidden');
+            $("#cc-modal-view-booking-search").addClass('hide');
+            $("#form_search_booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+            this.$http.get(laroute.route('booking.search', { reference: this.search_reference, name: this.search_name })).then(function (res) {
+                if (!res.data.error) {
+                    _this.search_result = res.data.bookings;
+                    $("#result_search").removeClass('hidden');
+                } else {
+                    var msg = "";
+                    $.each(res.data.messages, function (k, v) {
+                        msg += "<div>" + v + "</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }
+                $("#form_search_booking .loading").remove();
+            }, function (res) {});
+        },
+        fetchDataOfBooking: function fetchDataOfBooking(booking_id) {
+            var _this2 = this;
+
+            this.booking = [];
+            $("#cc-modal-view-booking-search").removeClass('hide').append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+            this.$http.get(laroute.route('booking.view', { one: booking_id })).then(function (res) {
+                $("#cc-modal-view-booking-search .loading").remove();
+                if (res.data.error == false) {
+                    _this2.booking = res.data.booking;
+                }
+            }, function (res) {
+                $("#cc-modal-view-booking-search .loading").remove();
+            });
+        },
+        acceptPayment: function acceptPayment(booking_id) {
+            var _this3 = this;
+
+            this.$http.get(laroute.route('booking.acceptPayment', { one: booking_id }), function (data) {
+                if (data.error == false) {
+                    _this3.booking.status = "paid";
+                    showNotice('success', "Update accept payment success!", 'Update Success!');
+                }
+            }).error(function (data) {});
+        },
+        editBooking: function editBooking(booking_id) {
+            //$("#md-booking-content-expand .editable_").removeClass('editable_').addClass('editable');
+        },
+        cancelBooking: function cancelBooking(booking_id) {
+            var parent = this;
+            $('#confirm-booking-delete').modal({ backdrop: 'static', keyboard: false }).one('click', '#booking-delete', function (e) {
+                $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                parent.$http.get(laroute.route('booking.cancel', { one: booking_id }), function (data) {
+                    if (data.error == false) {
+                        parent.flagChangeDataOfDate = Math.random();
+                        showNotice('success', "Cancel booking success!", 'Cancel Success!');
+                    } else {
+                        showNotice('error', data.message, 'Error!');
+                    }
+                    $("body .loading").remove();
+                }).error(function (data) {});
+            });
+        }
+    }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<form action=\"\" method=\"post\" id=\"form_search_booking\">\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <h2 class=\"title-search\">Find a Booking</h2>\n    </div>\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <div class=\"col-xs-12 col-md-10\">\n            <label for=\"reference_number\">Reference Number</label>\n            <input class=\"form-control\" name=\"reference_number\" type=\"text\" id=\"reference_number\">\n        </div>\n        <div class=\"col-xs-12 col-md-2\"><br><br> Or</div>\n    </div>\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <label for=\"customer_name\">Name</label>\n        <input class=\"form-control\" name=\"customer_name\" type=\"text\" id=\"customer_name\">\n    </div>\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <label for=\" \" style=\"color: #fff\">.</label>\n        <input class=\"btn btn-primary\" style=\"display: block\" type=\"submit\" value=\"Search\">\n    </div>\n    <div class=\"clearfix\"></div>\n    <div id=\"result_search\">\n        <h3 class=\"text-center\">Search Results</h3>\n        <table>\n            <tbody><tr>\n                <th>Booking Reference</th>\n                <th>Customer Name</th>\n                <th>Customer Phone</th>\n                <th>Booking Details</th>\n            </tr>\n            <tr>\n                <td>12345678</td>\n                <td>Peter Vardy</td>\n                <td>0123456789</td>\n                <td>\n                    Court #1 - Friday 29th January 2016 @16:00\n                    <a href=\"#\" class=\"viewbooking btn btn-primary\">View</a>\n                    <a href=\"#\" class=\"editbooking btn btn-primary\">Edit</a>\n                    <a href=\"#\" class=\"checkIn btn btn-primary\">Check In</a>\n                </td>\n            </tr>\n        </tbody></table>\n    </div>\n</form>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<form action=\"\" method=\"post\" id=\"form_search_booking\">\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <h2 class=\"title-search\">Find a Booking</h2>\n    </div>\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <div class=\"col-xs-12 col-md-10\">\n            <label for=\"reference_number\">Reference Number</label>\n            <input class=\"form-control\" name=\"reference_number\" v-model=\"search_reference\" type=\"text\" id=\"reference_number\">\n        </div>\n        <div class=\"col-xs-12 col-md-2\"><br><br> Or</div>\n    </div>\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <label for=\"customer_name\">Name</label>\n        <input class=\"form-control\" name=\"customer_name\" v-model=\"search_name\" type=\"text\" id=\"customer_name\">\n    </div>\n    <div class=\"pull-left col-xs-12 col-md-3\">\n        <label for=\" \" style=\"color: #fff\">.</label>\n        <input class=\"btn btn-primary\" style=\"display: block\" type=\"submit\" value=\"Search\" @click.prevent=\"searchFindBooking()\">\n    </div>\n    <div class=\"clearfix\"></div>\n    <div id=\"result_search\" class=\"hidden\">\n        <h3 class=\"text-center\">Search Results</h3>\n        <table>\n            <tbody><tr>\n                <th>Booking Reference</th>\n                <th>Customer Name</th>\n                <th>Customer Phone</th>\n                <th>Booking Details</th>\n            </tr>\n            <tr v-for=\"(index,item) in search_result\">\n                <td>{{item['id']}}</td>\n                <td>{{item['billing_info']['first_name'] + \" \" + item['billing_info']['last_name']}}</td>\n                <td>{{item['billing_info']['phone']}}</td>\n                <td>\n                    Court {{item['court_name']}} - {{item['date']}} @ {{item['hour']}}\n                    <a href=\"#\" @click=\"fetchDataOfBooking(item['id'])\" class=\"viewbooking btn btn-primary\">View</a>\n                    <a href=\"#\" class=\"editbooking btn btn-primary\">Edit</a>\n                    <a href=\"#\" class=\"checkIn btn btn-primary\">Check In</a>\n                </td>\n            </tr>\n        </tbody></table>\n    </div>\n</form>\n\n<div class=\"hide\" id=\"cc-modal-view-booking-search\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\">\n    <div class=\"court-booking-expanded\">\n        <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n        <div class=\"col-xs-3\">\n            <h3 class=\"title-part\">Customer Details</h3>\n            <table v-if=\"booking['billing_info']\">\n                <tbody><tr>\n                    <td align=\"right\">Name</td>\n                    <td>\n                        <div class=\"editable_\">{{booking['billing_info']['first_name']}}</div>\n                        <div class=\"editable_\">{{booking['billing_info']['last_name']}}</div>\n                    </td>\n                </tr>\n                <tr>\n                    <td align=\"right\">Email</td>\n                    <td><div class=\"editable_\">{{booking['billing_info']['email']}}</div></td>\n                </tr>\n                <tr>\n                    <td align=\"right\">Phone</td>\n                    <td><div class=\"editable_\">{{booking['billing_info']['phone']}}</div></td>\n                </tr>\n                <tr>\n                    <td align=\"right\">Address</td>\n                    <td><div class=\"editable_\">{{booking['billing_info']['address1']}}</div></td>\n                </tr>\n            </tbody></table>\n        </div>\n        <template v-if=\"booking\">\n            <div class=\"col-xs-3\">\n                <h3 class=\"title-part\">Booking Details</h3>\n\n                <table v-if=\"booking['billing_info']\">\n                    <tbody><tr>\n                        <td align=\"right\">Booking Type</td>\n                        <td>{{booking['type']}}</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Court:</td>\n                        <td>{{booking['court']['name']}}</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Start Time</td>\n                        <td>{{booking['hour'] + \" - \" + (booking['hour'] + booking['hour_length'])}}</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Length</td>\n                        <td>{{booking['hour_length']}} Hour</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Players</td>\n                        <td>{{booking['num_player']}}</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Create Time</td>\n                        <td>{{booking['created_at']}}</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Booking By</td>\n                        <td>Court-Connect.com</td>\n                    </tr>\n                </tbody></table>\n            </div>\n            <div class=\"col-xs-3\">\n                <h3 class=\"title-part\">Payment Details</h3>\n                <table v-if=\"booking['billing_info']\">\n                    <tbody><tr>\n                        <td align=\"right\">Status</td>\n                        <td v-if=\"booking['status'] == 'required'\" style=\"text-transform: capitalize\"><span style=\"color:red\">Payment Required</span></td>\n                        <td v-else=\"\" style=\"text-transform: capitalize\">{{booking['status']}}</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Tender</td>\n                        <td style=\"text-transform: capitalize\">{{booking['type']}}</td>\n                    </tr>\n                    <tr>\n                        <td align=\"right\">Total Due</td>\n                        <td>{{booking['total_price']}}</td>\n                    </tr>\n                </tbody></table>\n            </div>\n            <div class=\"col-xs-3\">\n                <div id=\"mb-print-receipt\" class=\"btn btn-primary btn-mb-ex icon-fa-print\">Print Receipt</div>\n                <div v-if=\"booking['status'] == 'required'\" @click=\"acceptPayment(booking['id'])\" id=\"mb-accept-payment\" class=\"btn btn-primary btn-mb-ex icon-fa-accept\">Accept Payment</div>\n                <div v-else=\"\" id=\"mb-check-players-in\" class=\"btn btn-primary btn-mb-ex icon-fa-check\">Check Players In</div>\n                <div id=\"mb-edit-booking\" @click=\"editBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex icon-fa-edit\">Edit Booking</div>\n                <div id=\"mb-cancel-booking\" @click=\"cancelBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex btn-custom icon-fa-cancel\">Cancel Booking</div>\n            </div>\n        </template>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\SearchBooking.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\booking\\SearchBooking.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -32249,7 +31102,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\ClubSetting.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\ClubSetting.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -32412,7 +31265,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\CourtRate.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\CourtRate.vue"
   module.hot.dispose(function () {
     require("vueify-insert-css").cache["\n#table-rate .ui-selected {\n\tbackground: #0f494d;\n\tcolor: white;\n}\n.date_period {\n\tmargin-top: 20px;\n}\n.modal {\n\tdisplay: block; /* Hidden by default */\n\tposition: absolute; /* Stay in place */\n\tz-index: 1; /* Sit on top */\n\tleft: 0;\n\ttop: 0;\n\twidth: 100%; /* Full width */\n\theight: 100%; /* Full height */\n\toverflow: auto; /* Enable scroll if needed */\n\tbackground-color: rgb(0,0,0); /* Fallback color */\n\tbackground-color: rgba(0,0,0,0.4); /* Black w/ opacity */\n}\n\n/* Modal Content */\n.modal-content {\n\tbackground-color: transparent;\n\tmargin: auto;\n\tborder: 1px solid #888;\n\ttext-align: center;\n\tcolor: #fff;\n\tdisplay: table;\n\twidth: 100%;\n\theight: 100%;\n}\n.notify {\n\tdisplay: table-cell;\n\tvertical-align: middle;\n}\n/* The Close Button */\n.close {\n\tcolor: #aaaaaa;\n\tfloat: right;\n\tfont-size: 28px;\n\tfont-weight: bold;\n}\n\n.close:hover,\n.close:focus {\n\tcolor: #000;\n\ttext-decoration: none;\n\tcursor: pointer;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
@@ -32424,7 +31277,7 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94,"vueify-insert-css":120}],128:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n.datetime-picker[_v-37a63886] {\n    position: relative;\n    display: inline-block;\n    font-family: \"Segoe UI\",\"Lucida Grande\",Helvetica,Arial,\"Microsoft YaHei\";\n    -webkit-font-smoothing: antialiased;\n    color: #333;\n    width: 100%;\n}\n\n.datetime-picker *[_v-37a63886] {\n    box-sizing: border-box;\n}\n\n.datetime-picker input[_v-37a63886] {\n    width: 100%;\n    padding: 5px 10px;\n    height: 30px;\n    outline: 0 none;\n    border: 1px solid #ccc;\n    font-size: 13px;\n}\n\n.datetime-picker .picker-wrap[_v-37a63886] {\n    z-index: 1000;\n    width: 100%;\n    min-height: 280px;\n    margin-top: 2px;\n    background-color: #fff;\n}\n.datetime-picker th[_v-37a63886]{\n    border: 0px !important;\n}\n.datetime-picker table[_v-37a63886] {\n    width: 100%;\n    border-collapse: collapse;\n    border-spacing: 0;\n    text-align: center;\n    font-size: 13px;\n}\n\n.datetime-picker tr[_v-37a63886] {\n    height: 34px;\n    border: 0 none;\n}\n\n.datetime-picker th[_v-37a63886], .datetime-picker td[_v-37a63886] {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    width: 34px;\n    height: 34px;\n    padding: 0;\n    border: 0 none;\n    line-height: 34px;\n    text-align: center;\n    border: 1px solid #EBEBEB;\n}\n\n.datetime-picker td[_v-37a63886] {\n    cursor: pointer;\n    height: 70px;\n    position: relative;\n}\n\n.datetime-picker td.date-pass[_v-37a63886], .datetime-picker td.date-future[_v-37a63886] {\n    color: #aaa;\n}\n\n.datetime-picker .date-head[_v-37a63886] {\n    background-color: none;\n    text-align: left;\n    color: #000;\n    font-size: 14px;\n}\n.datetime-picker td.date-pass[_v-37a63886], .datetime-picker td.date-future[_v-37a63886]{\n    background: #F3F3F5;\n}\n.datetime-picker .date-days[_v-37a63886] {\n    color: #000;\n    font-size: 14px;\n}\n\n.datetime-picker .show-year[_v-37a63886] {\n    display: inline-block;\n    min-width: 40px;\n    vertical-align: middle;\n}\n\n.datetime-picker .show-month[_v-37a63886] {\n    display: inline-block;\n    min-width: 28px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-37a63886],\n.datetime-picker .btn-next[_v-37a63886] {\n    cursor: pointer;\n    display: inline-block;\n    padding: 0 10px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-37a63886]:hover,\n.datetime-picker .btn-next[_v-37a63886]:hover {\n    background: rgba(16, 160, 234, 0.5);\n}\n.monthly-day-number[_v-37a63886] {\n    position: absolute;\n    line-height: 1em;\n    top: 2px;\n    left: 2px;\n    font-size: 11px;\n}\n.monthly-indicator-wrap[_v-37a63886] {\n    width: 100%;\n    max-width: none;\n    position: relative;\n    text-align: center;\n    height: 100%;\n}\n.monthly-indicator-wrap .overflow[_v-37a63886] {\n    width: 100%;\n    height: 100%;\n    background: rgba(0,0,0,0.7);\n    line-height: 70px;\n    display: none;\n    -webkit-transition: all 0.1s linear;\n    transition: all 0.1s linear;\n    position: absolute;\n    top: 0;\n}\n.overflow .action[_v-37a63886] {\n    display: inline;\n}\n.datetime-picker td:not(.date-future):hover .monthly-indicator-wrap .overflow[_v-37a63886]{\n    display: block;\n}\n.date-pass .monthly-indicator-wrap .time[_v-37a63886]{\n    line-height: 70px;\n}\n.datetime-picker td.date-pass:hover .monthly-indicator-wrap .overflow[_v-37a63886]{\n    display: none;\n}\n.date-pass .monthly-indicator-wrap[_v-37a63886], .date-future .monthly-indicator-wrap[_v-37a63886]{\n    display: none;\n}\n.dlg-setopenday[_v-37a63886]{\n    position: absolute;\n    left: 0px;\n    z-index: 999;\n    top: 70px;\n    background: #e2e2e2;\n    border: 1px solid #ccc;\n}\n")
+var __vueify_style__ = require("vueify-insert-css").insert("\n.datetime-picker[_v-17238b60] {\n    position: relative;\n    display: inline-block;\n    font-family: \"Segoe UI\",\"Lucida Grande\",Helvetica,Arial,\"Microsoft YaHei\";\n    -webkit-font-smoothing: antialiased;\n    color: #333;\n    width: 100%;\n}\n\n.datetime-picker *[_v-17238b60] {\n    box-sizing: border-box;\n}\n\n.datetime-picker input[_v-17238b60] {\n    width: 100%;\n    padding: 5px 10px;\n    height: 30px;\n    outline: 0 none;\n    border: 1px solid #ccc;\n    font-size: 13px;\n}\n\n.datetime-picker .picker-wrap[_v-17238b60] {\n    z-index: 1000;\n    width: 100%;\n    min-height: 280px;\n    margin-top: 2px;\n    background-color: #fff;\n}\n.datetime-picker th[_v-17238b60]{\n    border: 0px !important;\n}\n.datetime-picker table[_v-17238b60] {\n    width: 100%;\n    border-collapse: collapse;\n    border-spacing: 0;\n    text-align: center;\n    font-size: 13px;\n}\n\n.datetime-picker tr[_v-17238b60] {\n    height: 34px;\n    border: 0 none;\n}\n\n.datetime-picker th[_v-17238b60], .datetime-picker td[_v-17238b60] {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    width: 34px;\n    height: 34px;\n    padding: 0;\n    border: 0 none;\n    line-height: 34px;\n    text-align: center;\n    border: 1px solid #EBEBEB;\n}\n\n.datetime-picker td[_v-17238b60] {\n    cursor: pointer;\n    height: 70px;\n    position: relative;\n}\n\n.datetime-picker td.date-pass[_v-17238b60], .datetime-picker td.date-future[_v-17238b60] {\n    color: #aaa;\n}\n\n.datetime-picker .date-head[_v-17238b60] {\n    background-color: none;\n    text-align: left;\n    color: #000;\n    font-size: 14px;\n}\n.datetime-picker td.date-pass[_v-17238b60], .datetime-picker td.date-future[_v-17238b60]{\n    background: #F3F3F5;\n}\n.datetime-picker .date-days[_v-17238b60] {\n    color: #000;\n    font-size: 14px;\n}\n\n.datetime-picker .show-year[_v-17238b60] {\n    display: inline-block;\n    min-width: 40px;\n    vertical-align: middle;\n}\n\n.datetime-picker .show-month[_v-17238b60] {\n    display: inline-block;\n    min-width: 28px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-17238b60],\n.datetime-picker .btn-next[_v-17238b60] {\n    cursor: pointer;\n    display: inline-block;\n    padding: 0 10px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-17238b60]:hover,\n.datetime-picker .btn-next[_v-17238b60]:hover {\n    background: rgba(16, 160, 234, 0.5);\n}\n.monthly-day-number[_v-17238b60] {\n    position: absolute;\n    line-height: 1em;\n    top: 2px;\n    left: 2px;\n    font-size: 11px;\n}\n.monthly-indicator-wrap[_v-17238b60] {\n    width: 100%;\n    max-width: none;\n    position: relative;\n    text-align: center;\n    height: 100%;\n}\n.monthly-indicator-wrap .overflow[_v-17238b60] {\n    width: 100%;\n    height: 100%;\n    background: rgba(0,0,0,0.7);\n    line-height: 70px;\n    display: none;\n    -webkit-transition: all 0.1s linear;\n    transition: all 0.1s linear;\n    position: absolute;\n    top: 0;\n}\n.overflow .action[_v-17238b60] {\n    display: inline;\n}\n.datetime-picker td:not(.date-future):hover .monthly-indicator-wrap .overflow[_v-17238b60]{\n    display: block;\n}\n.date-pass .monthly-indicator-wrap .time[_v-17238b60]{\n    line-height: 70px;\n}\n.datetime-picker td.date-pass:hover .monthly-indicator-wrap .overflow[_v-17238b60]{\n    display: none;\n}\n.date-pass .monthly-indicator-wrap[_v-17238b60], .date-future .monthly-indicator-wrap[_v-17238b60]{\n    display: none;\n}\n.dlg-setopenday[_v-17238b60]{\n    position: absolute;\n    left: 0px;\n    z-index: 999;\n    top: 70px;\n    background: #e2e2e2;\n    border: 1px solid #ccc;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32708,14 +31561,14 @@ $(function () {
     });
 });
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-37a63886=\"\">\n    <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" id=\"form_set_openday\" enctype=\"multipart/form-data\" _v-37a63886=\"\"><input name=\"_token\" type=\"hidden\" value=\"My7S1d0Ttnzpw9U0SEC5sYIUh7zCUiHqDy93EJHA\" _v-37a63886=\"\">\n        <div class=\"pull-left form-box\" _v-37a63886=\"\">\n            <label for=\"date\" _v-37a63886=\"\">Select day(s) of the week</label>\n            <br _v-37a63886=\"\">\n            <select class=\"form-control\" name=\"date_open\" id=\"date_open\" v-model=\"dataOpenHour.daysOfWeek\" multiple=\"multiple\" style=\"display: none;\" _v-37a63886=\"\">\n                <option value=\"1\" _v-37a63886=\"\">Monday</option>\n                <option value=\"2\" _v-37a63886=\"\">Tuesday</option>\n                <option value=\"3\" _v-37a63886=\"\">Wednesday</option>\n                <option value=\"4\" _v-37a63886=\"\">Thursday</option>\n                <option value=\"5\" _v-37a63886=\"\">Friday</option>\n                <option value=\"6\" _v-37a63886=\"\">Saturday</option>\n                <option value=\"7\" _v-37a63886=\"\">Sunday</option>\n            </select>\n        </div>\n        <div class=\"pull-left form-box\" _v-37a63886=\"\">\n            <label for=\"daterange_open\" _v-37a63886=\"\">Date range</label>\n            <input class=\"daterange form-control\" name=\"daterange_open\" type=\"text\" id=\"daterange_open\" _v-37a63886=\"\">\n        </div>\n        <div class=\"pull-left form-box\" _v-37a63886=\"\">\n            <label for=\"opentime\" _v-37a63886=\"\">Open Time</label>\n            <input id=\"opentime\" class=\"timepicker opentime form-control\" placeholder=\"\" name=\"opentime\" type=\"text\" _v-37a63886=\"\">\n        </div>\n        <div class=\"pull-left form-box\" _v-37a63886=\"\">\n            <label for=\"closetime\" _v-37a63886=\"\">Closing Time</label>\n            <input class=\"timepicker closetime form-control\" placeholder=\"\" name=\"closetime\" type=\"text\" id=\"closetime\" _v-37a63886=\"\">\n        </div>\n        <div class=\"pull-left\" _v-37a63886=\"\">\n            <br _v-37a63886=\"\">\n            <input class=\"btn btn-primary\" style=\"margin-top: 6px;\" type=\"submit\" value=\"Apply\" @click.prevent=\"addOpenHours()\" _v-37a63886=\"\">\n        </div>\n    </form>\n</div>\n<div class=\"datetime-picker\" _v-37a63886=\"\">\n    <div class=\"picker-wrap\" v-show=\"show\" _v-37a63886=\"\">\n        <table class=\"date-picker\" _v-37a63886=\"\">\n            <thead _v-37a63886=\"\">\n            <tr class=\"date-head\" _v-37a63886=\"\">\n                <th colspan=\"4\" style=\"text-align: left\" _v-37a63886=\"\">\n                    <span class=\"btn-prev\" @click=\"monthClick(-1)\" _v-37a63886=\"\">&lt;</span>\n                    <span class=\"show-month\" _v-37a63886=\"\">{{months[now.getMonth()]}}</span>\n                    <span class=\"show-year\" _v-37a63886=\"\">{{now.getFullYear()}}</span>\n                    <span class=\"btn-next\" @click=\"monthClick(1)\" _v-37a63886=\"\">&gt;</span>\n                </th>\n                <th colspan=\"3\" _v-37a63886=\"\">\n                </th>\n            </tr>\n            <tr class=\"date-days\" _v-37a63886=\"\">\n                <th v-for=\"day in days\" _v-37a63886=\"\">{{day}}</th>\n            </tr>\n            </thead>\n            <tbody id=\"tbody-wrapper-main\" _v-37a63886=\"\">\n\n            <tr v-for=\"i in 6\" _v-37a63886=\"\">\n                <td v-for=\"j in 7\" :class=\"date[i * 7 + j] &amp;&amp; date[i * 7 + j].status\" :date=\"date[i * 7 + j] &amp;&amp; date[i * 7 + j].date\" data-x=\"{{i}}\" data-y=\"{{j}}\" data-id=\"{{date[i * 7 + j] &amp;&amp; date[i * 7 + j].status == 'date-current' &amp;&amp; date[i * 7 + j].text }}\" _v-37a63886=\"\">\n                    <div class=\"monthly-day-number\" a11=\"\" _v-37a63886=\"\">{{date[i * 7 + j] &amp;&amp; date[i * 7 + j].text}}</div>\n                    <div class=\"monthly-indicator-wrap\" v-if=\"date[i * 7 + j] &amp;&amp; date[i * 7 + j].status == 'date-current'\" _v-37a63886=\"\">\n                        <div class=\"time\" _v-37a63886=\"\"></div>\n                        <div class=\"overflow\" _v-37a63886=\"\">\n                            <div class=\"btn-close action\" @click=\"setCloseClick(date[i * 7 + j].text)\" _v-37a63886=\"\"><img src=\"/uploads/images/config/close_icon.png\" alt=\"\" _v-37a63886=\"\"></div>\n                            <div class=\"btn-plane action\" @click=\"setHolidayClick(date[i * 7 + j].text)\" _v-37a63886=\"\"><img src=\"/uploads/images/config/plane_icon.png\" alt=\"\" _v-37a63886=\"\"></div>\n                            <div class=\"btn-clock action\" _v-37a63886=\"\"><img src=\"/uploads/images/config/clock_icon.png\" alt=\"\" _v-37a63886=\"\"> </div>\n                            <div class=\"dlg-setopenday hidden\" _v-37a63886=\"\">\n                                <div style=\"width: 50%; float: left\" _v-37a63886=\"\">\n                                    <label for=\"opentime\" _v-37a63886=\"\">Open Time</label>\n                                    <input class=\"form-control\" name=\"opentime\" type=\"time\" v-model=\"date[i*7+j].hours_open\" _v-37a63886=\"\">\n                                </div>\n                                <div style=\"width: 50%; float: left\" _v-37a63886=\"\">\n                                    <label for=\"closetime\" _v-37a63886=\"\">Closing Time</label>\n                                    <input class=\"form-control\" name=\"closetime\" type=\"time\" v-model=\"date[i*7+j].hours_close\" _v-37a63886=\"\">\n                                </div>\n                                <div _v-37a63886=\"\">\n                                    <input class=\"btn btn-primary\" style=\"margin-top: 6px; width: auto;\" type=\"button\" @click=\"setTimeClick(i * 7 + j)\" value=\"Apply\" _v-37a63886=\"\">\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n\n                </td>\n            </tr>\n            </tbody>\n        </table>\n    </div>\n</div>\n<style _v-37a63886=\"\">\n    .overflow .action {\n        display: inline;\n        padding-right: 5px;\n    }\n    .monthly-indicator-wrap.day_close{\n        background: #1b1b1b;\n        text-transform: uppercase;\n        color: #fff;\n        line-height: 70px;\n        font-weight: bold;\n    }\n    .monthly-indicator-wrap.day_holiday{\n        background: #930101;\n        color: #fff;\n    }\n</style>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-17238b60=\"\">\n    <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" id=\"form_set_openday\" enctype=\"multipart/form-data\" _v-17238b60=\"\"><input name=\"_token\" type=\"hidden\" value=\"My7S1d0Ttnzpw9U0SEC5sYIUh7zCUiHqDy93EJHA\" _v-17238b60=\"\">\n        <div class=\"pull-left form-box\" _v-17238b60=\"\">\n            <label for=\"date\" _v-17238b60=\"\">Select day(s) of the week</label>\n            <br _v-17238b60=\"\">\n            <select class=\"form-control\" name=\"date_open\" id=\"date_open\" v-model=\"dataOpenHour.daysOfWeek\" multiple=\"multiple\" style=\"display: none;\" _v-17238b60=\"\">\n                <option value=\"1\" _v-17238b60=\"\">Monday</option>\n                <option value=\"2\" _v-17238b60=\"\">Tuesday</option>\n                <option value=\"3\" _v-17238b60=\"\">Wednesday</option>\n                <option value=\"4\" _v-17238b60=\"\">Thursday</option>\n                <option value=\"5\" _v-17238b60=\"\">Friday</option>\n                <option value=\"6\" _v-17238b60=\"\">Saturday</option>\n                <option value=\"7\" _v-17238b60=\"\">Sunday</option>\n            </select>\n        </div>\n        <div class=\"pull-left form-box\" _v-17238b60=\"\">\n            <label for=\"daterange_open\" _v-17238b60=\"\">Date range</label>\n            <input class=\"daterange form-control\" name=\"daterange_open\" type=\"text\" id=\"daterange_open\" _v-17238b60=\"\">\n        </div>\n        <div class=\"pull-left form-box\" _v-17238b60=\"\">\n            <label for=\"opentime\" _v-17238b60=\"\">Open Time</label>\n            <input id=\"opentime\" class=\"timepicker opentime form-control\" placeholder=\"\" name=\"opentime\" type=\"text\" _v-17238b60=\"\">\n        </div>\n        <div class=\"pull-left form-box\" _v-17238b60=\"\">\n            <label for=\"closetime\" _v-17238b60=\"\">Closing Time</label>\n            <input class=\"timepicker closetime form-control\" placeholder=\"\" name=\"closetime\" type=\"text\" id=\"closetime\" _v-17238b60=\"\">\n        </div>\n        <div class=\"pull-left\" _v-17238b60=\"\">\n            <br _v-17238b60=\"\">\n            <input class=\"btn btn-primary\" style=\"margin-top: 6px;\" type=\"submit\" value=\"Apply\" @click.prevent=\"addOpenHours()\" _v-17238b60=\"\">\n        </div>\n    </form>\n</div>\n<div class=\"datetime-picker\" _v-17238b60=\"\">\n    <div class=\"picker-wrap\" v-show=\"show\" _v-17238b60=\"\">\n        <table class=\"date-picker\" _v-17238b60=\"\">\n            <thead _v-17238b60=\"\">\n            <tr class=\"date-head\" _v-17238b60=\"\">\n                <th colspan=\"4\" style=\"text-align: left\" _v-17238b60=\"\">\n                    <span class=\"btn-prev\" @click=\"monthClick(-1)\" _v-17238b60=\"\">&lt;</span>\n                    <span class=\"show-month\" _v-17238b60=\"\">{{months[now.getMonth()]}}</span>\n                    <span class=\"show-year\" _v-17238b60=\"\">{{now.getFullYear()}}</span>\n                    <span class=\"btn-next\" @click=\"monthClick(1)\" _v-17238b60=\"\">&gt;</span>\n                </th>\n                <th colspan=\"3\" _v-17238b60=\"\">\n                </th>\n            </tr>\n            <tr class=\"date-days\" _v-17238b60=\"\">\n                <th v-for=\"day in days\" _v-17238b60=\"\">{{day}}</th>\n            </tr>\n            </thead>\n            <tbody id=\"tbody-wrapper-main\" _v-17238b60=\"\">\n\n            <tr v-for=\"i in 6\" _v-17238b60=\"\">\n                <td v-for=\"j in 7\" :class=\"date[i * 7 + j] &amp;&amp; date[i * 7 + j].status\" :date=\"date[i * 7 + j] &amp;&amp; date[i * 7 + j].date\" data-x=\"{{i}}\" data-y=\"{{j}}\" data-id=\"{{date[i * 7 + j] &amp;&amp; date[i * 7 + j].status == 'date-current' &amp;&amp; date[i * 7 + j].text }}\" _v-17238b60=\"\">\n                    <div class=\"monthly-day-number\" a11=\"\" _v-17238b60=\"\">{{date[i * 7 + j] &amp;&amp; date[i * 7 + j].text}}</div>\n                    <div class=\"monthly-indicator-wrap\" v-if=\"date[i * 7 + j] &amp;&amp; date[i * 7 + j].status == 'date-current'\" _v-17238b60=\"\">\n                        <div class=\"time\" _v-17238b60=\"\"></div>\n                        <div class=\"overflow\" _v-17238b60=\"\">\n                            <div class=\"btn-close action\" @click=\"setCloseClick(date[i * 7 + j].text)\" _v-17238b60=\"\"><img src=\"/uploads/images/config/close_icon.png\" alt=\"\" _v-17238b60=\"\"></div>\n                            <div class=\"btn-plane action\" @click=\"setHolidayClick(date[i * 7 + j].text)\" _v-17238b60=\"\"><img src=\"/uploads/images/config/plane_icon.png\" alt=\"\" _v-17238b60=\"\"></div>\n                            <div class=\"btn-clock action\" _v-17238b60=\"\"><img src=\"/uploads/images/config/clock_icon.png\" alt=\"\" _v-17238b60=\"\"> </div>\n                            <div class=\"dlg-setopenday hidden\" _v-17238b60=\"\">\n                                <div style=\"width: 50%; float: left\" _v-17238b60=\"\">\n                                    <label for=\"opentime\" _v-17238b60=\"\">Open Time</label>\n                                    <input class=\"form-control\" name=\"opentime\" type=\"time\" v-model=\"date[i*7+j].hours_open\" _v-17238b60=\"\">\n                                </div>\n                                <div style=\"width: 50%; float: left\" _v-17238b60=\"\">\n                                    <label for=\"closetime\" _v-17238b60=\"\">Closing Time</label>\n                                    <input class=\"form-control\" name=\"closetime\" type=\"time\" v-model=\"date[i*7+j].hours_close\" _v-17238b60=\"\">\n                                </div>\n                                <div _v-17238b60=\"\">\n                                    <input class=\"btn btn-primary\" style=\"margin-top: 6px; width: auto;\" type=\"button\" @click=\"setTimeClick(i * 7 + j)\" value=\"Apply\" _v-17238b60=\"\">\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n\n                </td>\n            </tr>\n            </tbody>\n        </table>\n    </div>\n</div>\n<style _v-17238b60=\"\">\n    .overflow .action {\n        display: inline;\n        padding-right: 5px;\n    }\n    .monthly-indicator-wrap.day_close{\n        background: #1b1b1b;\n        text-transform: uppercase;\n        color: #fff;\n        line-height: 70px;\n        font-weight: bold;\n    }\n    .monthly-indicator-wrap.day_holiday{\n        background: #930101;\n        color: #fff;\n    }\n</style>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\DateTime.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\DateTime.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n.datetime-picker[_v-37a63886] {\n    position: relative;\n    display: inline-block;\n    font-family: \"Segoe UI\",\"Lucida Grande\",Helvetica,Arial,\"Microsoft YaHei\";\n    -webkit-font-smoothing: antialiased;\n    color: #333;\n    width: 100%;\n}\n\n.datetime-picker *[_v-37a63886] {\n    box-sizing: border-box;\n}\n\n.datetime-picker input[_v-37a63886] {\n    width: 100%;\n    padding: 5px 10px;\n    height: 30px;\n    outline: 0 none;\n    border: 1px solid #ccc;\n    font-size: 13px;\n}\n\n.datetime-picker .picker-wrap[_v-37a63886] {\n    z-index: 1000;\n    width: 100%;\n    min-height: 280px;\n    margin-top: 2px;\n    background-color: #fff;\n}\n.datetime-picker th[_v-37a63886]{\n    border: 0px !important;\n}\n.datetime-picker table[_v-37a63886] {\n    width: 100%;\n    border-collapse: collapse;\n    border-spacing: 0;\n    text-align: center;\n    font-size: 13px;\n}\n\n.datetime-picker tr[_v-37a63886] {\n    height: 34px;\n    border: 0 none;\n}\n\n.datetime-picker th[_v-37a63886], .datetime-picker td[_v-37a63886] {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    width: 34px;\n    height: 34px;\n    padding: 0;\n    border: 0 none;\n    line-height: 34px;\n    text-align: center;\n    border: 1px solid #EBEBEB;\n}\n\n.datetime-picker td[_v-37a63886] {\n    cursor: pointer;\n    height: 70px;\n    position: relative;\n}\n\n.datetime-picker td.date-pass[_v-37a63886], .datetime-picker td.date-future[_v-37a63886] {\n    color: #aaa;\n}\n\n.datetime-picker .date-head[_v-37a63886] {\n    background-color: none;\n    text-align: left;\n    color: #000;\n    font-size: 14px;\n}\n.datetime-picker td.date-pass[_v-37a63886], .datetime-picker td.date-future[_v-37a63886]{\n    background: #F3F3F5;\n}\n.datetime-picker .date-days[_v-37a63886] {\n    color: #000;\n    font-size: 14px;\n}\n\n.datetime-picker .show-year[_v-37a63886] {\n    display: inline-block;\n    min-width: 40px;\n    vertical-align: middle;\n}\n\n.datetime-picker .show-month[_v-37a63886] {\n    display: inline-block;\n    min-width: 28px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-37a63886],\n.datetime-picker .btn-next[_v-37a63886] {\n    cursor: pointer;\n    display: inline-block;\n    padding: 0 10px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-37a63886]:hover,\n.datetime-picker .btn-next[_v-37a63886]:hover {\n    background: rgba(16, 160, 234, 0.5);\n}\n.monthly-day-number[_v-37a63886] {\n    position: absolute;\n    line-height: 1em;\n    top: 2px;\n    left: 2px;\n    font-size: 11px;\n}\n.monthly-indicator-wrap[_v-37a63886] {\n    width: 100%;\n    max-width: none;\n    position: relative;\n    text-align: center;\n    height: 100%;\n}\n.monthly-indicator-wrap .overflow[_v-37a63886] {\n    width: 100%;\n    height: 100%;\n    background: rgba(0,0,0,0.7);\n    line-height: 70px;\n    display: none;\n    -webkit-transition: all 0.1s linear;\n    transition: all 0.1s linear;\n    position: absolute;\n    top: 0;\n}\n.overflow .action[_v-37a63886] {\n    display: inline;\n}\n.datetime-picker td:not(.date-future):hover .monthly-indicator-wrap .overflow[_v-37a63886]{\n    display: block;\n}\n.date-pass .monthly-indicator-wrap .time[_v-37a63886]{\n    line-height: 70px;\n}\n.datetime-picker td.date-pass:hover .monthly-indicator-wrap .overflow[_v-37a63886]{\n    display: none;\n}\n.date-pass .monthly-indicator-wrap[_v-37a63886], .date-future .monthly-indicator-wrap[_v-37a63886]{\n    display: none;\n}\n.dlg-setopenday[_v-37a63886]{\n    position: absolute;\n    left: 0px;\n    z-index: 999;\n    top: 70px;\n    background: #e2e2e2;\n    border: 1px solid #ccc;\n}\n"] = false
+    require("vueify-insert-css").cache["\n.datetime-picker[_v-17238b60] {\n    position: relative;\n    display: inline-block;\n    font-family: \"Segoe UI\",\"Lucida Grande\",Helvetica,Arial,\"Microsoft YaHei\";\n    -webkit-font-smoothing: antialiased;\n    color: #333;\n    width: 100%;\n}\n\n.datetime-picker *[_v-17238b60] {\n    box-sizing: border-box;\n}\n\n.datetime-picker input[_v-17238b60] {\n    width: 100%;\n    padding: 5px 10px;\n    height: 30px;\n    outline: 0 none;\n    border: 1px solid #ccc;\n    font-size: 13px;\n}\n\n.datetime-picker .picker-wrap[_v-17238b60] {\n    z-index: 1000;\n    width: 100%;\n    min-height: 280px;\n    margin-top: 2px;\n    background-color: #fff;\n}\n.datetime-picker th[_v-17238b60]{\n    border: 0px !important;\n}\n.datetime-picker table[_v-17238b60] {\n    width: 100%;\n    border-collapse: collapse;\n    border-spacing: 0;\n    text-align: center;\n    font-size: 13px;\n}\n\n.datetime-picker tr[_v-17238b60] {\n    height: 34px;\n    border: 0 none;\n}\n\n.datetime-picker th[_v-17238b60], .datetime-picker td[_v-17238b60] {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    width: 34px;\n    height: 34px;\n    padding: 0;\n    border: 0 none;\n    line-height: 34px;\n    text-align: center;\n    border: 1px solid #EBEBEB;\n}\n\n.datetime-picker td[_v-17238b60] {\n    cursor: pointer;\n    height: 70px;\n    position: relative;\n}\n\n.datetime-picker td.date-pass[_v-17238b60], .datetime-picker td.date-future[_v-17238b60] {\n    color: #aaa;\n}\n\n.datetime-picker .date-head[_v-17238b60] {\n    background-color: none;\n    text-align: left;\n    color: #000;\n    font-size: 14px;\n}\n.datetime-picker td.date-pass[_v-17238b60], .datetime-picker td.date-future[_v-17238b60]{\n    background: #F3F3F5;\n}\n.datetime-picker .date-days[_v-17238b60] {\n    color: #000;\n    font-size: 14px;\n}\n\n.datetime-picker .show-year[_v-17238b60] {\n    display: inline-block;\n    min-width: 40px;\n    vertical-align: middle;\n}\n\n.datetime-picker .show-month[_v-17238b60] {\n    display: inline-block;\n    min-width: 28px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-17238b60],\n.datetime-picker .btn-next[_v-17238b60] {\n    cursor: pointer;\n    display: inline-block;\n    padding: 0 10px;\n    vertical-align: middle;\n}\n\n.datetime-picker .btn-prev[_v-17238b60]:hover,\n.datetime-picker .btn-next[_v-17238b60]:hover {\n    background: rgba(16, 160, 234, 0.5);\n}\n.monthly-day-number[_v-17238b60] {\n    position: absolute;\n    line-height: 1em;\n    top: 2px;\n    left: 2px;\n    font-size: 11px;\n}\n.monthly-indicator-wrap[_v-17238b60] {\n    width: 100%;\n    max-width: none;\n    position: relative;\n    text-align: center;\n    height: 100%;\n}\n.monthly-indicator-wrap .overflow[_v-17238b60] {\n    width: 100%;\n    height: 100%;\n    background: rgba(0,0,0,0.7);\n    line-height: 70px;\n    display: none;\n    -webkit-transition: all 0.1s linear;\n    transition: all 0.1s linear;\n    position: absolute;\n    top: 0;\n}\n.overflow .action[_v-17238b60] {\n    display: inline;\n}\n.datetime-picker td:not(.date-future):hover .monthly-indicator-wrap .overflow[_v-17238b60]{\n    display: block;\n}\n.date-pass .monthly-indicator-wrap .time[_v-17238b60]{\n    line-height: 70px;\n}\n.datetime-picker td.date-pass:hover .monthly-indicator-wrap .overflow[_v-17238b60]{\n    display: none;\n}\n.date-pass .monthly-indicator-wrap[_v-17238b60], .date-future .monthly-indicator-wrap[_v-17238b60]{\n    display: none;\n}\n.dlg-setopenday[_v-17238b60]{\n    position: absolute;\n    left: 0px;\n    z-index: 999;\n    top: 70px;\n    background: #e2e2e2;\n    border: 1px solid #ccc;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -32779,7 +31632,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\FormEditCourt.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\FormEditCourt.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -32856,7 +31709,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\FormNewCourt.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\FormNewCourt.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -32864,7 +31717,7 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":119,"vue-hot-reload-api":94}],131:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\ntr.selected[_v-fbf5339c] {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\ntr.selected[_v-fbf5339c]:hover {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\n")
+var __vueify_style__ = require("vueify-insert-css").insert("\ntr.selected[_v-db9b22d0] {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\ntr.selected[_v-db9b22d0]:hover {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32943,14 +31796,14 @@ exports.default = {
 	components: { Filter: _Filter2.default }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n<table class=\"table table-bordered table-hover table-th\" id=\"datatables\" _v-fbf5339c=\"\">\n\t<thead _v-fbf5339c=\"\">\n\t<tr _v-fbf5339c=\"\">\n\t\t<th _v-fbf5339c=\"\"></th>\n\t\t<th _v-fbf5339c=\"\">Court Name</th>\n\t\t<th _v-fbf5339c=\"\">Indoor/Outdoor</th>\n\t\t<th _v-fbf5339c=\"\">Surface</th>\n\t</tr>\n\t</thead>\n\t<tbody _v-fbf5339c=\"\">\n\t<tr v-for=\"(index,court) in data.data\" @click=\"addCourts(index)\" _v-fbf5339c=\"\">\n\t\t<td _v-fbf5339c=\"\"><input type=\"checkbox\" class=\"court-item-check\" name=\"court-item-check\" value=\"{{index}}\" @click=\"addCourts(index)\" _v-fbf5339c=\"\"></td>\n\t\t<td _v-fbf5339c=\"\">{{ court.name }}</td>\n\t\t<td v-if=\"court.indoor_outdoor == 1\" _v-fbf5339c=\"\">Indoor</td>\n\t\t<td v-else=\"\" _v-fbf5339c=\"\">Outdoor</td>\n\t\t<td _v-fbf5339c=\"\">{{ court.surface.label }}</td>\n\t</tr>\n\t</tbody>\n</table>\n<filter :data.sync=\"data\" _v-fbf5339c=\"\"></filter>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n<table class=\"table table-bordered table-hover table-th\" id=\"datatables\" _v-db9b22d0=\"\">\n\t<thead _v-db9b22d0=\"\">\n\t<tr _v-db9b22d0=\"\">\n\t\t<th _v-db9b22d0=\"\"></th>\n\t\t<th _v-db9b22d0=\"\">Court Name</th>\n\t\t<th _v-db9b22d0=\"\">Indoor/Outdoor</th>\n\t\t<th _v-db9b22d0=\"\">Surface</th>\n\t</tr>\n\t</thead>\n\t<tbody _v-db9b22d0=\"\">\n\t<tr v-for=\"(index,court) in data.data\" @click=\"addCourts(index)\" _v-db9b22d0=\"\">\n\t\t<td _v-db9b22d0=\"\"><input type=\"checkbox\" class=\"court-item-check\" name=\"court-item-check\" value=\"{{index}}\" @click=\"addCourts(index)\" _v-db9b22d0=\"\"></td>\n\t\t<td _v-db9b22d0=\"\">{{ court.name }}</td>\n\t\t<td v-if=\"court.indoor_outdoor == 1\" _v-db9b22d0=\"\">Indoor</td>\n\t\t<td v-else=\"\" _v-db9b22d0=\"\">Outdoor</td>\n\t\t<td _v-db9b22d0=\"\">{{ court.surface.label }}</td>\n\t</tr>\n\t</tbody>\n</table>\n<filter :data.sync=\"data\" _v-db9b22d0=\"\"></filter>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\ListCourt.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\ListCourt.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\ntr.selected[_v-fbf5339c] {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\ntr.selected[_v-fbf5339c]:hover {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\n"] = false
+    require("vueify-insert-css").cache["\ntr.selected[_v-db9b22d0] {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\ntr.selected[_v-db9b22d0]:hover {\n\tbackground-color: #0f494d;\n\tcolor: #fff;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -32965,7 +31818,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\ContractRate.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\ContractRate.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -32973,7 +31826,7 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":119,"vue-hot-reload-api":94}],133:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n\t#table-contract-rate-edit .ui-selected[_v-79dbefaa] {\n    background: #0f494d;\n    color: white;\n}\n")
+var __vueify_style__ = require("vueify-insert-css").insert("\n\t#table-contract-rate-edit .ui-selected[_v-4bdd8491] {\n    background: #0f494d;\n    color: white;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33079,14 +31932,14 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = " \n<div class=\"courtbox contract_rate\" _v-79dbefaa=\"\">\n\t<div _v-79dbefaa=\"\">\n\t<h3 class=\"title-box\" _v-79dbefaa=\"\">Contract Time Rates</h3>\n\t<div class=\"clearfix\" _v-79dbefaa=\"\">\n\t\tNote: Before setting rates, ensure that all holiday and closed days are entered into the calendar to ensure that the total days figure is calculated correctly\n\t</div>\n\t<form _v-79dbefaa=\"\">\n\n\t\t\t<strong _v-79dbefaa=\"\">Enter Price</strong>\n\t\t\t<div class=\"no-padding col-md-12\" _v-79dbefaa=\"\">\n\t\t\t\t<div class=\"no-padding col-md-4\" _v-79dbefaa=\"\"><input v-model=\"priceSet\" class=\"price_contract_rate form-control\" placeholder=\"Enter Price\" name=\"price_contract_rate\" type=\"text\" _v-79dbefaa=\"\"></div>\n\t\t\t\t<div class=\"col-md-4\" _v-79dbefaa=\"\"><button class=\"btn btn-primary\" @click.prevent=\"setPrice()\" _v-79dbefaa=\"\">Set Price</button></div>\t\t\t\n\t\t\t\t<div class=\"col-md-4 pull-left\" _v-79dbefaa=\"\">\n\t\t\t\t\t<button class=\"btn btn-primary unSelected hidden\" @click=\"removeSelect()\" _v-79dbefaa=\"\">Remove all select</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<p _v-79dbefaa=\"\">Select hours from grid and press apply to adjust hours</p>\n\t</form>\n\t<div class=\"clearfix\" _v-79dbefaa=\"\"></div>\n\t<table id=\"table-contract-rate-edit\" class=\"table table-bordered table-hover table-th clearfix\" style=\"margin-top: 20px\" _v-79dbefaa=\"\">\n\t\t<thead _v-79dbefaa=\"\">\n\t\t\t<tr _v-79dbefaa=\"\">\n\t\t\t\t<th style=\"text-align: right\" _v-79dbefaa=\"\">\n\t\t\t\t\tStarting Date <br _v-79dbefaa=\"\">\n\t\t\t\t\tDay of the Week <br _v-79dbefaa=\"\">\n\t\t\t\t\tTotal Days w/ Holidays\n\t\t\t\t</th>\n\t\t\t\t<th _v-79dbefaa=\"\">Mon</th>\n\t\t\t\t<th _v-79dbefaa=\"\">Tue</th>\n\t\t\t\t<th _v-79dbefaa=\"\">Web</th>\n\t\t\t\t<th _v-79dbefaa=\"\">Thur</th>\n\t\t\t\t<th _v-79dbefaa=\"\">Fri</th>\n\t\t\t\t<th _v-79dbefaa=\"\">Sat</th>\n\t\t\t\t<th _v-79dbefaa=\"\">Sun</th>\n\t\t\t</tr>\n\t\t</thead>\n\t\t<tbody _v-79dbefaa=\"\">\n\t\t\t<tr v-for=\"(index,time) in contractSelect.rates\" track-by=\"$index\" _v-79dbefaa=\"\">\n\t\t\t\t<td class=\"td_field_label\" v-if=\"index > 7\" _v-79dbefaa=\"\"> {{ index - 7 }} pm</td>\n\t\t\t\t<td class=\"td_field_label\" v-else=\"\" _v-79dbefaa=\"\"> {{ index + 5 }} am</td>\n\t\t\t\t<td v-for=\"(key,rate) in time\" class=\"price_hours\" data-x=\"{{ index }}\" data-y=\"{{key}}\" track-by=\"$index\" _v-79dbefaa=\"\">${{rate}}</td>\n\t\t\t</tr>\t\n\t\t</tbody>\n\t</table>\n\t\t\n\n</div>\n<div class=\"courtbox extras clearfix\" _v-79dbefaa=\"\">\n\t\t<div class=\"col-xs-12 col-md-6\" _v-79dbefaa=\"\">\n\t\t\t<h3 class=\"title-box pull-left\" _v-79dbefaa=\"\">Extras</h3>\n\t\t\t<a class=\"btn btn-primary pull-right btn-new-court\" href=\"\" @click.prevent=\"addExtra()\" _v-79dbefaa=\"\"><i class=\"fa fa-plus-circle\" _v-79dbefaa=\"\"></i> Add Extra</a>\n\t\t\t\t\t<table class=\"table table-bordered table-hover table-th\" id=\"datatables\" _v-79dbefaa=\"\">\n\t\t\t\t\t\t<thead _v-79dbefaa=\"\">\n\t\t\t\t\t\t\t<tr _v-79dbefaa=\"\">\n\t\t\t\t\t\t\t\t<th _v-79dbefaa=\"\">Extra Name</th>\n\t\t\t\t\t\t\t\t<th _v-79dbefaa=\"\">Cost</th>\n\t\t\t\t\t\t\t\t<th _v-79dbefaa=\"\"></th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t<tbody _v-79dbefaa=\"\">\n\t\t\t\t\t\t\t<tr v-for=\"(index,extra) in contractSelect.extras\" _v-79dbefaa=\"\">\n\t\t\t\t\t\t\t\t\t<td _v-79dbefaa=\"\">{{ extra.name }}</td>\n\t\t\t\t\t\t\t\t  <td _v-79dbefaa=\"\">{{ extra.value }}</td>\n\t\t\t\t\t\t\t\t\t<td _v-79dbefaa=\"\"><button class=\"btn btn-danger\" @click=\"deteteExtra(index)\" _v-79dbefaa=\"\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\" _v-79dbefaa=\"\"></i></button></td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr _v-79dbefaa=\"\">\n\t\t\t\t\t\t\t\t<td _v-79dbefaa=\"\"><input class=\"extra_name form-control\" name=\"extra_name\" type=\"text\" v-model=\"keyExtra\" _v-79dbefaa=\"\"></td>\n\t\t\t\t\t\t\t\t<td _v-79dbefaa=\"\"><input class=\"extra_cost form-control\" name=\"extra_cost\" type=\"text\" v-model=\"valueExtra\" _v-79dbefaa=\"\"></td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"col-xs-12 col-md-6\" _v-79dbefaa=\"\">\n\t\t\t<h3 class=\"title-box\" _v-79dbefaa=\"\">Allow Members Price</h3>\n\t\t\t\t<div class=\"form-group\" _v-79dbefaa=\"\">\n\t\t          <label _v-79dbefaa=\"\">\n\t\t            <input v-model=\"contractSelect.is_member\" type=\"radio\" name=\"is_member\" value=\"1\" checked=\"\" _v-79dbefaa=\"\">\n\t\t            Yes\n\t\t          </label>\n\t\t          <label _v-79dbefaa=\"\">\n\t\t            <input v-model=\"contractSelect.is_member\" type=\"radio\" name=\"is_member\" value=\"0\" _v-79dbefaa=\"\">\n\t\t            No\n\t\t          </label>\n\t\t\t  </div>\n\t\t</div>\n\t\t<div class=\"col-md-12\" _v-79dbefaa=\"\">\n\t\t\t<button class=\"btn btn-primary pull-right\" @click.prevent=\"updateContractRate()\" _v-79dbefaa=\"\">Update</button>\n\t\t\t<button class=\"btn btn-danger pull-right\" @click.prevent=\"deleteContractRate()\" style=\"margin-right:120px;\" _v-79dbefaa=\"\">Delete</button>\n\t\t</div>\n\t</div>\n\t</div>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = " \n<div class=\"courtbox contract_rate\" _v-4bdd8491=\"\">\n\t<div _v-4bdd8491=\"\">\n\t<h3 class=\"title-box\" _v-4bdd8491=\"\">Contract Time Rates</h3>\n\t<div class=\"clearfix\" _v-4bdd8491=\"\">\n\t\tNote: Before setting rates, ensure that all holiday and closed days are entered into the calendar to ensure that the total days figure is calculated correctly\n\t</div>\n\t<form _v-4bdd8491=\"\">\n\n\t\t\t<strong _v-4bdd8491=\"\">Enter Price</strong>\n\t\t\t<div class=\"no-padding col-md-12\" _v-4bdd8491=\"\">\n\t\t\t\t<div class=\"no-padding col-md-4\" _v-4bdd8491=\"\"><input v-model=\"priceSet\" class=\"price_contract_rate form-control\" placeholder=\"Enter Price\" name=\"price_contract_rate\" type=\"text\" _v-4bdd8491=\"\"></div>\n\t\t\t\t<div class=\"col-md-4\" _v-4bdd8491=\"\"><button class=\"btn btn-primary\" @click.prevent=\"setPrice()\" _v-4bdd8491=\"\">Set Price</button></div>\t\t\t\n\t\t\t\t<div class=\"col-md-4 pull-left\" _v-4bdd8491=\"\">\n\t\t\t\t\t<button class=\"btn btn-primary unSelected hidden\" @click=\"removeSelect()\" _v-4bdd8491=\"\">Remove all select</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<p _v-4bdd8491=\"\">Select hours from grid and press apply to adjust hours</p>\n\t</form>\n\t<div class=\"clearfix\" _v-4bdd8491=\"\"></div>\n\t<table id=\"table-contract-rate-edit\" class=\"table table-bordered table-hover table-th clearfix\" style=\"margin-top: 20px\" _v-4bdd8491=\"\">\n\t\t<thead _v-4bdd8491=\"\">\n\t\t\t<tr _v-4bdd8491=\"\">\n\t\t\t\t<th style=\"text-align: right\" _v-4bdd8491=\"\">\n\t\t\t\t\tStarting Date <br _v-4bdd8491=\"\">\n\t\t\t\t\tDay of the Week <br _v-4bdd8491=\"\">\n\t\t\t\t\tTotal Days w/ Holidays\n\t\t\t\t</th>\n\t\t\t\t<th _v-4bdd8491=\"\">Mon</th>\n\t\t\t\t<th _v-4bdd8491=\"\">Tue</th>\n\t\t\t\t<th _v-4bdd8491=\"\">Web</th>\n\t\t\t\t<th _v-4bdd8491=\"\">Thur</th>\n\t\t\t\t<th _v-4bdd8491=\"\">Fri</th>\n\t\t\t\t<th _v-4bdd8491=\"\">Sat</th>\n\t\t\t\t<th _v-4bdd8491=\"\">Sun</th>\n\t\t\t</tr>\n\t\t</thead>\n\t\t<tbody _v-4bdd8491=\"\">\n\t\t\t<tr v-for=\"(index,time) in contractSelect.rates\" track-by=\"$index\" _v-4bdd8491=\"\">\n\t\t\t\t<td class=\"td_field_label\" v-if=\"index > 7\" _v-4bdd8491=\"\"> {{ index - 7 }} pm</td>\n\t\t\t\t<td class=\"td_field_label\" v-else=\"\" _v-4bdd8491=\"\"> {{ index + 5 }} am</td>\n\t\t\t\t<td v-for=\"(key,rate) in time\" class=\"price_hours\" data-x=\"{{ index }}\" data-y=\"{{key}}\" track-by=\"$index\" _v-4bdd8491=\"\">${{rate}}</td>\n\t\t\t</tr>\t\n\t\t</tbody>\n\t</table>\n\t\t\n\n</div>\n<div class=\"courtbox extras clearfix\" _v-4bdd8491=\"\">\n\t\t<div class=\"col-xs-12 col-md-6\" _v-4bdd8491=\"\">\n\t\t\t<h3 class=\"title-box pull-left\" _v-4bdd8491=\"\">Extras</h3>\n\t\t\t<a class=\"btn btn-primary pull-right btn-new-court\" href=\"\" @click.prevent=\"addExtra()\" _v-4bdd8491=\"\"><i class=\"fa fa-plus-circle\" _v-4bdd8491=\"\"></i> Add Extra</a>\n\t\t\t\t\t<table class=\"table table-bordered table-hover table-th\" id=\"datatables\" _v-4bdd8491=\"\">\n\t\t\t\t\t\t<thead _v-4bdd8491=\"\">\n\t\t\t\t\t\t\t<tr _v-4bdd8491=\"\">\n\t\t\t\t\t\t\t\t<th _v-4bdd8491=\"\">Extra Name</th>\n\t\t\t\t\t\t\t\t<th _v-4bdd8491=\"\">Cost</th>\n\t\t\t\t\t\t\t\t<th _v-4bdd8491=\"\"></th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t<tbody _v-4bdd8491=\"\">\n\t\t\t\t\t\t\t<tr v-for=\"(index,extra) in contractSelect.extras\" _v-4bdd8491=\"\">\n\t\t\t\t\t\t\t\t\t<td _v-4bdd8491=\"\">{{ extra.name }}</td>\n\t\t\t\t\t\t\t\t  <td _v-4bdd8491=\"\">{{ extra.value }}</td>\n\t\t\t\t\t\t\t\t\t<td _v-4bdd8491=\"\"><button class=\"btn btn-danger\" @click=\"deteteExtra(index)\" _v-4bdd8491=\"\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\" _v-4bdd8491=\"\"></i></button></td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr _v-4bdd8491=\"\">\n\t\t\t\t\t\t\t\t<td _v-4bdd8491=\"\"><input class=\"extra_name form-control\" name=\"extra_name\" type=\"text\" v-model=\"keyExtra\" _v-4bdd8491=\"\"></td>\n\t\t\t\t\t\t\t\t<td _v-4bdd8491=\"\"><input class=\"extra_cost form-control\" name=\"extra_cost\" type=\"text\" v-model=\"valueExtra\" _v-4bdd8491=\"\"></td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"col-xs-12 col-md-6\" _v-4bdd8491=\"\">\n\t\t\t<h3 class=\"title-box\" _v-4bdd8491=\"\">Allow Members Price</h3>\n\t\t\t\t<div class=\"form-group\" _v-4bdd8491=\"\">\n\t\t          <label _v-4bdd8491=\"\">\n\t\t            <input v-model=\"contractSelect.is_member\" type=\"radio\" name=\"is_member\" value=\"1\" checked=\"\" _v-4bdd8491=\"\">\n\t\t            Yes\n\t\t          </label>\n\t\t          <label _v-4bdd8491=\"\">\n\t\t            <input v-model=\"contractSelect.is_member\" type=\"radio\" name=\"is_member\" value=\"0\" _v-4bdd8491=\"\">\n\t\t            No\n\t\t          </label>\n\t\t\t  </div>\n\t\t</div>\n\t\t<div class=\"col-md-12\" _v-4bdd8491=\"\">\n\t\t\t<button class=\"btn btn-primary pull-right\" @click.prevent=\"updateContractRate()\" _v-4bdd8491=\"\">Update</button>\n\t\t\t<button class=\"btn btn-danger pull-right\" @click.prevent=\"deleteContractRate()\" style=\"margin-right:120px;\" _v-4bdd8491=\"\">Delete</button>\n\t\t</div>\n\t</div>\n\t</div>\n\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\ContractRateEdit.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\ContractRateEdit.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n\t#table-contract-rate-edit .ui-selected[_v-79dbefaa] {\n    background: #0f494d;\n    color: white;\n}\n"] = false
+    require("vueify-insert-css").cache["\n\t#table-contract-rate-edit .ui-selected[_v-4bdd8491] {\n    background: #0f494d;\n    color: white;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -33170,7 +32023,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\ContractTime.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\ContractTime.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33185,7 +32038,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\FormEdit.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\FormEdit.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33287,7 +32140,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\FormNew.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\FormNew.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33362,7 +32215,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\List.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\club\\contract\\List.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33370,7 +32223,7 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],138:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n.pagination-panel-input[_v-0b1d17af] {\n    width: 50px;\n    display: inline-block;\n}\nselect[_v-0b1d17af] {\n    display: inline-block;\n    width: 70px;\n}\n")
+var __vueify_style__ = require("vueify-insert-css").insert("\n.pagination-panel-input[_v-1b4a2015] {\n    width: 50px;\n    display: inline-block;\n}\nselect[_v-1b4a2015] {\n    display: inline-block;\n    width: 70px;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33397,14 +32250,14 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"clearfix\" _v-0b1d17af=\"\"></div>\n<div class=\"row\" v-if=\"data\" _v-0b1d17af=\"\">\n    <div class=\"col-md-12 col-sm-12\" _v-0b1d17af=\"\">\n        <div class=\"pagination-panel\" _v-0b1d17af=\"\">\n            <div class=\"col-md-offset-6 col-md-6 text-right\" _v-0b1d17af=\"\">  \n                <label _v-0b1d17af=\"\">Page</label>  \n                <a href=\"#\" class=\"btn btn-sm default prev\" @click.prevent=\"prevPage\" :disabled=\"!data.prev_page_url\" _v-0b1d17af=\"\">\n                    <i class=\"fa fa-angle-left\" _v-0b1d17af=\"\"></i>\n                </a>\n                    <input type=\"text\" class=\"pagination-panel-input form-control input-sm input-inline input-mini\" v-model=\"data.current_page\" @keyup.enter=\"onGoPage\" _v-0b1d17af=\"\">\n                <a href=\"#\" class=\"btn btn-sm default next\" @click.prevent=\"prevNext\" :disabled=\"!data.next_page_url\" _v-0b1d17af=\"\">\n                    <i class=\"fa fa-angle-right\" _v-0b1d17af=\"\"></i>\n                </a>\n                 of <span class=\"pagination-panel-total\" _v-0b1d17af=\"\">{{ data.last_page }}</span>\n            </div>\n            <div class=\"col-md-6 hidden\" _v-0b1d17af=\"\">\n                 <label _v-0b1d17af=\"\"><span class=\"seperator\" _v-0b1d17af=\"\">|</span>View\n                     <select class=\"form-control input-xs input-sm input-inline\" v-model=\"data.per_page\" _v-0b1d17af=\"\">\n                         <option value=\"10\" _v-0b1d17af=\"\">10</option>\n                         <option value=\"20\" _v-0b1d17af=\"\">20</option>\n                         <option value=\"50\" _v-0b1d17af=\"\">50</option>\n                         <option value=\"100\" _v-0b1d17af=\"\">100</option>\n                         <option value=\"150\" _v-0b1d17af=\"\">150</option>\n                     </select> records\n                 </label>\n                 <span class=\"seperator\" _v-0b1d17af=\"\">|</span>Found total {{ data.total }} records\n            </div> \n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"clearfix\" _v-1b4a2015=\"\"></div>\n<div class=\"row\" v-if=\"data\" _v-1b4a2015=\"\">\n    <div class=\"col-md-12 col-sm-12\" _v-1b4a2015=\"\">\n        <div class=\"pagination-panel\" _v-1b4a2015=\"\">\n            <div class=\"col-md-offset-6 col-md-6 text-right\" _v-1b4a2015=\"\">  \n                <label _v-1b4a2015=\"\">Page</label>  \n                <a href=\"#\" class=\"btn btn-sm default prev\" @click.prevent=\"prevPage\" :disabled=\"!data.prev_page_url\" _v-1b4a2015=\"\">\n                    <i class=\"fa fa-angle-left\" _v-1b4a2015=\"\"></i>\n                </a>\n                    <input type=\"text\" class=\"pagination-panel-input form-control input-sm input-inline input-mini\" v-model=\"data.current_page\" @keyup.enter=\"onGoPage\" _v-1b4a2015=\"\">\n                <a href=\"#\" class=\"btn btn-sm default next\" @click.prevent=\"prevNext\" :disabled=\"!data.next_page_url\" _v-1b4a2015=\"\">\n                    <i class=\"fa fa-angle-right\" _v-1b4a2015=\"\"></i>\n                </a>\n                 of <span class=\"pagination-panel-total\" _v-1b4a2015=\"\">{{ data.last_page }}</span>\n            </div>\n            <div class=\"col-md-6 hidden\" _v-1b4a2015=\"\">\n                 <label _v-1b4a2015=\"\"><span class=\"seperator\" _v-1b4a2015=\"\">|</span>View\n                     <select class=\"form-control input-xs input-sm input-inline\" v-model=\"data.per_page\" _v-1b4a2015=\"\">\n                         <option value=\"10\" _v-1b4a2015=\"\">10</option>\n                         <option value=\"20\" _v-1b4a2015=\"\">20</option>\n                         <option value=\"50\" _v-1b4a2015=\"\">50</option>\n                         <option value=\"100\" _v-1b4a2015=\"\">100</option>\n                         <option value=\"150\" _v-1b4a2015=\"\">150</option>\n                     </select> records\n                 </label>\n                 <span class=\"seperator\" _v-1b4a2015=\"\">|</span>Found total {{ data.total }} records\n            </div> \n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\globals\\Filter.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\globals\\Filter.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n.pagination-panel-input[_v-0b1d17af] {\n    width: 50px;\n    display: inline-block;\n}\nselect[_v-0b1d17af] {\n    display: inline-block;\n    width: 70px;\n}\n"] = false
+    require("vueify-insert-css").cache["\n.pagination-panel-input[_v-1b4a2015] {\n    width: 50px;\n    display: inline-block;\n}\nselect[_v-1b4a2015] {\n    display: inline-block;\n    width: 70px;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -33458,7 +32311,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\header\\HeaderMain.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\header\\HeaderMain.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33629,7 +32482,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\FormEditClub.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\FormEditClub.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33805,7 +32658,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\FormNewClub.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\FormNewClub.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33845,7 +32698,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\ListClub.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\ListClub.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33895,7 +32748,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\SuperSetting.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\super\\SuperSetting.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -33903,6 +32756,71 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"./FormEditClub.vue":140,"./FormNewClub.vue":141,"./ListClub.vue":142,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],144:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['teachers_choice', 'clubSettingId', 'reloadTeachers'],
+    data: function data() {
+        return {
+            submit: false
+        };
+    },
+
+    computed: {
+        user: function user() {
+            return this.teachers_choice[0];
+        }
+    },
+    methods: {
+        editUser: function editUser() {
+            var _this = this;
+
+            var user = this.user;
+            this.$http.post(laroute.route('teachers.edit.post'), user).then(function (res) {
+                console.log(res);
+                if (res.data.error) {
+                    var msg = "";
+                    $.each(res.data.messages, function (k, v) {
+                        msg += "<div>" + v + "</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                } else {
+                    _this.reloadteachers = Math.floor(Math.random() * 10000);
+                    showNotice('success', res.data.success, 'Update Success!');
+                }
+                _this.submit = false;
+            }, function (res) {
+                showNotice('error', 'Error', 'Error!');
+            });
+        },
+        is_admin: function is_admin() {
+            if ($(".fm-user input[name=is_admin]").hasClass('is_admin')) {
+                $(this).removeClass('is_admin');
+                this.$set('teacher.is_admin', 0);
+            } else {
+                $(".fm-user input[name=is_admin]").addClass("is_admin");
+                this.$set('teacher.is_admin', 1);
+            }
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"court_new courtbox\" v-if=\"teachers_choice.length == 1\">\n    <h3 class=\"title-box\">Edit User</h3>\n    <form class=\"form-horizontal fm-user\">\n\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.fullname == null &amp;&amp; submit == true)}\">\n            <label for=\"name\" class=\"col-sm-4 control-label\">Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter full name\" name=\"fullname\" type=\"text\" id=\"fullname\" v-model=\"teacher.fullname\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.password == null &amp;&amp; submit == true)}\">\n            <label for=\"password\" class=\"col-sm-4 control-label\">Password *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Password\" name=\"password\" type=\"password\" id=\"password\" v-model=\"teacher.password\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.email == null &amp;&amp; submit == true)}\">\n            <label for=\"email\" class=\"col-sm-4 control-label\">Email *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" id=\"email\" v-model=\"teacher.email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"is_admin\" class=\"col-sm-4 control-label\">Is Admin? *</label>\n            <div class=\"col-sm-8\">\n                <input v-if=\"teacher.is_admin == true\" id=\"is_admin\" checked=\"checked\" class=\"styled is_admin\" name=\"is_admin\" type=\"checkbox\" @click=\"is_admin()\">\n                <input v-else=\"\" id=\"is_admin\" class=\"styled\" name=\"is_admin\" type=\"checkbox\" @click=\"is_admin()\">\n            </div>\n        </div>\n\n        <div>\n            <slot name=\"temp\"></slot>\n            <button type=\"button\" id=\"btnEditUser\" class=\"btn btn-primary pull-right\" @click.prevent=\"editUser()\">Edit User\n            </button>\n        </div>\n        <!-- /.box-footer -->\n    </form>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\FormEditTeacher.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":119,"vue-hot-reload-api":94}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33956,19 +32874,85 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"court_new courtbox\" v-if=\"users_choice.length == 1\">\n    <h3 class=\"title-box\">Edit User</h3>\n    <form class=\"form-horizontal fm-user\">\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.fullname == null &amp;&amp; submit == true)}\">\n            <label for=\"name\" class=\"col-sm-4 control-label\">Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter full name\" name=\"fullname\" type=\"text\" id=\"fullname\" v-model=\"user.fullname\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.password == null &amp;&amp; submit == true)}\">\n            <label for=\"password\" class=\"col-sm-4 control-label\">Password *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Password\" name=\"password\" type=\"password\" id=\"password\" v-model=\"user.password\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.email == null &amp;&amp; submit == true)}\">\n            <label for=\"email\" class=\"col-sm-4 control-label\">Email *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" id=\"email\" v-model=\"user.email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"is_admin\" class=\"col-sm-4 control-label\">Is Admin? *</label>\n            <div class=\"col-sm-8\">\n                <input v-if=\"user.is_admin == true\" id=\"is_admin\" checked=\"checked\" class=\"styled is_admin\" name=\"is_admin\" type=\"checkbox\" @click=\"is_admin()\">\n                <input v-else=\"\" id=\"is_admin\" class=\"styled\" name=\"is_admin\" type=\"checkbox\" @click=\"is_admin()\">\n            </div>\n        </div>\n\n        <div>\n            <slot name=\"temp\"></slot>\n            <button type=\"button\" id=\"btnEditUser\" class=\"btn btn-primary pull-right\" @click.prevent=\"editUser()\">Edit User\n            </button>\n        </div>\n        <!-- /.box-footer -->\n    </form>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"court_new courtbox\" v-if=\"users_choice.length == 1\">\n    <h3 class=\"title-box\">Edit User</h3>\n    <form class=\"form-horizontal fm-user\">\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.fullname == null &amp;&amp; submit == true)}\">\n            <label for=\"first_name\" class=\"col-sm-4 control-label\">First Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter first name\" name=\"first_name\" type=\"text\" id=\"first_name\" v-model=\"user.first_name\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.fullname == null &amp;&amp; submit == true)}\">\n            <label for=\"last_name\" class=\"col-sm-4 control-label\">Last Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter last name\" name=\"last_name\" type=\"text\" id=\"last_name\" v-model=\"user.last_name\">\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\" {'has-error' : (user.password == null &amp;&amp; submit == true)}\">\n            <label for=\"password\" class=\"col-sm-4 control-label\">Password *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Password\" name=\"password\" type=\"password\" id=\"password\" v-model=\"user.password\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.email == null &amp;&amp; submit == true)}\">\n            <label for=\"email\" class=\"col-sm-4 control-label\">Email *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" id=\"email\" v-model=\"user.email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"is_admin\" class=\"col-sm-4 control-label\">Is Admin? *</label>\n            <div class=\"col-sm-8\">\n                <input v-if=\"user.is_admin == true\" id=\"is_admin\" checked=\"checked\" class=\"styled is_admin\" name=\"is_admin\" type=\"checkbox\" @click=\"is_admin()\">\n                <input v-else=\"\" id=\"is_admin\" class=\"styled\" name=\"is_admin\" type=\"checkbox\" @click=\"is_admin()\">\n            </div>\n        </div>\n\n        <div>\n            <slot name=\"temp\"></slot>\n            <button type=\"button\" id=\"btnEditUser\" class=\"btn btn-primary pull-right\" @click.prevent=\"editUser()\">Edit User\n            </button>\n        </div>\n        <!-- /.box-footer -->\n    </form>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\FormEditUser.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\FormEditUser.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":119,"vue-hot-reload-api":94}],145:[function(require,module,exports){
+},{"vue":119,"vue-hot-reload-api":94}],146:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['surface', 'teacher', 'clubSettingId', 'reloadTeachers', 'dataRates'],
+    data: function data() {
+        return {
+            teacher: {
+                first_name: null,
+                last_name: null,
+                password: null,
+                email: null,
+                rate: 0,
+                club_id: null
+            },
+            submit: false
+        };
+    },
+
+    methods: {
+        addTeacher: function addTeacher() {
+            var _this = this;
+
+            this.$set('teacher.club_id', this.clubSettingId);
+            var teacher = this.teacher;
+            this.submit = true;
+            this.$http.post(laroute.route('teacher.create.post'), teacher).then(function (res) {
+                console.log(res);
+                if (res.data.error) {
+                    var msg = "";
+                    $.each(res.data.messages, function (k, v) {
+                        msg += "<div>" + v + "</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                } else {
+                    _this.reloadTeachers = Math.floor(Math.random() * 10000);
+                    _this.$set('teacher.first_name', null);
+                    _this.$set('teacher.last_name', null);
+                    _this.$set('teacher.password', null);
+                    _this.$set('teacher.email', null);
+                    showNotice('success', res.data.success_msg, 'Success!');
+                }
+                _this.submit = false;
+            }, function (res) {
+                console.log(res);
+                showNotice('error', "Error. Try again!", 'Error!');
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"court_new courtbox\">\n    <h3 class=\"title-box\">Add New Teacher</h3>\n    <form class=\"form-horizontal\">\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.first_name == null &amp;&amp; submit == true)}\">\n            <label for=\"first_name\" class=\"col-sm-4 control-label\">First Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter first name\" name=\"first_name\" type=\"text\" id=\"first_name\" v-model=\"teacher.first_name\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.last_name == null &amp;&amp; submit == true)}\">\n            <label for=\"last_name\" class=\"col-sm-4 control-label\">Last Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter last name\" name=\"last_name\" type=\"text\" id=\"last_name\" v-model=\"teacher.last_name\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.email == null &amp;&amp; submit == true)}\">\n            <label for=\"email\" class=\"col-sm-4 control-label\">Email *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" id=\"email\" v-model=\"teacher.email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.password == null &amp;&amp; submit == true)}\">\n            <label for=\"password\" class=\"col-sm-4 control-label\">Password *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Password\" name=\"password\" type=\"password\" id=\"password\" v-model=\"teacher.password\">\n            </div>\n        </div>\n\n        \n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.rate == null &amp;&amp; submit == true)}\">\n            <label for=\"rate\" class=\"col-sm-4 control-label\">Rate *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"rate\" name=\"rate\" type=\"number\" id=\"rate\" v-model=\"teacher.rate\">\n            </div>\n        </div>\n\n\n        <div>\n            <slot name=\"temp\"></slot>\n            <button type=\"button\" id=\"btnAddnewteacher\" class=\"btn btn-primary pull-right\" @click.prevent=\"addTeacher()\">Add Teacher</button>\n        </div>\n        <!-- /.box-footer -->\n    </form>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\FormNewTeacher.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":119,"vue-hot-reload-api":94}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33979,7 +32963,8 @@ exports.default = {
     data: function data() {
         return {
             user: {
-                name: null,
+                first_name: null,
+                last_name: null,
                 password: null,
                 email: null,
                 is_admin: 0,
@@ -34006,7 +32991,8 @@ exports.default = {
                     showNotice('error', msg, 'Error!');
                 } else {
                     _this.reloadUsers = Math.floor(Math.random() * 10000);
-                    _this.$set('user.fullname', null);
+                    _this.$set('user.first_name', null);
+                    _this.$set('user.last_name', null);
                     _this.$set('user.password', null);
                     _this.$set('user.email', null);
                     _this.$set('user.is_admin', 0);
@@ -34021,19 +33007,87 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"court_new courtbox\">\n    <h3 class=\"title-box\">Add New User</h3>\n    <form class=\"form-horizontal\">\n        <div class=\"form-group\" :class=\" {'has-error' : (user.fullname == null &amp;&amp; submit == true)}\">\n            <label for=\"name\" class=\"col-sm-4 control-label\">Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter full name\" name=\"fullname\" type=\"text\" id=\"fullname\" v-model=\"user.fullname\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.password == null &amp;&amp; submit == true)}\">\n            <label for=\"password\" class=\"col-sm-4 control-label\">Password *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Password\" name=\"password\" type=\"password\" id=\"password\" v-model=\"user.password\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.email == null &amp;&amp; submit == true)}\">\n            <label for=\"email\" class=\"col-sm-4 control-label\">Email *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" id=\"email\" v-model=\"user.email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"is_admin\" class=\"col-sm-4 control-label\">Is Admin? *</label>\n            <div class=\"col-sm-8\">\n                <input id=\"is_admin\" class=\"styled\" name=\"is_admin\" type=\"checkbox\" value=\"0\">\n            </div>\n        </div>\n\n        <div>\n            <slot name=\"temp\"></slot>\n            <button type=\"button\" id=\"btnAddnewUser\" class=\"btn btn-primary pull-right\" @click.prevent=\"addUser()\">Add User</button>\n        </div>\n        <!-- /.box-footer -->\n    </form>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"court_new courtbox\">\n    <h3 class=\"title-box\">Add New User</h3>\n    <form class=\"form-horizontal\">\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.first_name == null &amp;&amp; submit == true)}\">\n            <label for=\"first_name\" class=\"col-sm-4 control-label\">First Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter first name\" name=\"first_name\" type=\"text\" id=\"first_name\" v-model=\"user.first_name\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\" {'has-error' : (teacher.last_name == null &amp;&amp; submit == true)}\">\n            <label for=\"last_name\" class=\"col-sm-4 control-label\">Last Name *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Enter last name\" name=\"last_name\" type=\"text\" id=\"last_name\" v-model=\"user.last_name\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\" {'has-error' : (user.email == null &amp;&amp; submit == true)}\">\n            <label for=\"email\" class=\"col-sm-4 control-label\">Email *</label>\n            <div class=\"col-sm-8\">\n                <input class=\"form-control\" placeholder=\"Email\" name=\"email\" type=\"text\" id=\"email\" v-model=\"user.email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"is_admin\" class=\"col-sm-4 control-label\">Is Admin? *</label>\n            <div class=\"col-sm-8\">\n                <input id=\"is_admin\" class=\"styled\" name=\"is_admin\" type=\"checkbox\" value=\"0\">\n            </div>\n        </div>\n\n        <div>\n            <slot name=\"temp\"></slot>\n            <button type=\"button\" id=\"btnAddnewUser\" class=\"btn btn-primary pull-right\" @click.prevent=\"addUser()\">Add User</button>\n        </div>\n        <!-- /.box-footer -->\n    </form>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\FormNewUser.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\FormNewUser.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":119,"vue-hot-reload-api":94}],146:[function(require,module,exports){
+},{"vue":119,"vue-hot-reload-api":94}],148:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+
+var _ = require('lodash'),
+    deferred = require('deferred');
+var tmp_choice = null;
+exports.default = {
+    props: ['clubSettingId', 'teachers_choice', 'teachers', 'reloadTeacher'],
+    watch: {
+        clubSettingId: 'reloadAsyncData',
+        reloadTeachers: 'reloadAsyncData'
+    },
+    asyncData: function asyncData(resolve, reject) {
+        this.fetchTeachers().done(function (teachers) {
+            resolve({ teachers: teachers });
+        }, function (error) {
+            console.log(error);
+        });
+    },
+
+    methods: {
+        fetchTeachers: function fetchTeachers() {
+            //if (this.clubSettingId != null) {
+            var def = deferred(),
+                url = laroute.route('teacher.listdata', { one: this.clubSettingId });
+            this.$http.get(url).then(function (res) {
+                def.resolve(res.data.data);
+            }, function (res) {
+                def.reject(res);
+            });
+            return def.promise;
+            // }
+        },
+        addTeacher: function addTeacher(index) {
+            this.teachers_choice = [];
+            $("#tbl-listteacher .court-item-check:checked").prop("checked", false);
+            if (tmp_choice != index) {
+                $("#tbl-listteacher .court-item-check[value='" + index + "']").prop("checked", true);
+                this.teachers_choice[0] = this.teachers[$("#tbl-listteacher .court-item-check[value='" + index + "']").val()];
+                tmp_choice = index;
+            } else {
+                tmp_choice = null;
+            }
+        },
+        scrollAddnewTeacher: function scrollAddnewTeacher() {
+            $("#tbl-listteacher .court-item-check:checked").prop("checked", false);
+            this.teachers_choice = [];
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary pull-right btn-new-court\" href=\"\" @click.prevent=\"scrollAddnewTeacher()\"><i class=\"fa fa-plus-circle\"></i> Add New User</a>\n<table id=\"tbl-listteacher\" class=\"table table-bordered table-hover table-th\">\n    <thead>\n    <tr>\n        <th></th>\n        <th>Full Name</th>\n        <th>Email</th>\n        <th>Rate</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr v-for=\"(index,teacher) in teachers\">\n        <td><input type=\"checkbox\" class=\"court-item-check\" name=\"court-item-check\" value=\"{{index}}\" @click=\"addTeacher(index)\"></td>\n        <td>{{ teacher.fullname }}</td>\n        <td>{{ teacher.email }} </td>\n        <td></td>\n    </tr>\n    </tbody>\n</table>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\ListTeacher.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34087,19 +33141,19 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary pull-right btn-new-court\" href=\"\" @click.prevent=\"scrollAddnewUser()\"><i class=\"fa fa-plus-circle\"></i> Add New User</a>\n<table id=\"tbl-listuser\" class=\"table table-bordered table-hover table-th\">\n    <thead>\n    <tr>\n        <th></th>\n        <th>Full Name</th>\n        <th>Email</th>\n        <th>Is Admin ?</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr v-for=\"(index,user) in users\">\n        <td><input type=\"checkbox\" class=\"court-item-check\" name=\"court-item-check\" value=\"{{index}}\" @click=\"addUsers(index)\"></td>\n        <td>{{ user.fullname }}</td>\n        <td>{{ user.email }} </td>\n        <td v-if=\"user.is_admin == true\">Yes</td>\n        <td v-else=\"\">No</td>\n    </tr>\n    </tbody>\n</table>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary pull-right btn-new-court\" href=\"\" @click.prevent=\"scrollAddnewUser()\"><i class=\"fa fa-plus-circle\"></i> Add New User</a>\n<table id=\"tbl-listuser\" class=\"table table-bordered table-hover table-th\">\n    <thead>\n    <tr>\n        <th></th>\n        <th>Name</th>\n        <th>Email</th>\n        <th>Is Admin ?</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr v-for=\"(index,user) in users\">\n        <td><input type=\"checkbox\" class=\"court-item-check\" name=\"court-item-check\" value=\"{{index}}\" @click=\"addUsers(index)\"></td>\n        <td>{{ user.fullname }}</td>\n        <td>{{ user.email }} </td>\n        <td v-if=\"user.is_admin == true\">Yes</td>\n        <td v-else=\"\">No</td>\n    </tr>\n    </tbody>\n</table>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\ListUser.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\ListUser.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],147:[function(require,module,exports){
+},{"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34118,6 +33172,18 @@ var _FormNewUser = require('./FormNewUser.vue');
 
 var _FormNewUser2 = _interopRequireDefault(_FormNewUser);
 
+var _ListTeacher = require('./ListTeacher.vue');
+
+var _ListTeacher2 = _interopRequireDefault(_ListTeacher);
+
+var _FormEditTeacher = require('./FormEditTeacher.vue');
+
+var _FormEditTeacher2 = _interopRequireDefault(_FormEditTeacher);
+
+var _FormNewTeacher = require('./FormNewTeacher.vue');
+
+var _FormNewTeacher2 = _interopRequireDefault(_FormNewTeacher);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _ = require('lodash'),
@@ -34130,7 +33196,10 @@ exports.default = {
             users_choice: [],
             surface: null,
             users: [],
-            reloadUsers: 1
+            reloadUsers: 1,
+            teachers: [],
+            teachers_choice: [],
+            reloadTeachers: 1
         };
     },
 
@@ -34152,25 +33221,32 @@ exports.default = {
         }
     },
     methods: {},
+    ready: function ready() {
+        console.log(this.clubSettingId);
+    },
+
     components: {
         ListUser: _ListUser2.default,
         FormEditUser: _FormEditUser2.default,
-        FormNewUser: _FormNewUser2.default
+        FormNewUser: _FormNewUser2.default,
+        ListTeacher: _ListTeacher2.default,
+        FormEditTeacher: _FormEditTeacher2.default,
+        FormNewTeacher: _FormNewTeacher2.default
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"box-body\">\n    <section class=\"col-xs-12 col-md-7\">\n        <div class=\"court_list courtbox\">\n            <h3 class=\"title-box pull-left\">User list</h3>\n            <list-user :club-setting-id=\"clubSettingId\" :users_choice.sync=\"users_choice\" :users.sync=\"users\" :reload-users.sync=\"reloadUsers\">\n            </list-user>\n        </div>\n    </section>\n\n    <section class=\"col-xs-12 col-md-5\">\n        <form-edit-user v-if=\"users_choice.length < 2\" :users_choice=\"users_choice\" :surface=\"surface\" :users.sync=\"users\" :club-setting-id=\"clubSettingId\" :reload-users.sync=\"reloadUsers\" :data-rates.sync=\"dataRates\">\n\n        </form-edit-user>\n        <form-new-user v-if=\"!users_choice.length\" :surface=\"surface\" :users.sync=\"users\" :club-setting-id=\"clubSettingId\" :reload-users.sync=\"reloadUsers\" :data-rates.sync=\"dataRates\">\n        </form-new-user>\n    </section>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"box-body\">\n    <div class=\"user-clubs\">\n        <div class=\"row\">\n            <div class=\"col-xs-12 col-md-7\">\n                <div class=\"court_list courtbox\">\n                    <h3 class=\"title-box pull-left\">User list</h3>\n                    <list-user :club-setting-id=\"clubSettingId\" :users_choice.sync=\"users_choice\" :users.sync=\"users\" :reload-users.sync=\"reloadUsers\">\n                    </list-user>\n                </div>\n            </div>\n\n            <div class=\"col-xs-12 col-md-5\">\n                <form-edit-user v-if=\"users_choice.length < 2\" :users_choice=\"users_choice\" :surface=\"surface\" :users.sync=\"users\" :club-setting-id=\"clubSettingId\" :reload-users.sync=\"reloadUsers\" :data-rates.sync=\"dataRates\">\n\n                </form-edit-user>\n                <form-new-user v-if=\"!users_choice.length\" :surface=\"surface\" :users.sync=\"users\" :club-setting-id=\"clubSettingId\" :reload-users.sync=\"reloadUsers\" :data-rates.sync=\"dataRates\">\n                </form-new-user>\n            </div>\n        </div>\n    </div>\n    <!-- end user club -->\n    <div class=\"teach-clubs\">\n        <div class=\"row\">\n            <div class=\"col-xs-12 col-md-7\">\n                <h3 class=\"title-box pull-left\">Teacher list</h3>\n                <list-teacher :club-setting-id=\"clubSettingId\" :teachers_choice.sync=\"teachers_choice\" :teachers.sync=\"teachers\" :reload-teacher.sync=\"reloadTeacher\">\n                </list-teacher>\n            </div>\n            <div class=\"col-xs-12 col-md-5\">\n                <form-edit-teacher v-if=\"teachers_choice.length < 2\" :teachers_choice=\"teachers_choice\" :club-setting-id=\"clubSettingId\" :reload-teachers.sync=\"reloadTeachers\">\n\n                </form-edit-teacher>\n                <form-new-teacher v-if=\"!teachers_choice.length\" :surface=\"surface\" :club-setting-id=\"clubSettingId\" :reload-teachers.sync=\"reloadTeachers\">\n                </form-new-teacher>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "C:\\Thanhnhon\\SourceWeb\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\UserSetting.vue"
+  var id = "C:\\xampp\\htdocs\\projects\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\UserSetting.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./FormEditUser.vue":144,"./FormNewUser.vue":145,"./ListUser.vue":146,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}]},{},[121]);
+},{"./FormEditTeacher.vue":144,"./FormEditUser.vue":145,"./FormNewTeacher.vue":146,"./FormNewUser.vue":147,"./ListTeacher.vue":148,"./ListUser.vue":149,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}]},{},[121]);
 
 //# sourceMappingURL=app.js.map

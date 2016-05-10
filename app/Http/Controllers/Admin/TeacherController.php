@@ -5,11 +5,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Models\Auth\RoleUser;
 use App\Models\Auth\User;
+use App\Models\Teacher;
 use App\Repositories\Interfaces\Auth\UserInterface;
 use Illuminate\Http\Request;
 use Validator;
 
-class UserController extends Controller
+class TeacherController extends Controller
 {
 
     public function __construct(UserInterface $userRepository)
@@ -17,27 +18,11 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function getDatatables()
+    public function getTeachers($club_id = 1)
     {
-        return $this->userRepository->getDatatableData();
-    }
-
-    /**
-     * Display all users
-     *
-     * @return Response
-     */
-    public function getList()
-    {
-        $title = 'User Manager';
-        return view('admin.users.list', compact('title'));
-    }
-
-    public function getUsers($club_id = 1)
-    {
-        $data = User::with('roles')->whereHas('roles', function($query) use ($club_id) {
-            $query->where('context_id', $club_id);
-        })->select("id", "first_name",'last_name' ,"email")->paginate(10);
+        $data = User::with('teacher','roles')->whereHas('roles', function($query) use ($club_id) {
+            $query->where('context_id', $club_id)->where('role_id',4);
+        })->paginate(10);
         foreach($data as $user){
             if($user->hasRole('admin')){
                 $user['is_admin'] = true;
@@ -61,30 +46,33 @@ class UserController extends Controller
     }
     public function postCreate(Request $request)
     {
+        // $user = User::with('teacher')->where('id',1)->first();
+        // return $user;
         $v = Validator::make($request->all(), [
             'first_name' => 'required|max:60',
             'last_name' => 'required|max:60',
             'email' => 'email|required|max:60|min:6|unique:users',
             'password' => 'required|min:8',
-
+            'rate' => 'required|integer',
+            'club_id' => 'required|integer',
         ]);
 
         if($v->fails())
         {
             return response()->json(['error' => true,"messages"=>$v->errors()->all()]);
         }
-
         $user = new User;
-        $request['password'] = bcrypt($request['password']);
         $user->fill($request->all());
         $user = $this->userRepository->createOrUpdate($user);
-        if ($request->input('is_admin') == '1') {
-            $user->assignRole('admin', 'clubs', $request->input('club_id'));
-        } else {
-            $user->assignRole('user', 'clubs', $request->input('club_id'));
-        }
+        $user->assignRole('teacher', 'clubs', $request->input('club_id'));
+       
+        $teacher = new Teacher;
+        $teacher->club_id = $request->input('club_id');
+        $teacher->rate = $request->input('rate');
+        $teacher->user()->associate($user);
+        $teacher->save();
         return response()->json([
-            'error' => false, 'success' => 'User created successfully!',
+            'error' => false, 'success' => 'Teacher created successfully!',
         ]);
 
     }
@@ -135,18 +123,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function postUpdateCourt(UpdateCourtRequest $request)
-    {
-        $court = Court::find($request->input('id'));
-        $court->fill($request->all());
-        $court->save();
-        $rate = CourtRate::where('court_id', $request->input('id'))->delete();
-        $inputRates = $request->input('dataRates');
-        $this->updateTableRates($court, $inputRates);
-        return response([
-            'success_msg' => 'Court has been updated!',
-            'court' => $court,
-        ]);
-    }
+
 
 }

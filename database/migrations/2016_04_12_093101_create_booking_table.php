@@ -18,7 +18,7 @@ class CreateBookingTable extends Migration
             $table->integer('player_id')->unsigned();
             $table->integer('payment_id')->unsigned();
             $table->enum('status', ['required', 'paid'])->default('required');
-            $table->enum('status_update', ['', 'update','cancel'])->default('');
+            $table->enum('status_booking', ['create', 'update','cancel'])->default('create');
             $table->date('date');
             $table->integer('contract_id')->nullable();
             $table->integer('day_of_week')->nullable();

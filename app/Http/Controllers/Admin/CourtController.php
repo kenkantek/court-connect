@@ -20,7 +20,7 @@ class CourtController extends Controller
     }
     public function getList($club_id)
     {
-        $courts = Court::where('club_id', $club_id)->get();
+        $courts = Court::where('club_id', $club_id)->orderBy('name')->get();
         return response([
             'data' => $courts,
         ]);

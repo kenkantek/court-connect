@@ -17,7 +17,7 @@ class Player extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\Auth\User');
+        return $this->belongsTo(User::class);
     }
 
     public function payments()

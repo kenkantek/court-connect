@@ -210,16 +210,16 @@
                                             <div class="form-group clearfix">
                                                 <label for="zipcode" class="col-sm-2 control-label">Zipcode *</label>
                                                 <div class="col-sm-7">
-                                                    <input class="form-control" placeholder="Enter Zip Code" style="width: 50%; margin-right: 10px;" name="Zipcode" type="text" value="" id="zipcode" v-model="customerDetail.zip_code">
+                                                    <input class="form-control" placeholder="Enter Zip Code" style="width: 50%; margin-right: 10px;" name="zipcode" type="text" value="" id="input-zip_code" v-model="customerDetail.zip_code">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <button class="btn btn-primary" type="button" @click="address_lookup()">Address Lookup</button>
+                                                    <button class="btn btn-primary btn-get-address-lookup" type="button">Address Lookup</button>
                                                 </div>
                                             </div>
                                             <div class="form-group clearfix">
                                                 <label for="address1" class="col-sm-2 control-label">Address 1 *</label>
                                                 <div class="col-sm-10">
-                                                    <input class="form-control" placeholder="Address Line 1" name="address1" type="text" value="" id="address1" v-model="customerDetail.address1">
+                                                    <input class="form-control" placeholder="Address Line 1" name="address1" type="text" value="" id="input-address1" v-model="customerDetail.address1">
                                                 </div>
                                             </div>
                                             <div class="form-group clearfix">
@@ -231,13 +231,13 @@
                                             <div class="form-group clearfix">
                                                 <label for="city" class="col-sm-2 control-label">City *</label>
                                                 <div class=" col-sm-10">
-                                                    <input class="form-control" placeholder="City" name="city" type="text" value="" id="city" v-model="customerDetail.city">
+                                                    <input class="form-control" placeholder="City" name="city" type="text" value="" id="input-city" v-model="customerDetail.city">
                                                 </div>
                                             </div>
                                             <div class="form-group clearfix">
                                                 <label for="state" class="col-sm-2 control-label">State *</label>
                                                 <div class="col-sm-10">
-                                                    <input class="form-control" placeholder="State" name="state" type="text" value="" id="state" v-model="customerDetail.state">
+                                                    <input class="form-control" placeholder="State" name="state" type="text" value="" id="input-state" v-model="customerDetail.state">
                                                 </div>
                                             </div>
                                             <div class="form-group clearfix">
@@ -607,7 +607,7 @@
                 return;
             }
             this.$http.get(laroute.route('contracts.getView',{one:this.inputBookingDetail.contract_id})).then(res => {
-                if(res.data.success)
+                if(res.data.error == false)
                 {
                     this.info_contract = res.data.data;
                 }else{
@@ -630,21 +630,33 @@
 
             let def = deferred(),
                     url = laroute.route('booking.viewPriceOrder');
+            $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(url,input).then(res => {
+                $("#mb-create-new-booking .loading").remove();
                 if(res.data.error) {
-                var msg = "";
-                $.each(res.data.messages,function(k,v){
-                    msg += "<div>"+v+"</div>";
-                });
-                this.total_price = "NaN";
-                showNotice('error', msg, 'Error!');
-            }else
-            {
-                this.total_price = res.data.total_price;
-            }
-            }, res => {
+                    var msg = "";
+                    if(res.data.status){
+                        console.log("abc");
+                        switch(res.data.status){
+                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
+                            case 'close': msg = "Close. Please select another time or date"; break;
+                            default: msg = res.data.status
+                        }
+                    }
+                    else
+                        $.each(res.data.messages,function(k,v){
+                            msg += "<div>"+v+"</div>";
+                        });
+                    this.total_price = "NaN";
+                    showNotice('error', msg, 'Error!');
+                }else
+                {
+                    this.total_price = res.data.total_price;
+                }
+                }, res => {
 
-            });
+                });
         },
         nextCustomerDetail(){
             this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
@@ -656,11 +668,22 @@
             // check validate data
             let def = deferred(),
                     url = laroute.route('booking.postCheckCourtBooking');
+
+            $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(url, input).then(res => {
+                $("#mb-create-new-booking .loading").remove();
                 if(res.data.error)
                 {
                     var msg = "";
-                    $.each(res.data.messages,function(k,v){
+                    if(res.data.status){
+                        switch(res.data.status){
+                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
+                            case 'close': msg = "Close. Please select another time or date"; break;
+                            default: msg = res.data.status
+                        }
+                    }
+                    else $.each(res.data.messages,function(k,v){
                         msg += "<div>"+v+"</div>";
                     });
                     this.total_price = "NaN";
@@ -675,53 +698,75 @@
             });
         },
         nextPayment(){
-                if(this.inputBookingDetail.member == 1){
-                    this.customerDetail.player_id = $("#player_id").val();
-                    this.$http.post(laroute.route('booking.checkPlayerforBooking', {one: this.customerDetail.player_id})).then(res => {
-                        if(res.data.success)
-                        {
-                            var player = res.data.player; console.log(player);
-                            this.customerDetail.first_name = player.first_name;
-                            this.customerDetail.last_name = player.last_name;
-                            this.customerDetail.address1 = player.address1;
-                            this.customerDetail.state = player.state;
-                            this.customerDetail.city = player.city;
-                            this.customerDetail.email = player.email;
-                            this.customerDetail.phone = player.phone;
-                            this.tabClick("mb-payment-details-content");
-                        }else{
-                            var msg = "";
-                            $.each(res.data.messages,function(k,v){
-                                msg += "<div>"+v+"</div>";
-                            });
-                            showNotice('error', msg, 'Error!');
+            this.$set('customerDetail.address1',$("#input-address1").val());
+            this.$set('customerDetail.state',$("#input-state").val());
+            this.$set('customerDetail.city',$("#input-city").val());
+            this.$set('customerDetail.zip_code',$("#input-zip_code").val());
+            if(this.inputBookingDetail.member == 1){
+                this.customerDetail.player_id = $("#player_id").val();
+                $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                this.$http.post(laroute.route('booking.checkPlayerforBooking', {one: this.customerDetail.player_id})).then(res => {
+                    $("#mb-create-new-booking loading").remove();
+                if(!res.data.error)
+                {
+                    var player = res.data.player; console.log(player);
+                    this.customerDetail.first_name = player.first_name;
+                    this.customerDetail.last_name = player.last_name;
+                    this.customerDetail.address1 = player.address1;
+                    this.customerDetail.state = player.state;
+                    this.customerDetail.city = player.city;
+                    this.customerDetail.email = player.email;
+                    this.customerDetail.phone = player.phone;
+                    this.tabClick("mb-payment-details-content");
+                }else{
+                    var msg = "";
+                    if(res.data.status){
+                        switch(res.data.status){
+                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
+                            case 'close': msg = "Close. Please select another time or date"; break;
+                            default: msg = res.data.status
                         }
-                    }, res => {
-
+                    }
+                    else $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
                     });
+                    showNotice('error', msg, 'Error!');
                 }
-                else{
-                    const customer = this.customerDetail;
-                    // check validate customer
-                    let def = deferred(),
-                    url = laroute.route('booking.checkInputCustomer');
-                    this.$http.post(url,customer).then(res => {
-                        if(res.data.error)
-                        {
-                            var msg = "";
-                            $.each(res.data.messages,function(k,v){
-                                msg += "<div>"+v+"</div>";
-                            });
-                            showNotice('error', msg, 'Error!');
-                        }else{
-                            this.tabClick("mb-payment-details-content");
+            }, res => {
+
+            });
+            }
+            else{
+                const customer = this.customerDetail;
+                // check validate customer
+                let def = deferred(),
+                        url = laroute.route('booking.checkInputCustomer');
+                $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                this.$http.post(url,customer).then(res => {
+                    $("#mb-create-new-booking .loading").remove();
+                if(res.data.error)
+                {
+                    var msg = "";
+                    if(res.data.status){
+                        switch(res.data.status){
+                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
+                            case 'close': msg = "Close. Please select another time or date"; break;
+                            default: msg = res.data.status
                         }
-                    }, res => {
-
+                    }
+                    else $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
                     });
+                    showNotice('error', msg, 'Error!');
+                }else{
+                    this.tabClick("mb-payment-details-content");
                 }
+            }, res => {
 
-
+            });
+            }
         },
         nextConfirmation(){
             var data = new FormData();
@@ -736,7 +781,15 @@
                 if(res.data.error)
                 {
                     var msg = "";
-                    $.each(res.data.messages,function(k,v){
+                    if(res.data.status){
+                        switch(res.data.status){
+                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
+                            case 'close': msg = "Close. Please select another time or date"; break;
+                            default: msg = res.data.status
+                        }
+                    }
+                    else $.each(res.data.messages,function(k,v){
                         msg += "<div>"+v+"</div>";
                     });
                     showNotice('error', msg, 'Error!');
@@ -812,24 +865,6 @@
                 total_week: null,
                 extras: []
             };
-        },
-        address_lookup(){
-            this.$http.get(laroute.route('booking.address_lookup', {one: this.customerDetail.zipcode})).then(res => {
-                if(res.data.error)
-                {
-                    var msg = "";
-                    $.each(res.data.messages,function(k,v){
-                        msg += "<div>"+v+"</div>";
-                    });
-                    showNotice('error', msg, 'Error!');
-                }else{
-                    console.log(res.data);
-                    this.customerDetail.state = res.data.state;
-                    this.customerDetail.city = res.data.city;
-                }
-            }, res => {
-
-            });
         }
     },ready () {
         //test model open
@@ -864,6 +899,39 @@
             hideMinMax: true,
         });
 
+        //lookup address
+        $("body").on('click','.btn-get-address-lookup',function(){
+            var zipcode;
+            if($("#input-zip_code").length)
+                zipcode = $("#input-zip_code").val();
+            else zipcode = $("input[name=zipcode]").val();
+            console.log(zipcode);
+            $.ajax({
+                url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode+"&sensor=false",
+                method: "post",
+                success:function(data){
+                    $("input[name=state], #input-state").val(data.results[0].address_components[2].long_name);
+                    $("input[name=city], #input-city").val(data.results[0].address_components[3].long_name);
+                }
+            });
+        });
+
+        $("#input-address1").geocomplete()
+                .bind("geocode:result", function(event, result){
+                    $.each(result.address_components, function(index, val) {
+                        if (typeof val.types[0] != "undefined" ) {
+                            if(val.types[0] == "locality"){
+                                $("#input-city").val(val.long_name);
+                            }
+                            if(val.types[0] == 'administrative_area_level_1'){
+                                $("#input-state").val(val.long_name);
+                            }
+                            if(val.types[0] == "postal_code"){
+                                $("#input-zip_code").val(val.long_name);
+                            }
+                        }
+                    });
+                });
     },
     beforeDestroy () {
 

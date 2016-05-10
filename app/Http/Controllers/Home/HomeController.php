@@ -21,6 +21,9 @@ class HomeController extends Controller
         return view('home.index');
     }
 
+    public function getError(){
+
+    }
     public function paypal()
     {
         return view('home.paypal.app');

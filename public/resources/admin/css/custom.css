@@ -494,7 +494,7 @@ form.form-court{
     display: none;
 }
 .loading{
-    position: ABSOLUTE;
+    position: absolute;
     top: 0px;
     left: 0px;
     bottom: 0px;
@@ -748,4 +748,13 @@ form.form-court{
 }
 .daterangepicker.dropdown-menu{
     z-index: 9999999999999999999999;
+}
+#manager-book-top{
+    margin-bottom: 20px;
+}
+.pac-container{
+    z-index: 9999999999999999999999;
+}
+#cc-modal-view-booking-search{
+    outline: none;
 }

@@ -25,8 +25,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['email', 'password', 'phone', 'first_name', 'last_name', 'zip_code','address1','address2 ','state','city','facebook', 'google', 'gender', 'fullname'];
-
+    protected $fillable = ['email', 'password', 'phone', 'first_name', 'last_name', 'zip_code','address1','address2 ','state','city','facebook', 'google', 'gender'];
+    protected $appends = ['fullname'];
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -55,6 +55,12 @@ class User extends Authenticatable
     /**
      * Always capitalize the first name when we retrieve it
      */
+
+    public function teacher()
+    {
+        return $this->hasOne('App\Models\Teacher');
+    }
+
     public function getFirstNameAttribute($value)
     {
         return ucfirst($value);
@@ -65,10 +71,16 @@ class User extends Authenticatable
         return ucfirst($value);
     }
 
+    public function getFullnameAttribute()
+    {
+        return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
+    }
+
     public function getFullName()
     {
         return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
     }
+
     public function assignRole($role, $context = NULL, $context_id = NULL)
     {
         $pivot = array();

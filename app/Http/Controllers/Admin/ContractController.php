@@ -39,7 +39,7 @@ class ContractController extends Controller
         $contract = Contract::where('id',$contract_id)->select(['id','start_date','end_date','is_member','total_week','extras'])->first();
         if(isset($contract['id'])){
             return response([
-                'success' => true,
+                'error' => false,
                 'data' => $contract,
             ]);
         }else{

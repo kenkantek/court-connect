@@ -14,6 +14,15 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postUpdateUser' => 'users.update',
     ]);
 
+    Route::controller('teacher', TeacherController::class, [
+        'getList' => 'teacher.list',
+        'getDelete' => 'teacher.delete',
+        'postCreate' => 'teacher.create.post',
+        'postEdit' => 'teacher.edit.post',
+        'getTeachers' => 'teacher.listdata',
+        'postUpdateTeacher' => 'teacher.update',
+    ]);
+    
     Route::controller('clubs', ClubController::class, [
         'getSetting' => 'clubs.setting',
         'getManagerBookings' => 'clubs.manager-bookings',
@@ -54,14 +63,14 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postPayment' =>'booking.postPayment',
         'postCheckPlayerforBooking' =>'booking.checkPlayerforBooking',
         'getView' =>'booking.view',
-        'putDelete' =>'booking.delete',
+        'getCancel' =>'booking.cancel',
         'getAcceptPayment' =>'booking.acceptPayment',
         'getSearchPlayers' =>'booking.players',
-        'getAddressLookup' =>'booking.address_lookup',
         'getInfoGridAvailable' =>'booking.infoGridAvailable',
         'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
         'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
-        'postNewDeal' => 'booking.newDeal'
+        'postNewDeal' => 'booking.newDeal',
+        'getSearch' => 'booking.search'
     ]);
 });
 

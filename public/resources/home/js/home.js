@@ -2,7 +2,6 @@ $(function () {
     if($('#q').length)
         $('#q').cityAutocomplete();
 
-<<<<<<< .mine
     $('#card-expiry').datetimepicker({
         showTimepicker: false,
         showButtonPanel: false,
@@ -13,38 +12,6 @@ $(function () {
             var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).val($.datepicker.formatDate('mm/yy', new Date(year, month, 1)));
-
-
-
-
-
-
-
-
-
-
-=======
-    $('#card-expiry').datetimepicker({
-        format: 'MM/YY',
-    });
-
-    if (jQuery().select2) {
-        $('.select2').select2({
-            width: '100%',
-            minimumResultsForSearch: -1
-        });
-    }
-
-    $( "#q1" ).autocomplete({
-        source: function( request, response ) {
-            $.ajax({
-                url: "search/autocomplete?term=" + request.term,
-                success: function( data ) {
-                    response( $.map( data, function( item ) {
-                        return {
-                            label: item.value, // john
-                            value: item.type + "|" + item.value // user|john
->>>>>>> .theirs
         }
     });
     $("#card-expiry").focus(function () {
@@ -190,7 +157,6 @@ $(function () {
         hasGrid: false,
         hideMinMax: false,
     });
-<<<<<<< .mine
 
 
     $( "#q1" ).autocomplete({
@@ -223,7 +189,7 @@ $(function () {
         console.log(zipcode);
         $.ajax({
             url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode+"&sensor=false",
-            method: "POST",
+            method: "post",
             success:function(data){
                 $("input[name=state], #input-state").val(data.results[0].address_components[2].long_name);
                 $("input[name=city], #input-city").val(data.results[0].address_components[3].long_name);
@@ -233,7 +199,6 @@ $(function () {
 
     $("#input-address1").geocomplete()
         .bind("geocode:result", function(event, result){
-            console.log(result);
             $.each(result.address_components, function(index, val) {
                 if (typeof val.types[0] != "undefined" ) {
                     if(val.types[0] == "locality"){
@@ -252,68 +217,8 @@ $(function () {
             });
         });
 
-});
-=======
-
-    //booking
-    $("body").on('click','.btn-booking-tennis',function(e){
-
+    //
+    $("body").on('click','.btn-booking-tennis.disabled',function(e){
+        e.preventDefault();
     })
 });
-
-//# sourceMappingURL=home.js.map
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs

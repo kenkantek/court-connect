@@ -30,7 +30,7 @@
                             </thead>
                             <tbody>
                             @foreach($bookings as $booking)
-                                <tr class="booking-row-{{$booking->id}}">
+                                <tr class="booking-row-{{$booking->id}}" style="height: 150px">
                                     <td>
                                         <div class="col-md-4">
                                             <img src="{{ asset('resources/home/images/club-avatar.jpg') }}" class="img-circle" alt="{!! $booking->name !!}" width="58" height="58">
@@ -79,7 +79,7 @@
                                                 <li><a href="#" class="action-booking change-booking" data-booking="{{$booking->id}}">Change Booking</a></li>
                                                 <li><a href="#" class="action-booking cancel-booking" data-booking="{{$booking->id}}">Cancel Booking</a></li>
                                                 <li><a href="#" class="action-booking print-confirmation" data-booking="{{$booking->id}}">Print Confirmation</a></li>
-                                                <li><a href="#" class="action-booking export-to-outlook" data-booking="{{$booking->id}}">Export to Outlook</a></li>
+                                                <li><a href="#" class="action-booking send-mail" data-booking="{{$booking->id}}">Export to Outlook</a></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -221,6 +221,27 @@
 
     </div>
 
+    <!-- modal update/change -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="cc-modal-booking-change">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirm change booking</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <p>You can't perform the updates. Please cancel booking and book again !</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- modal cancel -->
     <div class="modal fade" tabindex="-1" role="dialog" id="cc-modal-booking-cancel">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -247,9 +268,32 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
+    <style>
+        @media print {
+            .print-hide{
+                display: none;
+                opacity: 0;
+            }
+            .print-book-confirm{
+                display: block;
+            }
+        }
+    </style>
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         $(document).ready(function(){
+
+            //change booking
+            $("body").on('click','.cc-action-booking .change-booking',function(e){
+                e.preventDefault();
+                $("#cc-modal-booking-change").modal('show');
+            });
+
+            //cancel booking
             $("body").on('click','.cc-action-booking .cancel-booking',function(e){
                 e.preventDefault();
                 var id_booking = $(this).data('booking');
@@ -308,6 +352,52 @@
                     },
                     error: function(res){
                         console.log(res);
+                    }
+                })
+            });
+
+            //print
+            $("body").on('click','.cc-action-booking .print-confirmation',function(e){
+                e.preventDefault();
+                var id_booking = $(this).data('booking');
+                $.ajax({
+                    url: base_url +"/print-confirmation",
+                    type: 'post',
+                    data: {id: id_booking},
+
+                    beforeSend: function(){
+                        $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                    },
+                    success: function(res){ console.log(res);
+                        $("body .loading").remove();
+                        $("body * ").addClass('print-hide');
+                        $("body .print-book-confirm").remove();
+                        $("body").append('<div class="print-book-confirm">'+res+'</div>');
+                        window.print();
+                    },
+                    error: function(request, status, error){
+                        console.log(request.responseText);
+                    }
+                })
+            });
+
+            //send mail
+            $("body").on('click','.cc-action-booking .send-mail',function(e){
+                e.preventDefault();
+                var id_booking = $(this).data('booking');
+                $.ajax({
+                    url: base_url +"/send-mail",
+                    type: 'post',
+                    data: {id: id_booking},
+                    beforeSend: function(){
+                        $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                    },
+                    success: function(res){
+                        alert(res.message);
+                        //$("body .loading").remove();
+                    },
+                    error: function(request, status, error){
+                        console.log(request.responseText);
                     }
                 })
             });

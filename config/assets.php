@@ -21,6 +21,8 @@ return [
             'pace',
             'uniform',
             'admin',
+            'apimap',
+            'geocomplete',
         ],
         'stylesheets' => [
             'bootstrap',
@@ -59,21 +61,13 @@ return [
             'jquery-ui-multidatespicker',
             'ionslider',
             'city-autocomplete',
-<<<<<<< .mine
             'select2',
             'apimap',
             'geocomplete',
+            'home',
             //'moment',
             //'datetimepicker',
             'home'
-=======
-            'select2',
-            //'moment',
-            //'datetimepicker',
-            'home'
-
-
->>>>>>> .theirs
         ],
         'stylesheets' => [
             'bootstrap',

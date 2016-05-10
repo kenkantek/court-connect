@@ -37,7 +37,7 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
     if(isset($unavailable) && count($unavailable) > 0){
         return [
             'error' => true,
-            'message' => "Unavailable (".$unavailable[0]['reason'].")"
+            'status' => "unavailable"
         ];
     }
 
@@ -140,6 +140,8 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         $date = Carbon::createFromFormat('m/d/Y', $input['date'])->format("Y-m-d");
         //check book is exist
         $check_book = Booking::where('date',$date)
+            ->where('court_id',$input['court_id'])
+            ->where('status_booking','!=','cancel')
             ->where(function ($q) use($input) {
                 $q->whereIn('hour', range($input['hour_start'], $input['hour_start'] + $input['hour_length'] - 0.5,0.5))
                     ->orWhere(function ($q) use ($input) {
@@ -152,18 +154,19 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
                     });
             })
             ->first();
+
         if(!empty($check_book))
-            return ['error' => true, "messages" => ["This was book. Please select another time or date"]];
+            return ['error' => true, "status" => "booking"];
 
         $r = calPriceForBooking($input['court_id'],$date,
             $input['hour_start'],$input['hour_length'],$input['member'],'open');
 
         if($r['error']){
-            return ['error' => true,"messages"=>[$r['message']]];
+            return ['error' => true,"status"=>$r['status']];
         }else {
             $total_price = $r['price'];
             return [
-                'success' => true,
+                'error' => false,
                 'total_price' => $total_price
             ];
         }
@@ -200,6 +203,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         foreach($range_date as $date) {
             //check book yet
             $check_book = Booking::where('date', $date)
+                ->where('status_booking','!=','cancel')
                 ->where(function ($q) use ($input) {
                     $q->whereIn('hour', range($input['hour_start'], $input['hour_start'] + $input['hour_length'] - 0.5, 0.5))
                         ->orWhere(function ($q) use ($input) {
@@ -230,11 +234,11 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         }
 
         if($r['error']){
-            return ['error' => true,"messages"=>[$r['message']]];
+            return ['error' => true,"status"=>$r['status']];
         }else {
             $total_price += $price_extra + $r['price'];
             return [
-                'success' => true,
+                'success' => false,
                 'total_price' => $total_price
             ];
         }
