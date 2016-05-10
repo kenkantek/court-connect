@@ -687,8 +687,8 @@ form.form-court{
     cursor: pointer;
 }
 #light-overlay-full{
-    /*position: fixed;*/
-    z-index: 9999;
+    position: fixed;
+    z-index: 999;
     opacity: 0.98;
     top: 0px;
     left: 0px;

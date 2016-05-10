@@ -268,7 +268,10 @@ class BookingController extends Controller
         $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
         $booking['billing_info'] = json_decode($booking['billing_info']);
         $document = view('home.booking.print_confirmation',compact('booking'));
-        return $document;
+        return response()->json([
+            'error' => true,
+            'data' =>$document
+        ]);
     }
 
     //send mail

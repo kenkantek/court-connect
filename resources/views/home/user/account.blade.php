@@ -56,7 +56,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div><?php echo date('l jS F Y', strtotime($booking->created_at)) ?></div>
+                                        <div><?php echo date('l jS F Y', strtotime($booking->date)) ?></div>
                                         <div>at {{($booking->hour <=12 ? str_replace(".5",":30",$booking->hour)."am" : str_replace(".5",":30",($booking->hour - 12))."pm") }}</div>
                                         <div>for {{$booking->hour_length}} Hour</div>
                                     </td>
@@ -251,7 +251,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger hide"></div>
-                    <table>
+                    <table style="text-align: center">
                         <thead>
                             <tr>
                                 <th class="col-md-2">Reservation#</th>
@@ -364,7 +364,7 @@
                     url: base_url +"/print-confirmation",
                     type: 'post',
                     data: {id: id_booking},
-
+                    dataType: 'json',
                     beforeSend: function(){
                         $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                     },
@@ -372,7 +372,7 @@
                         $("body .loading").remove();
                         $("body * ").addClass('print-hide');
                         $("body .print-book-confirm").remove();
-                        $("body").append('<div class="print-book-confirm">'+res+'</div>');
+                        $("body").append('<div class="print-book-confirm">'+res.data+'</div>');
                         window.print();
                     },
                     error: function(request, status, error){
@@ -394,7 +394,7 @@
                     },
                     success: function(res){
                         alert(res.message);
-                        //$("body .loading").remove();
+                        $("body .loading").remove();
                     },
                     error: function(request, status, error){
                         console.log(request.responseText);
