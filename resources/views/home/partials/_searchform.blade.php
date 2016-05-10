@@ -85,11 +85,12 @@
                       <div class="row" style="color:#fff; margin-top: 40px;">
                           <div class="form-group col-md-5">
                               <span style="padding-right: 20px">Court Type: </span>
-                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '1', in_array(1,$request->input('surface_id')) ? true : false) !!}Hard</label>
-                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '2', in_array(2,$request->input('surface_id')) ? true : false) !!}Har-Tru</label>
-                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '3', in_array(3,$request->input('surface_id')) ? true : false) !!}Red Clay</label>
-                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '4', in_array(4,$request->input('surface_id')) ? true : false) !!}Grass</label>
-                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '5', in_array(5,$request->input('surface_id')) ? true : false) !!}Carpet</label>
+                              <?php $surface_arr = $request->input('surface_id') ? $request->input('surface_id') : []; ?>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '1', in_array(1,$surface_arr) ? true : false) !!}Hard</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '2', in_array(2,$surface_arr) ? true : false) !!}Har-Tru</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '3', in_array(3,$surface_arr) ? true : false) !!}Red Clay</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '4', in_array(4,$surface_arr) ? true : false) !!}Grass</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '5', in_array(5,$surface_arr) ? true : false) !!}Carpet</label>
                           </div>
                           <div class="form-group col-md-7">
                             <span>Distance</span>
