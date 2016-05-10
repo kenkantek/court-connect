@@ -61,19 +61,18 @@
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i class="glyphicon glyphicon-time"></i>
-                            <input type="time" class="form-control" name="s_time" id="search-timepicker" placeholder="Time">
+                            {!! Form::time('s_time', $request->input('search-time'), ['id'=>'search-timepicker','class' => 'form-control'] ) !!}
                             <div class="search-tooltip hidden">
                                 <div class="tooltiptext">
                                     <div >
                                         <label for="opentime">Start Time</label>
-                                        <input class="form-control search-time" name="search-time" value="08:00" type="time">
+                                        {!! Form::time('search-time', $request->input('search-time'), ['class' => 'form-control search-time'] ) !!}
                                     </div>                                    
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-md-2 form-icon">
-                            <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" value="">
-                                    
+                            <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" data-from="{!! $request->input('mb-book-in-hour') !!}">
                         </div>
                         <div class="form-group col-md-2 form-icon">
                             <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
@@ -85,12 +84,12 @@
                       </div>
                       <div class="row" style="color:#fff; margin-top: 40px;">
                           <div class="form-group col-md-5">
-                            <span>Court Type</span>                            
-                            <label class="checkbox-inline"><input name="surface_id" type="checkbox" value="1">Hard</label>
-                            <label class="checkbox-inline"><input name="surface_id" type="checkbox" value="2">Har-Tru</label>
-                            <label class="checkbox-inline"><input name="surface_id" type="checkbox" value="3">Red Clay</label>
-                            <label class="checkbox-inline"><input name="surface_id" type="checkbox" value="4">Grass</label>                            
-                            <label class="checkbox-inline"><input name="surface_id" type="checkbox" value="5">Carpet</label>                            
+                              <span style="padding-right: 20px">Court Type: </span>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '1', in_array(1,$request->input('surface_id')) ? true : false) !!}Hard</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '2', in_array(2,$request->input('surface_id')) ? true : false) !!}Har-Tru</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '3', in_array(3,$request->input('surface_id')) ? true : false) !!}Red Clay</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '4', in_array(4,$request->input('surface_id')) ? true : false) !!}Grass</label>
+                              <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '5', in_array(5,$request->input('surface_id')) ? true : false) !!}Carpet</label>
                           </div>
                           <div class="form-group col-md-7">
                             <span>Distance</span>
