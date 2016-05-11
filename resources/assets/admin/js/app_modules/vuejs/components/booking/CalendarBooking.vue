@@ -78,7 +78,7 @@
                                                 <template v-if="grid.status != 'available'">{{grid.content}}</template>
                                             </div>
                                         </div>
-                                        <div v-else data-court="{{court['id']}}" data-hour="{{grid.hour}}" @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="test day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
+                                        <div v-else data-court="{{court['id']}}" data-hour="{{grid.hour}}" @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
                                     <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
                                          ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
                                     </span>
@@ -656,8 +656,12 @@
                 }
                 });
             }else{
-                if(!reload)
-                    $("#day-view-content").selectable( "destroy" );
+                if(!reload) {
+                    $("#day-view-content").selectable("destroy");
+                }
+                $("#day-view-content .grid-content-wap").selectable("destroy");
+                $("#day-view-content .grid-row .day-grid").removeClass('ui-selectee').removeClass('ui-selected');
+
             }
 
             $("#day-view-content").toggleClass('multi-time');
