@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Auth\User;
 use App\Models\Booking;
 use App\Models\Contexts\Court;
 use App\Models\Contract;
@@ -7,6 +8,7 @@ use App\Models\CourtRate;
 use App\Models\Deal;
 use App\Models\TimeUnavailable;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 function format_time(DateTime $timestamp, $format = 'j M Y H:i')
@@ -22,6 +24,23 @@ function format_time(DateTime $timestamp, $format = 'j M Y H:i')
 function date_from_database($time, $format = 'Y-m-d')
 {
     return format_time(Carbon::parse($time), $format);
+}
+
+//get 12 deal
+function getDeals(){
+    $deals = Deal::where('deals.date', '>=', date("Y-m-d"))
+        ->whereIn('deals.created_at',function($query){
+        $query->select(DB::raw("MAX(created_at)"))
+            ->from('deals')
+            ->groupBy("date", "court_id", "hour", "hour_length");
+        })
+        ->join('courts','courts.id','=','deals.court_id')
+        ->join('clubs','clubs.id','=','courts.club_id')
+        ->orderBy('date','asc')
+        ->select(['deals.*','courts.name as court_name','clubs.name as club_name', 'clubs.address', 'clubs.image'])
+        ->limit(12)
+        ->get();
+    return $deals;
 }
 
 function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_member,$type = 'open'){
@@ -118,7 +137,7 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
 
 //caculator price and check is book
 function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id,club_id,contract_id,member]
-    if($input['type'] == 'open'){
+    if($input['type'] == 'open' || $input['type'] == 'lesson'){
         $messages = [
             'hour_start'    => 'The Select a Time field is required.',
             'hour_length'    => 'The Select a Court field is required.',
@@ -137,7 +156,8 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             return ['error' => true,"messages"=>$v->errors()->all()];
         }
 
-        $date = Carbon::createFromFormat('m/d/Y', $input['date'])->format("Y-m-d");
+        //$date = Carbon::createFromFormat('m/d/Y', $input['date'])->format("Y-m-d");
+        $date = Carbon::createFromTimestamp(strtotime($input['date']))->format("Y-m-d");;
         //check book is exist
         $check_book = Booking::where('date',$date)
             ->where('court_id',$input['court_id'])
@@ -161,17 +181,27 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         $r = calPriceForBooking($input['court_id'],$date,
             $input['hour_start'],$input['hour_length'],$input['member'],'open');
 
+        $total_price = 0;
+        $price_teacher = 0;
+        //price teacher
+        if($input['type'] == 'lesson'){
+            $teacher = User::with('teacher')->where('id',$input['teacher_id'] ? $input['teacher_id'] : -1)->first();
+            if(isset($teacher['id'])){
+                $price_teacher = $teacher->teacher->rate;
+            }
+        }
         if($r['error']){
             return ['error' => true,"status"=>$r['status']];
         }else {
-            $total_price = $r['price'];
+            $total_price = $price_teacher + $r['price'];
             return [
                 'error' => false,
+                'price_teacher' => $price_teacher,
                 'total_price' => $total_price
             ];
         }
     }
-    if($input['type'] == 'contract'){
+    else if($input['type'] == 'contract'){
         $messages = [
             'contract_id'    => 'The Date range field is required.',
             'dayOfWeek'    => 'The day of weekfield is required.',
@@ -243,5 +273,5 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             ];
         }
     }
-    return ['error' => true,"messages"=>["Booking type invalid"]];
+    return ['error' => true,"messages"=>["Booking type invalid. Check all fill is full"]];
 }

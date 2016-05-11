@@ -15,7 +15,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     ]);
 
     Route::controller('teacher', TeacherController::class, [
-        'getList' => 'teacher.list',
+        'getListForBooking' => 'teacher.list',
         'getDelete' => 'teacher.delete',
         'postCreate' => 'teacher.create.post',
         'postEdit' => 'teacher.edit.post',

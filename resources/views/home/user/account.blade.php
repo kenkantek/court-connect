@@ -30,7 +30,7 @@
                             </thead>
                             <tbody>
                             @foreach($bookings as $booking)
-                                <tr class="booking-row-{{$booking->id}}" style="height: 150px">
+                                <tr class="booking-row booking-row-{{$booking->id}}" style="height: 150px">
                                     <td>
                                         <div class="col-md-4">
                                             <img src="{{ asset('resources/home/images/club-avatar.jpg') }}" class="img-circle" alt="{!! $booking->name !!}" width="58" height="58">
@@ -46,7 +46,7 @@
                                     </td>
                                     <td>
                                         <div>
-                                            Reservation: <span>{!! $booking->id !!}</span>
+                                            Reservation: #<span>{!! $booking->id !!}</span>
                                         </div>
                                         <div class="booking-type">
                                             Booking type: {{$booking->type}}
@@ -56,9 +56,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div><?php echo date('l jS F Y', strtotime($booking->date)) ?></div>
+                                        <div>{{date('l jS F Y', strtotime($booking->date))}}</div>
                                         <div>at {{($booking->hour <=12 ? str_replace(".5",":30",$booking->hour)."am" : str_replace(".5",":30",($booking->hour - 12))."pm") }}</div>
                                         <div>for {{$booking->hour_length}} Hour</div>
+                                        <hr style="width: 100%; margin: 10px 0px">
+                                        <div>Day trading: {{$booking->created_at}}</div>
                                     </td>
                                     <td>
                                         <div>
@@ -70,18 +72,35 @@
                                         </div>
                                     </td>
                                     <td>
+                                        <?php
+                                        $date_booking = date_create($booking->date);
+                                        $intpart = floor($booking->hour);
+                                        $fraction = $booking->hour - $intpart;
+                                        date_time_set($date_booking, $intpart, $fraction);
+                                        ?>
                                         <div class="dropdown yr-booking">
                                             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                 Modify
                                                 <span class="glyphicon glyphicon-menu-down"></span>
                                             </button>
                                             <ul class="cc-action-booking dropdown-menu" aria-labelledby="">
-                                                <li><a href="#" class="action-booking change-booking" data-booking="{{$booking->id}}">Change Booking</a></li>
-                                                <li><a href="#" class="action-booking cancel-booking" data-booking="{{$booking->id}}">Cancel Booking</a></li>
+                                                @if($booking->status_booking == 'cancel' || strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
+                                                @else
+                                                    <li><a href="#" class="action-booking change-booking" data-booking="{{$booking->id}}">Change Booking</a></li>
+                                                    <li><a href="#" class="action-booking cancel-booking" data-booking="{{$booking->id}}">Cancel Booking</a></li>
+                                                @endif
                                                 <li><a href="#" class="action-booking print-confirmation" data-booking="{{$booking->id}}">Print Confirmation</a></li>
                                                 <li><a href="#" class="action-booking send-mail" data-booking="{{$booking->id}}">Export to Outlook</a></li>
                                             </ul>
                                         </div>
+                                        <?php
+                                        if($booking->status_booking == 'cancel')
+                                            echo "<div class='status-booking'>Status:<span>Cancel</span></div>";
+                                        else if(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
+                                            echo "<div class='status-booking'>Status:<span>Expired</span></div>";
+                                        else
+                                            echo "<div class='status-booking'>Status:<span>Pending</span></div>";
+                                        ?>
                                     </td>
                                 </tr>
                             @endforeach
@@ -334,7 +353,7 @@
                 var id_booking = $(this).data('booking');
                 $.ajax({
                     url: base_url +"/cancel-booking",
-                    type: 'get',
+                    type: 'post',
                     data: {id: id_booking},
                     dataType: "json",
                     beforeSend: function(){

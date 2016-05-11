@@ -42,86 +42,88 @@
 
 </head>
 <body>
-@include('home.layouts.header')
-<div class="container-fluid">    
-    @yield('header')  
-    @yield('content')        
-    <div class="row footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="row">
-                        <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5)">
-                            <span>COMPANY</span>
-                            <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Press</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
-                            <span>LEGAL</span>
-                            <ul>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Terms of Use</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
-                            <span>HELP</span>
-                            <ul>
-                                <li><a href="#">Support Center</a></li>
-                                <li><a href="#">FAQ</a></li>
-                            </ul>
+<div class="content-wrapper">
+    @include('home.layouts.header')
+    <div class="container-fluid">
+        @yield('header')
+        @yield('content')
+        <div class="row footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5)">
+                                <span>COMPANY</span>
+                                <ul>
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Press</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
+                                <span>LEGAL</span>
+                                <ul>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Terms of Use</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
+                                <span>HELP</span>
+                                <ul>
+                                    <li><a href="#">Support Center</a></li>
+                                    <li><a href="#">FAQ</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                    <div class="col-md-5">
+                        <span>CONNECT WITH US</span>
+
+                        <div class="social"><i class="fa fa-facebook"></i> <i class="fa fa-twitter"></i> <i
+                                    class="fa fa-linkedin"></i></div>
+                    </div>
                 </div>
-                <div class="col-md-5">
-                    <span>CONNECT WITH US</span>
-
-                    <div class="social"><i class="fa fa-facebook"></i> <i class="fa fa-twitter"></i> <i
-                            class="fa fa-linkedin"></i></div>
-                </div>
-            </div>
-            <div class="row copyright">
-                Copyright © 2016 Open Sports, LLC New Jersey - All Rights Reserved
-            </div>
-        </div>
-    </div>
-    <!--End footer-->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <img style="margin: 0 auto" src="{{ asset('resources/home/images/logo-color_05.png') }}" class="img-responsive" alt="Image">
-
-                    <p style="margin-bottom:20px;margin-top: 34px;color: #082e31;font-family: RobotoBlackItalic, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px">
-                        Club Owners - Request an Account</p>
-
-                    <p style="padding:0 45px 0 45px; text-align:left ;color: #a0a0a0; font-family: RobotoRegular, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px">
-                        Court Connect is a complete schedualing solution to connect your club with tennis fans. Call us
-                        now
-                        to discuss how managing and taking bookings can be made easy using Court-Connect.com</p>
-
-                    <p style="margin-top:55px;margin-bottom:35px;color: #082e31; font-size: 31px"><span
-                            style="font-family: RobotoThin, 'Helvetica Neue', Helvetica, Arial, sans-serif;">Call</span>
-                        <span style="font-family: RobotoRegular, 'Helvetica Neue', Helvetica, Arial, sans-serif;">123-456-789</span>
-                    </p>
+                <div class="row copyright">
+                    Copyright © 2016 Open Sports, LLC New Jersey - All Rights Reserved
                 </div>
             </div>
         </div>
-    </div>
-    <div id="calendar-switch">
+        <!--End footer-->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <img style="margin: 0 auto" src="{{ asset('resources/home/images/logo-color_05.png') }}" class="img-responsive" alt="Image">
+
+                        <p style="margin-bottom:20px;margin-top: 34px;color: #082e31;font-family: RobotoBlackItalic, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px">
+                            Club Owners - Request an Account</p>
+
+                        <p style="padding:0 45px 0 45px; text-align:left ;color: #a0a0a0; font-family: RobotoRegular, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px">
+                            Court Connect is a complete schedualing solution to connect your club with tennis fans. Call us
+                            now
+                            to discuss how managing and taking bookings can be made easy using Court-Connect.com</p>
+
+                        <p style="margin-top:55px;margin-bottom:35px;color: #082e31; font-size: 31px"><span
+                                    style="font-family: RobotoThin, 'Helvetica Neue', Helvetica, Arial, sans-serif;">Call</span>
+                            <span style="font-family: RobotoRegular, 'Helvetica Neue', Helvetica, Arial, sans-serif;">123-456-789</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calendar-switch">
+
+        </div>
+
+        @foreach ($bodyScripts as $script)
+            {!! HTML::script($script) !!}
+        @endforeach
+
+        @yield('javascript')
 
     </div>
-
-    @foreach ($bodyScripts as $script)
-        {!! HTML::script($script) !!}
-    @endforeach
-
-    @yield('javascript')
-
 </div>
 </body>
 </html>

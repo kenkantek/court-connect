@@ -9,6 +9,13 @@
                 <h2><span>Checkout</span></h2>
 
                 <div class="container" id="form-checkout-wrapper">
+                    @if( strtotime('now') > strtotime($request->input('date')))
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <div>Warning. Date booking less than today!</div>
+                        </div>
+                    @endif
+
                     <div class="alert-message-box alert alert-danger alert-dismissible hide" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <div class="alert-content"></div>
@@ -18,7 +25,11 @@
                         <h3 class="text-center">Can't found data</h3>
                     @else
                         @if(isset($court['price']['status']))
-                            <div>Court is {{$court['price']['status']}}</div>
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <div>This is {{$court['price']['status']}}</div>
+                            </div>
+
                         @else
                         {{-- left content --}}
                         <div class="col-lg-8 col-md-8 left-sidebar">

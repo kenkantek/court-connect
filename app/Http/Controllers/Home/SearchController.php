@@ -10,6 +10,7 @@ use App\Models\State;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller {
+
     public function autocomplete(Request $request) {
         $term = $request->input('term');
 
@@ -50,7 +51,7 @@ class SearchController extends Controller {
 
         $keyword = $request->input('s_name');
         $clubs = Club::search($keyword)->paginate(5);
-        return view('home.search', compact('request', 'clubs'));
+        return view('home.pages.search', compact('request', 'clubs'));
     }
 
     public function getSearch(Request $request) {
@@ -71,7 +72,7 @@ class SearchController extends Controller {
         $clubs = null;
         if ($keyword_hour < 5) {
 
-        } else {
+        }else {
             $clubs = Club::search($keyword_clubs)->with(['courts' => function ($q) use ($keyword_surface) {
                 if ($keyword_surface != null) {
                     $q->where('surface_id', '=', $keyword_surface);
@@ -98,8 +99,10 @@ class SearchController extends Controller {
             }
 
         }
-        //echo "<pre>"; dd($clubs[0]); echo "<pre>"; die;
-        return view('home.search', compact('request', 'clubs', 'keyword_hour'));
+
+        $deals = getDeals();
+
+        return view('home.pages.search', compact('request', 'deals', 'clubs', 'keyword_hour'));
     }
 
     //get price follow hour of court

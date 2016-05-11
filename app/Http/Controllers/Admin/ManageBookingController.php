@@ -38,7 +38,7 @@ class ManageBookingController extends Controller
         $players = User::whereHas('roles', function($query){
             $query->where('context','players');
         })->where('email','LIKE','%'.$request['q'].'%')->limit(10)
-        ->select(['id','email','address1'])->get();
+            ->select(['id','email','address1'])->get();
         return $players;
     }
 
@@ -405,7 +405,7 @@ class ManageBookingController extends Controller
             'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'zip_code' => 'required | integer | min: 5',
+            'zip_code' => 'required | max: 6',
             'address1' => 'required',
             'state' => 'required',
             'city' => 'required',
@@ -425,12 +425,19 @@ class ManageBookingController extends Controller
     }
 
     public function postPayment(Request $request){
-        $v = Validator::make((array) json_decode($request->input('payment')), [
+        $fields_validate = [
             'type' => 'required',
             'card_number' => 'required',
             'expiry' => 'required',
             'cvv' => 'required|integer',
-        ]);
+            'cost_adj' =>'sometimes|integer',
+        ];
+
+        $cc_info_payment = json_decode($request->input('payment'));
+        if(!empty($cc_info_payment->cost_adj)){
+            $fields_validate['adj_reason'] = "required | min: 6";
+        }
+        $v = Validator::make((array) $cc_info_payment, $fields_validate);
 
         //dd($request->input('payment'));
         if($v->fails())
@@ -459,6 +466,22 @@ class ManageBookingController extends Controller
         $result_prices = getPriceForBooking($input);
         if(!$result_prices['error']) {
 
+            $text_notes = ""; //notes
+
+            //check Cost Adjustment
+            if(!empty($cc_info_payment->cost_adj)){
+                if($cc_info_payment->cost_adj > $result_prices['total_price']){
+                    return response()->json([
+                        'error' => true,
+                        "messages" => ['Cost Adjustment greater than total price']
+                    ]);
+                }else{
+                    $text_notes .= "Amount: $".$result_prices['total_price'];
+                    $text_notes .=" . Cost Adjustment: $".$cc_info_payment->cost_adj;
+                    $result_prices['total_price'] -= $cc_info_payment->cost_adj;
+                    $text_notes .=" . The remaining price: $".$result_prices['total_price'];
+                }
+            }
             if ($inputBookingDetail->member == 1) {
                 $player_id = $customerDetail->player_id;
                 $billing_info = json_encode([]);
@@ -504,7 +527,7 @@ class ManageBookingController extends Controller
             ]);
 
             //save with type open
-            if($inputBookingDetail->type == 'open') {
+            if($inputBookingDetail->type == 'open' || $inputBookingDetail->type == 'lesson') {
                 $booking = Booking::create([
                     'payment_id' => $payment['id'],
                     'type' => $inputBookingDetail->type,
@@ -515,13 +538,15 @@ class ManageBookingController extends Controller
                     'extra_id' => json_encode($inputBookingDetail->extra_id),
                     'teacher_id' => is_numeric($inputBookingDetail->teacher_id) ? $inputBookingDetail->teacher_id : 0,
                     'is_member' => $inputBookingDetail->member,
+                    'price_teacher' => $result_prices['price_teacher'] ? $result_prices['price_teacher'] : 0,
                     'total_price' => $result_prices['total_price'],
                     'hour' => $inputBookingDetail->hour_start,
                     'hour_length' => $inputBookingDetail->hour_length,
                     'player_id' => $player_id,
                     'num_player' => $inputBookingDetail->num_player,
                     'billing_info' => $billing_info,
-                    'payment_info' => $request->input('payment')
+                    'payment_info' => $request->input('payment'),
+                    'notes' => $text_notes
                 ]);
                 return [
                     'error' => false,
@@ -552,15 +577,18 @@ class ManageBookingController extends Controller
                     ]);
                 }
 
-                return [
+                return response()->json([
                     'error' => false,
+                    'total_price' => $result_prices['total_price'],
                     'payment_id' => $payment['id']
-                ];
+                ]);
             }
 
-        }else{
-            return ['error' => true, "messages" => ['Error. Input invalid'],'data'=>$result_prices];
         }
+        return response()->json([
+            'error' => true,
+            "messages" => ['Error. Input invalid or it is booking']
+        ]);
     }
 
     //get view booking

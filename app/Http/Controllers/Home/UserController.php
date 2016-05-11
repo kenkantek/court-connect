@@ -58,6 +58,7 @@ class UserController extends Controller
         $bookings = Booking::join('courts', 'courts.id', '=', 'bookings.court_id')
             ->join('clubs', 'clubs.id', '=', 'courts.club_id')
             ->where('player_id', Auth::user()->id)
+            ->orderBy('created_at','desc')
             ->get(['bookings.*','courts.name as court_name','clubs.id as club_id','clubs.name as club_name', 'clubs.address as club_address']);
         return view('home.user.account', compact('bookings'));
     }

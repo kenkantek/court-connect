@@ -24,8 +24,9 @@ class CreateBookingTable extends Migration
             $table->integer('day_of_week')->nullable();
             $table->integer('court_id')->unsigned();
             $table->text('extra_id')->nullable();
-            $table->integer('teacher_id')->nullable();
             $table->boolean('is_member');
+            $table->integer('teacher_id')->nullable();
+            $table->double('price_teacher')->nullable();
             $table->double('total_price')->nullable();
             $table->float('hour');
             $table->tinyInteger('hour_length');
@@ -33,7 +34,7 @@ class CreateBookingTable extends Migration
             $table->text('player_info');
             $table->text('billing_info');
             $table->text('payment_info');
-
+            $table->text('notes');
             $table->foreign('court_id')
                 ->references('id')
                 ->on('courts')

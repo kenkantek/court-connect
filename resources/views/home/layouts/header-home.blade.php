@@ -1,5 +1,5 @@
 <!--HEADER-->
-<div class="row header">
+<div class="header">
     <div class="container">
         <nav class="navbar navbar-default" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -112,10 +112,10 @@
 
 <!--END HEADER-->
 <!--App bar-->
-<div class="row app-bar" style="padding: 11px 0 11px 0">
+<div class="app-bar" style="padding: 11px 0 11px 0">
     <div class="container">
         <div class="col-md-6 divine-appbar-r">
-            <span>Looking For The Best Deals?</span> Click here
+            <a href="{!! route("home.deals") !!}" style="text-decoration: none; color: #fff"><span>Looking For The Best Deals?</span> Click here</a>
         </div>
         <div class="col-md-6 divine-appbar-l">
             <div class="col-md-4" style="font-size: 14px; line-height: 1.2em; margin-top: 10px">

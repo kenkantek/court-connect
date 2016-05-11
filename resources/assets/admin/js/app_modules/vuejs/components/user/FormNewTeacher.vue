@@ -28,14 +28,12 @@
                 </div>
             </div>
 
-            
             <div class="form-group" :class=" {'has-error' : (teacher.rate == null && submit == true)}">
                 <label for="rate" class="col-sm-4 control-label">Rate *</label>
                 <div class="col-sm-8">
                     <input class="form-control" placeholder="rate" name="rate" type="number" id="rate" v-model='teacher.rate'>
                 </div>
             </div>
-
 
             <div>
                 <slot name="temp"></slot>

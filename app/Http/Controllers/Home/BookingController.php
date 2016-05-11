@@ -11,6 +11,7 @@ use App\Models\Contexts\Club;
 use App\Models\Contexts\Court;
 use App\Models\Payments\Payment;
 use App\Models\RefundTransaction;
+use Carbon\Carbon;
 use Cartalyst\Stripe\Exception\CardErrorException;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ class BookingController extends Controller
                 $errors[] = "Not found data";
             }
         }
-        return view('home.booking.index',compact('request','court'));
+        return view('home.booking.checkout',compact('request','court'));
     }
 
     //post checkOut
@@ -197,6 +198,14 @@ class BookingController extends Controller
             ]);
         }else{
 
+            if($booking['status_booking'] == 'cancel')
+            {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'This is cancel booking!'
+                ]);
+            }
+
             $date_booking = date_create($booking['date']);
             $intpart = floor($booking['hour']);
             $fraction = $booking['hour'] - $intpart;
@@ -209,20 +218,22 @@ class BookingController extends Controller
                     'message' => 'A Reservation cannot be cancelled 24 hours before the booking time.'
                 ]);
             }
-            return response()->json([
-                'error' => false,
-                'message' => 'Amount for booking will full refund after cancel booking'
-            ]);
         }
+        return response()->json([
+            'error' => false,
+            'message' => 'Amount for booking will full refund after cancel booking'
+        ]);
     }
 
     //cancel booking
     public function cancelBooking(Request $request){
-        $check = json_decode($this->checkActionUpdateBooking($request));
-        if($check['error']){
+        $check = $this->checkActionUpdateBooking($request);
+        $tmp_check = $check->getData();
+
+        if($tmp_check->error){
             return response()->json([
                 'error' => true,
-                'message' =>$check['message']
+                'message' =>$tmp_check->message
             ]);
         }else{
             $booking = Booking::with('payment')->where(['id'=>$request['id'],'player_id'=>Auth::user()->id])->first();
@@ -250,7 +261,6 @@ class BookingController extends Controller
                     ]);
                 }
             }catch (Exception $e){
-                dd($e->getMessage());
                 return response()->json([
                     'error' => true,
                     'message' => "Charge has already been refunded. Please contact Admin website"//$e->getMessage()

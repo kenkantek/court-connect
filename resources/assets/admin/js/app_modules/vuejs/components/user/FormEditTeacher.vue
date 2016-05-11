@@ -1,19 +1,19 @@
 <template>
     <div class="court_new courtbox"  v-if="teachers_choice.length == 1">
-        <h3 class="title-box">Edit User</h3>
+        <h3 class="title-box">Edit Teacher</h3>
         <form class="form-horizontal fm-user">
 
-            <div class="form-group" :class=" {'has-error' : (teacher.fullname == null && submit == true)}">
-                <label for="name" class="col-sm-4 control-label">Name *</label>
+            <div class="form-group" :class=" {'has-error' : (user.first_name == null && submit == true)}">
+                <label for="first_name" class="col-sm-4 control-label">First Name *</label>
                 <div class="col-sm-8">
-                    <input class="form-control" placeholder="Enter full name" name="fullname" type="text" id="fullname" v-model='teacher.fullname'>
+                    <input class="form-control" placeholder="Enter first name" name="first_name" type="text" id="first_name" v-model='teacher.first_name'>
                 </div>
             </div>
 
-            <div class="form-group" :class=" {'has-error' : (teacher.password == null && submit == true)}">
-                <label for="password" class="col-sm-4 control-label">Password *</label>
+            <div class="form-group" :class=" {'has-error' : (user.last_name == null && submit == true)}">
+                <label for="last_name" class="col-sm-4 control-label">Last Name *</label>
                 <div class="col-sm-8">
-                    <input class="form-control" placeholder="Password" name="password" type="password" id="password" v-model='teacher.password'>
+                    <input class="form-control" placeholder="Enter last name" name="last_name" type="text" id="last_name" v-model='teacher.last_name'>
                 </div>
             </div>
 
@@ -24,17 +24,23 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="is_admin" class="col-sm-4 control-label">Is Admin? *</label>
+            <div class="form-group" :class=" {'has-error' : (teacher.password == null && submit == true)}">
+                <label for="password" class="col-sm-4 control-label">Password *</label>
                 <div class="col-sm-8">
-                    <input v-if="teacher.is_admin == true" id="is_admin" checked="checked" class="styled is_admin" name="is_admin" type="checkbox" @click="is_admin()">
-                    <input v-else id="is_admin" class="styled" name="is_admin" type="checkbox" @click="is_admin()">
+                    <input class="form-control" placeholder="Password" name="password" type="password" id="password" v-model='teacher.password'>
+                </div>
+            </div>
+
+            <div class="form-group" :class=" {'has-error' : (teacher.rate == null && submit == true)}">
+                <label for="rate" class="col-sm-4 control-label">Rate *</label>
+                <div class="col-sm-8">
+                    <input class="form-control" placeholder="rate" name="rate" type="number" id="rate" v-model='teacher.teacher.rate'>
                 </div>
             </div>
 
             <div>
                 <slot name="temp"></slot>
-                <button type="button" id="btnEditUser"  class="btn btn-primary pull-right" @click.prevent="editUser()">Edit User
+                <button type="button" id="btnEditUser"  class="btn btn-primary pull-right" @click.prevent="editTeacher()">Edit teacher
                 </button>
             </div>
             <!-- /.box-footer -->
@@ -50,23 +56,22 @@
         }
     },
     computed: {
-        user: function () {
+        teacher: function () {
             return this.teachers_choice[0];
         }
     },
     methods: {
-            editUser(){
-                const user = this.user;
-                this.$http.post(laroute.route('teachers.edit.post'), user).then(res => {
-                    console.log(res)
-                if(res.data.error)
-                {
-                    var msg = "";
-                    $.each(res.data.messages,function(k,v){
-                        msg += "<div>"+v+"</div>";
-                    });
-                    showNotice('error', msg, 'Error!');
-                }else
+        editTeacher(){
+                this.$set('teacher.rate',this.teacher.teacher.rate);
+                const teacher = this.teacher;
+                this.$http.post(laroute.route('teacher.edit.post'), teacher).then(res => {
+                    if(res.data.error){
+                        var msg = "";
+                        $.each(res.data.messages,function(k,v){
+                            msg += "<div>"+v+"</div>";
+                        });
+                        showNotice('error', msg, 'Error!');
+                    }else
                     {
                         this.reloadteachers =  Math.floor(Math.random() * 10000);
                         showNotice('success', res.data.success, 'Update Success!');
@@ -76,16 +81,6 @@
                     showNotice('error', 'Error', 'Error!');
                 });
 
-            },
-            is_admin(){
-                if($(".fm-user input[name=is_admin]").hasClass('is_admin')) {
-                    $(this).removeClass('is_admin')
-                    this.$set('teacher.is_admin',0);
-                }
-                else {
-                    $(".fm-user input[name=is_admin]").addClass("is_admin");
-                    this.$set('teacher.is_admin',1);
-                }
             }
         }
     }

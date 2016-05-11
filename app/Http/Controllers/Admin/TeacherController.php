@@ -34,6 +34,18 @@ class TeacherController extends Controller
         return $data;
     }
 
+    public function getListForBooking($club_id = 1)
+    {
+        $teachers = User::with('teacher')->whereHas('roles', function($query) use ($club_id) {
+            $query->where('context_id', $club_id)->where('role_id', 4);
+        })->get();
+        return response()->json([
+            'error' => false,
+            'data' => $teachers
+        ]);
+    }
+
+
     public function getDelete($id)
     {
         if (\Auth::user()->id == $id) {
@@ -108,14 +120,10 @@ class TeacherController extends Controller
         $user->password = bcrypt($request->input('password'));
         $user = $this->userRepository->createOrUpdate($user);
 
-        if ($request->input('is_admin') == 1 && !$user->hasRole('admin')) {
-            $user->removeRole('user');
-            $user->assignRole('admin',$user->InfoClub['context'],$user->InfoClub['context_id']);
-        }
-        if ($request->input('is_admin') == 0 && !$user->hasRole('user')) {
-            $user->removeRole('admin');
-            $user->assignRole('user',$user->InfoClub['context'],$user->InfoClub['context_id']);
-        }
+        $teacher = Teacher::where('user_id',$user['id'])->first();
+        $teacher->rate = $request->input('rate');
+        $teacher->update();
+
         return response()->json([
             'error' => false,
             'success' => 'User updated successfully!',

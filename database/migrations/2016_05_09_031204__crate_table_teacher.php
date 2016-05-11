@@ -16,7 +16,7 @@ class CrateTableTeacher extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->foreign('user_id')->references('id')->on('users');
             $table->integer('club_id')->unsigned()->foreign('club_id')->references('id')->on('clubs');
-            $table->integer('rate')->default(0);
+            $table->double('rate')->default(0);
             $table->timestamps();
         });
     }

@@ -115,9 +115,8 @@
                                         <div class="col-xs-12 col-md-12">
                                             <h4 class="mb-title-h4-modal text-center">Choose a Teacher</h4>
                                             <select name="mb-book-teacher" class="form-control" v-model="inputBookingDetail.teacher_id">
-                                                @for($i=1; $i<110; $i++)
-                                                <option value="{{$i}}">Teacher #{{$i}}</option>
-                                                @endfor
+                                                <option value="">--Select--</option>
+                                                <option v-for="item in teachers" value="{{item.id}}">{{item.first_name + " "+ item.last_name+ " - Price: $" + item.teacher.rate}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -330,7 +329,7 @@
                                         <div class="form-group">
                                             <div class="col-xs-12 col-md-3">
                                                 <label for="cost-adjustment">Cost Adjustment</label>
-                                                <input class="form-control" placeholder="-$10" name="cost-adjustment" type="text" value="" id="cost-adjustment" v-model="paymentDetail.cost_adj">
+                                                <input class="form-control" placeholder="-$10" name="cost-adjustment" type="number" value="" id="cost-adjustment" v-model="paymentDetail.cost_adj">
                                             </div>
                                             <div class="col-xs-12 col-md-9">
                                                 <label for="adjustment-reason">Adjustment Reason</label>
@@ -549,6 +548,7 @@
             booking_reference: null,
             total_price: null,
             contracts: [],
+            teachers: [],
             info_contract: {
                 total_week: null,
                 extras: []
@@ -592,12 +592,18 @@
         },
         changeBookingType(){
             if(this.inputBookingDetail.type == 'contract'){
-            var url = laroute.route('contracts.listContract', {club_id: this.clubSettingId, member: this.inputBookingDetail.member});
-            this.$http.get(url).then(res => {
-                this.contracts = res.data.data;
-            }, res => {
+                var url = laroute.route('contracts.listContract', {club_id: this.clubSettingId, member: this.inputBookingDetail.member});
+                this.$http.get(url).then(res => {
+                    this.contracts = res.data.data;
+                }, res => {
 
-            });
+                });
+            }else if(this.inputBookingDetail.type == 'lesson'){
+                this.$http.get(laroute.route('teacher.list',{one:this.clubSettingId})).then(res => {
+                    this.teachers = res.data.data;
+                }, res => {
+
+                });
             }
 
         },
@@ -653,6 +659,8 @@
                 }else
                 {
                     this.total_price = res.data.total_price;
+                    if(res.data.price_teacher)
+                        showNotice('success', res.data.price_teacher);
                 }
                 }, res => {
 
@@ -795,6 +803,7 @@
                     showNotice('error', msg, 'Error!');
                 }else{
                     this.booking_reference = res.data.payment_id;
+                    this.total_price = res.data.total_price
                     this.flagChangeDataOfDate = Math.random();
                     this.$dispatch('child-change-flagChangeDataOfDate', this.flagChangeDataOfDate);
                     this.tabClick("mb-confirmation-content")
@@ -878,7 +887,6 @@
                 });
 
         $("li.tab-disabled").click(function (e) {
-            console.log("abc");
             e.preventDefault();
             return false;
         });

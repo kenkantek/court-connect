@@ -14,7 +14,7 @@
             <td><input type="checkbox" class="court-item-check" name="court-item-check" value="{{index}}" @click="addTeacher(index)"></td>
             <td>{{ teacher.fullname }}</td>
             <td>{{ teacher.email }} </td>
-            <td></td>
+            <td>${{ teacher.teacher.rate }} </td>
         </tr>
         </tbody>
     </table>

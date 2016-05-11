@@ -13,14 +13,36 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Cartalyst\Stripe\Exception\CardErrorException;
+use Illuminate\Support\Facades\DB;
+
 class HomeController extends Controller
 {
 
     public function getIndex()
     {
-        return view('home.index');
+        //return date("Y-m-d");
+//        $deals = DB::select(
+//            DB::raw("SELECT deals.*,courts.name as court_name,clubs.name as club_name, clubs.address, clubs.image,clubs.state,clubs.city,clubs.zipcode FROM deals join courts on deals.court_id = courts.id join clubs on clubs.id = courts.club_id where deals.created_at IN (SELECT MAX(created_at) FROM deals GROUP BY date, court_id, hour, hour_length) limit 10")
+//        );
+        $deals = getDeals();
+        return view('home.pages.index',compact('deals'));
     }
 
+    //get deals
+    public function getDeals(){
+        $deals = Deal::where('deals.date', '>=', date("Y-m-d"))
+            ->whereIn('deals.created_at',function($query){
+                $query->select(DB::raw("MAX(created_at)"))
+                    ->from('deals')
+                    ->groupBy("date", "court_id", "hour", "hour_length");
+            })
+            ->join('courts','courts.id','=','deals.court_id')
+            ->join('clubs','clubs.id','=','courts.club_id')
+            ->orderBy('date','asc')
+            ->select(['deals.*','courts.name as court_name','clubs.name as club_name', 'clubs.address', 'clubs.image'])
+            ->paginate(6);
+        return view('home.pages.deals',compact('deals'));
+    }
     public function getError(){
 
     }

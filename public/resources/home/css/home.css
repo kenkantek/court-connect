@@ -1453,6 +1453,19 @@ a.ui-state-default.ui-state-highlight {
 .print-book-confirm{
     display: none;
 }
+.booking-row .status-booking{
+    text-align: center;
+    margin-top: 20px;
+}
+.booking-row .status-booking span{
+    font-weight: bold;
+    color: #0000AA;
+    font-size: 1.2em;
+    display: block;
+}
+.deal-link, .deal-link:hover{
+    text-decoration: none;
+}
 @-webkit-keyframes spin2 {
     from { -webkit-transform: rotate(0deg);}
     to { -webkit-transform: rotate(360deg);}

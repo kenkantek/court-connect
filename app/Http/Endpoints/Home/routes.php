@@ -8,6 +8,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('search', ['as' => 'home.search', 'uses' => 'SearchController@getSearch']);
 	Route::post('search', ['as' => 'home.search', 'uses' => 'SearchController@postSearch']);
 
+	Route::get('/deals', ['as' => 'home.deals', 'uses' => 'HomeController@getDeals']);
+
 	Route::get('signup', ['as' => 'home.signup', 'uses' => 'UserController@getSignUp']);
 	Route::post('signup', ['as' => 'home.signup', 'uses' => 'UserController@postSignUp']);
 
@@ -24,8 +26,9 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('print-confirmation', ['as' => 'home.print_confirmation', 'uses' => 'BookingController@printConfirmation']);
 	Route::post('send-mail', ['as' => 'home.send_mail', 'uses' => 'BookingController@sendMailOrder']);
 	Route::get('search/autocomplete', 'SearchController@autocomplete');
+
 	Route::post('/check-update-booking', 'BookingController@checkActionUpdateBooking');
-	Route::get('/cancel-booking', 'BookingController@cancelBooking');
+	Route::post('/cancel-booking', 'BookingController@cancelBooking');
 
 	Route::get('price', ['as' => 'home.send_mail', 'uses' => 'SearchController@checkPrice']);
 
