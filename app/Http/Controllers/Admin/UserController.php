@@ -69,7 +69,6 @@ class UserController extends Controller
             'password' => 'required|min:8',
 
         ]);
-
         if($v->fails())
         {
             return response()->json(['error' => true,"messages"=>$v->errors()->all()]);
@@ -135,7 +134,6 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
-
     public function postUpdateCourt(UpdateCourtRequest $request)
     {
         $court = Court::find($request->input('id'));
