@@ -7,20 +7,23 @@
 			<list-club
 				:clubs_choice.sync = "clubs_choice"
 				:clubs.sync = "clubs"
-				:delete_club.sync = "delete_club"
+				:delete_club.sync = "delete_club",
+				:reload-clubs.sync="reloadClubs"
 				></list-club>
 		</div>
 		<div class="form-clubs col-xs-12 col-md-5">
 				<form-new-club
 				v-if="clubs_choice == null"
-				:clubs.sync="clubs"
+				:clubs.sync="clubs",
+				:reload-clubs.sync="reloadClubs"
 				>
 				</form-new-club>
 				<form-edit-club
 				v-if="clubs_choice != null"
 				:clubs.sync="clubs"
 				:clubs_choice.sync = "clubs_choice"
-				:delete_club.sync = "delete_club"
+				:delete_club.sync = "delete_club",
+				:reload-clubs.sync="reloadClubs"
 				>
 				</form-edit-club>
 		</div>
@@ -37,6 +40,7 @@
 		data(){
 			return {
 				clubs_choice:null,
+				reloadClubs:1,
 			}
 		},
 		components: {

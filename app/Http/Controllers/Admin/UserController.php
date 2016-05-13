@@ -33,11 +33,12 @@ class UserController extends Controller
         return view('admin.users.list', compact('title'));
     }
 
-    public function getUsers($club_id = 1)
+    public function getUsers(Request $request)
     {
-        $data = User::with('roles')->whereHas('roles', function($query) use ($club_id) {
-            $query->where('context_id', $club_id);
-        })->select("id", "first_name",'last_name' ,"email")->paginate(10);
+        $take = $request->take ?: 10;
+        $data = User::with('roles')->whereHas('roles', function($query) use ($request) {
+            $query->where('context_id', $request->clubid);
+        })->select("id", "first_name",'last_name' ,"email")->orderBy('created_at','desc')->paginate($take);
         foreach($data as $user){
             if($user->hasRole('admin')){
                 $user['is_admin'] = true;

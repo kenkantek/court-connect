@@ -15,6 +15,13 @@
                 </div>
             </div>
 
+            <div class="form-group" :class=" {'has-error' : (user.password == null && submit == true)}">
+                <label for="password" class="col-sm-4 control-label">Password *</label>
+                <div class="col-sm-8">
+                    <input class="form-control" placeholder="Password" name="password" type="password" id="password" v-model='user.password'>
+                </div>
+            </div>
+
             <div class="form-group" :class=" {'has-error' : (user.email == null && submit == true)}">
                 <label for="email" class="col-sm-4 control-label">Email *</label>
                 <div class="col-sm-8">

@@ -18,11 +18,12 @@ class TeacherController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function getTeachers($club_id = 1)
+    public function getTeachers(Request $request)
     {
-        $data = User::with('teacher','roles')->whereHas('roles', function($query) use ($club_id) {
-            $query->where('context_id', $club_id)->where('role_id',4);
-        })->paginate(10);
+        $take = $request->take ?: 10;
+        $data = User::with('teacher','roles')->whereHas('roles', function($query) use ($request) {
+            $query->where('context_id', $request->clubid)->where('role_id',4);
+        })->orderBy('created_at','desc')->paginate($take);
         foreach($data as $user){
             if($user->hasRole('admin')){
                 $user['is_admin'] = true;
@@ -65,7 +66,7 @@ class TeacherController extends Controller
             'last_name' => 'required|max:60',
             'email' => 'email|required|max:60|min:6|unique:users',
             'password' => 'required|min:8',
-            'rate' => 'required|integer',
+            'rate' => 'required|numeric',
             'club_id' => 'required|integer',
         ]);
 

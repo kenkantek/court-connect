@@ -72,6 +72,12 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postNewDeal' => 'booking.newDeal',
         'getSearch' => 'booking.search'
     ]);
+
+    Route::controller('reports', ReportController::class, [
+        'getIndex' => 'reports.index',
+        'getData' => 'reports.listdata'
+    ]);
+
 });
 
 Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin','super']], function () {

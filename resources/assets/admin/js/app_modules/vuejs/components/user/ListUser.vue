@@ -10,7 +10,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(index,user) in users"  >
+        <tr v-for="(index,user) in data.data"  >
             <td><input type="checkbox" class="court-item-check" name="court-item-check" value="{{index}}" @click="addUsers(index)"></td>
             <td>{{ user.fullname }}</td>
             <td>{{ user.email }} </td>
@@ -19,52 +19,74 @@
         </tr>
         </tbody>
     </table>
+    <filter
+            :data.sync="data"
+    ></filter>
 </template>
 <script>
+    import Filter from '../globals/Filter.vue';
     var _ = require('lodash'),
             deferred = require('deferred');
     var tmp_choice = null;
     export default {
         props:['clubSettingId','users_choice','users','reloadUsers','dataRates'],
+        data(){
+            return {
+                data: {
+                    per_page: "10",
+                },
+                api:laroute.route('users.listdata'),
+            }
+        },
         watch: {
             clubSettingId: 'reloadAsyncData',
-            reloadUsers:'reloadAsyncData',
+            reloadUsers: 'reloadAsyncData',
         },
         asyncData(resolve, reject) {
-        this.fetchUsers().done((users) => {
-            resolve({users});
-    }, (error) => {
-        console.log(error);
-    });
-
-    },
-    methods: {
-        fetchUsers() {
-            let def = deferred(),
-                    url = laroute.route('users.listdata', {one:this.clubSettingId});
-            this.$http.get(url).then(res => {
-                def.resolve(res.data.data);
-        }, res => {
-            def.reject(res);
+        this.fetchUsers(this.api).done((data) => {
+            resolve({data});
+        }, (error) => {
+            console.log(error);
         });
-        return def.promise;
-    },
-    addUsers(index){
-        this.users_choice = [];
-        $("#tbl-listuser .court-item-check:checked").prop("checked",false);
-        if(tmp_choice != index) {
-            $("#tbl-listuser .court-item-check[value='"+index+"']").prop("checked",true);
-            this.users_choice[0] = this.users[$("#tbl-listuser .court-item-check[value='" + index + "']").val()];
-            tmp_choice = index;
-        }
-        else {
-            tmp_choice = null;
-        }
-    },
-    scrollAddnewUser(){
-        $("#tbl-listuser .court-item-check:checked").prop("checked",false);
-        this.users_choice = [];
-    },
-    }
+
+        },
+        methods: {
+            fetchUsers(api, clubid = this.clubSettingId, take = this.data.per_page) {
+                let def = deferred();
+                this.$http.get(api ,{ clubid, take}).then(res => {
+                    const { data } = res;
+                    def.resolve(data);
+                }, res => {
+                    def.reject(res);
+                });
+                return def.promise;
+            },
+            addUsers(index){
+                this.users_choice = [];
+                $("#tbl-listuser .court-item-check:checked").prop("checked",false);
+                console.log(index);
+                if(tmp_choice != index) {
+                    $("#tbl-listuser .court-item-check[value='"+index+"']").prop("checked",true);
+                    this.users_choice[0] = this.data.data[$("#tbl-listuser .court-item-check[value='" + index + "']").val()];
+                    tmp_choice = index;
+                }
+                else {
+                    tmp_choice = null;
+                }
+            },
+            scrollAddnewUser(){
+                $("#tbl-listuser .court-item-check:checked").prop("checked",false);
+                this.users_choice = [];
+            },
+        },
+        events: {
+            'go-to-page'(api) {
+                console.log(api);
+                this.api = api;
+                this.reloadAsyncData();
+            }
+        },
+
+        components: { Filter }
     }
 </script>

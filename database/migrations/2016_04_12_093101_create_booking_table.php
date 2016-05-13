@@ -34,6 +34,7 @@ class CreateBookingTable extends Migration
             $table->text('player_info');
             $table->text('billing_info');
             $table->text('payment_info');
+            $table->string('source',255);
             $table->text('notes');
             $table->foreign('court_id')
                 ->references('id')

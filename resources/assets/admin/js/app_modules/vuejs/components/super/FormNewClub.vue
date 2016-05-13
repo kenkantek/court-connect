@@ -1,7 +1,7 @@
 <template>
     <div class="court_new courtbox">
         <h3 class="title-box">Add New Clubs</h3>
-        <form class="form-horizontal" @submit.prevent="onSubmit">
+        <form class="form-horizontal" @submit.prevent="onSubmit" id="form-newClub">
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">Name</label>
 
@@ -20,25 +20,25 @@
                 <label for="address" class="col-sm-2 control-label">Address</label>
 
                 <div class="col-sm-10">
-                    <input id="geocomplete" class="form-control" type="text" placeholder="Enter address club" value="" v-model="club.address" />
+                    <input id="geocomplete" name="address" class="form-control" type="text" placeholder="Enter address club" value="" v-model="club.address" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="state" class="col-sm-2 control-label">State</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="administrative_area_level_1" type="text" value="" disabled="disabled" v-model="club.state" >
+                    <input class="form-control" name="administrative_area_level_1" type="text" value="" v-model="club.state" >
                 </div>
             </div>
             <div class="form-group">
                 <label for="city" class="col-sm-2 control-label">City</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="locality" type="text" value="" disabled="disabled" v-model="club.city">
+                    <input class="form-control" name="locality" type="text" value="" v-model="club.city">
                 </div>
             </div>
             <div class="form-group">
                 <label for="zipcode" class="col-sm-2 control-label">Zipcode</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="postal_code" type="text" value="" disabled="disabled" v-model="club.zipcode">
+                    <input class="form-control" name="postal_code" type="text" value="" v-model="club.zipcode">
                 </div>
             </div>
             <div class="form-group">
@@ -65,7 +65,7 @@
     var _ = require('lodash'),
         deferred = require('deferred');
     export default {
-        props: ['clubs'],
+        props: ['clubs','reloadClubs'],
         data() {
         return {
             club : {
@@ -101,21 +101,19 @@
         _this.club.latitude = this.georesult.geometry.access_points[0].location.lat;
         _this.club.longitude = this.georesult.geometry.access_points[0].location.lng;
 
-
-
              $.each(this.georesult.address_components, function(index, val) {
                 if (typeof val.types[0] != "undefined" ) {
                     if(val.types[0] == "locality"){
-                        _this.club.city = val.long_name;
+                        $("#form-newClub input[name=address]").val( val.long_name);
                     }
                     if(val.types[0] == 'administrative_area_level_1'){
-                        _this.club.state = val.long_name;
+                        $("#form-newClub input[name=administrative_area_level_1]").val(val.long_name);
                     }
                     if(val.types[0] == "postal_code"){
-                        _this.club.zipcode = val.long_name;
+                        $("#form-newClub input[name=locality]").val(val.long_name);
                     }
                     if(val.types[0] == "country"){
-                        _this.club.country = val.short_name;
+                        $("#form-newClub input[name=postal_code]").val(val.short_name);
                     }
                 }
             });
@@ -185,6 +183,11 @@
             }
         },
         onSubmit(){
+            this.$set('club.address',$("#form-newClub input[name=address]").val());
+            this.$set('club.state',$("#form-newClub input[name=administrative_area_level_1]").val());
+            this.$set('club.city',$("#form-newClub input[name=locality]").val());
+            this.$set('club.zipcode',$("#form-newClub input[name=postal_code]").val());
+
             const club = this.club;
             this.submiting = true;
             this.$http.post(laroute.route('super.clubs.create'), club).then(res => {
@@ -197,6 +200,8 @@
             this.$set('club.city', null);
             this.$set('club.state', null);
             this.$set('club.zipcode', null);
+
+            this.reloadClubs = Math.floor(Math.random() * 10000);
 
             showNotice('success', res.data.success_msg, 'Success!');
 

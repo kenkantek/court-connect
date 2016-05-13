@@ -329,6 +329,15 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'bootstrap-table' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/bootstrap-table/bootstrap-table.js',
+                    'cdn' => '',
+                ],
+            ],
+
             // End JS
         ],
         /* -- STYLESHEET ASSETS -- */
@@ -532,6 +541,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => ['/resources/vendor/ionslider/ion.rangeSlider.css', '/resources/vendor/ionslider/ion.rangeSlider.skinNice.css'],
+                    'cdn' => '',
+                ],
+            ],
+            'bootstrap-table' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => ['/resources/vendor/bootstrap-table/bootstrap-table.css'],
                     'cdn' => '',
                 ],
             ],

@@ -91,7 +91,7 @@
                 this.api = api;
                 this.reloadAsyncData();
             }
-    },
+    	},
 
         components: { Filter }
 	}
