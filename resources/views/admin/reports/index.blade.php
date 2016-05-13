@@ -18,5 +18,9 @@
 				></report-setting>
 		</div>
 	</div>
+	<script>
+		$(document).ready(function(){
 
+		})
+	</script>
 @stop

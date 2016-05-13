@@ -25,7 +25,11 @@ class Booking extends Model
     }
     public function getBillingInfoAttribute($value)
     {
-        return $this->attributes['billing_info'] = json_decode($value,true);
+        return json_decode($value,true);
+    }
+    public function getDateRangeOfContractAttribute($value)
+    {
+        return json_decode($value,true);
     }
     public function getDateAttribute($value)
     {

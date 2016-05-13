@@ -228,7 +228,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
 
         //contract
         $contract = Contract::where('id',$input['contract_id'])->first();
-        $range_date = $this->createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
+        $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
 
         foreach($range_date as $date) {
             //check book yet
@@ -254,8 +254,9 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         }
 
         $total_price = 0;
-        $r= $this->calPriceForBooking($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member'],'contract');
         $price_extra = 0;
+        $r= calPriceForBooking($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member'],'contract');
+        if(is_array($input['extra_id']))
         foreach($input['extra_id'] as $item){
             foreach($contract['extras'] as $extra){
                 if($item == $extra['name'])
@@ -268,10 +269,23 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         }else {
             $total_price += $price_extra + $r['price'];
             return [
-                'success' => false,
+                'error' => false,
                 'total_price' => $total_price
             ];
         }
     }
     return ['error' => true,"messages"=>["Booking type invalid. Check all fill is full"]];
+}
+
+function createRangeDate($s,$e,$dayOfWeek){
+    $startDate =  new DateTime($s);
+    $endDate = new DateTime($e);
+
+    $range_date = [];
+    for($i = $startDate; $startDate <= $endDate; $i->modify('+1 day')){
+        $tmp_date = $i->format("Y-m-d");
+        if(date("N",strtotime($tmp_date)) == $dayOfWeek)
+            $range_date[] = $tmp_date;
+    }
+    return$range_date;
 }

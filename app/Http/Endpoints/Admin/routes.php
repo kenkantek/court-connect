@@ -75,7 +75,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
 
     Route::controller('reports', ReportController::class, [
         'getIndex' => 'reports.index',
-        'getData' => 'reports.listdata'
+        'getData' => 'reports.listdata',
+        'getDownload' => 'reports.download'
     ]);
 
 });

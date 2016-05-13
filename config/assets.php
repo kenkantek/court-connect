@@ -23,6 +23,7 @@ return [
             'admin',
             'apimap',
             'geocomplete',
+            'iCheck',
         ],
         'stylesheets' => [
             'bootstrap',
@@ -30,6 +31,7 @@ return [
             'ionicons',
             'pace',
             'toastr',
+            'iCheck',
         ],
     ],
     'auth' => [
@@ -337,6 +339,14 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'iCheck' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/iCheck/icheck.min.js',
+                    'cdn' => '',
+                ],
+            ],
 
             // End JS
         ],
@@ -549,6 +559,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => ['/resources/vendor/bootstrap-table/bootstrap-table.css'],
+                    'cdn' => '',
+                ],
+            ],
+            'iCheck' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => ['/resources/vendor/iCheck/all.css'],
                     'cdn' => '',
                 ],
             ],
