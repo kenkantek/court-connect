@@ -98,22 +98,27 @@
 
         _this.club.address = this.georesult.formatted_address;
 
-        _this.club.latitude = this.georesult.geometry.access_points[0].location.lat;
-        _this.club.longitude = this.georesult.geometry.access_points[0].location.lng;
+        _this.club.latitude = this.georesult.geometry.location.lat();
+        _this.club.longitude = this.georesult.geometry.location.lng();
 
              $.each(this.georesult.address_components, function(index, val) {
                 if (typeof val.types[0] != "undefined" ) {
                     if(val.types[0] == "locality"){
                         $("#form-newClub input[name=address]").val( val.long_name);
+                        _this.$set('club.city',val.long_name);
                     }
                     if(val.types[0] == 'administrative_area_level_1'){
                         $("#form-newClub input[name=administrative_area_level_1]").val(val.long_name);
+                        _this.$set('club.state',val.long_name);
                     }
                     if(val.types[0] == "postal_code"){
                         $("#form-newClub input[name=locality]").val(val.long_name);
+                        _this.$set('club.zipcode',val.long_name);
+
                     }
                     if(val.types[0] == "country"){
                         $("#form-newClub input[name=postal_code]").val(val.short_name);
+                        _this.$set('club.country',val.long_name);
                     }
                 }
             });
@@ -183,11 +188,6 @@
             }
         },
         onSubmit(){
-            this.$set('club.address',$("#form-newClub input[name=address]").val());
-            this.$set('club.state',$("#form-newClub input[name=administrative_area_level_1]").val());
-            this.$set('club.city',$("#form-newClub input[name=locality]").val());
-            this.$set('club.zipcode',$("#form-newClub input[name=postal_code]").val());
-
             const club = this.club;
             this.submiting = true;
             this.$http.post(laroute.route('super.clubs.create'), club).then(res => {

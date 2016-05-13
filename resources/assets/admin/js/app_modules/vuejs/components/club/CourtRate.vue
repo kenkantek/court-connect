@@ -9,8 +9,8 @@
 		</h3>
 		<div class="pull-right">
 			<ul id="tabRate">
-				<li class="active" @click="setMember(1)">Members</li>
-				<li  @click="setMember(0)">Non/Members</li>
+				<li :class="{'active': dataRate.is_member == 1}"  @click="setMember(1)">Members</li>
+				<li :class="{'active': dataRate.is_member == 0}"  @click="setMember(0)">Non/Members</li>
 			</ul>
 		</div>
 		<div class="clearfix"></div>
