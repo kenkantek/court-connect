@@ -23,6 +23,7 @@ class Booking extends Model
     {
         $this->attributes['date'] = date('y-m-d', strtotime($value));
     }
+
     public function getBillingInfoAttribute($value)
     {
         return json_decode($value,true);
@@ -34,6 +35,10 @@ class Booking extends Model
     public function getDateAttribute($value)
     {
         return date('m/d/y', strtotime($value));
+    }
+    public function getCreatedAtAttribute($value)
+    {
+        return date('m-d-Y h:i:m', strtotime($value));
     }
 
     public function getLengthAttribute()

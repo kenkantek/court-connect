@@ -31,6 +31,9 @@ body{
     font-family: 'Source Sans Pro',sans-serif;
     font-size: 13px;
 }
+button,input,a{
+    outline: none !important;
+}
 .header {
     background: url(../images/header-bg.jpg) no-repeat top;
     height: 681px;
@@ -188,7 +191,6 @@ div.modal-body {
     color: #fff;
     font-size: 25px;
     font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
-    text-align: center;
     line-height: 2em
 }
 
@@ -435,6 +437,7 @@ h1 {
     color: #fff;
     border-radius: 0;
     outline: none;
+    min-width: 100%;
 }
 
 .form-icon {
@@ -759,7 +762,7 @@ a.ui-state-default.ui-state-highlight {
 
 /* Search page */
 #find-your-court{
-    height: 192px;
+    /*height: 192px;*/
     background-color: #373737;
     padding-top: 1px;
 }
@@ -772,6 +775,7 @@ a.ui-state-default.ui-state-highlight {
     background-color: #f2f2f2;
     text-align: left;
     padding: 10px;
+    margin-top: 20px;
 }
 .content .featured-blocks .price span{
     color: #63ac1e;
@@ -837,15 +841,18 @@ a.ui-state-default.ui-state-highlight {
 
 
 .content #show-results{
-    padding-top: 35px;
+    padding-top: 10px;
     padding-bottom: 22px;
     font-size: 14px;
-    color: #d7d7d7;
+    color: #A79B9B;
 }
 
 .content #show-results span{
-    color: #0f484d;
+    color: #000;
     font-weight: bold;
+}
+.content #show-results .pagination span{
+    color: #fff;
 }
 
 .content #search-results .club-block {
@@ -872,10 +879,16 @@ a.ui-state-default.ui-state-highlight {
 }
 .content #search-results .club-time {
     background-color: #dfdfdf;
+    padding-bottom: 5px;
 }
-
+.content #search-results .club-time .row-day{
+    display: block;
+    width: 100%;
+    padding: 5px 0px;
+}
 .content #search-results{
     color: #0f484d;
+    margin-top: 20px;
 }
 
 .content #search-results .information{
@@ -1180,11 +1193,10 @@ a.ui-state-default.ui-state-highlight {
     background-color: #fff;
     color: #000;
     text-align: center;
-    padding: 5px 0;
     border: 1px solid #d8d8d8;
     /* Position the tooltip text - see examples below! */
     position: absolute;
-    z-index: 1;
+    z-index: 9;
     padding: 10px;
 }
 
@@ -1243,7 +1255,6 @@ a.ui-state-default.ui-state-highlight {
     border: 1px solid #d8d8d8;
     margin: 0;
     max-height: 600px;
-    overflow-x: scroll;
 }
 .btn-booking-tennis{
     cursor: pointer;
@@ -1475,4 +1486,58 @@ a.ui-state-default.ui-state-highlight {
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
-/*# sourceMappingURL=home.css.map */
+
+/*search*/
+.city-autocomplete{
+    max-height: 500px;
+}
+.city-autocomplete .clubs .row .image{
+    float: left;
+    padding-right: 10px;
+}
+.city-autocomplete .clubs .row .image img{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+.city-autocomplete .clubs .row .text .address{
+    color: #aaa;
+}
+.time-kicker .irs-slider{
+    background: url(../images/balltime_05.png) top;
+    width: 20px;
+    height: 20px;
+}
+#mb-book-distance{
+    width: 300px;
+}
+.club-intro .viewmore{
+    font-size: 0.9em;
+    margin: 15px 0 10px 0;
+}
+.group-search-home-timepicker #search-timepicker:before{
+    content: "";
+}
+
+/*loader*/
+.loader {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 140px;
+    height: 140px;
+    background: url(../images/loading.gif) no-repeat;
+    background-size: 140px 140px;
+}
+.loader:before{
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.1);
+}

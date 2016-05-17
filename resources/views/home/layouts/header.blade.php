@@ -13,6 +13,6 @@
                 <a href="{{ route('home.index') }}" class="logo"><img src="{{ asset('resources/home/images/logo_02.png') }}" class="img-responsive logo" alt="logo"></a>
             </div>
            @include('home.layouts.menu')
-        </nav>        
+        </nav>
     </div>
 </div>

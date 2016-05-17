@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
+use App\Models\Player;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,12 +62,15 @@ class AuthController extends Controller
 
         $user              = new User;
         $user->facebook_id = $userfb->id;
-        $user->first_name  = $userfb->user['first_name'];
-        $user->last_name   = $userfb->user['last_name'];
+        $user->first_name  = $userfb->user['name'];
         $user->email       = $userfb->user['email'];
         $user->avatar      = $userfb->avatar;
-        //$user->active      = 1;
         $user->save();
+
+        $player = new Player();
+        $player->user_id = $user->id;
+        $player->save();
+
 
         Auth::login($user);
         return redirect()->route('home.index');

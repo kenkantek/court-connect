@@ -51,7 +51,7 @@
 <!--End Content-->
 
 <!--Footer-->
-<div class="row club">
+<div class="club">
     <div class="container">
         <div class="col-md-8">
             <p style="color: #eaffd6; font-family: RobotoThin, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 22px">
@@ -61,7 +61,7 @@
                 This is Photoshop's version of auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.
                 Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. </p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 text-center">
             <a href="#" class="btn btn-club">Find Out More</a>
         </div>
     </div>

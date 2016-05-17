@@ -24,6 +24,7 @@ return [
             'apimap',
             'geocomplete',
             'iCheck',
+            'mCustomScrollbar'
         ],
         'stylesheets' => [
             'bootstrap',
@@ -32,6 +33,7 @@ return [
             'pace',
             'toastr',
             'iCheck',
+            'mCustomScrollbar'
         ],
     ],
     'auth' => [
@@ -69,7 +71,7 @@ return [
             'home',
             //'moment',
             //'datetimepicker',
-            'home'
+            'mCustomScrollbar'
         ],
         'stylesheets' => [
             'bootstrap',
@@ -79,7 +81,8 @@ return [
             'ionslider',
             'autocomplete',
             'select2',
-            'datetimepicker'
+            'datetimepicker',
+            'mCustomScrollbar'
         ],
     ],
     'resources' => [
@@ -347,6 +350,15 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'mCustomScrollbar' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
+                    'cdn' => '',
+                ],
+            ],
+
 
             // End JS
         ],
@@ -567,6 +579,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => ['/resources/vendor/iCheck/all.css'],
+                    'cdn' => '',
+                ],
+            ],
+            'mCustomScrollbar' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => ['/resources/vendor/mCustomScrollbar/jquery.mCustomScrollbar.css'],
                     'cdn' => '',
                 ],
             ],

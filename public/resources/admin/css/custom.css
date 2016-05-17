@@ -3,7 +3,6 @@
 }
 .courtbox{
     margin-bottom: 20px;
-    margin-top: 20px;
 }
 .court_new table{
     width: 100%;
@@ -782,4 +781,7 @@ table .arrow{
 }
 #day-view-content .loading{
     position: fixed;
+}
+.content-wrapper .box.box-primary{
+    border-top: 0px;
 }

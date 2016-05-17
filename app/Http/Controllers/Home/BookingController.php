@@ -46,7 +46,7 @@ class BookingController extends Controller
                 $errors[] = "Not found data";
             }
         }
-        return view('home.booking.checkout',compact('request','court'));
+        return view('home.bookings.checkout',compact('request','court'));
     }
 
     //post checkOut
@@ -277,7 +277,7 @@ class BookingController extends Controller
         }
         $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
         $booking['billing_info'] = json_decode($booking['billing_info']);
-        $document = view('home.booking.print_confirmation',compact('booking'));
+        $document = view('home.bookings.print_confirmation',compact('booking'));
         return response()->json([
             'error' => true,
             'data' =>$document
@@ -295,7 +295,7 @@ class BookingController extends Controller
 
         try{
             $data['booking'] = $booking;
-            Mail::send('home.booking.print_confirmation',$data, function($message) use ($booking)
+            Mail::send('home.bookings.print_confirmation',$data, function($message) use ($booking)
             {
                 $message->to($booking['billing_info']->email, 'John Smith')->subject('Court Connect: Order');
             });

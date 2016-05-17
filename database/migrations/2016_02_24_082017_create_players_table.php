@@ -14,28 +14,9 @@ class CreatePlayersTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned();
 			$table->string('surname', 100);
-<<<<<<< .mine
-
-
-
-
-
-
-
-
-=======
-			$table->string('facebook', 120);
-			$table->string('google', 120);
-			$table->string('country')->nullable();
-      $table->float('longitude')->nullable();
-      $table->float('latitude')->nullable();
-			$table->tinyInteger('gender');
-			$table->string('facebook_id')->nullable();
-			$table->string('avatar')->default('uploads/images/users/no-avatar.png');
->>>>>>> .theirs
-			$table->tinyInteger('receive_discount_offers');
-			$table->integer('tenis_level')->unsigned();
-			$table->tinyInteger('is_recive_notification')->unsigned();
+			$table->tinyInteger('receive_discount_offers')->default(0);
+			$table->tinyInteger('tenis_level')->default(0);
+			$table->tinyInteger('is_receive_notification')->default(0);
 			$table->rememberToken();
 			$table->timestamps();
 

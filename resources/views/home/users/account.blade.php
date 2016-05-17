@@ -33,7 +33,7 @@
                                 <tr class="booking-row booking-row-{{$booking->id}}" style="height: 150px">
                                     <td>
                                         <div class="col-md-4">
-                                            <img src="{{ asset('resources/home/images/club-avatar.jpg') }}" class="img-circle" alt="{!! $booking->name !!}" width="58" height="58">
+                                            <img src="{{ asset($booking->club_image) }}" class="img-circle" alt="{!! $booking->name !!}" width="58" height="58">
                                         </div>
                                         <div class="col-md-8">
                                             <p>
@@ -59,8 +59,8 @@
                                         <div>{{date('l jS F Y', strtotime($booking->date))}}</div>
                                         <div>at {{($booking->hour <=12 ? str_replace(".5",":30",$booking->hour)."am" : str_replace(".5",":30",($booking->hour - 12))."pm") }}</div>
                                         <div>for {{$booking->hour_length}} Hour</div>
-                                        <hr style="width: 100%; margin: 10px 0px">
-                                        <div>Day trading: {{$booking->created_at}}</div>
+                                        {{--<hr style="width: 100%; margin: 10px 0px">--}}
+
                                     </td>
                                     <td>
                                         <div>
@@ -99,7 +99,7 @@
                                         else if(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
                                             echo "<div class='status-booking'>Status:<span>Expired</span></div>";
                                         else
-                                            echo "<div class='status-booking'>Status:<span>Pending</span></div>";
+                                            echo "<div class='status-booking'>Status:<span>Accept</span></div>";
                                         ?>
                                     </td>
                                 </tr>

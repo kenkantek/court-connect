@@ -43,11 +43,13 @@
 </head>
 <body>
 <div class="content-wrapper">
+    @if(!Request::is('/*'))
     @include('home.layouts.header')
+    @endif
     <div class="container-fluid">
         @yield('header')
         @yield('content')
-        <div class="row footer">
+        <div class="footer">
             <div class="container">
                 <div class="row">
                     <div class="col-md-7">
@@ -124,6 +126,23 @@
         @yield('javascript')
 
     </div>
+</div>
+<div class="loader hidden">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
 </div>
 </body>
 </html>

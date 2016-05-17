@@ -47,8 +47,10 @@ class SuperAdminController extends Controller
         } else {
             $club->image = '/uploads/images/clubs/no-image.jpg';
         }
-        $club->longitude = $request->input('longitude');
-        $club->latitude = $request->input('latitude');
+
+        $geo = get_lat_long($club->address);
+        $club->longitude = $geo['lng'];//$request->input('longitude');
+        $club->latitude = $geo['lat'];//$request->input('latitude');
         $club->country = $request->input('country');
         $club->save();
         return response([
@@ -69,6 +71,10 @@ class SuperAdminController extends Controller
             Image::make($request->input('image'))->save($path);
             $club->image = '/uploads/images/clubs/' . $filename;
         }
+        $geo = get_lat_long($club->address);
+        $club->longitude = $geo['lng'];//$request->input('longitude');
+        $club->latitude = $geo['lat'];//$request->input('latitude');
+
         $club->save();
         return response([
             'success_msg' => 'Club <b>' . $club->name . '</b> has been created!',

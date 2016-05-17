@@ -24,19 +24,19 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="state" class="col-sm-2 control-label">State</label>
-                <div class="col-sm-10">
-                    <input class="form-control" name="administrative_area_level_1" type="text" value="" v-model="club.state" >
-                </div>
-            </div>
-            <div class="form-group">
                 <label for="city" class="col-sm-2 control-label">City</label>
                 <div class="col-sm-10">
                     <input class="form-control" name="locality" type="text" value="" v-model="club.city">
                 </div>
             </div>
             <div class="form-group">
-                <label for="zipcode" class="col-sm-2 control-label">Zipcode</label>
+                <label for="state" class="col-sm-2 control-label">State</label>
+                <div class="col-sm-10">
+                    <input class="form-control" name="administrative_area_level_1" type="text" value="" v-model="club.state" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="zipcode" class="col-sm-2 control-label">Zip</label>
                 <div class="col-sm-10">
                     <input class="form-control" name="postal_code" type="text" value="" v-model="club.zipcode">
                 </div>
@@ -97,7 +97,6 @@
             var _this = this;
 
         _this.club.address = this.georesult.formatted_address;
-
         _this.club.latitude = this.georesult.geometry.location.lat();
         _this.club.longitude = this.georesult.geometry.location.lng();
 

@@ -2,15 +2,18 @@
     <div id="find-your-court">
         <h3 class="text-center">Find Your Court</h3>
         <div class="container">
+            {!!  Form::open(array('route' => 'home.search','method' => 'post')) !!}
             <div class="row">
-                {!!  Form::open(array('route' => 'home.search','method' => 'get')) !!}
                 <div class="form-group col-md-3 form-icon">
                     <i class="fa fa-map-marker"></i>
-                    {!! Form::text('s_name', $request->input('s_name'), ['id' => 'q', 'class' => 'form-control', 'autocomplete' => 'off', 'data-country' => 'us', 'placeholder' => 'Seach by Zip/Address or Club Name'] ) !!}
+                    {!! Form::text('s_name', $request->input('s_name'), ['id' => 'q', 'class' => 'form-control', 'autocomplete' => 'off',
+                     'data-country' => 'us', 'placeholder' => 'Search by Zip/Address or Club Name', 'required' => 'required',
+                     'oninvalid' => "this.setCustomValidity('A location is required')", 'oninput' =>"setCustomValidity('')"
+                     ] ) !!}
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i class="fa fa-calendar"></i>
-                    <input type="text" class="form-control" name="date" id="datepicker" placeholder="Date">
+                    <input type="text" class="form-control" name="date" value="{!! $request->input('date') !!}" id="datepicker" placeholder="Date">
                     <p align="center"
                        style="color: white; font-family: RobotoLight, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 13px; margin-top: 5px">
                     </p>
@@ -18,38 +21,39 @@
                         <span id="calendar-switch-header">Select the days of the week<br/>you'd like to book</span>
                         <div id="day-of-week">
                             <div class="checkbox">
+                                <?php $dayOfWeek = $request->input('dayOfWeek') ? $request->input('dayOfWeek') : []; ?>
                                 <div class="col-md-6">
-                                    <label class="checkbox-inline"><input type="checkbox" value="" id="mondays">Mondays</label>
+                                    <label class="checkbox-inline">{!! Form::checkbox('dayOfWeek[]', '1', in_array(1,$dayOfWeek) ? true : false) !!}Mondays</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="checkbox-inline"><input type="checkbox" value="" id="saturdays">Saturdays</label>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="checkbox">
-                                <div class="col-md-6">
-                                    <label class="checkbox-inline"><input type="checkbox" value="" id="tuesdays">Tuesday</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="checkbox-inline"><input type="checkbox" value="" id="sundays">Sundays</label>
+                                    <label class="checkbox-inline">{!! Form::checkbox('dayOfWeek[]', '6', in_array(6,$dayOfWeek) ? true : false) !!}Saturdays</label>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="checkbox">
                                 <div class="col-md-6">
-                                    <label><input type="checkbox" value="" id="wednesdays">Wednesdays</label>
+                                    <label class="checkbox-inline">{!! Form::checkbox('dayOfWeek[]', '2', in_array(2,$dayOfWeek) ? true : false) !!}Tuesdays</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="checkbox-inline">{!! Form::checkbox('dayOfWeek[]', '7', in_array(7,$dayOfWeek) ? true : false) !!}Sundays</label>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="checkbox">
                                 <div class="col-md-6">
-                                    <label><input type="checkbox" value="" id="thursdays">Thursdays</label>
+                                    <label class="checkbox-inline">{!! Form::checkbox('dayOfWeek[]', '3', in_array(3,$dayOfWeek) ? true : false) !!}Wednesdays</label>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="checkbox">
                                 <div class="col-md-6">
-                                    <label><input type="checkbox" value="" id="fridays">Fridays</label>
+                                    <label class="checkbox-inline">{!! Form::checkbox('dayOfWeek[]', '4', in_array(4,$dayOfWeek) ? true : false) !!}Thursdays</label>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="checkbox">
+                                <div class="col-md-6">
+                                    <label class="checkbox-inline">{!! Form::checkbox('dayOfWeek[]', '5', in_array(5,$dayOfWeek) ? true : false) !!}Fridays</label>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -61,28 +65,28 @@
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i class="glyphicon glyphicon-time"></i>
-                    {!! Form::time('s_time', $request->input('search-time'), ['id'=>'search-timepicker','class' => 'form-control'] ) !!}
+                    {!! Form::time('s_time', $request->input('s_time'), ['id'=>'search-timepicker','class' => 'form-control'] ) !!}
                     <div class="search-tooltip hidden">
                         <div class="tooltiptext">
                             <div >
                                 <label for="opentime">Start Time</label>
-                                {!! Form::time('search-time', $request->input('search-time'), ['class' => 'form-control search-time'] ) !!}
+                                {!! Form::time('search-time', $request->input('s_time'), ['class' => 'form-control search-time','id'=>'cc-input-search-time'] ) !!}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-2 form-icon">
+                <div class="form-group col-md-2 form-icon time-kicker">
                     <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" data-from="{!! $request->input('mb-book-in-hour') !!}">
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::select('court',[1,2,3,4],old('court'),['id'=>'inputID','class' => 'form-control','style'=>'text-align-last:center; ']) !!}
+                    {!! Form::selectRange('court',1,4,$request->input('court'),['id'=>'inputID','class' => 'form-control','style'=>'text-align-last:center; ']) !!}
                 </div>
                 <div class="form-group col-md-1">
                     <button type="submit" class="btn btn-search">SEARCH</button>
                 </div>
             </div>
-            <div class="row" style="color:#fff; margin-top: 40px;">
+            <div class="row" style="color:#fff; margin: 20px 0 10px 0;">
                 <div class="form-group col-md-5">
                     <span style="padding-right: 20px">Court Type: </span>
                     <?php $surface_arr = $request->input('surface_id') ? $request->input('surface_id') : []; ?>
@@ -93,7 +97,10 @@
                     <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '5', in_array(5,$surface_arr) ? true : false) !!}Carpet</label>
                 </div>
                 <div class="form-group col-md-7">
-                    <span>Distance</span>
+                    <span style="float: left; padding-right: 20px">Distance</span>
+                    <div class="form-icon time-kicker" style="float: left; width: 200px; margin-top: -17px">
+                        <input id="mb-book-distance" class="ionslider" type="text" name="mb-book-distance" data-from="{!! $request->input('mb-book-distance') !!}">
+                    </div>
                 </div>
             </div>
             {!! Form::close() !!}

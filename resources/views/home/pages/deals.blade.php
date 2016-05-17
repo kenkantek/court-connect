@@ -19,11 +19,11 @@
                                     {!! $deal->club_name !!}
                                 </div>
                                 <div class="caption location-carousel">
-                                    {!! $deal->address !!}
+                                    {!! $deal->city.", ".$deal->state !!}
                                 </div>
                                 <hr>
                                 <div class="caption datetime-carousel">
-                                    <i class="glyphicon glyphicon-calendar"></i> {{date('jS F Y', strtotime($deal->date))}} &nbsp;
+                                    <i class="glyphicon glyphicon-calendar"></i> {{date('F jS Y', strtotime($deal->date))}} &nbsp;
                                     <i class="glyphicon glyphicon-time"></i>
                                     {{$deal->hour <=12 ? str_replace(".5",":30",$deal->hour)."am" : str_replace(".5",":30",($deal->hour - 12))."pm"}} -
                                     {{$deal->hour + $deal->hour_length <=12 ? str_replace(".5",":30",$deal->hour + $deal->hour_length)."am" : str_replace(".5",":30",($deal->hour + $deal->hour_length- 12))."pm"}}

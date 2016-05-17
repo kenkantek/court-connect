@@ -1,4 +1,5 @@
 $(function () {
+    var key_googleapi = "AIzaSyC4Bb68mvFmien-T9YQXJfuNpCLFJw4bic";
     if($('#q').length)
         $('#q').cityAutocomplete();
 
@@ -78,17 +79,40 @@ $(function () {
         $("#saturdays").val($.datepicker.formatDate('mm/dd/yy', new Date(saturdayOfWeek)));
         $("#sundays").val($.datepicker.formatDate('mm/dd/yy', new Date(sundayOfWeek)));
     }
-    loadDayOfWeek();
+    //loadDayOfWeek();
 
     var dateNow = new Date();
-    console.log(dateNow);
+
     $('#datepicker').datetimepicker({
         minDate: 0,
-        maxDate: "+1M +10D",
+        //maxDate: "+1M +10D",
         showTimepicker: false,
         showButtonPanel: true,
         format: 'mm/dd/yy',
+        nextText: "abc",
         beforeShow: function (input) {
+            setTimeout(function () {
+                var buttonPane = $(input)
+                    .datepicker("widget")
+                    .find(".ui-datepicker-buttonpane");
+
+                var btn = $('<div style="padding: 0 15px 10px 15px"><button class="btn btn-search" style="width:100%; font-size:12px;padding:0;" type="button">Switch To Contract Time Bookings</button></div>');
+                btn.unbind("click")
+                    .bind("click", function (e) {
+                        $("#datepicker").datepicker( "hide" );
+                        $("#calendar-switch").css({
+                            top: 38,
+                            left: 15
+                        })
+                        $("#calendar-switch").show();
+                        e.stopPropagation();
+                    });
+
+                buttonPane.replaceWith(btn);
+
+            }, 1);
+        },
+        onChangeMonthYear: function(input) {
             setTimeout(function () {
                 var buttonPane = $(input)
                     .datepicker("widget")
@@ -115,12 +139,6 @@ $(function () {
         }
     }).datepicker('setDate', dateNow);
 
-    //set time search time
-    $("#search-timepicker").val($(".search-time").val());
-    $(".search-time").change(function(){
-        $("#search-timepicker").val($(this).val());
-    })
-
     $("#calendar-switch").click(function(e){
         e.stopPropagation();
     });
@@ -128,15 +146,15 @@ $(function () {
         $("#calendar-switch").hide();
     })
     $('#calendar-switch input[type="checkbox"]').click(function(e){
-        //$('#calendar-switch input[type="checkbox"]').not(this).prop( "checked", false ).parent().css("color", "#999999");
-
-        if($(this).is(':checked')){
-            $(this).parent().css("color", "#63ac1e");
-            $('#datepicker').datepicker("setDate", new Date($(this).val()));
-            //$("#calendar-switch").hide();
-        }else{
-            $(this).parent().css("color", "#999999");
-        }
+        ////$('#calendar-switch input[type="checkbox"]').not(this).prop( "checked", false ).parent().css("color", "#999999");
+        //
+        //if($(this).is(':checked')){
+        //    $(this).parent().css("color", "#63ac1e");
+        //    $('#datepicker').datepicker("setDate", new Date($(this).val()));
+        //    //$("#calendar-switch").hide();
+        //}else{
+        //    $(this).parent().css("color", "#999999");
+        //}
     });
     $("#calendar-switch-button").click(function(e){
         $("#calendar-switch").fadeOut("slow");
@@ -146,6 +164,7 @@ $(function () {
     $("#search-timepicker").click(function(){
         $(".search-tooltip").toggleClass('hidden');
     })
+
     $("#mb-book-in-hour").ionRangeSlider({
         min: 1,
         max: 7,
@@ -153,6 +172,18 @@ $(function () {
         step: 1,
         grid: true,
         postfix: " Hour",
+        prettify: false,
+        hasGrid: false,
+        hideMinMax: false,
+    });
+
+    $("#mb-book-distance").ionRangeSlider({
+        min: 1,
+        max: 20,
+        type: 'single',
+        step: 1,
+        grid: true,
+        postfix: " miles",
         prettify: false,
         hasGrid: false,
         hideMinMax: false,
@@ -166,8 +197,8 @@ $(function () {
                 success: function( data ) {
                     response( $.map( data, function( item ) {
                         return {
-                            label: item.value, // john
-                            value: item.type + "|" + item.value // user|john
+                            label: item.value,
+                            value: item.type + "|" + item.value,
                         }
                     }));
                 }
@@ -176,6 +207,38 @@ $(function () {
         minLength: 3,
         select: function(event, ui) {
             $('#q').val(ui.item.value);
+        }
+    });
+
+    $('.city-autocomplete, .content-view-more-court').mCustomScrollbar({
+        axis: "y",
+        theme: "dark"
+    });
+
+    // set time current
+    var timeNow = new Date();
+    var hours   = timeNow.getHours();
+    var minutes = timeNow.getMinutes();
+    if(minutes <= 30) minutes = 30;
+    else{
+        hours +=1;
+        minutes = "00";
+    }
+    $("#cc-input-search-time").val((hours<10?"0"+hours:hours)+":"+minutes);
+    $("#search-timepicker").val($("#cc-input-search-time").val());
+    $("#cc-input-search-time").change(function(){
+        $("#search-timepicker").val($(this).val());
+    })
+
+    //validate time search
+    $("#cc-search-form").on('submit',function(e){
+        timeNow = new Date();
+        var dateInput = $("input[name=date]").val().split("/");
+        var timeInput = $("input[name=s_time]").val().split(":");
+        var tmp_date = new Date(dateInput[2], dateInput[0] - 1, dateInput[1],timeInput[0], timeInput[1]);
+        if(tmp_date.getTime() < timeNow.getTime()){
+            alert("Date or time can't less than current time!");
+            e.preventDefault();
         }
     });
 
@@ -188,11 +251,11 @@ $(function () {
         else zipcode = $("input[name=zipcode]").val();
         console.log(zipcode);
         $.ajax({
-            url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode+"&sensor=false",
+            url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode+"&sensor=false&key=".key_googleapi,
             method: "post",
             success:function(data){
-                $("input[name=state], #input-state").val(data.results[0].address_components[2].long_name);
-                $("input[name=city], #input-city").val(data.results[0].address_components[3].long_name);
+                $("input[name=state], #input-state").val(data.results[0].address_components[3].long_name);
+                $("input[name=city], #input-city").val(data.results[0].address_components[1].long_name);
             }
         });
     });
@@ -220,5 +283,9 @@ $(function () {
     //
     $("body").on('click','.btn-booking-tennis.disabled',function(e){
         e.preventDefault();
+    })
+
+    $("#cc-search-form").submit(function(e){
+        $(".loader").toggleClass('hidden');
     })
 });

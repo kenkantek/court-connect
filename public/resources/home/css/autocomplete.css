@@ -26,13 +26,13 @@
 .city-autocomplete div.row-city:before{
     content: 'City';
     display: inline-block;
-    color: #ddd;
+    color: #aaa;
     padding-right: 10px;
 }
 .city-autocomplete div.row-state:before{
     content: 'State';
     display: inline-block;
-    color: #ddd;
+    color: #aaa;
     padding-right: 10px;
 }
 

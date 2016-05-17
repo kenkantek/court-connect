@@ -7,9 +7,14 @@
         <div class="container content">
             <div class="instruction">
                 <h2><span>Checkout</span></h2>
-
+                <?php
+                    $date_booking = date_create($request->input('date'));
+                    $intpart = floor($request->input('hour_start'));
+                    $fraction = $request->input('hour_start') - $intpart;
+                    date_time_set($date_booking, $intpart, $fraction);
+                ?>
                 <div class="container" id="form-checkout-wrapper">
-                    @if( strtotime('now') > strtotime($request->input('date')))
+                    @if( strtotime('now') > strtotime(date_format($date_booking, 'Y-m-d H:i:s')))
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <div>Warning. Date booking less than today!</div>
@@ -190,11 +195,11 @@
                                             <div class="form-group">
                                                 <div class="col-lg-5 col-md-5 text-left">
                                                     <label for="player-1-name">Player Name</label>
-                                                    <input class="form-control player_name" type="text" placeholder="Player Name"/>
+                                                    <input class="form-control player_name" value="{{Auth::user() ? Auth::user()->first_name ." ". Auth::user()->last_name: ""}}" type="text" placeholder="Player Name"/>
                                                 </div>
                                                 <div class="col-lg-7 col-md-7 text-left">
                                                     <label for="player-1-email">Player Email</label>
-                                                    <input class="form-control player_email" type="email" placeholder="Player Email"/>
+                                                    <input class="form-control player_email" value="{{Auth::user() ? Auth::user()->email: ""}}" type="email" placeholder="Player Email"/>
                                                 </div>
                                             </div>
                                         </div>

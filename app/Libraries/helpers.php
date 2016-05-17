@@ -26,6 +26,22 @@ function date_from_database($time, $format = 'Y-m-d')
     return format_time(Carbon::parse($time), $format);
 }
 
+function get_lat_long($address)
+{
+    $address = str_replace(" ", "+", $address);
+    $key = "AIzaSyC4Bb68mvFmien-T9YQXJfuNpCLFJw4bic";
+    $json = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=" . $address . "&key=" . $key);
+    $json = json_decode($json);
+    $lat="";
+    $long="";
+    if(isset($json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'}))
+    {
+        $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+        $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+    }
+    return ['lat' => round($lat,6), 'lng' => round($long,6)];
+}
+
 //get 12 deal
 function getDeals(){
     $deals = Deal::where('deals.date', '>=', date("Y-m-d"))
@@ -248,7 +264,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
                 ->first();
             if (!empty($check_book)) {
                 $err = "Please select another time or range date. ";
-                $err .= "Detail: Date ".$date." at ".$input['hour_start']. "hour - ".($input['hour_start'] + $input['hour_length'])."hour";
+                $err .= "Detail: Date " . $date . " at " . $input['hour_start'] . "hour - " . ($input['hour_start'] + $input['hour_length']) . "hour";
                 return ['error' => true, "messages" => [$err]];
             }
         }
@@ -256,7 +272,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         $total_price = 0;
         $price_extra = 0;
         $r= calPriceForBooking($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member'],'contract');
-        if(is_array($input['extra_id']))
+        if(isset($input['extra_id']) && is_array($input['extra_id']))
         foreach($input['extra_id'] as $item){
             foreach($contract['extras'] as $extra){
                 if($item == $extra['name'])

@@ -51,11 +51,11 @@
         <section class="sidebar">
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <li class="header"><strong>Content Management</strong></li>
-                <li>
+                <li class="header"><strong>Content Management {{Request::url()}}</strong></li>
+                <li {{ Request::is("sadmin") ? 'class="active"': '' }}>
                     <a href="/sadmin" data-toggle="tooltip" data-placement="right" title="Home"><i class="fa fa-home"></i></a>
                 </li>
-                <li>
+                <li {{ Request::is("/sadmin/booking/*") ? 'class="active"': '' }}>
                     <a href="{{ route('booking.index') }}" data-toggle="tooltip" data-placement="right" title="Booking"><i class="fa fa-book"></i></a>
                 </li>
                 <li>
@@ -82,7 +82,6 @@
     </aside>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" style="min-height: auto">
-
         <!-- Main content -->
         <section class="content">
             @yield('content')

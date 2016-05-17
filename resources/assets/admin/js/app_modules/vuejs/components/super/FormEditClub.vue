@@ -24,6 +24,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="city" class="col-sm-2 control-label">City</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="zipcode" placeholder="Enter zipcode club" v-model="club.city">
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="state" class="col-sm-2 control-label">State</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="zipcode" placeholder="Enter zipcode club" v-model="club.state">
@@ -31,13 +37,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="city" class="col-sm-2 control-label">City</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="zipcode" placeholder="Enter zipcode club" v-model="club.city">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="zipcode" class="col-sm-2 control-label">Zipcode</label>
+                <label for="zipcode" class="col-sm-2 control-label">Zip</label>
 
                 <div class="col-sm-10">
 
@@ -78,6 +78,7 @@
             formErrors: {},
             states: [],
             citys: [],
+            georesult:[],
         }
     },
     asyncData(resolve, reject) {
@@ -99,48 +100,54 @@
     },
     watch: {
         clubs_choice: function(){
+            $("#geocomplete").trigger("geocode");
              // $("#geocomplete").geocomplete({
              //      map: ".map_canvas",
              //      details: "form",
              //      types: ["geocode", "establishment"],
              //    })
             //this.fetchCitys();
+        },
+        georesult: function () {
+            console.log(this.georesult);
+            var _this = this;
+
+            _this.club.address = this.georesult.formatted_address;
+            _this.club.latitude = this.georesult.geometry.location.lat();
+            _this.club.longitude = this.georesult.geometry.location.lng();
+
+            $.each(this.georesult.address_components, function(index, val) {
+                if (typeof val.types[0] != "undefined" ) {
+                    if(val.types[0] == "locality"){
+                        $("#form-newClub input[name=address]").val( val.long_name);
+                        _this.$set('club.city',val.long_name);
+                    }
+                    if(val.types[0] == 'administrative_area_level_1'){
+                        $("#form-newClub input[name=administrative_area_level_1]").val(val.long_name);
+                        _this.$set('club.state',val.long_name);
+                    }
+                    if(val.types[0] == "postal_code"){
+                        $("#form-newClub input[name=locality]").val(val.long_name);
+                        _this.$set('club.zipcode',val.long_name);
+
+                    }
+                    if(val.types[0] == "country"){
+                        $("#form-newClub input[name=postal_code]").val(val.short_name);
+                        _this.$set('club.country',val.long_name);
+                    }
+                }
+            });
         }
     },
     ready() {
         var _this = this;
-        
         $("#geocomplete").geocomplete({
-          map: ".map_canvas",
-          details: "form",
-          types: ["geocode", "establishment"],
+            map: ".map_canvas",
+            details: "form",
+            types: ["geocode", "establishment"],
         }).bind("geocode:result", function(event, result){
-                if (typeof result.formatted_address != "undefined" ) { 
-                    _this.club.address = result.formatted_address;
-                }
-                if (typeof result.geometry.access_points[0] != "undefined" ) { 
-                     _this.club.latitude = result.geometry.access_points[0].location.lat;
-                    _this.club.longitude = result.geometry.access_points[0].location.lng;
-                }
-            
-             $.each(result.address_components, function(index, val) {
-                if (typeof val.types[0] != "undefined" ) {
-                      if( val.types[0] == "locality"){
-                        _this.club.city = val.long_name;
-                        }
-                        if(val.types[0] == 'administrative_area_level_1'){
-                            _this.club.state = val.long_name;
-                        }
-                        if(val.types[0] == "postal_code"){
-                            _this.club.zipcode = val.long_name;
-                        }
-                        if(val.types[0] == "country"){
-                            _this.club.country = val.long_name;
-                        }
-                }
-                
-            });
-          });
+            _this.georesult = result;
+        });
         $("#geocomplete").trigger("geocode");
     },
     methods: {

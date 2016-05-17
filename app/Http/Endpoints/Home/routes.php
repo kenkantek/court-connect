@@ -5,21 +5,21 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/', ['as' => 'home.index', 'uses' => 'HomeController@getIndex']);
 	Route::get('/error', ['as' => 'home.error', 'uses' => 'HomeController@getError']);
 
-	Route::get('search', ['as' => 'home.search', 'uses' => 'SearchController@getSearch']);
-	Route::post('search', ['as' => 'home.search', 'uses' => 'SearchController@postSearch']);
+	Route::get('search', ['as' => 'home.search', 'uses' => 'HomeController@getIndex']);
+	Route::post('search', ['as' => 'home.search', 'uses' => 'SearchController@search']);
 
 	Route::get('/deals', ['as' => 'home.deals', 'uses' => 'HomeController@getDeals']);
 
-	Route::get('signup', ['as' => 'home.signup', 'uses' => 'UserController@getSignUp']);
-	Route::post('signup', ['as' => 'home.signup', 'uses' => 'UserController@postSignUp']);
+	Route::get('signup', ['as' => 'home.signup', 'uses' => 'PlayerController@getSignUp']);
+	Route::post('signup', ['as' => 'home.signup', 'uses' => 'PlayerController@postSignUp']);
 
-	Route::get('view-profile', ['as' => 'home.acount', 'uses' => 'UserController@getAccount']);
-	Route::get('account', ['as' => 'home.acouunt', 'uses' => 'UserController@getAccount']);
-	Route::post('account', ['as' => 'home.account', 'uses' => 'UserController@updateAccount']);
+	Route::get('view-profile', ['as' => 'home.acount', 'uses' => 'PlayerController@getAccount']);
+	Route::get('account', ['as' => 'home.acouunt', 'uses' => 'PlayerController@getAccount']);
+	Route::post('account', ['as' => 'home.account', 'uses' => 'PlayerController@updateAccount']);
 	
-	Route::post('account/setting/password', ['as' => 'home.account.setting.password', 'uses' => 'UserController@updateSettingPassword']);
-	Route::post('account/setting/contact', ['as' => 'home.account.setting.contact', 'uses' => 'UserController@updateSettingContact']);
-	Route::post('account/setting/address', ['as' => 'home.account.setting.address', 'uses' => 'UserController@updateSettingAddress']);
+	Route::post('account/setting/password', ['as' => 'home.account.setting.password', 'uses' => 'PlayerController@updateSettingPassword']);
+	Route::post('account/setting/contact', ['as' => 'home.account.setting.contact', 'uses' => 'PlayerController@updateSettingContact']);
+	Route::post('account/setting/address', ['as' => 'home.account.setting.address', 'uses' => 'PlayerController@updateSettingAddress']);
 
 	Route::get('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@index']);
 	Route::post('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@postCheckout']);
@@ -31,7 +31,4 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('/cancel-booking', 'BookingController@cancelBooking');
 
 	Route::get('price', ['as' => 'home.send_mail', 'uses' => 'SearchController@checkPrice']);
-
-	Route::get('/paypal', ['as'=>'home','uses'=>'HomeController@paypal']);
-	Route::post('order-post', ['as'=>'order-post','uses'=>'HomeController@orderPost']);
 });
