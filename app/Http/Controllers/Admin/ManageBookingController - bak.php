@@ -9,6 +9,7 @@ use App\Models\Contexts\Court;
 use App\Models\Contract;
 use App\Models\CourtRate;
 use App\Models\Deal;
+use App\Models\Payments\Payment;
 use App\Models\Player;
 use App\Models\RefundTransaction;
 use App\Models\SetOpenDay;
@@ -19,6 +20,7 @@ use DB;
 use DateTime;
 use Illuminate\Http\Request;
 use Validator;
+use Cartalyst\Stripe\Exception\CardErrorException;
 use Exception;
 
 class ManageBookingController extends Controller
@@ -409,7 +411,6 @@ class ManageBookingController extends Controller
 
     }
 
-    //payment
     public function postPayment(Request $request){
         $fields_validate = [
             'type' => 'required',
@@ -423,24 +424,19 @@ class ManageBookingController extends Controller
         if(!empty($cc_info_payment->cost_adj)){
             $fields_validate['adj_reason'] = "required | min: 6";
         }
-        $v = \Validator::make((array) $cc_info_payment, $fields_validate);
+        $v = Validator::make((array) $cc_info_payment, $fields_validate);
 
-
+        //dd($request->input('payment'));
         if($v->fails())
         {
             return ['error' => true,"messages"=>$v->errors()->all()];
         }
 
         $inputBookingDetail = json_decode($request->input('infoBooking'));
-        $customerDetail = (array)json_decode($request->input('customer'));
+        $customerDetail = json_decode($request->input('customer'));
         $paymentDetail = json_decode($request->input('payment'));
 
-        $data_order['bookingDetail'] = [];
-        $data_order['paymentDetail'] = [];
-        $data_order['customerDetail'] = [];
-        $data_order['players'] = [];
-
-        $data_order['bookingDetail'] = [
+        $input = [
             'date'=> $inputBookingDetail->date,
             'type' => $inputBookingDetail->type,
             'contract_id' => $inputBookingDetail->contract_id,
@@ -450,49 +446,136 @@ class ManageBookingController extends Controller
             'hour_start'=> $inputBookingDetail->hour_start,
             'hour_length'=> $inputBookingDetail->hour_length,
             'court_id'=> $inputBookingDetail->court_id,
+            'club_id'=> $inputBookingDetail->club_id,
             'member'=> $inputBookingDetail->member
         ];
 
-        if($request->type && $request->type == 'contract'){
-            $data_order['bookingDetail']['type'] = 'contract';
-            $data_order['bookingDetail']['contract_id'] = $request->contract_id ? $request->contract_id :null;
-            $data_order['bookingDetail']['dayOfWeek'] = $request->dayOfWeek ? $request->dayOfWeek :null;
-        }
-
-        $expiry = explode("/", $paymentDetail->expiry);
-        $data_order['paymentDetail']=[
-            'number' => $paymentDetail->card_number,
-            'exp_month' => $expiry[0],
-            'exp_year' => $expiry[1],
-            'cvv' => $paymentDetail->cvv,
-            'cost_adj' => $paymentDetail->cost_adj,
-            'adj_reason' => $paymentDetail->adj_reason,
-        ];
-
-        $result_prices = getPriceForBooking($data_order['bookingDetail']); // get prices
-
+        $result_prices = getPriceForBooking($input);
         if(!$result_prices['error']) {
 
-            $data_order['customerDetail'] = $customerDetail;
+            $text_notes = ""; //notes
 
-//            $data_order['players']['names'] = $request->input('player_name') ? $request->input('player_name') : [];
-//            $data_order['players']['emails'] = $request->input('player_email') ? $request->input('player_email') : [];
-//            $data_order['players']['player_num'] = $request->input('player_num');
-            $data_order['players']['source'] = 0;
+            //check Cost Adjustment
+            if(!empty($cc_info_payment->cost_adj)){
+                $cc_info_payment->cost_adj = abs($cc_info_payment->cost_adj);
+                if($cc_info_payment->cost_adj > $result_prices['total_price']){
+                    return response()->json([
+                        'error' => true,
+                        "messages" => ['Cost Adjustment greater than total price']
+                    ]);
+                }else{
+                    $text_notes .= "Amount: $".$result_prices['total_price'];
+                    $text_notes .=" . Cost Adjustment: $".$cc_info_payment->cost_adj;
+                    $result_prices['total_price'] -= $cc_info_payment->cost_adj;
+                    $text_notes .=" . The remaining price: $".$result_prices['total_price'];
+                }
+            }
 
-            //call booking from helper
-            $booking = booking($data_order);
+            if ($inputBookingDetail->member == 1) {
+                $player_id = $customerDetail->player_id;
+                $billing_info = json_encode([]);
+            } else {
+                $player_id = 0;
+                $billing_info = $request->input('customer');
+            }
 
-            if(!$booking['error'])
+            $expiry = explode("/", $paymentDetail->expiry);
+            //stripe
+            try {
+                $token = Stripe::tokens()->create([
+                    'card' => [
+                        'number' => $paymentDetail->card_number,
+                        'exp_month' => $expiry[0],
+                        'exp_year' => $expiry[1],
+                        'cvv' => $paymentDetail->cvv,
+                    ],
+                ]);
+            } catch (CardErrorException $e) {
+                return ['error' => true, "messages" => [$e->getMessage()]];
+            }
+
+            $customer = Stripe::customers()->create([
+                'email' => $customerDetail->email,
+                'source' => $token['id'],
+            ]);
+
+            $charge = Stripe::charges()->create([
+                'customer' => $customer['id'],
+                'currency' => 'USD',
+                'amount' => $result_prices['total_price'],
+            ]);
+
+            $payment = Payment::create([
+                'user_id' => 0,
+                'card_number' => $paymentDetail->card_number,
+                'amount' => $request->input('total_price'),
+                'exp_month' => $expiry['0'],
+                'exp_year' => $expiry['1'],
+                'cvv' => $paymentDetail->cvv,
+                'stripe_transaction_id' => $charge['id'],
+            ]);
+
+            //save with type open
+            if($inputBookingDetail->type == 'open' || $inputBookingDetail->type == 'lesson') {
+                $booking = Booking::create([
+                    'payment_id' => $payment['id'],
+                    'type' => $inputBookingDetail->type,
+                    'date' => $inputBookingDetail->date,
+                    'status' => 'required',
+                    'status_booking' => 'create',
+                    'contract_id' => $inputBookingDetail->contract_id,
+                    'day_of_week' => is_numeric($inputBookingDetail->dayOfWeek) ? $inputBookingDetail->dayOfWeek : 0,
+                    'court_id' => $inputBookingDetail->court_id,
+                    'extra_id' => json_encode($inputBookingDetail->extra_id),
+                    'teacher_id' => is_numeric($inputBookingDetail->teacher_id) ? $inputBookingDetail->teacher_id : 0,
+                    'is_member' => $inputBookingDetail->member,
+                    'price_teacher' => $result_prices['price_teacher'] ? $result_prices['price_teacher'] : 0,
+                    'total_price' => $result_prices['total_price'],
+                    'hour' => $inputBookingDetail->hour_start,
+                    'hour_length' => $inputBookingDetail->hour_length,
+                    'player_id' => $player_id,
+                    'num_player' => $inputBookingDetail->num_player,
+                    'billing_info' => $billing_info,
+                    'payment_info' => $request->input('payment'),
+                    'source' => 1,
+                    'notes' => $text_notes
+                ]);
+                return [
+                    'error' => false,
+                    'payment_id' => $payment['id']
+                ];
+            }else if($inputBookingDetail->type == 'contract') { //save with type contract
+
+                $contract = Contract::where('id',$inputBookingDetail->contract_id)->first();
+                $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
+                foreach($range_date as $date) {
+                    $booking = Booking::create([
+                        'payment_id' => $payment['id'],
+                        'type' => $inputBookingDetail->type,
+                        'date' => $date,
+                        'date_range_of_contract' => json_encode(['from'=>$contract['start_date'],'to'=>$contract['end_date']]),
+                        'day_of_week' => is_numeric($inputBookingDetail->dayOfWeek) ? $inputBookingDetail->dayOfWeek : 0,
+                        'contract_id' => $inputBookingDetail->contract_id,
+                        'court_id' => $inputBookingDetail->court_id,
+                        'extra_id' => json_encode($inputBookingDetail->extra_id),
+                        'teacher_id' => is_numeric($inputBookingDetail->teacher_id) ? $inputBookingDetail->teacher_id : 0,
+                        'is_member' => $inputBookingDetail->member,
+                        'total_price' => $result_prices['total_price'],
+                        'hour' => $inputBookingDetail->hour_start,
+                        'hour_length' => $inputBookingDetail->hour_length,
+                        'player_id' => $player_id,
+                        'num_player' => $inputBookingDetail->num_player,
+                        'billing_info' => $billing_info,
+                        'payment_info' => $request->input('payment'),
+                        'source' => 1,
+                        'notes' => $text_notes
+                    ]);
+                }
+
                 return response()->json([
                     'error' => false,
-                    'total_price' => $booking['booking']['total_price'],
-                    'payment_id' => $booking['booking']['id']
-                ]);
-            else{
-                return response()->json([
-                    'error' => true,
-                    'messages' => $booking['messages'] ? $booking['messages'] : "An error occurred in the implementation process"
+                    'total_price' => $result_prices['total_price'],
+                    'payment_id' => $payment['id']
                 ]);
             }
 

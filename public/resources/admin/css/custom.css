@@ -785,3 +785,12 @@ table .arrow{
 .content-wrapper .box.box-primary{
     border-top: 0px;
 }
+#cc-confirm-delete{
+    background: #fff;
+    z-index: 3000000;
+    height: 150px;
+    top: 30%;
+}
+#cc-confirm-delete.in{
+    display: block !important;
+}

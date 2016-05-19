@@ -59,6 +59,7 @@ class PlayerController extends Controller
             ->join('clubs', 'clubs.id', '=', 'courts.club_id')
             ->where('player_id', Auth::user()->id)
             ->orderBy('created_at','desc')
+            ->groupBy('payment_id')
             ->get(['bookings.*','courts.name as court_name','clubs.id as club_id','clubs.image as club_image','clubs.name as club_name', 'clubs.address as club_address']);
         return view('home.users.account', compact('bookings'));
     }

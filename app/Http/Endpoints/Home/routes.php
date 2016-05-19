@@ -21,8 +21,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('account/setting/contact', ['as' => 'home.account.setting.contact', 'uses' => 'PlayerController@updateSettingContact']);
 	Route::post('account/setting/address', ['as' => 'home.account.setting.address', 'uses' => 'PlayerController@updateSettingAddress']);
 
-	Route::get('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@index']);
-	Route::post('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@postCheckout']);
+	Route::get('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@checkout']);
+	Route::post('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@postBooking']);
 	Route::post('print-confirmation', ['as' => 'home.print_confirmation', 'uses' => 'BookingController@printConfirmation']);
 	Route::post('send-mail', ['as' => 'home.send_mail', 'uses' => 'BookingController@sendMailOrder']);
 	Route::get('search/autocomplete', 'SearchController@autocomplete');

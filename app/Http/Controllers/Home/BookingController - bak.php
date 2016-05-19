@@ -58,9 +58,6 @@ class BookingController extends Controller
 
     //post checkOut
     public function postBooking(Request $request){
-
-        ini_set('max_execution_time', 300); // 5 miniute
-
         //return $_POST;
         $input_validate = [
             'date' => 'required',
@@ -90,45 +87,38 @@ class BookingController extends Controller
         if($v->fails())
             return response()->json(['error' => true,"messages"=>$v->errors()->all()]);
         else{
+            $input_customer = $request->input('customer');
+            unset($input_customer['password_confirmation']);
 
-            $data_order['bookingDetail'] = [];
-            $data_order['paymentDetail'] = [];
-            $data_order['customerDetail'] = [];
-            $data_order['players'] = [];
-
-            $data_order['bookingDetail'] = [
+            $input_booking = [
                 'date'=> $request->input('date'),
                 'type' => 'open',
                 'contract_id' => null,
-                'dayOfWeek' => null,
-                'extra_id' => null,
+                'dayOfWeek' => '',
+                'extra_id' => [],
                 'teacher_id' => null,
                 'hour_start'=> $request->input('hour_start'),
                 'hour_length'=> $request->input('hour_length'),
                 'court_id'=> $request->input('court'),
                 'member'=> 0
             ];
-
-            if($request->type && $request->type == 'contract'){
-                $data_order['bookingDetail']['type'] = 'contract';
-                $data_order['bookingDetail']['contract_id'] = $request->contract_id ? $request->contract_id :null;
-                $data_order['bookingDetail']['dayOfWeek'] = $request->dayOfWeek ? $request->dayOfWeek :null;
-            }
-
-            $expiry = explode("/", $request->input('payment.card-expiry'));
-            $data_order['paymentDetail']=[
-                'number'=> $request->input('payment.card-number'),
-                'exp_month' => $expiry['0'],
-                'exp_year' => $expiry['1'],
-                'cvv' => $request->input('payment.cvv'),
-            ];
-
-            $input_customer = $request->input('customer');
-            unset($input_customer['password_confirmation']);
-
-            $result_prices = getPriceForBooking($data_order['bookingDetail']); // get prices
+            $result_prices = getPriceForBooking($input_booking); // get prices
 
             if(isset($result_prices['error']) && !$result_prices['error']) {
+                $expiry = explode("/", $request->input('payment.card-expiry'));
+                //stripe check validate card
+                try {
+                    $token = Stripe::tokens()->create([
+                        'card' => [
+                            'number' => $request->input('payment.card-number'),
+                            'exp_month' => $expiry[0],
+                            'exp_year' => $expiry[1],
+                            'cvv' => $request->input('payment.cvv'),
+                        ],
+                    ]);
+                } catch (CardErrorException $e) {
+                    return response()->json(['error' => true, "messages" => [$e->getMessage()]]);
+                }
 
                 if($request->input('is_customer') == 0 && !Auth::check()){ //create user
                     $user = new User;
@@ -143,37 +133,58 @@ class BookingController extends Controller
                 }
                 unset($input_customer['password']);
 
+                // payment
+                $customer = Stripe::customers()->create([
+                    'email' => $input_customer['email'],
+                    'source' => $token['id'],
+                ]);
 
-                $data_order['customerDetail'] = $input_customer;
+                $charge = Stripe::charges()->create([
+                    'customer' => $customer['id'],
+                    'currency' => 'USD',
+                    'amount' => $result_prices['total_price'],
+                ]);
 
-                $data_order['players']['names'] = $request->input('player_name') ? $request->input('player_name') : [];
-                $data_order['players']['emails'] = $request->input('player_email') ? $request->input('player_email') : [];
-                $data_order['players']['player_num'] = $request->input('player_num');
-                $data_order['players']['source'] = 1;
+                $payment = Payment::create([
+                    'user_id' => $input_customer['player_id'],
+                    'card_number' => $request->input('payment.card-number'),
+                    'amount' => $result_prices['total_price'],
+                    'exp_month' => $expiry['0'],
+                    'exp_year' => $expiry['1'],
+                    'cvv' => $request->input('payment.cvv'),
+                    'stripe_transaction_id' => $charge['id'],
+                ]);
 
-                //call booking from helper
-                $booking = booking($data_order);
+                //save with type open
+                $booking = Booking::create([
+                    'payment_id' => $payment['id'],
+                    'type' => 'open',
+                    'status' => 'required',
+                    'status_booking' => 'create',
+                    'date' => $request->input('date'),
+                    'contract_id' => null,
+                    'day_of_week' => null,
+                    'court_id' => $request->input('court'),
+                    'extra_id' => json_encode([]),
+                    'teacher_id' => 0,
+                    'is_member' => 0,
+                    'total_price' => $result_prices['total_price'],
+                    'hour' => $request->input('hour_start'),
+                    'hour_length' => $request->input('hour_length'),
+                    'player_id' => $input_customer['player_id'],
+                    'num_player' => $request->input('player_num'),
+                    'players_info' => json_encode(['name'=>$request->input('player_name'),'email'=>$request->input('player_email')]),
+                    'billing_info' => json_encode($input_customer),
+                    'payment_info' => json_encode($request->input('payment')),
+                ]);
+                return response()->json([
+                    'error' => false,
+                    'payment_id' => $payment['id']
+                ]);
 
-                if(!$booking['error'])
-                    return response()->json([
-                        'error' => false,
-                        'payment_id' => $booking['booking']['id']
-                    ]);
-                else{
-                    return response()->json([
-                        'error' => true,
-                        'messages' => $booking['messages'] ? $booking['messages'] : "An error occurred in the implementation process"
-                    ]);
-                }
             }
             else{
-                $msg = "Error. Input invalid";
-                if(isset($result_prices['status']) && $result_prices['status'] == 'booking')
-                    $msg.= "This is is booked";
-                if(isset($result_prices['messages']) && is_array($result_prices['messages']))
-                    foreach($result_prices['messages'] as $message)
-                    $msg.= "<br>".$message;
-                return response()->json( ['error' => true, "messages" => [$msg]]);
+                return response()->json( ['error' => true, "messages" => ['Error. Input invalid'],'data'=>$result_prices]);
             }
         }
 
@@ -209,25 +220,12 @@ class BookingController extends Controller
             $fraction = $booking['hour'] - $intpart;
             date_time_set($date_booking, $intpart, $fraction);
 
-            if($booking['type'] == 'contract') {
-                $date_from = date_create($booking['date_range_of_contract']['from']);
-                date_time_set($date_from, $intpart, $fraction);
-
-                if (strtotime(date_format($date_from, 'Y-m-d H:i:s')) - strtotime("now") < 86400) // < 24hour
-                {
-                    return response()->json([
-                        'error' => true,
-                        'message' => 'A Reservation cannot be cancelled 24 hours before the booking time.'
-                    ]);
-                }
-            }else{
-                if (strtotime(date_format($date_booking, 'Y-m-d H:i:s')) - strtotime("now") < 86400) // < 24hour
-                {
-                    return response()->json([
-                        'error' => true,
-                        'message' => 'A Reservation cannot be cancelled 24 hours before the booking time.'
-                    ]);
-                }
+            if(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) - strtotime("now") < 86400) // < 24hour
+            {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'A Reservation cannot be cancelled 24 hours before the booking time.'
+                ]);
             }
         }
         return response()->json([
@@ -260,13 +258,7 @@ class BookingController extends Controller
                         'refund_id' => $refund['id'],
                         'amount' => $booking['payment']['amount']
                     ]);
-
-                    if($booking['type'] == 'contract') {
-                        $bookingContracts = Booking::where(['payment_id' => $booking['payment_id'], 'player_id' => Auth::user()->id])
-                            ->update(['status_booking'=>'cancel']);
-                    }else{
-                        $booking->update(['status_booking'=>'cancel']);
-                    }
+                    $booking->update(['status_booking'=>'cancel']);
                     return response()->json([
                         'error' => false,
                         'message' => 'Cancel success.'
@@ -293,7 +285,12 @@ class BookingController extends Controller
             return redirect('error');
         }
         $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
-        return view('home.bookings.print_confirmation',compact('booking'));
+        $booking['billing_info'] = json_decode($booking['billing_info']);
+        $document = view('home.bookings.print_confirmation',compact('booking'));
+        return response()->json([
+            'error' => true,
+            'data' =>$document
+        ]);
     }
 
     //send mail
@@ -303,6 +300,7 @@ class BookingController extends Controller
             return redirect('error');
         }
         $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
+        $booking['billing_info'] = json_decode($booking['billing_info']);
 
         try{
             $data['booking'] = $booking;
@@ -317,7 +315,7 @@ class BookingController extends Controller
         }catch(Exception $e){
             return response()->json([
                 'error' => true,
-                'message' => 'Error. Can"t send email. Mail not exist'
+                'message' => 'Error. Can"t send email'
             ]);
         }
     }

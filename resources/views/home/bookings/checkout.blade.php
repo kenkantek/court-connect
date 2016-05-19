@@ -7,6 +7,34 @@
         <div class="container content">
             <div class="instruction">
                 <h2><span>Checkout</span></h2>
+                @if($errors || $court->price['error'])
+                    <div class="alert alert-danger alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        @if($errors)
+                            <ul>
+                                @foreach($errors as $message)
+                                    <li>{{$message}}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            @if(isset($court->price['messages']))
+                                <ul>
+                                    @if(!is_array($court->price['messages']))
+                                        <li>{{$court->price['messages']}}</li>
+                                    @elseif(is_array($court->price['messages']))
+                                        @foreach($court->price['messages'] as $message)
+                                            <li>{{$message}}</li>
+                                        @endforeach
+                                    @endif
+                                </ul>
+                            @elseif(isset($court->price['status']))
+                                <ul>
+                                    <li>{{$court->price['status'] == "booking" ? "This was booked" : $court->price['status']}}</li>
+                                </ul>
+                            @endif
+                        @endif
+                    </div>
+                @else
                 <?php
                     $date_booking = date_create($request->input('date'));
                     $intpart = floor($request->input('hour_start'));
@@ -29,10 +57,10 @@
                     @if(!isset($court))
                         <h3 class="text-center">Can't found data</h3>
                     @else
-                        @if(isset($court['price']['status']))
+                        @if(isset($court['price']['messages']))
                             <div class="alert alert-danger alert-dismissible" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <div>This is {{$court['price']['status']}}</div>
+                                <div>This is {{$court['price']['messages']}}</div>
                             </div>
 
                         @else
@@ -45,6 +73,14 @@
                                 <input type="hidden" name="court" value="{{$request->input('court')}}">
                                 <input type="hidden" name="hour_start" value="{{$request->input('hour_start')}}">
                                 <input type="hidden" name="hour_length" value="{{$request->input('hour_length')}}">
+                                @if($request->dayOfWeek)
+                                    <input type="hidden" name="dayOfWeek" value="{{$request->input('dayOfWeek')}}">
+                                    <input type="hidden" name="type" value="contract">
+                                @endif
+                                @if($request->contract_id)
+                                    <input type="hidden" name="contract_id" value="{{$request->input('contract_id')}}">
+                                @endif
+
                                 @if(!Auth::check())
                                     <div class="nav nav-tabs text-left">
                                         <div class="active col-lg-6 col-md-6">
@@ -251,11 +287,11 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2">
                                                 <div class="payment-logo">
-                                                    <img src="resources/home/images/paypal-logo.jpg" class="img-responsive" alt="Paypal">
+                                                    <img src="resources/home/images/icon_payment_cash.png" class="img-responsive" alt="Cash">
                                                 </div>
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="payment[method]" value="paypal">Paypal
+                                                        <input type="radio" name="payment[method]" value="cash">Cash
                                                     </label>
                                                 </div>
                                             </div>
@@ -347,6 +383,8 @@
                         @endif
                     @endif
                 </div>
+
+                @endif
             </div>
         </div>
     </div>
@@ -421,7 +459,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function(){
-                        $("#form-checkout-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        $(".loader").removeClass('hidden');
                     },
                     success: function(result){
                         if(result.error){
@@ -433,13 +471,14 @@
                             msg += "</ul>";
                             $(".alert-message-box").removeClass('hide').find('.alert-content').html(msg);
                             $("#form-checkout-wrapper .loading").remove();
+                            $(".loader").addClass('hidden');
                         }else if(!result.error){
                             location.href = base_url + "/view-profile"
                         }
                     },
                     error: function(){
                         $(".alert-message-box").removeClass('hide').find('.alert-content').html("Error, Try again");
-                        $("#form-checkout-wrapper .loading").remove();
+                        $(".loader").addClass('hidden');
                     }
                 })
             })

@@ -86,6 +86,7 @@
         <section class="content">
             @yield('content')
         </section><!-- /.content -->
+
     </div><!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
@@ -93,6 +94,17 @@
         </div>
         <strong>Copyright &copy; 2016 Court Connect.</strong> All rights reserved.
     </footer>
+
+    <div id="cc-confirm-delete" class="modal hide fade">
+        <div class="modal-body">
+            Are you sure delete?
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="cc-submit-delete">Delete</button>
+            <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+        </div>
+    </div>
+
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Tab panes -->

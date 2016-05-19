@@ -15,12 +15,12 @@ class CreateBookingTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('type', ['open', 'contract','lesson']);
-            $table->integer('player_id')->unsigned();
+            $table->integer('player_id');
             $table->integer('payment_id')->unsigned();
             $table->enum('status', ['required', 'paid'])->default('required');
             $table->enum('status_booking', ['create', 'update','cancel'])->default('create');
             $table->date('date');
-            $table->integer('contract_id')->nullable();
+            $table->text('info_contract');
             $table->integer('day_of_week')->nullable();
             $table->integer('court_id')->unsigned();
             $table->text('extra_id')->nullable();

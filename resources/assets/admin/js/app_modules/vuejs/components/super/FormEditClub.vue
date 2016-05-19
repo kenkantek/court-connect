@@ -187,33 +187,43 @@
             }
         },
         deleteClub(){
+            var _this = this;
+            $('#cc-confirm-delete').modal({ backdrop: 'static', keyboard: false })
+                    .one('click', '#cc-submit-delete', function (e) {
+                        $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        const club = _this.club;
+                        _this.$http.delete(laroute.route('super.clubs.delete'), club).then(res => {
+                            showNotice('success', res.data.success_msg, 'Success!');
+                        _this.delete_club =  Math.floor(Math.random() * 10000);
+                        _this.$set('clubs_choice', null);
+                        },(res) => {
+                            showNotice('error', 'Error', 'Error!');
+                        });
+                        $("body .loading").remove();
+                    });
+
+        },
+        onSubmit(){
+            this.$set('club.state',this.club.state);
+            this.$set('club.city',this.club.city);
             const club = this.club;
-            this.$http.delete(laroute.route('super.clubs.delete'), club).then(res => {
+            this.submiting = true;
+            $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+            this.$http.put(laroute.route('super.clubs.edit'), club).then(res => {
+                this.submiting = false;
                 showNotice('success', res.data.success_msg, 'Success!');
-            this.delete_club =  Math.floor(Math.random() * 10000);
-            this.$set('clubs_choice', null);
-        },(res) => {
-            showNotice('error', 'Error', 'Error!');
-        });
-    },
-    onSubmit(){
-        this.$set('club.state',this.club.state);
-        this.$set('club.city',this.club.city);
-        const club = this.club;
-        this.submiting = true;
-        this.$http.put(laroute.route('super.clubs.edit'), club).then(res => {
-            this.submiting = false;
-        showNotice('success', res.data.success_msg, 'Success!');
-    }, (res) => {
-        this.formErrors = res.data;
-        this.submiting = false;
-        var msg = "";
-        $.each(res.data,function(k,v){
-            msg += "<div>"+v+"</div>";
-        });
-        showNotice('error', msg, 'Error!');
-    });
-    }
+                $("body .loading").remove();
+            }, (res) => {
+                this.formErrors = res.data;
+                this.submiting = false;
+                var msg = "";
+                $.each(res.data,function(k,v){
+                    msg += "<div>"+v+"</div>";
+                });
+                showNotice('error', msg, 'Error!');
+                $("body .loading").remove();
+            });
+        }
     }
     }
 </script>

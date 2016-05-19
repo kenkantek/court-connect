@@ -8,8 +8,11 @@ use App\Models\CourtRate;
 use App\Models\Deal;
 use App\Models\TimeUnavailable;
 use Carbon\Carbon;
+use Cartalyst\Stripe\Exception\CardErrorException;
+use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Payments\Payment;
 
 function format_time(DateTime $timestamp, $format = 'j M Y H:i')
 {
@@ -53,13 +56,13 @@ function getDeals(){
         ->join('courts','courts.id','=','deals.court_id')
         ->join('clubs','clubs.id','=','courts.club_id')
         ->orderBy('date','asc')
-        ->select(['deals.*','courts.name as court_name','clubs.name as club_name', 'clubs.address', 'clubs.image'])
+        ->select(['deals.*','courts.name as court_name','clubs.name as club_name', 'clubs.city', 'clubs.state', 'clubs.image'])
         ->limit(12)
         ->get();
     return $deals;
 }
 
-function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_member,$type = 'open'){
+function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_member,$type = 'open',$contract_id=0){
     $unavailable = TimeUnavailable::where(['date' => $date, 'court_id' => $court_id])
         ->where(function ($q) use($hour_start,$hour_length) {
             $q->orWhere('hour', $hour_start)
@@ -85,12 +88,18 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             ->first();
     }else if($type == "contract") {
         $court = Court::where('id',$court_id)->first();
-        $table_rate = Contract::where('start_date', '<=', $date)
+        $table_rate = Contract::where('id', $contract_id)
+            ->where('start_date', '<=', $date)
             ->where('end_date', '>=', $date)
             ->where('club_id', $court['club_id'])
             ->where('is_member', $is_member)
             ->orderBy('updated_at', 'DESC')
             ->first();
+        if(!$table_rate)
+            return [
+                'error' => true,
+                'status' => "Contract invalid"
+            ];
     }
     $deals = Deal::where('date',$date)->where('court_id',$court_id)
         ->orderBy('updated_at','asc')
@@ -151,8 +160,8 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
     ];
 }
 
-//caculator price and check is book
-function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id,club_id,contract_id,member]
+//caculator price and check was booked
+function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id,contract_id,member]
     if($input['type'] == 'open' || $input['type'] == 'lesson'){
         $messages = [
             'hour_start'    => 'The Select a Time field is required.',
@@ -224,9 +233,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             'hour_start'    => 'The Select a Time field is required.',
             'hour_length'    => 'The Select a Court field is required.',
             'court_id.exists'  => 'The selected court is invalid.',
-            'club_id.exists'      => 'The selected club is invalid.',
             'court_id.required'  => 'The selected court is invalid.',
-            'club_id.required'      => 'The selected club is invalid.',
         ];
         $v = Validator::make($input, [
             'contract_id' => 'required',
@@ -234,7 +241,6 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             'hour_start' => 'required',
             'hour_length' => 'required',
             'court_id' => 'required|exists:courts,id',
-            'club_id' => 'required|exists:clubs,id',
         ],$messages);
 
         if($v->fails())
@@ -242,8 +248,18 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             return ['error' => true,"messages"=>$v->errors()->all()];
         }
 
+        //court
+        $court = Court::where('id',$input['court_id'])->first();
+        if(!$court){
+            return ['error' => true,"messages"=>["Data invalid"]];
+        }
         //contract
-        $contract = Contract::where('id',$input['contract_id'])->first();
+        $contract = Contract::where(['id'=>$input['contract_id'],'club_id'=>$court['club_id']])->first();
+
+        if(!$contract){
+            return ['error' => true,"messages"=>"Data invalid"];
+        }
+
         $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
 
         foreach($range_date as $date) {
@@ -264,14 +280,14 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
                 ->first();
             if (!empty($check_book)) {
                 $err = "Please select another time or range date. ";
-                $err .= "Detail: Date " . $date . " at " . $input['hour_start'] . "hour - " . ($input['hour_start'] + $input['hour_length']) . "hour";
+                $err .= "Detail: Date " . $date . " at " . $input['hour_start'] . " - " . ($input['hour_start'] + $input['hour_length']) . "hour was booked";
                 return ['error' => true, "messages" => [$err]];
             }
         }
 
         $total_price = 0;
         $price_extra = 0;
-        $r= calPriceForBooking($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member'],'contract');
+        $r= calPriceForBooking($input['court_id'],$range_date[0],$input['hour_start'],$input['hour_length'],$input['member'],'contract',$contract['id']);
         if(isset($input['extra_id']) && is_array($input['extra_id']))
         foreach($input['extra_id'] as $item){
             foreach($contract['extras'] as $extra){
@@ -281,7 +297,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         }
 
         if($r['error']){
-            return ['error' => true,"status"=>$r['status']];
+            return ['error' => true,'messages'=>'Error',"status"=>isset($r['status']) ? $r['status'] : "Error. Contract not exist"];
         }else {
             $total_price += $price_extra + $r['price'];
             return [
@@ -293,6 +309,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
     return ['error' => true,"messages"=>["Booking type invalid. Check all fill is full"]];
 }
 
+//create range
 function createRangeDate($s,$e,$dayOfWeek){
     $startDate =  new DateTime($s);
     $endDate = new DateTime($e);
@@ -304,4 +321,162 @@ function createRangeDate($s,$e,$dayOfWeek){
             $range_date[] = $tmp_date;
     }
     return$range_date;
+}
+
+//order
+function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $input['customerDetail']
+
+    $input_get_price = [
+        'date'=> $input['bookingDetail']['date'],
+        'type' => $input['bookingDetail']['type'],
+        'contract_id' => $input['bookingDetail']['contract_id'],
+        'dayOfWeek' => $input['bookingDetail']['dayOfWeek'],
+        'teacher_id' => $input['bookingDetail']['teacher_id'],
+        'hour_start'=> $input['bookingDetail']['hour_start'],
+        'hour_length'=> $input['bookingDetail']['hour_length'],
+        'court_id'=> $input['bookingDetail']['court_id'],
+        'member'=> $input['bookingDetail']['member']
+    ];
+
+    $result_prices = getPriceForBooking($input_get_price);
+
+    if(!$result_prices['error']) {
+
+        $text_notes = ""; //notes
+
+        //check Cost Adjustment
+        if(isset($input['paymentDetail']['cost_adj']) && !empty($input['paymentDetail']['cost_adj'])){
+            $input['paymentDetail']['cost_adj'] = abs($input['paymentDetail']['cost_adj']);
+            if($input['paymentDetail']['cost_adj']> $result_prices['total_price']){
+                return [
+                    'error' => true,
+                    "messages" => ['Cost Adjustment greater than total price']
+                ];
+            }else{
+                $text_notes .= "Amount: $".$result_prices['total_price'];
+                $text_notes .=" . Cost Adjustment: $".$input['paymentDetail']['cost_adj'];
+                $result_prices['total_price'] -= $input['paymentDetail']['cost_adj'];
+                $text_notes .=" . The remaining price: $".$result_prices['total_price'];
+            }
+        }
+
+        if ($input['bookingDetail']['member'] == 1 && isset($input['bookingDetail']['player_id'])) {
+            $billing_info = [];
+        } else {
+            $billing_info = $input['customerDetail'];
+        }
+
+        //stripe
+        try {
+            $token = Stripe::tokens()->create([
+                'card' => $input['paymentDetail'],
+            ]);
+        } catch (CardErrorException $e) {
+            return ['error' => true, "messages" => [$e->getMessage()]];
+        }
+
+        try {
+            $customer_stripe = Stripe::customers()->create([
+                'email' => $input['customerDetail']['email'],
+                'source' => $token['id'],
+            ]);
+        } catch (CardErrorException $e) {
+            return ['error' => true, "messages" => [$e->getMessage()]];
+        }
+
+        try {
+            $charge = Stripe::charges()->create([
+                'customer' => $customer_stripe['id'],
+                'currency' => 'USD',
+                'amount' => $result_prices['total_price'],
+            ]);
+        } catch (CardErrorException $e) {
+            return ['error' => true, "messages" => [$e->getMessage()]];
+        }
+
+        $payment = Payment::create([
+            'card_number' => $input['paymentDetail']['number'],
+            'amount' => $result_prices['total_price'],
+            'exp_month' => $input['paymentDetail']['exp_month'],
+            'exp_year' => $input['paymentDetail']['exp_year'],
+            'cvv' => $input['paymentDetail']['cvv'],
+            'stripe_transaction_id' => $charge['id'],
+        ]);
+
+        //save with type open
+        if($input['bookingDetail']['type'] == 'open' || $input['bookingDetail']['type'] == 'lesson') {
+            $booking = Booking::create([
+                'payment_id' => $payment['id'],
+                'type' => $input['bookingDetail']['type'],
+                'date' => $input['bookingDetail']['date'],
+                'status' => 'required',
+                'status_booking' => 'create',
+                'day_of_week' => isset($input['bookingDetail']['dayOfWeek']) ? $input['bookingDetail']['dayOfWeek'] : null,
+                'court_id' => $input['bookingDetail']['court_id'],
+                'extra_id' => json_encode(isset($input['bookingDetail']['extra_id']) ? $input['bookingDetail']['extra_id'] : []),
+                'teacher_id' => $input['bookingDetail']['teacher_id'] ? $input['bookingDetail']['teacher_id'] : 0,
+                'is_member' => $input['bookingDetail']['member'],
+                'price_teacher' => isset($result_prices['price_teacher']) ? $result_prices['price_teacher'] : 0,
+                'total_price' => $result_prices['total_price'],
+                'hour' => $input['bookingDetail']['hour_start'],
+                'hour_length' => $input['bookingDetail']['hour_length'],
+                'player_id' => $input['customerDetail']['player_id'],
+                'num_player' => isset($input['players']['player_num']) ? $input['players']['player_num'] : null,
+                'billing_info' => json_encode($billing_info),
+                'payment_info' => json_encode($input['paymentDetail']),
+                'players_info' => json_encode(['name'=>isset($input['players']['names']) ? $input['players']['names']: [],
+                    'email'=>isset($input['players']['emails']) ? $input['players']['emails'] : [] ]),
+                'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
+                'notes' => isset($text_notes) ? $text_notes : null
+            ]);
+            return [
+                'error' => false,
+                'booking' => $booking
+            ];
+        }else if($input['bookingDetail']['type'] == 'contract') { //save with type contract
+
+            $contract = Contract::where('id',$input['bookingDetail']['contract_id'])->first();
+            $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['bookingDetail']['dayOfWeek']);
+
+            $booking = null;
+            foreach($range_date as $date) {
+                $booking = Booking::create([
+                    'payment_id' => $payment['id'],
+                    'type' => $input['bookingDetail']['type'],
+                    'date' => $date,
+                    'date_range_of_contract' => json_encode(['from'=>$contract['start_date'],'to'=>$contract['end_date']]),
+                    'status' => 'required',
+                    'status_booking' => 'create',
+                    'info_contract' => json_encode(['id'=>$contract['id'], 'start_date'=> $contract['start_date'],'end_date'=> $contract['end_date']]),
+                    'day_of_week' => isset($input['bookingDetail']['dayOfWeek']) ? $input['bookingDetail']['dayOfWeek'] : null,
+                    'court_id' => $input['bookingDetail']['court_id'],
+                    'extra_id' => json_encode(isset($input['bookingDetail']['extra_id']) ? $input['bookingDetail']['extra_id'] : []),
+                    'teacher_id' => $input['bookingDetail']['teacher_id'] ? $input['bookingDetail']['teacher_id'] : 0,
+                    'is_member' => $input['bookingDetail']['member'],
+                    'price_teacher' => isset($result_prices['price_teacher']) ? $result_prices['price_teacher'] : 0,
+                    'total_price' => $result_prices['total_price'],
+                    'hour' => $input['bookingDetail']['hour_start'],
+                    'hour_length' => $input['bookingDetail']['hour_length'],
+                    'player_id' => $input['customerDetail']['player_id'],
+                    'num_player' => isset($input['players']['player_num']) ? $input['players']['player_num'] : null,
+                    'billing_info' => json_encode($billing_info),
+                    'payment_info' => json_encode($input['paymentDetail']),
+                    'players_info' => json_encode(['name'=>isset($input['players']['names']) ? $input['players']['names']: [],
+                        'email'=>isset($input['players']['emails']) ? $input['players']['emails'] : [] ]),
+                    'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
+                    'notes' => isset($text_notes) ? $text_notes : null
+                ]);
+            }
+
+            return [
+                'error' => false,
+                'booking' => $booking
+            ];
+        }
+
+    }
+    return response()->json([
+        'error' => true,
+        "messages" => ['Error. Input invalid or it was booked']
+    ]);
 }

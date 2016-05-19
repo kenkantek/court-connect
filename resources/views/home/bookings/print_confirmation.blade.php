@@ -1,4 +1,14 @@
-<body>
+<?php
+$dayOfWeek = [
+        "1" => "Mondays",
+        "2" =>"Tuesdays",
+        "3"=>"Wednesdays",
+        "4"=>"Thursdays",
+        "5"=>"Fridays",
+        "6" => "Saturdays",
+        "7" => "Sundays"
+];
+?>
 <table width="650px" border="0" cellspacing="0" cellpadding="0" style="margin:10px auto">
     <tbody>
     <tr style="background: url({{ url("/")."/resources/home/images/header-bg.jpg"}}) ">
@@ -24,7 +34,7 @@
             <div style="line-height:18px;color:#333">
                 <h1 style="font-size:20px;font-weight:bold;color:#cc0000">Congratulations you have successfully ordered!</h1>
                     <span style="display:block;padding:10px 0">Hello
-                        <strong>{{$booking['billing_info']->first_name. " ". $booking['billing_info']->last_name}}</strong>,
+                        <strong>{{$booking['billing_info']['first_name']. " ". $booking['billing_info']['last_name']}}</strong>,
                     </span>
                     <span>
                         You placed an order with the following information:
@@ -47,11 +57,11 @@
                                     <tbody class="text">
                                     <tr>
                                         <td>Full name: </td>
-                                        <td>{{$booking['billing_info']->first_name. " ". $booking['billing_info']->last_name}}</td>
+                                        <td>{{$booking['billing_info']['first_name']. " ". $booking['billing_info']['last_name']}}</td>
                                     </tr>
                                     <tr>
                                         <td>Email: </td>
-                                        <td><a href="mailto: {{$booking['billing_info']->email}}" target="_blank">{{$booking['billing_info']->email}}</a></td>
+                                        <td><a href="mailto: {{$booking['billing_info']['email']}}" target="_blank">{{$booking['billing_info']['email']}}</a></td>
                                     </tr>
                                     <tr>
                                         <td>Reference: </td>
@@ -59,11 +69,11 @@
                                     </tr>
                                     <tr>
                                         <td>Phone: </td>
-                                        <td>{{$booking['billing_info']->phone}}</td>
+                                        <td>{{$booking['billing_info']['phone']}}</td>
                                     </tr>
                                     <tr>
                                         <td>Address: </td>
-                                        <td>{{$booking['billing_info']->address1}}</td>
+                                        <td>{{$booking['billing_info']['address1']}}</td>
                                     </tr>
                                     <tr>
                                         <td>Booking Time : </td>
@@ -121,10 +131,10 @@
                             <th scope="col" style="padding:5px">Cost</th>
                         </tr>
                         <tr>
-                            <td style="padding:5px 0;text-align:center">{{$booking['type']}}</td>
-                            <td style="padding:5px 0;text-align:right">{{$booking['date']}}</td>
-                            <td style="padding:5px 0;text-align:center">{{$booking['hour'] <=12 ? str_replace(".5",":30",$booking['hour'])."am" : str_replace(".5",":30",($booking['hour'] - 12))."pm"}} / {{$booking['hour_length']}}Hour</td>
-                            <td style="padding:5px 0;text-align:center">${{$booking['total_price']}}</td>
+                            <td style="padding:5px 0;">{{$booking['type']}}</td>
+                            <td style="padding:5px 0;">{{$booking['type'] == 'contract' ? $booking['date_range_of_contract']['from']." - ".$booking['date_range_of_contract']['to']." / ".$dayOfWeek[$booking['day_of_week']] : $booking['date']}}</td>
+                            <td style="padding:5px 0;">{{$booking['hour'] <=12 ? str_replace(".5",":30",$booking['hour'])."am" : str_replace(".5",":30",($booking['hour'] - 12))."pm"}} / {{$booking['hour_length']}}Hour</td>
+                            <td style="padding:5px 0;">${{$booking['total_price']}}</td>
                         </tr>
                         <tr align="center">
                             <td align="right" colspan="3" style="border-bottom:1px solid #eff0f4;padding:5px">Amount other</td>

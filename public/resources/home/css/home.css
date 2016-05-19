@@ -1428,7 +1428,7 @@ a.ui-state-default.ui-state-highlight {
 
 }
 .club-time-wrap {
-    padding:0 5px;
+    /*padding:0 5px;*/
 }
 .item-court {
     border: 1px solid #f0f0f0;
@@ -1521,7 +1521,7 @@ a.ui-state-default.ui-state-highlight {
 
 /*loader*/
 .loader {
-    position: absolute;
+    position: fixed;
     top: 0px;
     bottom: 0px;
     left: 0px;
@@ -1531,6 +1531,7 @@ a.ui-state-default.ui-state-highlight {
     height: 140px;
     background: url(../images/loading.gif) no-repeat;
     background-size: 140px 140px;
+    z-index: 9999;
 }
 .loader:before{
     content: '';
@@ -1540,4 +1541,12 @@ a.ui-state-default.ui-state-highlight {
     top: 0;
     left: 0;
     background: rgba(0,0,0,0.1);
+}
+.instruction .alert{
+    text-align: left;
+}
+@media screen and (min-width: 1170px) {
+    #search-results .content-left-info {
+        padding-right: 0px;
+    }
 }

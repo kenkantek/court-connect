@@ -7,7 +7,7 @@
             <div class="clearfix"></div>
             {{-- #search-results --}}
             <div class="row text-left clearfix" id="search-results">
-                <div class="col-md-8">
+                <div class="col-md-8 content-left-info">
                     {{-- #show-results --}}
                     <div class="text-left clearfix" id="show-results">
                         @if (isset($clubs) && count($clubs) > 0)
@@ -33,7 +33,7 @@
                     @endif
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 content-right-map">
                     <div id="map" style="min-height: 600px; margin-top: 30px"></div>
                 </div>
             </div>

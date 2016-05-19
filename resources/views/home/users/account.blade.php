@@ -49,17 +49,20 @@
                                             Reservation: #<span>{!! $booking->id !!}</span>
                                         </div>
                                         <div class="booking-type">
-                                            Booking type: {{$booking->type}}
+                                            Booking type: <strong>{{$booking->type}}</strong>
                                         </div>
                                         <div class="booking-price">
                                             Price: ${{$booking->total_price}}
                                         </div>
                                     </td>
                                     <td>
+                                        @if($booking->type == "contract")
+                                            <div style="font-weight: bold">Period: {{$booking->date_range_of_contract['from']." - ".$booking->date_range_of_contract['to']}}</div>
+                                        @else
                                         <div>{{date('l jS F Y', strtotime($booking->date))}}</div>
+                                        @endif
                                         <div>at {{($booking->hour <=12 ? str_replace(".5",":30",$booking->hour)."am" : str_replace(".5",":30",($booking->hour - 12))."pm") }}</div>
                                         <div>for {{$booking->hour_length}} Hour</div>
-                                        {{--<hr style="width: 100%; margin: 10px 0px">--}}
 
                                     </td>
                                     <td>
@@ -84,23 +87,45 @@
                                                 <span class="glyphicon glyphicon-menu-down"></span>
                                             </button>
                                             <ul class="cc-action-booking dropdown-menu" aria-labelledby="">
-                                                @if($booking->status_booking == 'cancel' || strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
+                                                @if($booking->type == 'contract')
+                                                    @if($booking->status_booking != 'cancel' || (strtotime(date_format(date_create($booking->date_range_of_contract['from']), 'Y-m-d H:i:s')) < strtotime("now") &&
+                                                    strtotime(date_format(date_create($booking->date_range_of_contract['to']), 'Y-m-d H:i:s')) > strtotime("now")))
+                                                        <li><a href="#" class="action-booking change-booking" data-booking="{{$booking->id}}">Change Booking</a></li>
+                                                        <li><a href="#" class="action-booking cancel-booking" data-booking="{{$booking->id}}">Cancel Booking</a></li>
+                                                    @else
+                                                    @endif
                                                 @else
-                                                    <li><a href="#" class="action-booking change-booking" data-booking="{{$booking->id}}">Change Booking</a></li>
-                                                    <li><a href="#" class="action-booking cancel-booking" data-booking="{{$booking->id}}">Cancel Booking</a></li>
+                                                    @if($booking->status_booking == 'cancel' || strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
+                                                    @else
+                                                        <li><a href="#" class="action-booking change-booking" data-booking="{{$booking->id}}">Change Booking</a></li>
+                                                        <li><a href="#" class="action-booking cancel-booking" data-booking="{{$booking->id}}">Cancel Booking</a></li>
+                                                    @endif
                                                 @endif
+
                                                 <li><a href="#" class="action-booking print-confirmation" data-booking="{{$booking->id}}">Print Confirmation</a></li>
                                                 <li><a href="#" class="action-booking send-mail" data-booking="{{$booking->id}}">Export to Outlook</a></li>
                                             </ul>
                                         </div>
-                                        <?php
-                                        if($booking->status_booking == 'cancel')
-                                            echo "<div class='status-booking'>Status:<span>Cancel</span></div>";
-                                        else if(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
-                                            echo "<div class='status-booking'>Status:<span>Expired</span></div>";
-                                        else
-                                            echo "<div class='status-booking'>Status:<span>Accept</span></div>";
-                                        ?>
+
+                                        @if($booking->type == 'contract')
+                                                @if($booking->status_booking == 'cancel')
+                                                    <div class='status-booking'>Status:<span>Cancel</span></div>
+                                                @elseif(strtotime(date_format(date_create($booking->date_range_of_contract['from']), 'Y-m-d H:i:s')) > strtotime("now") ||
+                                                (strtotime(date_format(date_create($booking->date_range_of_contract['from']), 'Y-m-d H:i:s')) < strtotime("now") &&
+                                                    strtotime(date_format(date_create($booking->date_range_of_contract['to']), 'Y-m-d H:i:s')) > strtotime("now")))
+                                                    <div class='status-booking'>Status:<span>Accept</span></div>
+                                                @else
+                                                    <div class='status-booking'>Status:<span>Expired</span></div>
+                                                @endif
+                                        @else
+                                                @if($booking->status_booking == 'cancel')
+                                                    <div class='status-booking'>Status:<span>Cancel</span></div>"
+                                                @elseif(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
+                                                    <div class='status-booking'>Status:<span>Expired</span></div>
+                                                @else
+                                                    <div class='status-booking'>Status:<span>Accept</span></div>
+                                                @endif
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -322,7 +347,8 @@
                     data: {id: id_booking},
                     dataType: "json",
                     beforeSend: function(){
-                        $("#cc-modal-booking-cancel .modal-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        $(".loader").removeClass('hidden');
+                        $("#cc-modal-booking-cancel .modal-body .alert-danger").html('').addClass('hide');
                     },
                     success: function(res){
                         content = $(".booking-row-"+id_booking).clone();
@@ -332,7 +358,7 @@
                         $("#cc-modal-booking-cancel .btn-submit").data('booking',id_booking);
                         $("#cc-modal-booking-cancel .modal-body tbody").html(content.html());
                         $("#cc-modal-booking-cancel").modal('show');
-                        $("#cc-modal-booking-cancel .loading").remove();
+                        $(".loader").addClass('hidden');
 
                         $("#cc-modal-booking-cancel .modal-body .alert-danger").html(res.message).removeClass('hide');
 
@@ -357,13 +383,13 @@
                     data: {id: id_booking},
                     dataType: "json",
                     beforeSend: function(){
-                        $("#cc-modal-booking-cancel").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        $(".loader").removeClass('hidden');
                     },
                     success: function(res){
                         if(res.error){
                             $("#cc-modal-booking-cancel .btn-submit").attr('disabled','disabled');
                             $("#cc-modal-booking-cancel .modal-body .alert-danger").html(res.message).removeClass('hide');
-                            $("#cc-modal-booking-cancel .loading").remove();
+                            $(".loader").addClass('hidden');
                         }else{
                             alert("Cancel success!");
                             location.reload();
@@ -383,15 +409,15 @@
                     url: base_url +"/print-confirmation",
                     type: 'post',
                     data: {id: id_booking},
-                    dataType: 'json',
+//                    dataType: 'json',
                     beforeSend: function(){
-                        $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        $(".loader").removeClass('hidden');
                     },
-                    success: function(res){ console.log(res);
-                        $("body .loading").remove();
+                    success: function(res){
+                        $(".loader").addClass('hidden');
                         $("body * ").addClass('print-hide');
                         $("body .print-book-confirm").remove();
-                        $("body").append('<div class="print-book-confirm">'+res.data+'</div>');
+                        $("body").append('<div class="print-book-confirm">'+res+'</div>');
                         window.print();
                     },
                     error: function(request, status, error){
@@ -409,11 +435,11 @@
                     type: 'post',
                     data: {id: id_booking},
                     beforeSend: function(){
-                        $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        $(".loader").removeClass('hidden');
                     },
                     success: function(res){
                         alert(res.message);
-                        $("body .loading").remove();
+                        $(".loader").addClass('hidden');
                     },
                     error: function(request, status, error){
                         console.log(request.responseText);

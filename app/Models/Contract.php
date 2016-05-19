@@ -29,7 +29,7 @@ class Contract extends Model
     */
     protected $dates    = ['created_at', 'updated_at'];
 
-    protected $fillable = ['club_id', 'start_date', 'end_date', 'note','total_week','rates','extras'];
+    protected $fillable = ['club_id', 'start_date', 'end_date', 'note','total_week','rates','extras','is_member'];
 
     public function club()
     {

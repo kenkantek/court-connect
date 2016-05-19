@@ -88,24 +88,30 @@ class SearchController extends Controller {
                     foreach ($clubs as $k => $club) {
                         $contracts = Contract::where(['club_id' => $club['id'], 'is_member' => 0])
                             ->limit(5)->orderBy('updated_at', 'desc')->get(['id','start_date','end_date','is_member','total_week']);
+
                         if($contracts && count($contracts)  > 0) {
                             foreach ($contracts as $m => $contract) {
+                                $tmp_count = count($club->courts);
                                 foreach ($club->courts as $p => $court) {
                                     $input['court_id'] = $court['id'];
                                     $input['club_id'] = $club['id'];
                                     $input['type'] = 'contract';
                                     $input['contract_id'] = $contract['id'];
-                                    $clubs[$k]['courts'][$p]['type'] = 'contract';
-                                    $clubs[$k]['courts'][$p]['start_date'] = $contract['start_date'];
-                                    $clubs[$k]['courts'][$p]['end_date'] = $contract['end_date'];
                                     $lprice = [];
                                     foreach($request->dayOfWeek as $dayOfWeek) {
                                         $input['dayOfWeek'] = intval($dayOfWeek);
                                         $lprice[] = $this->getListPriceOfCourt($input);
                                     }
-                                    $clubs[$k]['courts'][$p]['prices'] = $lprice;
+                                    if(!isset($clubs[$k]['courts'][$m*$tmp_count+$p])) {
+                                        $clubs[$k]['courts'][$m * $tmp_count + $p] = clone($clubs[$k]['courts'][$p]);
+                                    }
+                                    $clubs[$k]['courts'][$m*$tmp_count+$p]['contract_id'] = $contract['id'];
+                                    $clubs[$k]['courts'][$m*$tmp_count+$p]['prices'] = $lprice;
                                 }
                             }
+                            $clubs[$k]['type'] = 'contract';
+                            $clubs[$k]['start_date'] = $contract['start_date'];
+                            $clubs[$k]['end_date'] = $contract['end_date'];
                             $clubs[$k]['range_date'] = createRangeDate($contract['start_date'], $contract['end_date'], $input['dayOfWeek']);
                         }else{
                             unset($clubs[$k]);
@@ -124,7 +130,7 @@ class SearchController extends Controller {
             }
 
         }
-        //return $clubs;
+
         $deals = getDeals();
         return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour'));
     }
@@ -145,7 +151,8 @@ class SearchController extends Controller {
                 $hour_start = $input['hour_start'];
                 $hour_end = $input['hour_start'] + $limit_hour;
             }
-        }else{
+        }else
+        {
             if($input['hour_start'] - 5 >= 2){
                 $limit_hour = $input['hour_start'] + 2 < 22 - $input['hour_length']? 2 : (int)(22 - $input['hour_start'] - 2);
                 $hour_start = $input['hour_start'] -2;

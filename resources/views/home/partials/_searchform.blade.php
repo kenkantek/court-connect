@@ -2,7 +2,7 @@
     <div id="find-your-court">
         <h3 class="text-center">Find Your Court</h3>
         <div class="container">
-            {!!  Form::open(array('route' => 'home.search','method' => 'post')) !!}
+            {!!  Form::open(array('route' => 'home.search','method' => 'post','id'=>'cc-search-form')) !!}
             <div class="row">
                 <div class="form-group col-md-3 form-icon">
                     <i class="fa fa-map-marker"></i>

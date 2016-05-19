@@ -120,9 +120,6 @@
                     </div>
                 </div>
             @endforeach
-
-
-
         </div>
     </div>
     {{-- End Club block --}}

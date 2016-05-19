@@ -151,7 +151,7 @@
                                     </tr>
                                     <tr>
                                         <td align="right">Booking By</td>
-                                        <td>Court-Connect.com</td>
+                                        <td>{{booking['source'] == 1 ? "Player Booking" : "Court-Connect.com" }}</td>
                                     </tr>
                                 </table>
                             </div>

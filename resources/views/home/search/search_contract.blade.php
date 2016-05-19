@@ -64,14 +64,14 @@ $dayOfWeek = [
                                         @foreach ($club->courts[0]->prices as $k=>$price)
                                             <div class="row-day clearfix">
                                                 <hr>
-                                                <div class="title-day">{{$dayOfWeek[$request->input('dayOfWeek')[$k]]}}</div>
+                                                <div class="title-day">{{$dayOfWeek[$request->input('dayOfWeek')[$k]]}} | Contract</div>
                                                 @foreach($price as $item)
                                                     <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
                                                                     <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start']): str_replace(".5",":30",($item['hour_start'] - 12))}} -
                                                                         {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
                                                                     </span>
 
-                                                        <a href="{{route('home.checkout',['date'=>$request->input('date'),'court'=>$club->courts[0]->id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="{{$club->courts[0]->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
+                                                        <a href="{{route('home.checkout',['date'=>$request->input('date'),'dayOfWeek'=>$request->input('dayOfWeek')[$k],'contract_id'=>$club->courts[0]->contract_id,'court'=>$club->courts[0]->id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="{{$club->courts[0]->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
                                                             @if(isset($item['total_price']) && $item['total_price'] == 'N/A' )
                                                                 <span>N/A</span>
                                                             @else
@@ -120,14 +120,14 @@ $dayOfWeek = [
                         @foreach ($court->prices as $k=>$price)
                             <div class="row-day clearfix">
                                 <hr>
-                                <div class="title-day">{{$dayOfWeek[$request->input('dayOfWeek')[$k]]}}</div>
+                                <div class="title-day">{{$request->input('dayOfWeek')[$k]}}</div>
                                 @foreach($price as $item)
                                     <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
                                                                     <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start']): str_replace(".5",":30",($item['hour_start'] - 12))}} -
                                                                         {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
                                                                     </span>
 
-                                        <a href="{{route('home.checkout',['date'=>$request->input('date'),'court'=>$club->courts[0]->id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="{{$club->courts[0]->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
+                                        <a href="{{route('home.checkout',['date'=>$request->input('date'),'dayOfWeek'=>$request->input('dayOfWeek')[$k],'court'=>$court->id,'contract_id'=>$court->contract_id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="{{$club->courts[0]->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
                                             @if(isset($item['total_price']) && $item['total_price'] == 'N/A' )
                                                 <span>N/A</span>
                                             @else
