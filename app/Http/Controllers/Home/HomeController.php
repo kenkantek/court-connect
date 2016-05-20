@@ -38,4 +38,8 @@ class HomeController extends Controller
 
     }
 
+    public function getAlert(){
+        return view('home.pages.alert');
+    }
+
 }

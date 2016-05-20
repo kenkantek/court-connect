@@ -173,6 +173,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         //Laravel\Cashier\CashierServiceProvider::class
         'Cartalyst\Stripe\Laravel\StripeServiceProvider',
+        Caffeinated\Flash\FlashServiceProvider::class,
     ],
 
     /*
@@ -221,6 +222,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'HTML' => Collective\Html\HtmlFacade::class,
         'Carbon' => Carbon\Carbon::class,
+        'Flash'     => Caffeinated\Flash\Facades\Flash::class,
 
 
         /*=================== CUSTOM COMPONENTS ALIAS ====================*/

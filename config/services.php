@@ -39,6 +39,11 @@ return [
         'client_secret' => env('FB_SECRET'),
         'redirect'      => env('FB_REDIRECT_URI'),
     ],
+    'google'   => [
+        'client_id'     => env('GOOGLE_KEY'),
+        'client_secret' => env('GOOGLE_SECRET'),
+        'redirect'      => env('GOOGLE_REDIRECT_URL'),
+    ],
     'braintree' => [
         'model'  => App\Models\Player::class,
         'environment' => env('BRAINTREE_ENV'),

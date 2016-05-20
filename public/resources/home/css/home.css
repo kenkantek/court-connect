@@ -150,7 +150,15 @@ div.modal-body {
     display: block;
     margin: 0px auto;
 }
-
+.btn-login-google {
+    background: url(../images/signin-with-google.png) no-repeat;
+    background-size: contain;
+    width: 189px;
+    height: 43px;
+    border: none;
+    display: block;
+    margin: 0px auto;
+}
 .line-label span {
     padding: 0 22px;
     background: #fff

@@ -39,4 +39,12 @@ class Deal extends Model
     {
         return date('m/d/y', strtotime($value));
     }
+    public function getPriceMemberAttribute($value)
+    {
+        return floatval($value);
+    }
+    public function getPriceNonmemberAttribute($value)
+    {
+        return floatval($value);
+    }
 }

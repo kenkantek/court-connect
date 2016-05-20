@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserCreateEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
 use App\Models\Player;
+use Caffeinated\Flash\Facades\Flash;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
+use Mockery\CountValidator\Exception;
 use Validator;
 
 class AuthController extends Controller
@@ -41,44 +45,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
-    }
-
-    public function handleProviderCallback()
-    {
-        if (!empty($_REQUEST['error']) && ($_REQUEST['error'] == 'access_denied')) {
-            return redirect()->route('front::auth.facebook');
-        }
-        $userfb = Socialite::driver('facebook')->user();
-
-        if (($checkUser = User::where('facebook_id', '=', $userfb->id)->first()) || (($checkUser = User::where('email', '=', $userfb->email)->first()))) {
-            Auth::login($checkUser);
-            return redirect()->route('home.index');
-        }
-        // $userfb           = $userfb->user;
-        if ($userfb->email == null) {
-            return redirect('register')->with(['userFb' => $userfb->user]);
-        }
-
-        $user              = new User;
-        $user->facebook_id = $userfb->id;
-        $user->first_name  = $userfb->user['name'];
-        $user->email       = $userfb->user['email'];
-        $user->avatar      = $userfb->avatar;
-        $user->save();
-
-        $player = new Player();
-        $player->user_id = $user->id;
-        $player->save();
-
-
-        Auth::login($user);
-        return redirect()->route('home.index');
-    }
-
-    public function redirectToProvider()
-    {
-        return Socialite::with('facebook')->redirect();
+        $this->middleware('guest', ['except' => ['logout', 'getVerify', 'getReSendEmail']]);
     }
 
     public function ajaxlogin(Request $request)
@@ -97,6 +64,74 @@ class AuthController extends Controller
         }
 
         return response()->json($reponses);
+    }
+
+    public function getVerify(Request $request)
+    {
+        $verifyCode = $request->code;
+        $user = User::whereVerifyCode($verifyCode)->first();
+        if (!$user) {
+            Flash::error('Error verify');
+            return redirect()->route('home.alert');
+        }
+        $user->verify_code = null;
+        $user->status = 1;
+        $user->save();
+        Flash::success('Verify successfull');
+        return redirect()->route('home.alert');
+    }
+
+    public function getReSendEmail()
+    {
+        $user = Auth::user()->toArray();
+        Mail::send('home.users.emails.user_create', ['data' => $user], function ($message) use ($user) {
+            $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
+            $message->to($user['email'])->subject('Verify your email address');
+            Flash::success('Thanks for signing up! Please check your email.');
+        });
+
+        return response()->json('Success Resend Confirmation Email !');
+    }
+
+    //Social
+
+    public function redirectToProvider($driver)
+    {
+        return Socialite::driver($driver)->redirect();
+    }
+
+    public function handleProviderCallback($driver)
+    {
+        if (!empty($_REQUEST['error']) && ($_REQUEST['error'] == 'access_denied')) {
+            return redirect()->route('front::auth.facebook');
+        }
+        $usersocial  = Socialite::driver($driver)->user();
+
+        if ($checkUser = User::whereEmail($usersocial->email)->first()) {
+            Auth::login($checkUser);
+            return redirect()->route('home.index');
+        }
+
+        try {
+            $user = new User;
+            $user->facebook_id = $usersocial->id;
+            $user->first_name = isset($usersocial->user['name']) ? $usersocial->user['name'] : isset($usersocial->name) ? $usersocial->name : "";
+            $user->email = $usersocial->email;
+            $user->avatar = $usersocial->avatar;
+            $user->verify_code = str_random(30);
+            $user->save();
+
+            $player = new Player();
+            $player->user_id = $user->id;
+            $player->save();
+
+            event(new UserCreateEvent($user));
+
+            Auth::login($user);
+        }catch(Exception $e){
+
+        }
+        return redirect()->route('home.index');
     }
 
 }

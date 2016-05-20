@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration{
             $table->string('state', 100);
             $table->string('city', 100);
             $table->string('zip_code', 6);
+            $table->tinyInteger('status');
+            $table->string('verify_code', 50);
 //            $table->integer('skill_level')->unsigned();
 //            $table->foreign('role_id')
 //                ->references('id')

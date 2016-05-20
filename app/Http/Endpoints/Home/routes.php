@@ -3,7 +3,9 @@
 Route::group(['middleware' => ['web']], function () {
 
 	Route::get('/', ['as' => 'home.index', 'uses' => 'HomeController@getIndex']);
+	Route::get('/contact', ['as' => 'contact', 'uses' => 'HomeController@getIndex']);
 	Route::get('/error', ['as' => 'home.error', 'uses' => 'HomeController@getError']);
+	Route::get('/alert', ['as' => 'home.alert', 'uses' => 'HomeController@getAlert']);
 
 	Route::get('search', ['as' => 'home.search', 'uses' => 'HomeController@getIndex']);
 	Route::post('search', ['as' => 'home.search', 'uses' => 'SearchController@search']);

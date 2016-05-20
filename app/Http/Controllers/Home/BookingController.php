@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Events\UserBookingEvent;
 use App\Http\Controllers\Admin\ManageBookingController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlayerRequest;
@@ -297,23 +298,20 @@ class BookingController extends Controller
     }
 
     //send mail
+
     public function sendMailOrder(Request $request){
         $id = $request->input('id');
         if(!Auth::check()){
             return redirect('error');
         }
-        $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
-
         try{
-            $data['booking'] = $booking;
-            Mail::send('home.bookings.print_confirmation',$data, function($message) use ($booking)
-            {
-                $message->to($booking['billing_info']->email, 'John Smith')->subject('Court Connect: Order');
-            });
+            $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
+            event(new UserBookingEvent(Auth::user()->id, $id));
             return response()->json([
                 'error' => false,
-                'message' => 'Order detail has been sent to email "'.$booking['billing_info']->email.'" please check your email.'
+                'message' => 'Order detail has been sent to email "'.$booking['billing_info']['email'].'" please check your email.'
             ]);
+
         }catch(Exception $e){
             return response()->json([
                 'error' => true,

@@ -1,7 +1,4 @@
 @extends('home.layouts.master')
-@section('banner')
-    <div class="row header-1-bg"></div>
-@stop
 @section('content')
     <div class="row">
         <div class="container content">

@@ -1,14 +1,15 @@
 <?php
 Route::group(['middleware' => ['web']], function () {
-    Route::get('auth/facebook', [
-        'as' => 'auth.facebook',
-        'uses' => 'AuthController@redirectToProvider',
-    ]);
 
-    Route::get('auth/facebook/callback', [
-        'as' => 'auth.social.confirm',
-        'uses' => 'AuthController@handleProviderCallback',
-    ]);
+    Route::get('auth/social/{driver}/callback', [
+            'as'   => 'auth.social.callback',
+            'uses' => 'AuthController@handleProviderCallback']
+    );
+    Route::get('auth/social/{driver}', [
+            'as'   => 'auth.social',
+            'uses' => 'AuthController@redirectToProvider']
+    );
+
 
     Route::get('logout', [
         'as' => 'auth.logout-home',
@@ -23,6 +24,11 @@ Route::group(['middleware' => ['web']], function () {
     $this->get('password/reset', ['as' => 'auth.password.reset', 'uses' => 'PasswordController@forgetpassword']);
     $this->get('password/reset/{token?}', ['as' => 'auth.password.reset', 'uses' => 'PasswordController@userresetpassword']);
     $this->post('password/email', ['as' => 'auth.password.email', 'uses' => 'PasswordController@sendResetLinkEmail']);
+
+    Route::get('verify', [
+        'as' => 'verify',
+        'uses' => 'AuthController@getVerify'
+    ]);
 
 });
 

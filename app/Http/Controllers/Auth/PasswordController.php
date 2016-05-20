@@ -36,7 +36,7 @@ class PasswordController extends Controller
     }
 
     public function forgetpassword(){
-        return view('home.user.passwords.email');
+        return view('home.users.passwords.email');
     }
     public function userresetpassword(Request $request, $token = null)
     {
@@ -49,11 +49,11 @@ class PasswordController extends Controller
             return view($this->resetView)->with(compact('token', 'email'));
         }
 
-        if (view()->exists('home.user.passwords.reset')) {
-            return view('home.user.passwords.reset')->with(compact('token', 'email'));
+        if (view()->exists('home.users.passwords.reset')) {
+            return view('home.users.passwords.reset')->with(compact('token', 'email'));
         }
 
-        return view('home.user.reset')->with(compact('token', 'email'));
+        return view('home.users.reset')->with(compact('token', 'email'));
     }
 
 }
