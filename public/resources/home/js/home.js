@@ -137,7 +137,7 @@ $(function () {
         onSelect: function (dateText, inst) {
             //$("#calendar-switch").hide();
         }
-    }).datepicker('setDate', dateNow);
+    });//.datepicker('setDate', dateNow);
 
     $("#calendar-switch").click(function(e){
         e.stopPropagation();
