@@ -9,27 +9,39 @@
             <div class="row text-left clearfix" id="search-results">
                 <div class="col-md-8 content-left-info">
                     {{-- #show-results --}}
-                    <div class="text-left clearfix" id="show-results">
-                        @if (isset($clubs) && count($clubs) > 0)
-                            <div class="pull-left show-result">
-                                Showing Results <span>{!! $clubs->currentPage()!!}-{!! $clubs->count() !!}</span> of <span>{!! $clubs->total() !!}</span>
 
-                            </div>
-                            <div class="pull-right">
-                                {!! $clubs->appends($request->input())->render() !!}
-                            </div>
-
-                        @endif
-                    </div>
-                    {{-- End #show-results --}}
-                    @if (isset($clubs) && count($clubs) > 0)
-                        @if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0)
-                            @include("home.search.search_contract")
-                        @else
-                            @include("home.search.search_open")
-                        @endif
+                    @if($errors !=null)
+                        <div class="alert alert-danger alert-block">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <ul>
+                                @foreach($errors as $message)
+                                    <li>{{$message}}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     @else
-                        <h4 class="text-center">No result</h4>
+                        <div class="text-left clearfix" id="show-results">
+                            @if (isset($clubs) && count($clubs) > 0)
+                                <div class="pull-left show-result">
+                                    Showing Results <span>{!! $clubs->currentPage()!!}-{!! $clubs->count() !!}</span> of <span>{!! $clubs->total() !!}</span>
+
+                                </div>
+                                <div class="pull-right">
+                                    {!! $clubs->appends($request->input())->render() !!}
+                                </div>
+
+                            @endif
+                        </div>
+                        {{-- End #show-results --}}
+                        @if (isset($clubs) && count($clubs) > 0)
+                            @if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0)
+                                @include("home.search.search_contract")
+                            @else
+                                @include("home.search.search_open")
+                            @endif
+                        @else
+                            <h4 class="text-center">No result</h4>
+                        @endif
                     @endif
                 </div>
 
@@ -98,24 +110,25 @@
                 center: latlng
             };
             var map = new google.maps.Map(document.getElementById("map"), myMapOptions);
-            @foreach($clubs as $k=>$club)
-                markers[{{$k}}] = new google.maps.Marker({
-                //icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{$k+1}}|FF7B6F",
-                title: "{{$club['name']}}",
-                label: "{{$club['name']}}",
-                position: new google.maps.LatLng({{$club['latitude']}},{{$club['longitude']}}),
-                map: map
-            });
-            infos[{{$k}}] = new google.maps.InfoWindow({
-                content: "{{$club['name']}}"
-            });
+            @if($errors !=null && $clubs)
+                @foreach($clubs as $k=>$club)
+                    markers[{{$k}}] = new google.maps.Marker({
+                    //icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{$k+1}}|FF7B6F",
+                    title: "{{$club['name']}}",
+                    label: "{{$club['name']}}",
+                    position: new google.maps.LatLng({{$club['latitude']}},{{$club['longitude']}}),
+                    map: map
+                });
+                infos[{{$k}}] = new google.maps.InfoWindow({
+                    content: "{{$club['name']}}"
+                });
 
-            google.maps.event.addListener(map, "click", function(event){
-                this.setOptions({scrollwheel:true,draggable:true})
-            })
+                google.maps.event.addListener(map, "click", function(event){
+                    this.setOptions({scrollwheel:true,draggable:true})
+                })
 
-            @endforeach
-
+                @endforeach
+            @endif
 
             var latlngbounds = new google.maps.LatLngBounds();
             @for($i=0; $i< count($clubs); $i++)

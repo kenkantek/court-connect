@@ -309,7 +309,7 @@
 		this.showNotice = false;
 	},
 	deleteDataRate() {
-		let name = this.dataRates[this.indexDataRates].name;
+		let name = this.dataRates[this.indexDataRates].datarate.name;
 		this.dataRates.splice(this.indexDataRates, 1);
 		showNotice('success', 'Delete '+ name, 'Success!');
 	},

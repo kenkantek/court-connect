@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title_heading')
-	User Manager
+	User & Teacher Manager
 @stop
 @section('content')
 

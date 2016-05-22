@@ -64,8 +64,9 @@ class SearchController extends Controller {
         }
 
         $clubs = null;
-        if ($keyword_hour < 5) {
-
+        $errors = null;
+        if ($keyword_hour < 5 || $keyword_hour > 22) {
+            $errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
         }else {
             $clubs = Club::search($keyword_clubs)->with(['courts' => function ($q) use ($keyword_surface) {
                 if ($keyword_surface != null) {
@@ -130,9 +131,8 @@ class SearchController extends Controller {
             }
 
         }
-
         $deals = getDeals();
-        return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour'));
+        return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour','errors'));
     }
 
     //get price follow hour of court

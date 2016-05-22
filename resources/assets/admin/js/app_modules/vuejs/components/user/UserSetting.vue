@@ -48,7 +48,7 @@
                             :club-setting-id="clubSettingId"
                             :teachers_choice.sync="teachers_choice"
                             :teachers.sync="teachers"
-                            :reload-teacher.sync="reloadTeachers"
+                            :reload-teachers.sync="reloadTeachers",
                             >
                     </list-teacher>
                 </div>

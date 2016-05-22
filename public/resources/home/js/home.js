@@ -224,7 +224,7 @@ $(function () {
         hours +=1;
         minutes = "00";
     }
-    $("#cc-input-search-time").val((hours<10?"0"+hours:hours)+":"+minutes);
+    //$("#cc-input-search-time").val((hours<10?"0"+hours:hours)+":"+minutes);
     $("#search-timepicker").val($("#cc-input-search-time").val());
     $("#cc-input-search-time").change(function(){
         $("#search-timepicker").val($(this).val());
@@ -238,8 +238,9 @@ $(function () {
         var tmp_date = new Date(dateInput[2], dateInput[0] - 1, dateInput[1],timeInput[0], timeInput[1]);
         if(tmp_date.getTime() < timeNow.getTime()){
             alert("Date or time can't less than current time!");
-            e.preventDefault();
+            //e.preventDefault();
         }
+        else $(".loader").toggleClass('hidden');
     });
 
 
@@ -285,7 +286,4 @@ $(function () {
         e.preventDefault();
     })
 
-    $("#cc-search-form").submit(function(e){
-        $(".loader").toggleClass('hidden');
-    })
 });
