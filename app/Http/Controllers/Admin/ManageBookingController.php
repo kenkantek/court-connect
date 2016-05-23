@@ -53,6 +53,7 @@ class ManageBookingController extends Controller
 
     //getInfoGridAvailable
     public function getInfoGridAvailable(Request $request){
+
         $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
         $hour = $request->input('hour');
         $court_id = $request->input('court_id');
@@ -70,8 +71,7 @@ class ManageBookingController extends Controller
         $tmp_inc_hour = 1;
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
             $r = calPriceForBooking($court_id,$date,$hour, $tmp_inc_hour,1,'open');
-            //$price_member[] = !$r['error'] ? $r['price']: $r['message'];
-            $price_member[] = !$r['error'] ? $r['price']: $r['message'];
+            $price_member[] = !$r['error'] ? $r['price']: (isset($r['message']) ? $r['message'] : (isset($r['status']) ? $r['status'] : ""));
             $tmp_inc_hour+=0.5;
         }
 
@@ -79,7 +79,7 @@ class ManageBookingController extends Controller
         $price_nonmember = [];
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
             $r = calPriceForBooking($court_id,$date,$hour, $tmp_inc_hour,0,'open');
-            $price_nonmember[] = !$r['error'] ? $r['price']: $r['message'];
+            $price_nonmember[] = !$r['error'] ? $r['price']: (isset($r['message']) ? $r['message'] : (isset($r['status']) ? $r['status'] : ""));
             $tmp_inc_hour+=0.5;
         }
 
@@ -379,7 +379,7 @@ class ManageBookingController extends Controller
         $result = getPriceForBooking($input);
 
         if($result['error'] == false){
-            $result['court_detail'] = Court::find($request->input('court_id'))->first();
+            $result['court_detail'] = Court::whereId($request->input('court_id'))->first();
             return response()->json($result);
         }
         return response()->json($result);

@@ -3221,16 +3221,16 @@
         },
         {
             "name": "yajra/laravel-datatables-oracle",
-            "version": "v6.11.2",
+            "version": "v6.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables.git",
-                "reference": "aa95adb5822add6f7f0e7085aca66541a5d9aa73"
+                "reference": "e7c0aa99b66ce690ec034c10f2db565f89ca8698"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/aa95adb5822add6f7f0e7085aca66541a5d9aa73",
-                "reference": "aa95adb5822add6f7f0e7085aca66541a5d9aa73",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/e7c0aa99b66ce690ec034c10f2db565f89ca8698",
+                "reference": "e7c0aa99b66ce690ec034c10f2db565f89ca8698",
                 "shasum": ""
             },
             "require": {
@@ -3274,7 +3274,7 @@
                 "laravel4",
                 "laravel5"
             ],
-            "time": "2016-05-18 05:59:54"
+            "time": "2016-05-20 14:32:45"
         }
     ],
     "packages-dev": [
@@ -4007,16 +4007,16 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "0.9.4",
+            "version": "0.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "70bba85e4aabc9449626651f48b9018ede04f86b"
+                "reference": "4db079511a283e5aba1b3c2fb19037c645e70fc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/70bba85e4aabc9449626651f48b9018ede04f86b",
-                "reference": "70bba85e4aabc9449626651f48b9018ede04f86b",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/4db079511a283e5aba1b3c2fb19037c645e70fc2",
+                "reference": "4db079511a283e5aba1b3c2fb19037c645e70fc2",
                 "shasum": ""
             },
             "require": {
@@ -4068,7 +4068,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2015-04-02 19:54:00"
+            "time": "2016-05-22 21:52:33"
         },
         {
             "name": "phpdocumentor/reflection-docblock",

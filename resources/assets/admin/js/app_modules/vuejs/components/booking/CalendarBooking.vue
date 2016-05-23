@@ -585,13 +585,13 @@
             });
         },
         multiMakeTimeUnavailable(){ //multi
+            $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$set('multi_make_time_unavailable.hour_length', 1);
             this.$set('multi_make_time_unavailable.date', this.dateChooise);
             var _this = this;
             var data = new FormData();
             data.append('multi_make_time_unavailable',JSON.stringify(this.multi_make_time_unavailable));
             data.append('grids_selected',JSON.stringify(this.grids_selected));
-            $("#day-view-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(laroute.route('booking.makeTimeUnavailable'),data).then(res => {
                 if(res.data.error == false){
                     $("#multi_make_time_unavailable .btn-in-expand").click();
@@ -685,7 +685,7 @@
                 var parent = this;
                 var parent = this;
                 $(".day-grid.g2.available[data-hour='" + hour + "']").each(function(index){
-                    if (!$(this).hasClass("ui-selected")) {
+                    if (!$(this).hasClass("ui-selected") && !$(this).hasClass("gn")) {
                         $(this).addClass("ui-selected");
                         const c = $(this).data('court'),
                                 h = $(this).data('hour');

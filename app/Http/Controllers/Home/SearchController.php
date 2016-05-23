@@ -68,12 +68,21 @@ class SearchController extends Controller {
         if ($keyword_hour < 5 || $keyword_hour > 22) {
             $errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
         }else {
-            $clubs = Club::search($keyword_clubs)->with(['courts' => function ($q) use ($keyword_surface) {
-                if ($keyword_surface != null) {
-                    $q->where('surface_id', '=', $keyword_surface);
-                }
-            }])->paginate(5);
-            if ($clubs->count() == 0 || $clubs[0]->courts->count() == 0) {
+            $clubs = Club::search($keyword_clubs)
+                ->join('courts','courts.club_id','=','clubs.id')
+                ->where(function ($q) use ($keyword_surface) {
+                    if ($keyword_surface != null) {
+                        $q->where('courts.surface_id', '=', $keyword_surface);
+                    }})
+                ->with(['courts' => function ($q) use ($keyword_surface) {
+                    if ($keyword_surface != null) {
+                        $q->where('surface_id', '=', $keyword_surface);
+                    }
+                }])
+                ->groupBy('clubs.id')
+                ->select(['clubs.*'])
+                ->paginate(5);
+            if ($clubs->count() == 0 ) {
 
             } else {
                 $input = [
@@ -129,8 +138,8 @@ class SearchController extends Controller {
                     }
                 }
             }
-
         }
+        //return $clubs;
         $deals = getDeals();
         return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour','errors'));
     }
