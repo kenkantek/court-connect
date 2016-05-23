@@ -9,11 +9,11 @@
 				</div>
 
 				<list-court
-						:club-setting-id="clubSettingId"
-						:courts_choice.sync="courts_choice"
-						:courts.sync="courts"
-						:reload-courts.sync="reloadCourts"
-						></list-court>
+					:club-setting-id="clubSettingId"
+					:courts_choice.sync="courts_choice"
+					:courts.sync="courts"
+					:reload-courts.sync="reloadCourts"
+				></list-court>
 			<div>
 					<a class="btn btn-primary btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
 				<form-edit-court
@@ -83,9 +83,9 @@
 			:club-setting-id="clubSettingId"
 		>
 		<div class="clearfix" slot="headercontract">
-					<h3 class="title-box pull-left">Contract Time</h3>
-					<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Create Contract Time Period</a>
-				</div>
+			<h3 class="title-box pull-left">Contract Time</h3>
+			<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Create Contract Time Period</a>
+		</div>
 		</contract-time>
 	</div>
 </template>
@@ -140,6 +140,7 @@
 	methods:{
 		scrollAddnewCourt(){
 			this.btnAddCourt = !this.btnAddCourt;
+			this.courts_choice = [];
 		},
 		fetchSurface(surface) {
 			let def = deferred(),
