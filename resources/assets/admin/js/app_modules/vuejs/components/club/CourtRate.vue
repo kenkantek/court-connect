@@ -34,13 +34,13 @@
 				<strong>Date Period</strong>
 					<div>
 						<select name="list-period" id="inputList-Period" class="form-control" required="required" v-model="indexDataRates">
-							<option v-for="(index,d) in dataRates" track-by="$index" value="{{index}}">
+							<option v-for="(index,d) in dataRates" track-by="$index" value="{{index}}" :selected="index == 0 ? 'selected':''">
 								{{d.datarate.name}} -- {{d.nameCourt}}
 							</option>
 						</select>
 					</div>
 					<div class="date_period">
-						<button v-if="dataRates.length > 0" class="btn btn-danger" style="margin-right:30px" @click="deleteDataRate()">Delete</button>
+						<button v-if="dataRates.length > 0 && indexDataRates != null" class="btn btn-danger" style="margin-right:30px" @click="deleteDataRate()">Delete</button>
 						<button class="btn btn-primary" v-show="courts_choice.length > 0" @click="updateMulti">Update Rates</button>
 					</div>
 			</div>
@@ -225,8 +225,9 @@
 			},
 			selected:  [],
 			priceSet: 20,
-			indexDataRates:0,
+			indexDataRates:null,
 			showNotice:false,
+			rateIndex:null,
 		}
 	},
 	watch: {
@@ -234,6 +235,7 @@
 			if (this.dataRates.length >0 ) {
 				var index = this.indexDataRates ;
 				this.dataRate = this.dataRates[index].datarate;
+				this.rateIndex = index;
 			}
 		},
 		reloadCourts: function () {
@@ -246,6 +248,7 @@
 				this.showNotice = true;
 			}else{
 				this.showNotice = false;
+				this.indexDataRates = 0;
 			}
 			if (this.dataRates.length >0 ) {
 				var index = this.indexDataRates ;
@@ -321,8 +324,8 @@
 		p.datarate = _.cloneDeep(this.dataRate);
 
 		p.datarate.name = this.dataRate.name,
-			p.datarate.is_member = this.dataRate.is_member,
-			p.datarate.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
+		p.datarate.is_member = this.dataRate.is_member,
+		p.datarate.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
 		p.datarate.start_date =  $(".daterange").data('daterangepicker').startDate.format('MM/DD/YYYY');
 		this.dataRates.push(p);
 		$('.new_date_preiod').addClass('hidden');
@@ -330,9 +333,10 @@
 	setPrice(){
 		this.selected.forEach(s => {
 			const {x, y} = s;
-		this.dataRate.rates[x][y] = this.priceSet;
-	});
-	}
+			this.dataRate.rates[x][y] = this.priceSet;
+		});
+	},
+
 	}
 
 	}
