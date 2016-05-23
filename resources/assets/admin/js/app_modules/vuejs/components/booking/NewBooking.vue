@@ -646,7 +646,7 @@
                         switch(res.data.status){
                             case 'booking': msg = "This was book. Please select another time or date"; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
-                            case 'close': msg = "Close. Please select another time or date"; break;
+                            case 'close': msg = "Day Close. Please select another time or date"; break;
                             default: msg = res.data.status
                         }
                     }

@@ -6,6 +6,7 @@ use App\Models\Contexts\Court;
 use App\Models\Contract;
 use App\Models\CourtRate;
 use App\Models\Deal;
+use App\Models\SetOpenDay;
 use App\Models\TimeUnavailable;
 use Carbon\Carbon;
 use Cartalyst\Stripe\Exception\CardErrorException;
@@ -63,6 +64,18 @@ function getDeals(){
 }
 
 function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_member,$type = 'open',$contract_id=0){
+    $court = Court::where('id',$court_id)->first();
+
+    //check day close
+    $check_close = SetOpenDay::where(['date' => $date, 'club_id' => $court['club_id']])
+        ->where('is_close',1)
+        ->get();
+    if(isset($check_close) && count($check_close) > 0){
+        return [
+            'error' => true,
+            'status' => "close"
+        ];
+    }
     $unavailable = TimeUnavailable::where(['date' => $date, 'court_id' => $court_id])
         ->where(function ($q) use($hour_start,$hour_length) {
             $q->orWhere('hour', $hour_start)
@@ -87,7 +100,6 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             ->orderBy('updated_at', 'DESC')
             ->first();
     }else if($type == "contract") {
-        $court = Court::where('id',$court_id)->first();
         $table_rate = Contract::where('id', $contract_id)
             ->where('start_date', '<=', $date)
             ->where('end_date', '>=', $date)
@@ -148,8 +160,9 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
         }
         if($rates_full[$tmp_index][$index_json] == "N/A"){
             return [
-                'error' => false,
-                'price' => "N/A"
+                'error' => true,
+                'price' => "N/A",
+                'status' => 'nosetprice'
             ];
         }
         $total_price += $rates_full[$tmp_index][$index_json] / 2;
@@ -222,7 +235,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             return [
                 'error' => false,
                 'price_teacher' => $price_teacher,
-                'total_price' => $total_price
+                'total_price' => $total_price,
             ];
         }
     }
@@ -295,7 +308,6 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
                     $price_extra += $extra['value'];
             }
         }
-
         if($r['error']){
             return ['error' => true,'messages'=>'Error',"status"=>isset($r['status']) ? $r['status'] : "Error. Contract not exist"];
         }else {
