@@ -10,11 +10,12 @@
                 <div class="col-md-8 content-left-info">
                     {{-- #show-results --}}
 
-                    @if($errors !=null)
+                    @if($msg_errors !=null)
+
                         <div class="alert alert-danger alert-block">
                             <button type="button" class="close" data-dismiss="alert">×</button>
                             <ul>
-                                @foreach($errors as $message)
+                                @foreach($msg_errors as $message)
                                     <li>{{$message}}</li>
                                 @endforeach
                             </ul>
@@ -110,7 +111,7 @@
                 center: latlng
             };
             var map = new google.maps.Map(document.getElementById("map"), myMapOptions);
-            @if($errors !=null && $clubs)
+            @if( is_null($msg_errors) && $clubs)
                 @foreach($clubs as $k=>$club)
                     markers[{{$k}}] = new google.maps.Marker({
                     //icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{$k+1}}|FF7B6F",

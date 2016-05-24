@@ -5,10 +5,12 @@ namespace App\Models\Auth;
 use App\Models\Contexts\Club;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class User extends Authenticatable
 {
     use HasRoles;
+    use SearchableTrait;
 
     protected $table = 'users';
 
@@ -35,6 +37,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $searchable = [
+        'columns' => [
+            'first_name' => 20,
+            'last_name' => 10,
+            'email' => 20,
+        ]
+    ];
+
     public function roles()
     {
         return $this->belongsToMany(

@@ -18,6 +18,12 @@ class TeacherController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    public function getList()
+    {
+        $title = 'Teacher Manager';
+        return view('admin.users.list-teacher', compact('title'));
+    }
+
     public function getTeachers(Request $request)
     {
         $take = $request->take ?: 10;

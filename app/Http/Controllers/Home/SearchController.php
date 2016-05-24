@@ -31,7 +31,8 @@ class SearchController extends Controller {
         }
 
         $queries = City::where('name', 'LIKE', '%' . $term . '%')
-            ->orWhere('zip', 'LIKE', '%' . $term . '%')
+            ->join('zipcodes','zipcodes.city_id','=','citys.id')
+            ->orWhere('zipcodes.zipcode', 'LIKE', '%' . $term . '%')
             ->take(5)->get();
 
         foreach ($queries as $query) {
@@ -64,9 +65,9 @@ class SearchController extends Controller {
         }
 
         $clubs = null;
-        $errors = null;
+        $msg_errors = null;
         if ($keyword_hour < 5 || $keyword_hour > 22) {
-            $errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
+            $msg_errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
         }else {
             $clubs = Club::search($keyword_clubs)
                 ->join('courts','courts.club_id','=','clubs.id')
@@ -139,9 +140,8 @@ class SearchController extends Controller {
                 }
             }
         }
-        //return $clubs;
         $deals = getDeals();
-        return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour','errors'));
+        return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour','msg_errors'));
     }
 
     //get price follow hour of court

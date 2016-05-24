@@ -3,7 +3,7 @@ $(function () {
     if($('#q').length)
         $('#q').cityAutocomplete();
 
-    $('#card-expiry').datetimepicker({
+    $('#card-expiry1').datetimepicker({
         showTimepicker: false,
         showButtonPanel: false,
         changeMonth: true,
@@ -15,7 +15,7 @@ $(function () {
             $(this).val($.datepicker.formatDate('mm/yy', new Date(year, month, 1)));
         }
     });
-    $("#card-expiry").focus(function () {
+    $("#card-expiry1").focus(function () {
         $(".ui-datepicker-calendar").hide();
         $("#ui-datepicker-div").position({
             my: "center top",
@@ -23,7 +23,9 @@ $(function () {
             of: $(this)
         });
     });
-
+    $('#card-expiry').datetimepicker({
+        format: 'MM/YY',
+    })
     if (jQuery().select2) {
         $('.select2').select2({
             width: '100%',
@@ -167,13 +169,13 @@ $(function () {
 
     $("#mb-book-in-hour").ionRangeSlider({
         min: 1,
-        max: 7,
+        max: 3.5,
         type: 'single',
-        step: 1,
-        grid: true,
+        step: 0.5,
+        grid: false,
         postfix: " Hour",
         prettify: false,
-        hasGrid: false,
+        hasGrid: true,
         hideMinMax: false,
     });
 
@@ -182,13 +184,12 @@ $(function () {
         max: 20,
         type: 'single',
         step: 1,
-        grid: true,
+        grid: false,
         postfix: " miles",
         prettify: false,
         hasGrid: false,
         hideMinMax: false,
     });
-
 
     $( "#q1" ).autocomplete({
         source: function( request, response ) {
@@ -232,15 +233,30 @@ $(function () {
 
     //validate time search
     $("#cc-search-form").on('submit',function(e){
-        timeNow = new Date();
-        var dateInput = $("input[name=date]").val().split("/");
-        var timeInput = $("input[name=s_time]").val().split(":");
-        var tmp_date = new Date(dateInput[2], dateInput[0] - 1, dateInput[1],timeInput[0], timeInput[1]);
-        if(tmp_date.getTime() < timeNow.getTime()){
-            alert("Date or time can't less than current time!");
-            //e.preventDefault();
+        //for safari
+        var ref = $(this).find("[required]");
+        var error_safari = false;
+        $(ref).each(function(){
+            if ( $(this).val() == '' )
+            {
+                alert("Required field should not be blank.");
+                $(this).focus();
+                e.preventDefault();
+                error_safari = true;
+                return false;
+            }
+        });
+        if(!error_safari) {
+            timeNow = new Date();
+            var dateInput = $("input[name=date]").val().split("/");
+            var timeInput = $("input[name=s_time]").val().split(":");
+            var tmp_date = new Date(dateInput[2], dateInput[0] - 1, dateInput[1], timeInput[0], timeInput[1]);
+            if (tmp_date.getTime() < timeNow.getTime()) {
+                alert("Date or time can't less than current time!");
+                e.preventDefault();
+            }
+            else $(".loader").toggleClass('hidden');
         }
-        else $(".loader").toggleClass('hidden');
     });
 
 

@@ -65,6 +65,9 @@
                     <a href="{{ route('users.list') }}" data-toggle="tooltip" data-placement="right" title="User"><i class="fa fa-users"></i></a>
                 </li>
                 <li>
+                    <a href="{{ route('teacher.listAll') }}" data-toggle="tooltip" data-placement="right" title="Teacher"><i class="fa fa-user-plus"></i></a>
+                </li>
+                <li>
                     <a href="{{ route('clubs.setting') }}" data-toggle="tooltip" data-placement="right" title="Club Setting">
                         <i class="fa fa-cogs"></i>
                     </a>

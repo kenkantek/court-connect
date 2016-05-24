@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i class="fa fa-calendar"></i>
-                    <input type="text" class="form-control" name="date" id="datepicker" placeholder="Date">
+                    <input type="text" class="form-control" name="date" required id="datepicker" placeholder="Date">
 
                     <div id="calendar-switch">
                         <span id="calendar-switch-header">Select the days of the week<br/>you'd like to book</span>

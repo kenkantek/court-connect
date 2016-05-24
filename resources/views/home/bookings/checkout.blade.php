@@ -298,11 +298,11 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="text-left">
-                                                <div class="col-lg-6 col-md-6">
+                                                <div class="col-lg-5 col-md-5">
                                                     <label for="card-number">Card Number</label>
                                                     <input type="text" class="form-control" name="payment[card-number]" required id="card-number" placeholder="Enter Card Number">
                                                 </div>
-                                                <div class="col-lg-3 col-md-3">
+                                                <div class="col-lg-4 col-md-4">
                                                     <label for="expiry">Expiry</label>
                                                     <div class="">
                                                         <input type="text" name="payment[card-expiry]" class="form-control" required id="card-expiry" placeholder="06/17">
@@ -388,6 +388,7 @@
             </div>
         </div>
     </div>
+
     <script>
         $(document).ready(function(){
             $('input[name="is_customer"]').on("change", function(){
@@ -483,10 +484,18 @@
                 })
             })
         })
+
     </script>
     <style>
         .ui-datepicker-month, .ui-datepicker-year{
             padding: 0px;
         }
+        .bootstrap-datetimepicker-widget span{
+            text-align: center !important;
+        }
     </style>
+@stop
+@section('javascript')
+    {!! HTML::script("resources/vendor/moment/min/moment.min.js") !!}
+    {!! HTML::script("resources/vendor/datetimepicker/build/js/bootstrap-datetimepicker.min.js") !!}
 @stop

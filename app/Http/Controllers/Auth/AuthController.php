@@ -103,7 +103,7 @@ class AuthController extends Controller
     public function handleProviderCallback($driver)
     {
         if (!empty($_REQUEST['error']) && ($_REQUEST['error'] == 'access_denied')) {
-            return redirect()->route('front::auth.facebook');
+            return redirect()->route('home.index');
         }
         $usersocial  = Socialite::driver($driver)->user();
 

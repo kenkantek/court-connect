@@ -15,6 +15,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     ]);
 
     Route::controller('teacher', TeacherController::class, [
+        'getList' => 'teacher.listAll',
         'getListForBooking' => 'teacher.list',
         'getDelete' => 'teacher.delete',
         'postCreate' => 'teacher.create.post',
@@ -66,6 +67,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getCancel' =>'booking.cancel',
         'getAcceptPayment' =>'booking.acceptPayment',
         'getSearchPlayers' =>'booking.players',
+        'getAddressLookup' =>'booking.address_lookup',
+        'getCustomerLookup' =>'booking.customer_lookup',
         'getInfoGridAvailable' =>'booking.infoGridAvailable',
         'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
         'getInfoGridForDeal' => 'booking.getInfoGridForDeal',

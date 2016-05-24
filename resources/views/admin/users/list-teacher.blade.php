@@ -1,15 +1,15 @@
 @extends('admin.layouts.master')
 @section('title_heading')
-	User Manager
+	Teacher Manager
 @stop
 @section('content')
 
 	<div class="box box-primary">
 		<div class="box-body">
-			<user-setting
+			<teacher-setting
 					:club-setting-id = "clubSettingId"
 					>
-			</user-setting>
+			</teacher-setting>
 		</div>
 	</div><!--end box data-->
 

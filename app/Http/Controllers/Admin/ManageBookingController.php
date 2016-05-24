@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
 use App\Models\Booking;
+use App\Models\City;
 use App\Models\Contexts\Club;
 use App\Models\Contexts\Court;
 use App\Models\Contract;
@@ -61,9 +62,12 @@ class ManageBookingController extends Controller
 
         $arr_lb_hour = [];
         $tmp_inc_hour = 1;
+
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
-            $arr_lb_hour[] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
-                ($hour + $tmp_inc_hour <=12 ? str_replace(".5",":30",$hour + $tmp_inc_hour)."am" : str_replace(".5",":30",$hour + $tmp_inc_hour - 12)."pm") ." (".$tmp_inc_hour." hour)";
+            $lb_hour['text'] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
+                ($hour + $tmp_inc_hour <=12 ? str_replace(".5",":30",$hour + $tmp_inc_hour)."am" : str_replace(".5",":30",$hour + $tmp_inc_hour - 12)."pm");
+            $lb_hour['value'] = $tmp_inc_hour;
+            $arr_lb_hour[] = $lb_hour;
             $tmp_inc_hour+=0.5;
         }
 
@@ -71,7 +75,7 @@ class ManageBookingController extends Controller
         $tmp_inc_hour = 1;
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
             $r = calPriceForBooking($court_id,$date,$hour, $tmp_inc_hour,1,'open');
-            $price_member[] = !$r['error'] ? $r['price']: (isset($r['message']) ? $r['message'] : (isset($r['status']) ? $r['status'] : ""));
+            $price_member[] = !$r['error'] ? "$".$r['price']: "N/A - ".(isset($r['message']) ? $r['message'] : (isset($r['status']) ? $r['status'] : ""));
             $tmp_inc_hour+=0.5;
         }
 
@@ -79,7 +83,7 @@ class ManageBookingController extends Controller
         $price_nonmember = [];
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
             $r = calPriceForBooking($court_id,$date,$hour, $tmp_inc_hour,0,'open');
-            $price_nonmember[] = !$r['error'] ? $r['price']: (isset($r['message']) ? $r['message'] : (isset($r['status']) ? $r['status'] : ""));
+            $price_nonmember[] = !$r['error'] ? "$".$r['price']: "N/A - ".(isset($r['message']) ? $r['message'] : (isset($r['status']) ? $r['status'] : ""));
             $tmp_inc_hour+=0.5;
         }
 
@@ -267,7 +271,7 @@ class ManageBookingController extends Controller
             ->select(['id','name'])->orderBy('name')->get();
 
         //check date close
-        $date_close = SetOpenDay::where('date',$date)->where('is_close',1)->first();
+        $date_close = SetOpenDay::where('club_id',$request->input('club_id'))->where('date',$date)->where('is_close',1)->first();
         if(isset($date_close)){
             foreach($courts as $k=>$court){
                 $arr_hour_tmp = [];
@@ -387,7 +391,7 @@ class ManageBookingController extends Controller
 
     public function postCheckInputCustomer(Request $request){
         $v = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'sometimes',
             'first_name' => 'required',
             'last_name' => 'required',
             'zip_code' => 'required | max: 6',
@@ -421,7 +425,7 @@ class ManageBookingController extends Controller
 
         $cc_info_payment = json_decode($request->input('payment'));
         if(!empty($cc_info_payment->cost_adj)){
-            $fields_validate['adj_reason'] = "required | min: 6";
+            $fields_validate['adj_reason'] = "required";
         }
         $v = \Validator::make((array) $cc_info_payment, $fields_validate);
 
@@ -589,5 +593,29 @@ class ManageBookingController extends Controller
             ]);
         }
 
+    }
+
+    //get address lookup
+    public function getAddressLookup($zipcode){
+        $city = City::join('states','states.state_code','=','citys.state_code')
+            ->join('zipcodes','citys.id','=','zipcodes.city_id')
+            ->select(['citys.name as city','states.name as state'])
+            ->where('zipcodes.zipcode',"like","%".$zipcode."%")
+            ->first();
+        if(!isset($city)){
+            return ['error' => true, "messages" => ["Not found data"]];
+        }
+        return response()->json([
+            'error' => false,
+            'address' => $city
+        ]);
+    }
+    public function getCustomerLookup($search){
+        $user = User::search($search)
+            ->first();
+        return response()->json([
+            'error' => false,
+            'user' => $user
+        ]);
     }
 }

@@ -185,15 +185,15 @@
                                         </div>
                                         <div class="{{inputBookingDetail.member == 1 ? 'hidden' :'block'}}">
                                             <div class="form-group">
-                                                <label for="surname" class="col-sm-4 control-label">Customer Lookup</label>
+                                                <label for="surname" class="col-sm-4 btn btn-primary" @click="customer_lookup()">Customer Lookup</label>
                                                 <div class="col-sm-8">
-                                                    <input class="form-control" placeholder="Surname" name="surname" type="text" value="" id="surname" v-model="customerDetail.surname">
+                                                    <input class="form-control" placeholder="Surname" name="surname" type="text" value="" id="surname" v-model="surname">
                                                 </div>
                                             </div>
                                             <div class="clearfix" style="padding-bottom: 20px;"></div>
                                             <div class="form-group">
                                                 <div class="col-sm-4">
-                                                    <label for="title">Title *</label>
+                                                    <label for="title">Title</label>
                                                     <input class="form-control" placeholder="Title" name="title" type="text" value="" id="title" v-model="customerDetail.title">
                                                 </div>
                                                 <div class="col-sm-4">
@@ -207,12 +207,12 @@
                                             </div>
                                             <div class="clearfix" style="padding-bottom: 20px;"></div>
                                             <div class="form-group clearfix">
-                                                <label for="zipcode" class="col-sm-2 control-label">Zipcode *</label>
+                                                <label for="input-zip_code" class="col-sm-2 control-label">Zipcode *</label>
                                                 <div class="col-sm-7">
                                                     <input class="form-control" placeholder="Enter Zip Code" style="width: 50%; margin-right: 10px;" name="zipcode" type="text" value="" id="input-zip_code" v-model="customerDetail.zip_code">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <button class="btn btn-primary btn-get-address-lookup" type="button">Address Lookup</button>
+                                                    <button class="btn btn-primary" type="button" @click="address_lookup()">Address Lookup</button>
                                                 </div>
                                             </div>
                                             <div class="form-group clearfix">
@@ -506,6 +506,7 @@
         data (){
         return {
             courts: [],
+            surname: null,
             inputBookingDetail:{
                 type: null,
                 member: 0,
@@ -522,7 +523,6 @@
             },
             customerDetail:{
                 player_id: null,
-                surname: null,
                 title: null,
                 firstname: null,
                 lastname: null,
@@ -825,6 +825,48 @@
             $(".tab-pane").removeClass('active');
             $("#"+element).addClass('active');
         },
+        address_lookup(){
+            var _this = this;
+            this.$http.get(laroute.route('booking.address_lookup', {one: this.customerDetail.zip_code})).then(res => {
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }else{
+                    _this.customerDetail.state = res.data.address.state;
+                    _this.customerDetail.city = res.data.address.city;
+                }
+            }, res => {
+
+            });
+        },
+        customer_lookup(){
+            var _this = this;
+            this.$http.get(laroute.route('booking.customer_lookup', {one: this.surname})).then(res => {
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }else{
+                    _this.customerDetail.first_name = res.data.user.first_name;
+                    _this.customerDetail.last_name = res.data.user.last_name;
+                    _this.customerDetail.zip_code = res.data.user.zip_code;
+                    _this.customerDetail.city = res.data.user.city;
+                    _this.customerDetail.state = res.data.user.state;
+                    _this.customerDetail.address1 = res.data.user.address1;
+                    _this.customerDetail.email = res.data.user.email;
+                    _this.customerDetail.phone = res.data.user.phone;
+                }
+            }, res => {
+
+            });
+        },
         resetData(){
             this.fetchCourts();
             this.preBookingDetail();
@@ -844,7 +886,6 @@
             };
             this.customerDetail = {
                         player_id: null,
-                        surname: null,
                         title: null,
                         first_name: null,
                         last_name: null,

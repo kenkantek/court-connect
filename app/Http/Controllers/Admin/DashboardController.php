@@ -34,7 +34,8 @@ class DashboardController extends Controller
             }
         }
         */
-        return view('admin.index');
+        //return view('admin.index');
+        return redirect()->route("booking.index");
     }
     public function getAddContext(Request $request)
     {

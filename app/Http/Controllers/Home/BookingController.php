@@ -21,9 +21,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Exception;
 
-class BookingController extends Controller
-{
-
+class BookingController extends Controller{
     public function checkout(Request $request)
     {
         $errors = null;

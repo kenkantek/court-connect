@@ -40,46 +40,12 @@
             </div>
         </div>
         <!-- end user club -->
-        <div class="teach-clubs">
-            <div class="row">
-                <div class="col-xs-12 col-md-7">
-                    <h3 class="title-box pull-left">Teacher list</h3>
-                    <list-teacher
-                            :club-setting-id="clubSettingId"
-                            :teachers_choice.sync="teachers_choice"
-                            :teachers.sync="teachers"
-                            :reload-teachers.sync="reloadTeachers",
-                            >
-                    </list-teacher>
-                </div>
-                <div class="col-xs-12 col-md-5">
-                    <form-edit-teacher
-                            v-if="teachers_choice.length < 2"
-                            :teachers_choice="teachers_choice"
-                            :club-setting-id="clubSettingId"
-                            :reload-teachers.sync="reloadTeachers"
-                            >
-
-                    </form-edit-teacher>
-                    <form-new-teacher
-                            v-if="!teachers_choice.length"
-                            :surface="surface"
-                            :club-setting-id="clubSettingId"
-                            :reload-teachers.sync="reloadTeachers"
-                            >
-                    </form-new-teacher>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 <script>
     import ListUser from './ListUser.vue';
     import FormEditUser from './FormEditUser.vue';
     import FormNewUser from './FormNewUser.vue';
-    import ListTeacher from './ListTeacher.vue';
-    import FormEditTeacher from './FormEditTeacher.vue';
-    import FormNewTeacher from './FormNewTeacher.vue';
     let _ = require('lodash'),
             deferred = require('deferred');
     export default {
@@ -91,9 +57,6 @@
             surface:null,
             users:[],
             reloadUsers:1,
-            teachers:[],
-            teachers_choice:[],
-            reloadTeachers:1,
         }
     },
     watch: {
@@ -119,9 +82,6 @@
         ListUser,
                 FormEditUser,
                 FormNewUser,
-                ListTeacher,
-                FormEditTeacher,
-                FormNewTeacher,
     }
     }
 </script>

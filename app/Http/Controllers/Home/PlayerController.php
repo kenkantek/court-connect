@@ -38,7 +38,6 @@ class PlayerController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->remember_token = $request->_token;
-        $user->fullname = $request->firstname . " " . $request->lastname;
         $user->verify_code = str_random(30);
         $user->save();
 

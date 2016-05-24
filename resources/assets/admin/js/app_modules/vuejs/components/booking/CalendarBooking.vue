@@ -197,20 +197,20 @@
                                 <thead>
                                     <tr>
                                         <th>Quick Quotes</th>
-                                        <th v-for="item in info_grid_available.lb_hour">{{ item }}</th>
+                                        <td v-for="item in info_grid_available.lb_hour"><strong>{{ item.text }}</strong> <br> ({{ item.value }}) hours</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Member ($): </td>
+                                    <td>Member: </td>
                                     <td v-for="itemmember in info_grid_available.price_member">{{itemmember}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Non Member ($): </td>
+                                    <td>Non Member: </td>
                                     <td v-for="itemnonmember in info_grid_available.price_nonmember">{{itemnonmember}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Lesson ($): </td>
+                                    <td>Lesson: </td>
                                 </tr>
                                 </tbody>
                             </table>
