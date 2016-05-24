@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i class="fa fa-calendar"></i>
-                    <input type="text" class="form-control" name="date" value="{!! $request->input('date') !!}" id="datepicker" placeholder="Date">
+                    <input type="text" class="form-control" name="date" required value="{!! $request->input('date') !!}" id="datepicker" placeholder="Date">
                     <p align="center"
                        style="color: white; font-family: RobotoLight, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 13px; margin-top: 5px">
                     </p>
@@ -72,6 +72,22 @@
                                 <label for="opentime">Start Time</label>
                                 {!! Form::time('search-time', $request->input('s_time'), ['class' => 'form-control search-time','id'=>'cc-input-search-time'] ) !!}
                             </div>
+                            @if(!$request->input('s_time'))
+                            <script>
+                                $(document).ready(function(){
+                                    // set time current
+                                    var timeNow = new Date();
+                                    var hours   = timeNow.getHours();
+                                    var minutes = timeNow.getMinutes();
+                                    if(minutes <= 30) minutes = 30;
+                                    else{
+                                        hours +=1;
+                                        minutes = "00";
+                                    }
+                                    $("#cc-input-search-time").val((hours < 10 ? "0" + hours : hours) + ":" + minutes);
+                                })
+                            </script>
+                            @endif
                         </div>
                     </div>
                 </div>

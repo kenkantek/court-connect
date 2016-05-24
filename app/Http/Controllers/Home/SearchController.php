@@ -50,7 +50,7 @@ class SearchController extends Controller {
     }
 
     public function search(Request $request) {
-        ini_set('max_execution_time', 10000);
+        ini_set('max_execution_time', 300);
         $keyword_clubs = $request->input('s_name');
         $keyword_day = $request->input('date');
         $keyword_day = date("Y-m-d", strtotime($keyword_day));
@@ -66,9 +66,9 @@ class SearchController extends Controller {
 
         $clubs = null;
         $msg_errors = null;
-        if ($keyword_hour < 5 || $keyword_hour > 22) {
+        if ($request->input('date') && $keyword_hour < 5 || $keyword_hour > 22) {
             $msg_errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
-        }else {
+        }else if (!empty($keyword_clubs)){
             $clubs = Club::search($keyword_clubs)
                 ->join('courts','courts.club_id','=','clubs.id')
                 ->where(function ($q) use ($keyword_surface) {

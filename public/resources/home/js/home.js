@@ -216,16 +216,19 @@ $(function () {
         theme: "dark"
     });
 
-    // set time current
-    var timeNow = new Date();
-    var hours   = timeNow.getHours();
-    var minutes = timeNow.getMinutes();
-    if(minutes <= 30) minutes = 30;
-    else{
-        hours +=1;
-        minutes = "00";
+
+    function setTimeSearch() {
+        // set time current
+        var timeNow = new Date();
+        var hours   = timeNow.getHours();
+        var minutes = timeNow.getMinutes();
+        if(minutes <= 30) minutes = 30;
+        else{
+            hours +=1;
+            minutes = "00";
+        }
+        $("#cc-input-search-time").val((hours < 10 ? "0" + hours : hours) + ":" + minutes);
     }
-    //$("#cc-input-search-time").val((hours<10?"0"+hours:hours)+":"+minutes);
     $("#search-timepicker").val($("#cc-input-search-time").val());
     $("#cc-input-search-time").change(function(){
         $("#search-timepicker").val($(this).val());
