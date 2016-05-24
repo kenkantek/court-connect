@@ -28,7 +28,7 @@ class TeacherController extends Controller
     {
         $take = $request->take ?: 10;
         $data = User::with('teacher','roles')->whereHas('roles', function($query) use ($request) {
-            $query->where('context_id', $request->clubid)->where('role_id',4);
+            $query->where('context_id', $request->input('clubid'))->where('role_id',4);
         })->orderBy('created_at','desc')->paginate($take);
         foreach($data as $user){
             if($user->hasRole('admin')){
@@ -53,12 +53,12 @@ class TeacherController extends Controller
     }
 
 
-    public function getDelete($id)
+    public function getDelete(Request $request)
     {
-        if (\Auth::user()->id == $id) {
+        if (\Auth::user()->id == $request->id) {
             return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
         }
-        $response = $this->userRepository->delete($id);
+        $response = $this->userRepository->delete($request->id);
         return response()->json([
             'error' => false, 'message' => 'Deleted user successfully!',
         ]);
@@ -81,6 +81,7 @@ class TeacherController extends Controller
             return response()->json(['error' => true,"messages"=>$v->errors()->all()]);
         }
         $user = new User;
+        $request['password'] = bcrypt($request['password']);
         $user->fill($request->all());
         $user = $this->userRepository->createOrUpdate($user);
         $user->assignRole('teacher', 'clubs', $request->input('club_id'));

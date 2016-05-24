@@ -55,23 +55,32 @@
                 <li {{ Request::is("sadmin") ? 'class="active"': '' }}>
                     <a href="/sadmin" data-toggle="tooltip" data-placement="right" title="Home"><i class="fa fa-home"></i></a>
                 </li>
+
                 <li {{ Request::is("/sadmin/booking/*") ? 'class="active"': '' }}>
                     <a href="{{ route('booking.index') }}" data-toggle="tooltip" data-placement="right" title="Booking"><i class="fa fa-book"></i></a>
                 </li>
+
+                @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
                 <li>
                     <a href="{{ route('reports.index') }}" data-toggle="tooltip" data-placement="right" title="Reports"><i class="fa fa-area-chart"></i></a>
                 </li>
+                @endif
+
                 <li>
                     <a href="{{ route('users.list') }}" data-toggle="tooltip" data-placement="right" title="User"><i class="fa fa-users"></i></a>
                 </li>
                 <li>
                     <a href="{{ route('teacher.listAll') }}" data-toggle="tooltip" data-placement="right" title="Teacher"><i class="fa fa-user-plus"></i></a>
                 </li>
+
+                @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
                 <li>
                     <a href="{{ route('clubs.setting') }}" data-toggle="tooltip" data-placement="right" title="Club Setting">
                         <i class="fa fa-cogs"></i>
                     </a>
                 </li>
+                @endif
+
                 @if (Auth::user()->is_super)
                     <li>
                         <a href="{{ route('super.index') }}" data-toggle="tooltip" data-placement="right" title="Supper Admin">

@@ -41,6 +41,8 @@
 
             <div>
                 <slot name="temp"></slot>
+                <button type="button" id="btnDeleteUser"  class="btn btn-danger pull-left" @click.prevent="deleteUser()">Delete User
+                </button>
                 <button type="button" id="btnEditUser"  class="btn btn-primary pull-right" @click.prevent="editUser()">Edit User
                 </button>
             </div>
@@ -80,21 +82,39 @@
                 showNotice('success', res.data.success, 'Update Success!');
             }
             this.submit = false;
-        }, (res) => {
-            showNotice('error', 'Error', 'Error!');
-        });
+            }, (res) => {
+                showNotice('error', 'Error', 'Error!');
+            });
 
-    },
-    is_admin(){
-        if($(".fm-user input[name=is_admin]").hasClass('is_admin')) {
-            $(this).removeClass('is_admin')
-            this.$set('user.is_admin',0);
+        },
+        deleteUser(){
+            const user = this.user;
+            this.$http.get(laroute.route('users.delete'), {id:user.id}).then(res => {
+            if(res.data.error)
+            {
+                var msg = "<div>"+res.data.message+"</div>";
+                showNotice('error', msg, 'Error!');
+            }else
+            {
+                this.reloadUsers =  Math.floor(Math.random() * 10000);
+                showNotice('success', res.data.success, 'Deleted user successfully!');
+            }
+            this.submit = false;
+            }, (res) => {
+                showNotice('error', 'Error', 'Error!');
+            });
+
+        },
+        is_admin(){
+            if($(".fm-user input[name=is_admin]").hasClass('is_admin')) {
+                $(this).removeClass('is_admin')
+                this.$set('user.is_admin',0);
+            }
+            else {
+                $(".fm-user input[name=is_admin]").addClass("is_admin");
+                this.$set('user.is_admin',1);
+            }
         }
-        else {
-            $(".fm-user input[name=is_admin]").addClass("is_admin");
-            this.$set('user.is_admin',1);
-        }
-    }
     }
     }
 </script>

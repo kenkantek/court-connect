@@ -37,8 +37,10 @@ class UserController extends Controller
     {
         $take = $request->take ?: 10;
         $data = User::with('roles')->whereHas('roles', function($query) use ($request) {
-            $query->where('context_id', $request->clubid);
-        })->select("id", "first_name",'last_name' ,"email")->orderBy('created_at','desc')->paginate($take);
+            $query->where('context_id', $request->input('clubid'))
+                ->where('role_id','<>',4);
+        })->select("id", "first_name",'last_name' ,"email")->orderBy('updated_at','desc')->paginate($take);
+
         foreach($data as $user){
             if($user->hasRole('admin')){
                 $user['is_admin'] = true;
@@ -50,12 +52,12 @@ class UserController extends Controller
         return $data;
     }
 
-    public function getDelete($id)
+    public function getDelete(Request $request)
     {
-        if (\Auth::user()->id == $id) {
+        if (\Auth::user()->id == $request->id) {
             return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
         }
-        $response = $this->userRepository->delete($id);
+        $response = $this->userRepository->delete($request->id);
         return response()->json([
             'error' => false, 'message' => 'Deleted user successfully!',
         ]);
@@ -134,6 +136,7 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
+
     public function postUpdateCourt(UpdateCourtRequest $request)
     {
         $court = Court::find($request->input('id'));

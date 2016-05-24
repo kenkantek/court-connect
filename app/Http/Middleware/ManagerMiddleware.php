@@ -24,10 +24,9 @@ class ManagerMiddleware
             }
         }
 
-//        if (!$request->user()->isSuper()) {
-//
-//            return redirect()->route('clubs.setting');
-//        }
-        return $next($request);
+        if ($request->user()->hasRole('admin') || $request->user()->isSuper()) {
+            return $next($request);
+        }
+        return redirect()->route('admin.index');
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth', 'manager']], function () {
-
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth']], function () {
     Route::get('/', ['as' => 'admin.index', 'uses' => 'DashboardController@getIndex']);
 
     Route::controller('users', UserController::class, [
@@ -23,7 +22,36 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getTeachers' => 'teacher.listdata',
         'postUpdateTeacher' => 'teacher.update',
     ]);
-    
+
+    Route::controller('dashboard', DashboardController::class, [
+        'getAddContext' => 'dashboard.context',
+        'getClubs' => 'dashboard.clubs.list',
+    ]);
+    Route::controller('booking', ManageBookingController::class, [
+        'getManageBooking' => 'booking.index',
+        'getDataOfClub' => 'booking.dataOfClub',
+        'postViewPriceOrder' =>'booking.viewPriceOrder',
+        'postCheckCourtBooking' =>'booking.postCheckCourtBooking',
+        'postCheckInputCustomer' =>'booking.checkInputCustomer',
+        'postPayment' =>'booking.postPayment',
+        'postCheckPlayerforBooking' =>'booking.checkPlayerforBooking',
+        'getView' =>'booking.view',
+        'getCancel' =>'booking.cancel',
+        'getAcceptPayment' =>'booking.acceptPayment',
+        'getSearchPlayers' =>'booking.players',
+        'getAddressLookup' =>'booking.address_lookup',
+        'getCustomerLookup' =>'booking.customer_lookup',
+        'getInfoGridAvailable' =>'booking.infoGridAvailable',
+        'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
+        'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
+        'postNewDeal' => 'booking.newDeal',
+        'getSearch' => 'booking.search'
+    ]);
+});
+
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth', 'manager']], function () {
+
+
     Route::controller('clubs', ClubController::class, [
         'getSetting' => 'clubs.setting',
         'getManagerBookings' => 'clubs.manager-bookings',
@@ -51,30 +79,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
     Route::controller('surface', SurfaceController::class, [
         'getList' => 'surface.list',
     ]);
-    Route::controller('dashboard', DashboardController::class, [
-        'getAddContext' => 'dashboard.context',
-        'getClubs' => 'dashboard.clubs.list',
-    ]);
-    Route::controller('booking', ManageBookingController::class, [
-        'getManageBooking' => 'booking.index',
-        'getDataOfClub' => 'booking.dataOfClub',
-        'postViewPriceOrder' =>'booking.viewPriceOrder',
-        'postCheckCourtBooking' =>'booking.postCheckCourtBooking',
-        'postCheckInputCustomer' =>'booking.checkInputCustomer',
-        'postPayment' =>'booking.postPayment',
-        'postCheckPlayerforBooking' =>'booking.checkPlayerforBooking',
-        'getView' =>'booking.view',
-        'getCancel' =>'booking.cancel',
-        'getAcceptPayment' =>'booking.acceptPayment',
-        'getSearchPlayers' =>'booking.players',
-        'getAddressLookup' =>'booking.address_lookup',
-        'getCustomerLookup' =>'booking.customer_lookup',
-        'getInfoGridAvailable' =>'booking.infoGridAvailable',
-        'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
-        'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
-        'postNewDeal' => 'booking.newDeal',
-        'getSearch' => 'booking.search'
-    ]);
+
 
     Route::controller('reports', ReportController::class, [
         'getIndex' => 'reports.index',
