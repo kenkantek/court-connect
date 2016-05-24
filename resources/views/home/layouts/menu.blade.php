@@ -102,9 +102,9 @@
                     <div class="form-group" style="text-align: center; margin-bottom: 0px">
                         <a href="{{ route('auth.social',['provider' => 'facebook']) }}" class="btn-login-facebook"></a>
                     </div>
-                    <div class="form-group" style="text-align: center; margin-bottom: 0px">
-                        <a href="{{ route('auth.social',['provider' => 'google']) }}" class="btn-login-google"></a>
-                    </div>
+                    {{--<div class="form-group" style="text-align: center; margin-bottom: 0px">--}}
+                        {{--<a href="{{ route('auth.social',['provider' => 'google']) }}" class="btn-login-google"></a>--}}
+                    {{--</div>--}}
                 </form>
             </ul>
         </li>

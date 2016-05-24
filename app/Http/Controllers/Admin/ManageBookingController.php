@@ -266,7 +266,6 @@ class ManageBookingController extends Controller
     public function getDataOfClub(Request $request){
         $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
         $hours = range(5,22.5,0.5);
-
         $courts = Court::where('club_id',$request->input('club_id'))
             ->select(['id','name'])->orderBy('name')->get();
 
@@ -290,6 +289,7 @@ class ManageBookingController extends Controller
                 'data' => $courts
             ]);
         }
+
         foreach($courts as $k=>$court){
             $arr_hour = [];
             foreach($hours as $key=>$hour) {
@@ -304,22 +304,26 @@ class ManageBookingController extends Controller
             foreach($bookings as $booking){
                 $tmp_i = 0;
                 for($i=$booking['hour']; $i < $booking['hour'] + $booking['hour_length']; $i+=0.5){
-                    if($booking['player_id'] == 0) {
-                        $arr_hour["h_".$i]['content'] = $booking['billing_info']['first_name']. " ". $booking['billing_info']['last_name'];
-                    }else{
-                        $billing_info = Player::where('id',$booking['billing_info'])->first();
-                        if($billing_info)
-                            $arr_hour["h_".$i]['content'] = $billing_info['first_name']. " ". $billing_info['last_name'];
-                        $arr_hour["h_".$i]['content'] = "";
-                    }
-                    $arr_hour["h_".$i]['status'] = $booking['type'];
-                    $arr_hour["h_".$i]['booking_id'] = $booking['id'];
+                    $index = floatval($i);
+                    if(isset($arr_hour["h_".$index]['hour'])) {
+                        if ($booking['player_id'] == 0) {
+                            $arr_hour["h_" . $index]['content'] = $booking['billing_info']['first_name'] . " " . $booking['billing_info']['last_name'];
+                        } else {
+                            $billing_info = Player::where('id', $booking['billing_info'])->first();
+                            if ($billing_info)
+                                $arr_hour["h_" . $index]['content'] = $billing_info['first_name'] . " " . $billing_info['last_name'];
+                            $arr_hour["h_" . $index]['content'] = "";
+                        }
 
-                    if($tmp_i % 2 == 0)
-                        $arr_hour["h_" . $i]['g_start'] = "start";
-                    else
-                        $arr_hour["h_" . $i]['g_end'] = "end";
-                    $tmp_i++;
+                        $arr_hour["h_" . $index]['status'] = $booking['type'];
+                        $arr_hour["h_" . $index]['booking_id'] = $booking['id'];
+
+                        if ($tmp_i % 2 == 0)
+                            $arr_hour["h_" . $index]['g_start'] = "start";
+                        else
+                            $arr_hour["h_" . $index]['g_end'] = "end";
+                        $tmp_i++;
+                    }
                 }
             }
 
@@ -335,10 +339,10 @@ class ManageBookingController extends Controller
             }
 
             //copy arr_hour, edit key arr hour
-            $arr_hour_tmp = [];
+            $arr_hour_temp = [];
             foreach($arr_hour as $v)
-                $arr_hour_tmp[] = $v;
-            $courts[$k]['hours'] = $arr_hour_tmp;
+                $arr_hour_temp[] = $v;
+            $courts[$k]['hours'] = $arr_hour_temp;
         }
 
         return response()->json([

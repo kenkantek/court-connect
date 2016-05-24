@@ -24,7 +24,7 @@ use Exception;
 class BookingController extends Controller{
     public function checkout(Request $request)
     {
-        $errors = null;
+        $msg_errors = null;
         $court = null;
         if(!Input::has('court') || !Input::has('hour_start') ||  !Input::has('hour_length') || !Input::has('date') ){
         }
@@ -49,10 +49,10 @@ class BookingController extends Controller{
 
                 $court['price'] = getPriceForBooking($input);
             }else{
-                $errors[] = "Data invalid. Not found data";
+                $msg_errors[] = "Data invalid. Not found data";
             }
         }
-        return view('home.bookings.checkout',compact('request','court','errors'));
+        return view('home.bookings.checkout',compact('request','court','msg_errors'));
     }
 
     //post checkOut

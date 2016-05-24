@@ -7,12 +7,12 @@
         <div class="container content">
             <div class="instruction">
                 <h2><span>Checkout</span></h2>
-                @if($errors || $court->price['error'])
+                @if($msg_errors || $court->price['error'])
                     <div class="alert alert-danger alert-block">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        @if($errors)
+                        @if($msg_errors)
                             <ul>
-                                @foreach($errors as $message)
+                                @foreach($msg_errors as $message)
                                     <li>{{$message}}</li>
                                 @endforeach
                             </ul>
