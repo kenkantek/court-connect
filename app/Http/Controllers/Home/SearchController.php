@@ -54,7 +54,7 @@ class SearchController extends Controller {
         $keyword_clubs = $request->input('s_name');
         $keyword_day = $request->input('date');
         $keyword_day = date("Y-m-d", strtotime($keyword_day));
-        $keyword_hour_length = $request->input('mb-book-in-hour');
+        $keyword_hour_length = $request->input('mb-book-in-hour') >=1 ? $request->input('mb-book-in-hour') : 1;
         $keyword_hour = $request->input('s_time');
         $keyword_hour = date("G", strtotime($keyword_hour)) + date("i", strtotime($keyword_hour)) / 60;
 
