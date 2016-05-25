@@ -14,6 +14,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Commands\Inspire::class,
+        \App\Console\Commands\Inspire::class,
+        \App\Console\Commands\Test::class,
+        \App\Console\Commands\SendMail::class,
     ];
 
     /**
@@ -26,5 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        //$schedule->call('Test@sendEmail')->cron('* * * * *');
+        $schedule->call('send:email')->everyMinute();
     }
 }

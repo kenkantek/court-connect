@@ -18,7 +18,6 @@ use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Mail;
 use Exception;
 
 class BookingController extends Controller{
