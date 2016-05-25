@@ -124,7 +124,7 @@ $dayOfWeek = [
                 <div style="background:#eff0f4;border:1px solid #e2e2e2;padding:10px;margin-top:10px;width:100%; box-sizing: border-box;">
                     <table bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tbody>
-                        <tr bgcolor="#13234e" style="color:#fff;height:25px">
+                        <tr bgcolor="#13234e" style="color:#fff;height:25px; text-align: left">
                             <th scope="col" style="padding:5px">Booking Type</th>
                             <th scope="col" style="padding:5px">Date</th>
                             <th scope="col" style="padding:5px">Time/Length</th>
@@ -138,11 +138,11 @@ $dayOfWeek = [
                         </tr>
                         <tr align="center">
                             <td align="right" colspan="3" style="border-bottom:1px solid #eff0f4;padding:5px">Amount other</td>
-                            <td align="right" style="border-bottom:1px solid #eff0f4;padding:5px 16px 5px 5px">$0</td>
+                            <td align="left" style="border-bottom:1px solid #eff0f4;padding:5px 16px 5px 5px">$0</td>
                         </tr>
                         <tr align="center">
-                            <td align="right" colspan="" style="border-bottom:1px solid #eff0f4;padding:5px"><strong>Total</strong></td>
-                            <td align="right" style="border-bottom:1px solid #eff0f4;padding:5px 16px 5px 5px">
+                            <td align="right" colspan="3" style="border-bottom:1px solid #eff0f4;padding:5px"><strong>Total</strong></td>
+                            <td align="left" style="border-bottom:1px solid #eff0f4;padding:5px 16px 5px 5px">
                                 <strong>${{$booking['total_price']}}</strong>
                             </td>
                         </tr>
@@ -165,3 +165,8 @@ $dayOfWeek = [
 <style>
     .text tr td:first-child{display: block; width: 120px}
 </style>
+<script>
+    @if(isset($print) && $print == true)
+        window.print();
+    @endif
+</script>

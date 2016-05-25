@@ -124,7 +124,7 @@
                     </table>
                 </div>
                 <div class="col-xs-3">
-                    <div id="mb-print-receipt" class="btn btn-primary btn-mb-ex icon-fa-print">Print Receipt</div>
+                    <div id="mb-print-receipt" class="btn btn-primary btn-mb-ex icon-fa-print" @click="printReceipt(booking['id'])">Print Receipt</div>
                     <div v-if="booking['status'] == 'required'" @click="acceptPayment(booking['id'])" id="mb-accept-payment" class="btn btn-primary btn-mb-ex icon-fa-accept">Accept Payment</div>
                     <div v-else id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-check">Check Players In</div>
                     <div id="mb-edit-booking" @click="editBooking(booking['id'])" class="btn btn-primary btn-mb-ex icon-fa-edit">Edit Booking</div>
@@ -187,9 +187,18 @@
                     this.booking.status = "paid";
                     showNotice('success', "Update accept payment success!", 'Update Success!');
                 }
-            }).error((data) => {
+                }).error((data) => {
 
-            });
+                });
+            },
+            printReceipt(booking_id){
+                $('<form>', {
+                    "id": "getInvoiceImage",
+                    "html": '<input type="hidden" name="id" value="' + booking_id + '" /><input name="_token" type="hidden" value="'+$('meta[name="csrf-token"]').attr('content')+'">',
+                    "action": laroute.route('booking.printReceipt'),
+                    'target': '_blank',
+                    'method': 'post',
+                }).appendTo(document.body).submit();
 
             },
             editBooking(booking_id){

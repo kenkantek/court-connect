@@ -539,9 +539,6 @@ class ManageBookingController extends Controller
             ->orWhere('billing_info',"like","%".$name."%")
             ->get(['bookings.*','courts.name as court_name']);
 
-        foreach($bookings as $k=>$booking){
-            $bookings[$k]['billing_info'] = (array)json_decode($booking['billing_info']);
-        }
         return response()->json([
             'error' => false,
             'bookings' => $bookings
@@ -621,5 +618,12 @@ class ManageBookingController extends Controller
             'error' => false,
             'user' => $user
         ]);
+    }
+
+    public function postPrintReceipt(Request $request){
+        $id = $request->input('id');
+        $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id])->first();
+        $print = true;
+        return view('home.bookings.print_confirmation',compact('booking','print'));
     }
 }

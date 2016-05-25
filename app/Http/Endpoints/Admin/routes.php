@@ -45,7 +45,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
         'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
         'postNewDeal' => 'booking.newDeal',
-        'getSearch' => 'booking.search'
+        'getSearch' => 'booking.search',
+        'postPrintReceipt' => 'booking.printReceipt'
     ]);
 });
 

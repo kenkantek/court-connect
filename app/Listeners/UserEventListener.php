@@ -39,7 +39,7 @@ class UserEventListener
         Mail::send('home.bookings.print_confirmation',$data, function($message) use ($booking)
         {
             $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
-            $message->to($booking['billing_info']['email'])->subject('Court Connect: Order');
+            $message->to($booking['billing_info']['email'])->subject('Court Connect: Order#'.$booking['id']);
         });
     }
 
