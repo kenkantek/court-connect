@@ -30,6 +30,6 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         //$schedule->call('Test@sendEmail')->cron('* * * * *');
-        $schedule->call('send:email')->everyMinute();
+        $schedule->command('send:email')->everyMinute();
     }
 }
