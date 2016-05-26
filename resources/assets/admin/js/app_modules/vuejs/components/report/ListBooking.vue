@@ -50,7 +50,7 @@
 			<tr v-for="booking in data.data | filterBy filterKey | orderBy sortKey sortOrders[sortKey]">
 				<td>{{ booking.id }}</td>
 				<td>
-					{{ booking.type == "contract" ? (dateOfWeek[booking->day_of_week]]+ ", " + booking.date_range_of_contract.from + " - " + booking.date_range_of_contract.to): booking.date }}
+					{{ booking.type == "contract" ? (dateOfWeek[booking.day_of_week]+ ", " + booking.date_range_of_contract.from + " - " + booking.date_range_of_contract.to): booking.date }}
 					<div>
 						at {{ booking.hour }}
 						for {{ booking.hour_length }}Hour

@@ -50,15 +50,16 @@ class SendMail extends Command
         })
             ->orWhere('date', $date_current->subDays(5)->format('Y/m/d'))
             ->get();
-
-        foreach($bookings_today as $booking){
-            $data['booking'] = $booking;
-            Mail::send('home.bookings.print_confirmation',$data, function($message) use ($booking)
-            {
-                $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
-                $message->to($booking['billing_info']['email'])->subject('Court Connect: Order#'.$booking['id']);
-            });
+        if(isset($bookings_today) && count($bookings_today) > 0) {
+            foreach ($bookings_today as $booking) {
+                $data['booking'] = $booking;
+                Mail::send('home.bookings.print_confirmation', $data, function ($message) use ($booking) {
+                    $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
+                    $message->to($booking['billing_info']['email'])->subject('Court Connect: Order#' . $booking['id']);
+                });
+            }
+            \Log::info("Begin schedule send mail: " . \Carbon\Carbon::now());
         }
-        \Log::info("Begin schedule send mail: ". \Carbon\Carbon::now());
+        \Log::info("Test log: " . \Carbon\Carbon::now());
     }
 }

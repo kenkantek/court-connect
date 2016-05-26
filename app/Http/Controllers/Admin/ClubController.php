@@ -143,7 +143,7 @@ class ClubController extends Controller
     }
 
     public function getCitys(Request $request){
-        $data = DB::table('citys')->where('state_id',$request->input('state_id'))->orderBy('name')->get();
+        $data = DB::table('citys')->where('state_code',$request->input('state_id'))->orderBy('name')->get();
         return response()->json([
             'error' => false,
             'data' => $data
