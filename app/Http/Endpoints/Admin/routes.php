@@ -1,6 +1,7 @@
 <?php
 
-Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth', 'manager']], function () {
+
     Route::get('/', ['as' => 'admin.index', 'uses' => 'DashboardController@getIndex']);
 
     Route::controller('users', UserController::class, [
@@ -48,11 +49,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getSearch' => 'booking.search',
         'postPrintReceipt' => 'booking.printReceipt'
     ]);
-});
 
-Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth', 'manager']], function () {
-
-
+    
     Route::controller('clubs', ClubController::class, [
         'getSetting' => 'clubs.setting',
         'getManagerBookings' => 'clubs.manager-bookings',
