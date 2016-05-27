@@ -41,23 +41,25 @@
 		props:['clubSettingId','courts_choice','courts','reloadCourts'],
 		data(){
 			return {
-        data: {
-                per_page: "10",
-                },
-        api:laroute.route('clubs.courts.list'),
+		        data: {
+		                per_page: "20",
+		              },
+		        api:laroute.route('clubs.courts.list'),
 			}
 		},
 		watch: {
 			clubSettingId: 'reloadAsyncData',
 			reloadCourts:'reloadAsyncData',
+			data : function () {
+				this.courts = this.data.data;
+			}
 		},
 	asyncData(resolve, reject) {
 		this.fetchCourts(this.api).done((data) => {
-			resolve({data});
-		}, (error) => {
-			console.log(error);
+				resolve({data});
+			}, (error) => {
+				console.log(error);
 		});
-
 	},
 	methods: {
 		fetchCourts(api, clubid = this.clubSettingId, take = this.data.per_page) {
@@ -70,6 +72,7 @@
 			});
 			return def.promise;
 		},
+
 		addCourts(index){
 				this.courts_choice = [];
 				var indexTable = index + 1 ;

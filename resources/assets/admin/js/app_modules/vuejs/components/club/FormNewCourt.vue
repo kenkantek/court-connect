@@ -36,7 +36,7 @@
 				<div class="col-sm-8">
 					<select class="form-control" name="price" v-model='court.base_price' @change="updateDataRates">
 						<option value="0">-------</option>
-						<option  v-for="(index,court) in courts" value="{{court.id}}">Base of {{court.name}}</option>
+						<option  v-for="court in courts" value="{{court.id}}">Base of {{court.name}}</option>
 					</select>
 				</div>
 			</div>
@@ -69,8 +69,12 @@
 
 			for (var index in this.courts) {
 				if (this.court.base_price == this.courts[index].id) {
-					const temp = _.cloneDeep(this.courts[index].rates);
-					this.dataRates = temp;
+					for (var i in this.courts[index].rates) {
+						const datarate = _.cloneDeep(this.courts[index].rates[i]);
+						const nameCourt = _.cloneDeep(this.courts[index].name);
+						this.dataRates.push({datarate,nameCourt});
+					}
+					break;
 				}
 			}
 		},
