@@ -96,7 +96,6 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
         $table_rate = CourtRate::where('start_date', '<=', $date)
             ->where('end_date', '>=', $date)
             ->where('court_id', $court_id)
-            ->where('is_member', $is_member)
             ->orderBy('updated_at', 'DESC')
             ->first();
     }else if($type == "contract") {
@@ -104,7 +103,6 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             ->where('start_date', '<=', $date)
             ->where('end_date', '>=', $date)
             ->where('club_id', $court['club_id'])
-            ->where('is_member', $is_member)
             ->orderBy('updated_at', 'DESC')
             ->first();
         if(!$table_rate)
@@ -131,9 +129,11 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             $rates[$i]['A6'] = "N/A";
             $rates[$i]['A7'] = "N/A";
         }
-    }else
-        $rates = $table_rate['rates'];
-
+    }else {
+        if($is_member)
+            $rates = $table_rate['rates_member'];
+        else $rates = $table_rate['rates_nonmember'];
+    }
 
     $dayOfWeek = date('w', strtotime($date));
     $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);

@@ -32,13 +32,16 @@
 		background-color: #0f494d;
 		color: #fff;
 	}
+	tr td{
+		text-align: left;
+	}
 </style>
 <script>
 	import Filter from '../globals/Filter.vue';
 	var _ = require('lodash'),
 		deferred = require('deferred');
 	export default {
-		props:['clubSettingId','courts_choice','courts','reloadCourts'],
+		props:['clubSettingId','courts_choice','courts','reloadCourts','delete_court','indexDataRates'],
 		data(){
 			return {
 		        data: {
@@ -50,8 +53,15 @@
 		watch: {
 			clubSettingId: 'reloadAsyncData',
 			reloadCourts:'reloadAsyncData',
+			delete_court:'reloadAsyncData',
 			data : function () {
 				this.courts = this.data.data;
+			},
+			courts_choice: function () {
+				if(this.courts_choice.length <=0){
+					$('table tbody tr').removeClass('selected');
+					$('.court-item-check').prop('checked',false);
+				}
 			}
 		},
 	asyncData(resolve, reject) {
@@ -74,6 +84,7 @@
 		},
 
 		addCourts(index){
+				this.indexDataRates = null;
 				this.courts_choice = [];
 				var indexTable = index + 1 ;
 				if($('.court-item-check:eq('+index+')').prop('checked')){

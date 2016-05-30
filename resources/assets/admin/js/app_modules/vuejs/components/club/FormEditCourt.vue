@@ -1,6 +1,6 @@
 <template>
 	<div class="court_new courtbox"
-		 v-if="courts_choice.length == 1"
+		 v-if="courts_choice !=null && courts_choice.length == 1"
 		>
 		<h3 class="title-box">Edit Court</h3>
 		<form class="form-horizontal">
@@ -35,8 +35,8 @@
 			</div>
 			<div>
 				<slot name="temp"></slot>
-				<button type="button" id="btnEditCourt"  class="btn btn-primary pull-right" @click.prevent="editCourt()">Edit Court
-				</button>
+				<button type="button" id="btnEditCourt"  class="btn btn-primary pull-right" @click.prevent="editCourt()">Save Court</button>
+				<button type="button" class="btn btn-flat btn-danger pull-left" @click="deleteCourt">Delete court</button>
 			</div>
 			<!-- /.box-footer -->
 		</form>
@@ -44,7 +44,7 @@
 </template>
 <script>
 	export default {
-		props:['courts_choice','surface','courts','clubSettingId','reloadCourts','dataRates'],
+		props:['courts_choice','surface','courts','clubSettingId','reloadCourts','dataRates','delete_court'],
 		data() {
 		return {
 			submit : false,
@@ -52,12 +52,14 @@
 	},
 	computed: {
 		court: function () {
-			return this.courts_choice[0];
+			if(this.courts_choice.length > 0)
+				return this.courts_choice[0];
+			else return null;
 		}
 	},
 	methods: {
 		editCourt(){
-			if(this.dataRates.length > 0){
+			if(this.dataRates.length > 0 && this.court != null ){
 				const court = this.court;
 				court.dataRates = _.cloneDeep(this.dataRates);
 				console.log(court);
@@ -74,14 +76,32 @@
 					showNotice('error', 'Error', 'Error!');
 					$("#clubSetting-wrapper .loading").remove();
 				});
-		}else if(this.dataRates == null) {
-			showNotice('error', 'Please add new rate for court', 'Error!');
-			$('.new_date_preiod').removeClass('hidden');
-			$('html, body').animate({ scrollTop: $('.new_date_preiod').position().top }, 500);
-			$('#date-picker-rate').focus();
+			}else if(this.dataRates == null || this.dataRates.length < 1) {
+				showNotice('error', 'Please add new rate for court', 'Error!');
+				$('.new_date_preiod').removeClass('hidden');
+				$('html, body').animate({ scrollTop: $('.new_date_preiod').position().top }, 500);
+				$('#date-picker-rate').focus();
 
-		 }
-	  }
+			 }
+	  	},
+		deleteCourt(){
+			var _this = this;
+			$('#cc-confirm-delete').modal({ backdrop: 'static', keyboard: false })
+					.one('click', '#cc-submit-delete', function (e) {
+						$("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+						const court = _this.court;
+						_this.$http.delete(laroute.route('courts.delete'), court).then(res => {
+							showNotice('success', res.data.success_msg, 'Success!');
+						_this.delete_court = _this.reloadCourts =  Math.floor(Math.random() * 10000);
+						_this.reloadCourts =  Math.floor(Math.random() * 10000);
+						_this.$set('courts_choice', null);
+					},(res) => {
+							showNotice('error', 'Error', 'Error!');
+						});
+						$("body .loading").remove();
+					});
+
+		},
 	 }
 	}
 </script>

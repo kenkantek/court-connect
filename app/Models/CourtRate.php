@@ -12,7 +12,11 @@ class CourtRate extends Model
         return $this->belongsTo('App\Models\Contexts\Court', 'court_id');
 
     }
-    public function getRatesAttribute($value)
+    public function getRatesMemberAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+    public function getRatesNonmemberAttribute($value)
     {
         return json_decode($value, true);
     }

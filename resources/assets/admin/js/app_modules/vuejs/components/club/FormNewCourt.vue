@@ -51,7 +51,7 @@
 </template>
 <script>
 	export default {
-		props:['surface','courts','clubSettingId','reloadCourts','dataRates','btnAddCourt'],
+		props:['surface','courts','clubSettingId','reloadCourts','dataRates','btnAddCourt','indexDataRates'],
 		data() {
 		return {
 			court : {
@@ -72,7 +72,8 @@
 					for (var i in this.courts[index].rates) {
 						const datarate = _.cloneDeep(this.courts[index].rates[i]);
 						const nameCourt = _.cloneDeep(this.courts[index].name);
-						this.dataRates.push({datarate,nameCourt});
+//						this.dataRates.push({datarate,nameCourt});
+						this.dataRates=[{datarate,nameCourt}];
 					}
 					break;
 				}
@@ -93,22 +94,24 @@
 				$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
 				this.$http.post(laroute.route('courts.create'), court).then(res => {
 					this.reloadCourts =  Math.floor(Math.random() * 10000);
-				this.$set('court.name', null);
-				this.$set('court.indoor_outdoor', 1);
-				this.$set('court.surface_id', 1);
-				this.$set('court.base_price', 0);
-				this.$set('btnAddCourt', false);
-				showNotice('success', res.data.success_msg, 'Success!');
-				this.submit = false;
-				$('.unSelected').click();
-				$("#clubSetting-wrapper .loading").remove();
-			}, (res) => {
-				showNotice('error', 'Court Name is required!', 'Error!');
-				$("#clubSetting-wrapper .loading").remove();
-			});
-		}
 
-	}
+					this.$set('court.name', null);
+					this.$set('court.indoor_outdoor', 1);
+					this.$set('court.surface_id', 1);
+					this.$set('court.base_price', 0);
+					this.$set('btnAddCourt', false);
+					this.$set('indexDataRates',null);
+					showNotice('success', res.data.success_msg, 'Success!');
+					this.submit = false;
+					$('.unSelected').click();
+					$("#clubSetting-wrapper .loading").remove();
+				}, (res) => {
+					showNotice('error', 'Court Name is required!', 'Error!');
+					$("#clubSetting-wrapper .loading").remove();
+				});
+			}
+
+		}
 	}
 	}
 </script>

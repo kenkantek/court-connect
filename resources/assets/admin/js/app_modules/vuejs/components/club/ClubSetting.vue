@@ -13,6 +13,7 @@
 					:courts_choice.sync="courts_choice"
 					:courts.sync="courts"
 					:reload-courts.sync="reloadCourts"
+					:index-data-rates.sync = "indexDataRates"
 				></list-court>
 			<div>
 					<a class="btn btn-primary btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
@@ -23,7 +24,8 @@
 					:courts.sync="courts"
 					:club-setting-id="clubSettingId"
 					:reload-courts.sync="reloadCourts"
-					:data-rates.sync="dataRates"
+					:data-rates.sync="dataRates",
+					:delete_court.sync = "delete_court",
 					></form-edit-court>
 				<form-new-court
 					v-if="!courts_choice.length && btnAddCourt"
@@ -33,6 +35,7 @@
 					:reload-courts.sync="reloadCourts"
 					:data-rates.sync="dataRates"
 					:btn-add-court.sync = "btnAddCourt"
+					:index-data-rates.sync = "indexDataRates"
 					>
 						<span slot="temp">When creating a new court you can set the initial prices to match a previously created court. Select the court you'd like to copy the prices from.
 						</span>
@@ -45,6 +48,7 @@
 				:data-rates.sync="dataRates" 
 				:courts_choice.sync="courts_choice"
 				:btn-add-court.sync = "btnAddCourt"
+				:index-data-rates.sync = "indexDataRates"
 				:reload-courts.sync = "reloadCourts"
 				></court-rate>
 				
@@ -99,7 +103,7 @@
 	let _ = require('lodash'),
 		deferred = require('deferred');
 	export default {
-		props:['clubSettingId'],
+		props:['clubSettingId','delete_court'],
 		data(){
 		return {
 			dataRates:[],
@@ -108,6 +112,7 @@
 			courts:[],
 			reloadCourts:1,
 			btnAddCourt:false,
+			indexDataRates: null
 		}
 	},
 	watch: {

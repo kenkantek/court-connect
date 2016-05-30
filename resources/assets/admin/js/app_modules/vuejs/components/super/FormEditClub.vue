@@ -53,8 +53,8 @@
                 </div>
             </div>
             <div class="form-group">
-                 <button type="submit" class="btn btn-flat btn-info pull-right" :disabled="submiting" style="margin-right: 85px;">Update club</button>
-                <button type="button" class="btn btn-flat btn-danger pull-right" @click="deleteClub">Delete club</button>
+                <button type="submit" class="btn btn-flat btn-info pull-right" :disabled="submiting" style="margin-right: 65px;">Update club</button>
+                <button type="button" class="btn btn-flat btn-danger pull-left" @click="deleteClub">Delete club</button>
             </div>
            
 

@@ -27,7 +27,6 @@ class CourtController extends Controller
     }
     public function postCreateCourt(CreateCourtRequest $request)
     {
- 
         $court = new Court;
         $court->fill($request->all());
         $court->status = 1;
@@ -78,11 +77,11 @@ class CourtController extends Controller
         //set rate
         foreach ($dataRates as $key => $inputRate) {
             $rate = new CourtRate;
-            $rate->rates = json_encode($inputRate['datarate']['rates']);
+            $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);
+            $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
             $rate->end_date = $inputRate['datarate']['end_date'];
             $rate->start_date = $inputRate['datarate']['start_date'];
             $rate->name = $inputRate['datarate']['name'];
-            $rate->is_member = $inputRate['datarate']['is_member'];
             $rate->court_id = $court['id'];
             $rate->save();
             //$this->setDateRateOfCourt($rate['id'],$court, $inputRate);
@@ -166,5 +165,13 @@ class CourtController extends Controller
                 $tmp_club_court->update();
             }
         }
+    }
+
+    public function deleteCourt(Request $request)
+    {
+        $court = Court::find($request->input('id'))->delete();
+        return response([
+            'success_msg' => 'Court ' . $court['name'] . ' has been deleted',
+        ]);
     }
 }

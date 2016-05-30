@@ -9,8 +9,8 @@
 		</h3>
 		<div class="pull-right">
 			<ul id="tabRate">
-				<li :class="{'active': dataRate.is_member == 1}"  @click="setMember(1)">Members</li>
-				<li :class="{'active': dataRate.is_member == 0}"  @click="setMember(0)">Non/Members</li>
+				<li :class="{'active': is_member == 1}"  @click="setMember(1)">Members</li>
+				<li :class="{'active': is_member == 0}"  @click="setMember(0)">Non/Members</li>
 			</ul>
 		</div>
 		<div class="clearfix"></div>
@@ -21,7 +21,7 @@
 					<div class="new_date_preiod tooltip1 hidden">
 						<div class="pull-left">
 							<strong>Select Date Range</strong>
-							<input id="date-picker-rate" class="daterange form-control pull-right" name="daterange_period" type="text" v-model="dataRate.name">
+							<input id="date-picker-rate" class="daterange form-control pull-right" name="daterange_period" type="text" v-model="daterange_period">
 						</div>
 						<br>
 						<div class="pull-right">
@@ -32,56 +32,69 @@
 			</div>
 			<div class="pull-left">
 				<strong>Date Period</strong>
-					<div>
-						<select name="list-period" id="inputList-Period" class="form-control" required="required" v-model="indexDataRates">
-							<option v-for="(index,d) in dataRates" track-by="$index" value="{{index}}" :selected="index == 0 ? 'selected':''">
-								{{d.datarate.name}} -- {{d.nameCourt}}
-							</option>
-						</select>
-					</div>
-					<div class="date_period">
-						<button v-if="dataRates.length > 0 && indexDataRates != null" class="btn btn-danger" style="margin-right:30px" @click="deleteDataRate()">Delete</button>
-						<button class="btn btn-primary" v-show="courts_choice.length > 0" @click="updateMulti">Update Rates</button>
-					</div>
+				<div>
+					<select name="list-period" id="inputList-Period" class="form-control" required="required" v-model="indexDataRates">
+						<option v-for="(index,d) in dataRates" track-by="$index" value="{{index}}" :selected="index == 0 ? 'selected':''">
+							{{d.datarate.name}} -- {{d.nameCourt}}
+						</option>
+					</select>
+				</div>
+				<div class="date_period">
+					<button v-if="dataRates.length > 0 && indexDataRates != null" class="btn btn-danger" style="margin-right:30px" @click="deleteDataRate()">Delete</button>
+					<button class="btn btn-primary" v-show="courts_choice.length > 0" @click="updateMulti">Update Rates</button>
+				</div>
 			</div>
 			<div class="clearfix"></div>
 			<br>
-			<div class="row">
-				<div class="col-md-5">
-					<strong>Enter Price</strong>
-					<input class="price form-control" placeholder="Enter Price" name="price" type="number" v-model="priceSet">
-					<span>Select hours from grid and press apply to adjust hours</span>
-				</div>				
-				<div class="col-md-4">
-					<button class="btn btn-primary"  @click="setPrice()" style="margin-top: 20px;">Set Price</button>
-				</div>
-				<div class="col-md-3 text-right">
-					<button class="btn btn-primary unSelected hidden" style="margin-top: 20px; margin-left: 20px" @click="removeSelect()">Remove all select</button>
-				</div>
-			</div>
-			<div class="clearfix"></div>
-			<table class="table table-bordered table-hover table-th clearfix" style="margin-top: 20px" id="table-rate">
-				<thead>
-				<tr>
-					<th></th>
-					<th>Mon</th>
-					<th>Tue</th>
-					<th>Web</th>
-					<th>Thur</th>
-					<th>Fri</th>
-					<th>Sat</th>
-					<th>Sun</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr v-for="(index,time) in dataRate.rates" track-by="$index">
-					<td class="td_field_label" v-if="index > 7"> {{ index - 7 }} pm</td>
-					<td class="td_field_label" v-else> {{ index + 5 }} am</td>
-					<td v-for="(key,rate) in time" class="price_hours" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</td>
-				</tr>
 
-				</tbody>
-			</table>
+			<div class="box-data-rates">
+				<div class="overlight"></div>
+				<div class="row">
+					<div class="col-md-5">
+						<strong>Enter Price</strong>
+						<input class="price form-control" placeholder="Enter Price" name="price" type="number" v-model="priceSet">
+						<span>Select hours from grid and press apply to adjust hours</span>
+					</div>
+					<div class="col-md-4">
+						<button class="btn btn-primary"  @click="setPrice()" style="margin-top: 20px;">Set Price</button>
+					</div>
+					<div class="col-md-3 text-right">
+						<button class="btn btn-primary unSelected hidden" style="margin-top: 20px; margin-left: 20px" @click="removeSelect()">Remove all select</button>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<table class="table table-bordered table-hover table-th clearfix" style="margin-top: 20px" id="table-rate">
+					<thead>
+					<tr>
+						<th></th>
+						<th>Mon</th>
+						<th>Tue</th>
+						<th>Web</th>
+						<th>Thur</th>
+						<th>Fri</th>
+						<th>Sat</th>
+						<th>Sun</th>
+					</tr>
+					</thead>
+					<tbody>
+					<template v-if="this.is_member == 1">
+						<tr v-for="(index,time) in dataRate.rates_member" track-by="$index">
+							<td class="td_field_label" v-if="index > 7"> {{ index - 7 }} pm</td>
+							<td class="td_field_label" v-else> {{ index + 5 }} am</td>
+							<td v-for="(key,rate) in time" class="price_hours" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</td>
+						</tr>
+					</template>
+					<template v-if="this.is_member == 0">
+						<tr v-for="(index,time) in dataRate.rates_nonmember" track-by="$index">
+							<td class="td_field_label" v-if="index > 7"> {{ index - 7 }} pm</td>
+							<td class="td_field_label" v-else> {{ index + 5 }} am</td>
+							<td v-for="(key,rate) in time" class="price_hours" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</td>
+						</tr>
+					</template>
+					</tbody>
+				</table>
+			</div>
+
 		</div>
 		<!-- The Modal -->
 		<div id="myModal" class="modal" v-show="showNotice">
@@ -103,7 +116,7 @@
 			<!-- Modal content -->
 			<div class="modal-content">
 				<div class="notify">
-					
+
 				</div>
 
 			</div>
@@ -165,179 +178,236 @@
 </style>
 <script>
 	var _ = require('lodash'),
-		deferred = require('deferred');
+			deferred = require('deferred');
 	export default {
-		props:   ['clubSettingId','dataRates','courts_choice','btnAddCourt','reloadCourts'],
+		props:   ['clubSettingId','dataRates','courts_choice','btnAddCourt','reloadCourts','indexDataRates'],
 
 		data() {
-		return {
-			dataRate : {
-				rates :[
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-				],
-				end_date:0,
-				start_date:0,
-				name:null,
+			return {
+				daterange_period: null,
+				dataRate : {
+					rates_member :[
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					],
+					rates_nonmember :[
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					],
+					end_date:0,
+					start_date:0,
+					name:null,
+				},
+				defaultRate : {
+					rates_member :[
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					],
+					rates_nonmember :[
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					],
+					end_date:0,
+					start_date:0,
+					name:null,
+				},
+				selected:  [],
+				priceSet: 20,
+				showNotice:false,
+				rateIndex:null,
 				is_member:1,
-			},
-			defaultRate : {
-				rates :[
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-					{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-				],
-				end_date:0,
-				start_date:0,
-				name:null,
-				is_member:1,
-			},
-			selected:  [],
-			priceSet: 20,
-			indexDataRates:null,
-			showNotice:false,
-			rateIndex:null,
-		}
-	},
-	watch: {
-		indexDataRates: function () {
-			if (this.dataRates.length >0 ) {
-				var index = this.indexDataRates ;
-				this.dataRate = this.dataRates[index].datarate;
-				this.rateIndex = index;
 			}
 		},
-		reloadCourts: function () {
-			this.priceSet =  20;
-			this.dataRate = this.defaultRate;
-			this.dataRates = [];
-		},
-		courts_choice: function () {
-			if (this.courts_choice.length > 1) {
-				this.showNotice = true;
-			}else{
-				this.showNotice = false;
-				this.indexDataRates = 0;
-			}
-			if (this.dataRates.length >0 ) {
-				var index = this.indexDataRates ;
-				this.dataRate = this.dataRates[index].datarate;
-			}else{
-				this.dataRate = this.defaultRate;
-			}
-		}
-	},
-	ready(){
-		$('.add_tooltip').click(function(event) {
-			event.preventDefault();
-			$('.tooltip1').toggleClass('hidden');
-		});
+		watch: {
+			indexDataRates: function () {
+				if (this.dataRates.length >0 && this.indexDataRates != null) {
+					var index = this.indexDataRates ;
+					this.dataRate = this.dataRates[index].datarate;
+					this.rateIndex = index;
+				}
+				if(this.indexDataRates != null){
+					$(".box-data-rates .overlight").hide();
+				}
+				else $(".box-data-rates .overlight").show();
+			},
+			reloadCourts: function () {
+				this.priceSet =  20;
+				this.dataRate = _.cloneDeep(this.defaultRate);
+				this.dataRates = [];
+			},
+			courts_choice: function () {
+				if (this.courts_choice.length > 1) {
+					this.showNotice = true;
+					//this.indexDataRates = 0;
+				}else{
+					this.showNotice = false;
+					this.indexDataRates = null;
+				}
 
-		$('#table-rate').selectable({
-			filter: ".price_hours",
-			selected: ( event, ui ) => {
-				$(".unSelected").removeClass('hidden');
-				const x = $(ui.selected).data('x'),
-				y = $(ui.selected).data('y');
-				this.selected.push({x , y});
-			},
-			unselected:( event, ui ) => {
-				const x = $(ui.unselected).data('x'),
-					y = $(ui.unselected).data('y');
-				$(".unSelected").removeClass('hidden');
-				this.selected = _.reject(this.selected, {x, y});
+				if (this.dataRates.length >0 && this.indexDataRates != null) {
+					var index = this.indexDataRates ;
+					this.dataRate = this.dataRates[index].datarate;
+				}else{
+					this.dataRate = _.cloneDeep(this.defaultRate);
+				}
 			}
-		});
-		$('.daterange').daterangepicker(
-			{
+		},
+		ready(){
+			$('.add_tooltip').click(function(event) {
+				event.preventDefault();
+				$('.tooltip1').toggleClass('hidden');
+			});
+
+			$('#table-rate').selectable({
+				filter: ".price_hours",
+				selected: ( event, ui ) => {
+					$(".unSelected").removeClass('hidden');
+					const x = $(ui.selected).data('x'),
+						y = $(ui.selected).data('y');
+					this.selected.push({x , y});
+				},
+				unselected:( event, ui ) => {
+					const x = $(ui.unselected).data('x'),
+							y = $(ui.unselected).data('y');
+					$(".unSelected").removeClass('hidden');
+					this.selected = _.reject(this.selected, {x, y});
+				}
+			});
+			$('.daterange').daterangepicker({
 				showDropdowns: true,
 				startDate: moment().startOf('month'),
 				endDate: moment().add(3, 'months').endOf('month'),
-		});
-	},
-	methods: {
-		removeSelect(){
-			$("#table-rate .ui-selected").removeClass("ui-selected").addClass("ui-unselecting");
-			this.selected  = [];
-			$(".unSelected").addClass('hidden');
+			});
 		},
-		updateMulti(){
-			const courts = _.cloneDeep(this.courts_choice);
-			const dataRates = _.cloneDeep(this.dataRates);
-			$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
-			this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates}).then(res => {
-				this.reloadCourts =  Math.floor(Math.random() * 10000);
+		methods: {
+			removeSelect(){
+				$("#table-rate .ui-selected").removeClass("ui-selected").addClass("ui-unselecting");
+				this.selected  = [];
+				$(".unSelected").addClass('hidden');
+			},
+			updateMulti(){
+				const courts = _.cloneDeep(this.courts_choice);
+				const dataRates = _.cloneDeep(this.dataRates);
+				$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+				this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates}).then(res => {
+					this.reloadCourts =  Math.floor(Math.random() * 10000);
 				this.courts_choice = [];
 				this.dataRates = [];
-				this.dataRate = this.defaultRate
-			showNotice('success', res.data.success_msg, 'Update Multi Success!');
-			$("#clubSetting-wrapper .loading").remove();
-		}, (res) => {
-			showNotice('error', 'Error', 'Error!');
-			$("#clubSetting-wrapper .loading").remove();
-		});
-	},
-	continueRate() {
-		this.showNotice = false;
-	},
-	deleteDataRate() {
-		let name = this.dataRates[this.indexDataRates].datarate.name;
-		this.dataRates.splice(this.indexDataRates, 1);
-		showNotice('success', 'Delete '+ name, 'Success!');
-	},
-	setMember(number){
-		this.$set('dataRate.is_member', number);
-	},
-	addNewCourtRate(){
-		const p = {};
-		p.datarate = _.cloneDeep(this.dataRate);
+				this.dataRate = _.cloneDeep(this.defaultRate);
+				showNotice('success', res.data.success_msg, 'Update Multi Success!');
+				$("#clubSetting-wrapper .loading").remove();
+			}, (res) => {
+					showNotice('error', 'Error', 'Error!');
+					$("#clubSetting-wrapper .loading").remove();
+				});
+			},
+			continueRate() {
+				this.showNotice = false;
+			},
+			deleteDataRate() {
+				let name = this.dataRates[this.indexDataRates].datarate.name;
+				this.dataRates.splice(this.indexDataRates, 1);
+				showNotice('success', 'Delete '+ name, 'Success!');
+			},
+			setMember(number){
+				this.$set('is_member', number);
+				this.removeSelect();
+			},
+			addNewCourtRate(){
+				//set price default
+				this.dataRate = _.cloneDeep(this.defaultRate);
 
-		p.datarate.name = this.dataRate.name,
-		p.datarate.is_member = this.dataRate.is_member,
-		p.datarate.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
-		p.datarate.start_date =  $(".daterange").data('daterangepicker').startDate.format('MM/DD/YYYY');
-		this.dataRates.push(p);
-		$('.new_date_preiod').addClass('hidden');
-	},
-	setPrice(){
-		this.selected.forEach(s => {
-			const {x, y} = s;
-			this.dataRate.rates[x][y] = this.priceSet;
-		});
-	},
+				const p = {};
+				p.datarate = this.dataRate;
+				p.datarate.name = this.daterange_period,
+						p.datarate.end_date =  $(".daterange").data('daterangepicker').endDate.format('MM/DD/YYYY');
+				p.datarate.start_date =  $(".daterange").data('daterangepicker').startDate.format('MM/DD/YYYY');
+				this.dataRates.push(p);
+				$('.new_date_preiod').addClass('hidden');
+				//set indexrates
+				this.indexDataRates = this.dataRates.length -1 ;
+			},
+			setPrice(){
+				if(this.is_member) {
+					this.selected.forEach(s => {
+						const {x, y} = s;
+					this.dataRate.rates_member[x][y] = this.priceSet;
+				});
+				}else{
+					this.selected.forEach(s => {
+						const {x, y} = s;
+					this.dataRate.rates_nonmember[x][y] = this.priceSet;
+				});
+				}
+				this.dataRates[this.indexDataRates]['datarate']['rates_member'] = this.dataRate['rates_member'];
+				this.dataRates[this.indexDataRates]['datarate']['rates_nonmember'] = this.dataRate['rates_nonmember'];
+			}
 
-	}
+		},
 
 	}
 </script>

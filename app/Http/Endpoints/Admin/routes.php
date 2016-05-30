@@ -66,6 +66,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postUpdateCourt' => 'courts.update',
         'postUpdateCourts' => 'courts.update.multi',
         'getList' => 'courts.list',
+        'deleteCourt' => 'courts.delete',
     ]);
     Route::controller('contracts', ContractController::class, [
         'postCreateContract' => 'contracts.create',

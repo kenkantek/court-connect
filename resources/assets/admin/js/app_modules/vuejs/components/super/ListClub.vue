@@ -17,6 +17,11 @@
 		</tbody>
 	</table>
 </template>
+<style scoped>
+	tr td{
+		text-align: left;
+	}
+</style>
 <script>
 	 var _ = require('lodash'),
      deferred = require('deferred');

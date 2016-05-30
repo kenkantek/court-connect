@@ -23,6 +23,11 @@
             :data.sync="data"
     ></filter>
 </template>
+<style scoped>
+    tr td{
+        text-align: left;
+    }
+</style>
 <script>
     import Filter from '../globals/Filter.vue';
     var _ = require('lodash'),
