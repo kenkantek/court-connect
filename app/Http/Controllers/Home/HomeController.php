@@ -20,11 +20,6 @@ class HomeController extends Controller
 
     public function getIndex()
     {
-        $all = CourtRate::all();
-        foreach ($all as $item){
-            $item['rates_nonmember'] = json_encode($item['rates_member']);
-            $item->update();
-        }
         $deals = getDeals();
         return view('home.pages.index',compact('deals'));
     }
