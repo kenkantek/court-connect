@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\City;
 use App\Models\Deal;
 use App\Models\Zipcode;
+use App\Models\CourtRate;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,6 +20,11 @@ class HomeController extends Controller
 
     public function getIndex()
     {
+        $all = CourtRate::all();
+        foreach ($all as $item){
+            $item['rates_nonmember'] = json_encode($item['rates_member']);
+            $item->update();
+        }
         $deals = getDeals();
         return view('home.pages.index',compact('deals'));
     }
