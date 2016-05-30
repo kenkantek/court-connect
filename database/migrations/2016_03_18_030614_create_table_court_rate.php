@@ -17,7 +17,8 @@ class CreateTableCourtRate extends Migration
             $table->string('name');
             $table->date('start_date');
             $table->date('end_date');
-            $table->text('rates');
+            $table->text('rates_member');
+            $table->text('rates_nonmember');
             $table->integer('court_id')->unsigned();
             $table->timestamps();
 

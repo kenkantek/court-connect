@@ -42,6 +42,7 @@
 
 </head>
 <body>
+@yield('header-home')
 <div class="content-wrapper">
     @if(!Request::is('/*'))
         @include('home.layouts.header')
@@ -50,6 +51,7 @@
         @yield('header')
         @yield('content')
     </div>
+    @yield('content-footer')
     <div class="footer">
         <div class="container">
             <div class="row">
