@@ -119,7 +119,7 @@
                                                 @endif
                                         @else
                                                 @if($booking->status_booking == 'cancel')
-                                                    <div class='status-booking'>Status:<span>Cancel</span></div>"
+                                                    <div class='status-booking'>Status:<span>Canceled</span></div>"
                                                 @elseif(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
                                                     <div class='status-booking'>Status:<span>Expired</span></div>
                                                 @else
@@ -234,14 +234,16 @@
                     @endif
                     <div class="form-blocks">
                         <h4 class="text-left">Others</h4>
-                        <form class="form-horizontal" role="form">
+                        <form class="form-horizontal" role="form" method="post" action="{{ route('home.account.setting.other')}}">
+                            {!! csrf_field() !!}
                             <div class="form-group">
                                 <label for="zipcode" class="control-label col-sm-3">Tennis Skill Level</label>
                                 <div class="col-sm-2">
-                                    <select name="skill" class="form-control select2">
-                                        <option value="beginer">Beginner</option>
-                                        <option value="professional">Professional</option>
-                                    </select>
+                                    <?php
+                                        $skill  = Auth::user()->getPlayer() ? Auth::user()->getPlayer()->tenis_level : null;
+                                        $cb_offers  = Auth::user()->getPlayer() ? Auth::user()->getPlayer()->receive_discount_offers : 0;
+                                    ?>
+                                    {!! Form::select("skill",['0'=>'Beginner','1'=>'Professional'],$skill,['class'=>"form-control select2"]) !!}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -249,7 +251,7 @@
                                 <div class="col-sm-5">
                                     <div class="checkbox text-left">
                                         <label>
-                                            <input type="checkbox" id="cb_offers">
+                                            <input type="checkbox" name="cb_offers" {{$cb_offers == 1 ? "checked" : ""}} value="1" id="cb_offers">
                                         </label>
                                     </div>
                                 </div>

@@ -3,6 +3,7 @@
 namespace App\Models\Auth;
 
 use App\Models\Contexts\Club;
+use App\Models\Player;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Nicolaslopezj\Searchable\SearchableTrait;
@@ -86,10 +87,13 @@ class User extends Authenticatable
     {
         return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
     }
-
-    public function getFullName()
+    public function getPlayer()
     {
-        return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
+        $player = Player::where('user_id',$this->id)->first();
+        if(isset($player)) {
+            return $player;
+        }
+        return null;
     }
 
     public function assignRole($role, $context = NULL, $context_id = NULL)

@@ -39,6 +39,19 @@
                 </div>
             </div>
 
+            <div class="form-group" v-show="user.is_admin == 1">
+                <label for="is_admin" class="col-sm-4 control-label">Select Clubs</label>
+                <div class="col-sm-8">
+                    <select id="cc-ms" multiple="multiple" name="clubs" v-model="user.clubs">
+                        <template v-for="club in clubs">
+                            <option v-if="club.id == clubSettingId" selected="selected" disabled="disabled" value="{{club.id}}">{{club.name}}</option>
+                            <option v-if="user.arr_club.indexOf(club.id) > -1" selected="selected" value="{{club.id}}">{{club.name}}</option>
+                            <option v-else value="{{club.id}}">{{club.name}}</option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+
             <div>
                 <slot name="temp"></slot>
                 <button type="button" id="btnDeleteUser"  class="btn btn-danger pull-left" @click.prevent="deleteUser()">Delete User
@@ -52,7 +65,7 @@
 </template>
 <script>
     export default {
-        props:['users_choice','surface','users','clubSettingId','reloadUsers','dataRates'],
+        props:['users_choice','surface','users','clubs','clubSettingId','reloadUsers','dataRates'],
         data() {
         return {
             submit : false,
@@ -63,10 +76,24 @@
             return this.users_choice[0];
         }
     },
+        watch: {
+            clubs: function(){
+                $('#cc-ms').multipleSelect({
+                    width: '100%',
+                });
+            },
+            clubSettingId: function(){
+                $('#cc-ms').multipleSelect({
+                    width: '100%',
+                });
+            }
+        },
     methods: {
         editUser(){
+            this.$set('user.club_id',this.clubSettingId);
+            this.user.clubs = $("#cc-ms").val();
+            this.user.clubs.unshift(this.clubSettingId);
             const user = this.user;
-            console.log(user);
             this.$http.post(laroute.route('users.edit.post'), user).then(res => {
                 console.log(res)
             if(res.data.error)
@@ -96,6 +123,7 @@
                 showNotice('error', msg, 'Error!');
             }else
             {
+                this.users_choice = [];
                 this.reloadUsers =  Math.floor(Math.random() * 10000);
                 showNotice('success', res.data.success, 'Deleted user successfully!');
             }
@@ -115,6 +143,11 @@
                 this.$set('user.is_admin',1);
             }
         }
-    }
+    },
+        ready() {
+            $('#cc-ms').multipleSelect({
+                width: '100%',
+            });
+        }
     }
 </script>

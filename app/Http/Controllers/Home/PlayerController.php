@@ -102,4 +102,23 @@ class PlayerController extends Controller
         $user->save();
         return back()->withInput()->with(['flash_level' => 'success', 'flash_message' => 'Success! Complete Update Address!']);
     }
+
+    public function updateSettingOther(Request $request)
+    {
+        $player = Player::where('user_id',Auth::user()->id)->first();
+        if(isset($player)) {
+            $player['receive_discount_offers'] = isset($request->cb_offers) ? $request->cb_offers : 0;
+            $player['tenis_level'] = $request->skill;
+
+            $player->save();
+        }else{
+            $player = [
+                'user_id' => Auth::user()->id,
+                'receive_discount_offers' => isset($request->cb_offers) ? 1 : 0,
+                'tenis_level' => $request->skill
+            ];
+            Player::create($player);
+        }
+        return back()->withInput()->with(['flash_level' => 'success', 'flash_message' => 'Update Successful!']);
+    }
 }

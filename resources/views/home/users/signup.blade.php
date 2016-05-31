@@ -70,7 +70,7 @@
                     <div class="col-sm-offset-3 col-sm-5">
                         <button type="submit" class="btn btn-default">Sign Up</button>
                         <div class="submit-text">
-                            <span>By Clicking Sign Up, You Agree to <a href="#">Teams of Service</a></span>
+                            <span>By Clicking Sign Up, You Agree to <a href="{{url('page/term-of-service')}}">Term of Service</a></span>
                         </div>
                     </div>
                 </div>

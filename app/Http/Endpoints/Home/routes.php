@@ -22,6 +22,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('account/setting/password', ['as' => 'home.account.setting.password', 'uses' => 'PlayerController@updateSettingPassword']);
 	Route::post('account/setting/contact', ['as' => 'home.account.setting.contact', 'uses' => 'PlayerController@updateSettingContact']);
 	Route::post('account/setting/address', ['as' => 'home.account.setting.address', 'uses' => 'PlayerController@updateSettingAddress']);
+	Route::post('account/setting/other', ['as' => 'home.account.setting.other', 'uses' => 'PlayerController@updateSettingOther']);
 
 	Route::get('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@checkout']);
 	Route::post('checkout', ['as' => 'home.checkout', 'uses' => 'BookingController@postBooking']);

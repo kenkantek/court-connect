@@ -359,7 +359,14 @@ return [
                 ],
             ],
 
-
+            'multiple-select' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/multiple-select/multiple-select.js',
+                    'cdn' => '',
+                ],
+            ],
             // End JS
         ],
         /* -- STYLESHEET ASSETS -- */
@@ -587,6 +594,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => ['/resources/vendor/mCustomScrollbar/jquery.mCustomScrollbar.css'],
+                    'cdn' => '',
+                ],
+            ],
+            'multiple-select' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/multiple-select/multiple-select.css',
                     'cdn' => '',
                 ],
             ],

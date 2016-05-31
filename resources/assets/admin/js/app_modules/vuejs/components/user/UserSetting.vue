@@ -22,6 +22,7 @@
                             :surface="surface"
                             :users.sync="users"
                             :club-setting-id="clubSettingId"
+                            :clubs="clubs"
                             :reload-users.sync="reloadUsers"
                             :data-rates.sync="dataRates"
                             >
@@ -32,6 +33,7 @@
                             :surface="surface"
                             :users.sync="users"
                             :club-setting-id="clubSettingId"
+                            :clubs="clubs"
                             :reload-users.sync="reloadUsers"
                             :data-rates.sync="dataRates"
                             >
@@ -49,7 +51,7 @@
     let _ = require('lodash'),
             deferred = require('deferred');
     export default {
-        props:['clubSettingId'],
+        props:['clubSettingId','clubs'],
         data(){
         return {
             dataRates:[],
@@ -77,7 +79,7 @@
     },
     methods:{
     },
-    ready() { console.log(this.clubSettingId);},
+    ready() {},
     components: {
         ListUser,
                 FormEditUser,

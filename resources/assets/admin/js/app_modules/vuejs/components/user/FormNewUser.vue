@@ -32,7 +32,19 @@
             <div class="form-group">
                 <label for="is_admin" class="col-sm-4 control-label">Is Admin? *</label>
                 <div class="col-sm-8">
-                    <input id="is_admin" class="styled" name="is_admin" type="checkbox" value="0">
+                    <input id="is_admin" class="styled" name="is_admin" type="checkbox" value="0" @click="changeIsAdmin">
+                </div>
+            </div>
+
+            <div class="form-group" v-show="user.is_admin == 1">
+                <label for="is_admin" class="col-sm-4 control-label">Select Clubs</label>
+                <div class="col-sm-8">
+                    <select id="cc-ms" multiple="multiple" name="clubs" v-model="user.clubs">
+                        <template v-for="club in clubs">
+                            <option v-if="club.id == clubSettingId" selected="selected" disabled="disabled" value="{{club.id}}">{{club.name}}</option>
+                            <option v-else value="{{club.id}}">{{club.name}}</option>
+                        </template>
+                    </select>
                 </div>
             </div>
 
@@ -46,7 +58,7 @@
 </template>
 <script>
     export default {
-        props:['surface','users','clubSettingId','reloadUsers','dataRates'],
+        props:['surface','users','clubSettingId','clubs','reloadUsers','dataRates'],
         data() {
             return {
                 user : {
@@ -56,17 +68,38 @@
                     email:null,
                     is_admin:0,
                     club_id:null,
+                    clubs: []
                 },
                 submit:false,
             }
         },
+        watch: {
+            clubs: function(){
+                $('#cc-ms').change(function() {
+                }).multipleSelect({
+                    width: '100%',
+                });
+            },
+            clubSettingId: function(){
+                $('#cc-ms').change(function() {
+                }).multipleSelect({
+                    width: '100%',
+                });
+            }
+        },
         methods: {
+            changeIsAdmin(){
+                if(this.user.is_admin == 0)
+                    this.user.is_admin = 1;
+                else this.user.is_admin = 0;
+            },
             addUser(){
-                this.$set('user.club_id', this.clubSettingId);
+                this.$set('user.club_id',this.clubSettingId);
+                this.user.clubs = $("#cc-ms").val();
+                this.user.clubs.unshift(this.clubSettingId);
                 const user = this.user;
                 this.submit = true;
                 this.$http.post(laroute.route('users.create.post'), user).then(res => {
-                    console.log(res)
                     if(res.data.error)
                     {
                         var msg = "";
@@ -90,6 +123,12 @@
                     showNotice('error', "Error. Try again!", 'Error!');
                 });
             }
+        },
+        ready() {
+            $('#cc-ms').change(function() {
+            }).multipleSelect({
+                width: '100%',
+            });
         }
     }
 </script>

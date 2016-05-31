@@ -29,6 +29,9 @@ class UserController extends Controller
      */
     public function getList()
     {
+        \Assets::addJavascript(['multiple-select']);
+        \Assets::addStylesheets(['multiple-select']);
+        \Assets::addAppModule(['app']);
         $title = 'User Manager';
         return view('admin.users.list', compact('title'));
     }
@@ -48,6 +51,11 @@ class UserController extends Controller
             else{
                 $user['is_admin'] = false;
             }
+            $arr_club = [];
+            foreach ($user->roles as $role){
+                $arr_club[] = $role->pivot->context_id;
+            }
+            $user['arr_club'] = $arr_club;
         }
         return $data;
     }
@@ -81,10 +89,12 @@ class UserController extends Controller
         $user->fill($request->all());
         $user = $this->userRepository->createOrUpdate($user);
         if ($request->input('is_admin') == '1') {
-            $user->assignRole('admin', 'clubs', $request->input('club_id'));
+            foreach ($request->input('clubs') as $club_id)
+                $user->assignRole('admin', 'clubs', $club_id);
         } else {
             $user->assignRole('user', 'clubs', $request->input('club_id'));
         }
+
         return response()->json([
             'error' => false, 'success' => 'User created successfully!',
         ]);
@@ -122,13 +132,17 @@ class UserController extends Controller
         $user->password = bcrypt($request->input('password'));
         $user = $this->userRepository->createOrUpdate($user);
 
-        if ($request->input('is_admin') == 1 && !$user->hasRole('admin')) {
+        if ($request->input('is_admin') == 1) {
             $user->removeRole('user');
-            $user->assignRole('admin',$user->InfoClub['context'],$user->InfoClub['context_id']);
+            $user->removeRole('admin');
+            foreach ($request->input('clubs') as $club_id)
+                $user->assignRole('admin', 'clubs', $club_id);
+            //$user->assignRole('admin',$user->InfoClub['context'],$user->InfoClub['context_id']);
         }
         if ($request->input('is_admin') == 0 && !$user->hasRole('user')) {
+            $user_infoClub = $user->InfoClub;
             $user->removeRole('admin');
-            $user->assignRole('user',$user->InfoClub['context'],$user->InfoClub['context_id']);
+            $user->assignRole('user',$user_infoClub['context'],$user_infoClub['context_id']);
         }
         return response()->json([
             'error' => false,

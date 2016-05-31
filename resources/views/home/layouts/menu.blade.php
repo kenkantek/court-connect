@@ -4,7 +4,7 @@
     <ul class="nav navbar-nav navbar-right">
 
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->getFullName() }}<b
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->fullname }}<b
                         class="caret"></b></a>
             <ul class="dropdown-menu ">
                 <span class="arrow-up"></span>

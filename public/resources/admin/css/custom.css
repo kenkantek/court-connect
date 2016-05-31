@@ -812,3 +812,7 @@ table .arrow{
 #cc-confirm-delete.in{
     display: block !important;
 }
+#cc-ms{
+    width: 100%;
+    min-height: 200px;
+}
