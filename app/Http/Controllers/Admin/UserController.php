@@ -7,6 +7,7 @@ use App\Models\Auth\RoleUser;
 use App\Models\Auth\User;
 use App\Repositories\Interfaces\Auth\UserInterface;
 use Illuminate\Http\Request;
+use Mockery\CountValidator\Exception;
 use Validator;
 
 class UserController extends Controller
@@ -135,8 +136,10 @@ class UserController extends Controller
         if ($request->input('is_admin') == 1) {
             $user->removeRole('user');
             $user->removeRole('admin');
-            foreach ($request->input('clubs') as $club_id)
+            $clubs_id = array_unique($request->input('clubs'));
+            foreach ($clubs_id as $club_id) {
                 $user->assignRole('admin', 'clubs', $club_id);
+            }
             //$user->assignRole('admin',$user->InfoClub['context'],$user->InfoClub['context_id']);
         }
         if ($request->input('is_admin') == 0 && !$user->hasRole('user')) {
