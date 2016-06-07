@@ -88,7 +88,6 @@ class BookingController extends Controller{
         if($v->fails())
             return response()->json(['error' => true,"messages"=>$v->errors()->all()]);
         else{
-
             $data_order['bookingDetail'] = [];
             $data_order['paymentDetail'] = [];
             $data_order['customerDetail'] = [];
