@@ -271,9 +271,10 @@ $(function () {
         else zipcode = $("input[name=zipcode]").val();
         console.log(zipcode);
         $.ajax({
-            url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode+"&sensor=false&key=".key_googleapi,
+            url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode,
             method: "post",
             success:function(data){
+                console.log(data);
                 $("input[name=state], #input-state").val(data.results[0].address_components[3].long_name);
                 $("input[name=city], #input-city").val(data.results[0].address_components[1].long_name);
             }

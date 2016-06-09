@@ -55,12 +55,12 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password')))
         {
             $reponses['error'] = 0;
-            if($request->user()->hasRole('admin'))
-                $reponses['redirect'] = route('super.index');
-            if($request->user()->hasRole('user'))
-                $reponses['redirect'] = route('admin.index');
             if($request->user()->hasRole('player'))
                 $reponses['redirect'] = route('home.index');
+            if($request->user()->hasRole('user') || $request->user()->hasRole('admin'))
+                $reponses['redirect'] = route('admin.index');
+            if( $request->user()->isSuper())
+                $reponses['redirect'] = route('super.index');
         }
 
         return response()->json($reponses);

@@ -59,7 +59,7 @@
                 ClubsDropDown.append('<div class="row" data-value="'+item.value+'"><div class="image"><img src="'+base_url+item.image+'" width="40" height="40" alt="image"></div><div class="text">' + item.value + '<div class="address">'+item.address+'</div></div></div');
             });
             $.each( data.citys, function(i, item ) {
-                CitysDropDown.append('<div class="row row-city" data-value="'+item.value+'">' + item.value + ", " + item.state + '</div');
+                CitysDropDown.append('<div class="row row-city" data-value="'+item.value + ", " + item.state + '">' + item.value + ", " + item.state + '</div');
             });
             $.each( data.states, function(i, item ) {
                 CitysDropDown.append('<div class="row row-state" data-value="'+item.value+'">' + item.value + '</div');

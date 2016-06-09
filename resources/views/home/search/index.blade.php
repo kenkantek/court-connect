@@ -137,6 +137,41 @@
             @endfor
             map.fitBounds(latlngbounds);
             if (typeof mbOnAfterInit == "function") mbOnAfterInit(map);
+
+            @if(empty($clubs) || count($clubs) < 1)
+                    geocoder = new google.maps.Geocoder();
+            if (geocoder) {
+                var address = "{{$request->input('s_name')}}";
+                geocoder.geocode({
+                    'address': address
+                }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                            map.setCenter(results[0].geometry.location);
+
+                            var infowindow = new google.maps.InfoWindow({
+                                content: '<b>' + address + '</b>',
+                                size: new google.maps.Size(150, 50)
+                            });
+
+                            var marker = new google.maps.Marker({
+                                position: results[0].geometry.location,
+                                map: map,
+                                title: address
+                            });
+                            google.maps.event.addListener(marker, 'click', function () {
+                                infowindow.open(map, marker);
+                            });
+
+                        } else {
+                            alert("No results found");
+                        }
+                    } else {
+                        alert("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+            }
+            @endif
         }
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>

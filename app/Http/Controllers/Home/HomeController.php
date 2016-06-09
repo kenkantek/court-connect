@@ -23,9 +23,9 @@ class HomeController extends Controller
 
     public function getIndex()
     {
-        $calendar = new GoogleCalendar();
-        $calendarId = "YourCalendarID";
-        $result = $calendar->get($calendarId);
+//        $calendar = new GoogleCalendar();
+//        $calendarId = "YourCalendarID";
+//        $result = $calendar->get($calendarId);
         $deals = getDeals();
         return view('home.pages.index',compact('deals'));
     }
