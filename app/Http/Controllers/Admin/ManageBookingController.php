@@ -519,11 +519,11 @@ class ManageBookingController extends Controller
         }
 
         $booking['payment_info'] = json_decode($booking['payment_info']);
-        if($booking['player_id'] != 0) {
-            $billing_info = User::where('id',$booking['player_id'])->select(["first_name","last_name","email","phone","address1","city","state"])->first();
-            if($billing_info)
-                $booking['billing_info'] = $billing_info;
-        }
+//        if($booking['player_id'] != 0) {
+//            $billing_info = User::where('id',$booking['player_id'])->select(["first_name","last_name","email","phone","address1","city","state"])->first();
+//            if($billing_info)
+//                $booking['billing_info'] = $billing_info;
+//        }
         return response()->json([
             'error' => false,
             'booking' => $booking
