@@ -528,8 +528,14 @@ class ManageBookingController extends Controller
         $ref = $request->input('reference');
         $name = $request->input('name');
         $bookings = Booking::join('courts','courts.id','=','bookings.court_id')
-            ->orWhere('bookings.id',"like","%".$ref."%")
-            ->orWhere('billing_info',"like","%".$name."%")
+            ->orWhere(function ($q) use ($ref) {
+                if ($ref != null && !empty($ref)) {
+                    $q->where('bookings.id',"like","%".$ref."%");
+                }})
+            ->orWhere(function ($q) use ($name) {
+                if ($name != null && !empty($name)) {
+                    $q->where('billing_info',"like","%".$name."%");
+                }})
             ->get(['bookings.*','courts.name as court_name']);
 
         return response()->json([
