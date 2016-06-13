@@ -1,6 +1,7 @@
 {{-- begin ddeals-near-you --}}
 <div class="deals">
     <h2 style="color: #63ac1e; margin-top: 77px">Deals Near You</h2>
+    @if(count($deals) > 0)
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
@@ -52,4 +53,5 @@
         </a>
     </div>
 </div>
+    @endif
 {{-- end deals-near-you --}}

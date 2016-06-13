@@ -366,13 +366,13 @@
                                                 <input name="payment" type="radio" value="discover" id="discover" v-model="paymentDetail.type">
                                                 <label for="discover">Discover</label>
                                             </div>
-                                            <div class="pull-left payment-item">
-                                                <div class="img-wrap">
-                                                    <img src="/resources/admin/img/icon_payment_cash.png" alt="cash">
-                                                </div>
-                                                <input name="cash" type="radio" value="cash" id="cash" v-model="paymentDetail.type">
-                                                <label for="mastercard">Cash</label>
-                                            </div>
+                                            <!--<div class="pull-left payment-item">-->
+                                                <!--<div class="img-wrap">-->
+                                                    <!--<img src="/resources/admin/img/icon_payment_cash.png" alt="cash">-->
+                                                <!--</div>-->
+                                                <!--<input name="cash" type="radio" value="cash" id="cash" v-model="paymentDetail.type">-->
+                                                <!--<label for="mastercard">Cash</label>-->
+                                            <!--</div>-->
                                         </div>
 
                                         <div class="form-group clearfix">
@@ -404,7 +404,7 @@
                                 <div id="print-receipt" class="btn btn-primary btn-md-cpl" onclick="partPrint('#InfoOrderComplete');">
                                     <i class="fa fa-print" aria-hidden="true"></i>Print Receipt
                                 </div>
-                                <div id="email-receipt" class="btn btn-primary btn-md-cpl">
+                                <div id="email-receipt" class="btn btn-primary btn-md-cpl" @click.prevent="emailReceipt()">
                                     <i class="fa fa-envelope-o" aria-hidden="true"></i>Email Receipt
                                 </div>
 
@@ -818,6 +818,24 @@
         },
         preCustomerDetail(){
             this.tabClick("mb-customer-details-content")
+        },
+        emailReceipt(){
+            var id_booking = this.booking_reference;
+            $.ajax({
+                url: base_url +"/send-mail",
+                type: 'post',
+                data: {id: id_booking},
+                beforeSend: function(){
+                    $(".loader").removeClass('hidden');
+                },
+                success: function(res){
+                    alert(res.message);
+                    $(".loader").addClass('hidden');
+                },
+                error: function(request, status, error){
+                    console.log(request.responseText);
+                }
+            })
         },
         tabClick(element){
             $("#mb-create-new-booking .mb-tabs li").removeClass('active').addClass('tab-disabled');

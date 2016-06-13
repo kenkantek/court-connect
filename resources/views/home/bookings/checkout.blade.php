@@ -285,16 +285,6 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-2 col-md-2">
-                                                <div class="payment-logo">
-                                                    <img src="resources/home/images/icon_payment_cash.png" class="img-responsive" alt="Cash">
-                                                </div>
-                                                <div class="radio">
-                                                    <label>
-                                                        <input type="radio" name="payment[method]" value="cash">Cash
-                                                    </label>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="text-left">

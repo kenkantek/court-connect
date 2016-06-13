@@ -191,10 +191,17 @@ $(function () {
         hideMinMax: false,
     });
 
+    var currentRequest = null;
     $( "#q1" ).autocomplete({
         source: function( request, response ) {
-            $.ajax({
+            currentRequest = $.ajax({
                 url: "search/autocomplete?term=" + request.term,
+                beforeSend: function(){
+                    console.log(currentRequest);
+                    if(currentRequest != null) {
+                        currentRequest.abort();
+                    }
+                },
                 success: function( data ) {
                     response( $.map( data, function( item ) {
                         return {

@@ -306,14 +306,7 @@ class ManageBookingController extends Controller
                 for($i=$booking['hour']; $i < $booking['hour'] + $booking['hour_length']; $i+=0.5){
                     $index = floatval($i);
                     if(isset($arr_hour["h_".$index]['hour'])) {
-                        if ($booking['player_id'] == 0) {
-                            $arr_hour["h_" . $index]['content'] = $booking['billing_info']['first_name'] . " " . $booking['billing_info']['last_name'];
-                        } else {
-                            $billing_info = Player::where('id', $booking['billing_info'])->first();
-                            if ($billing_info)
-                                $arr_hour["h_" . $index]['content'] = $billing_info['first_name'] . " " . $billing_info['last_name'];
-                            $arr_hour["h_" . $index]['content'] = "";
-                        }
+                        $arr_hour["h_" . $index]['content'] = $booking['billing_info']['first_name'] . " " . $booking['billing_info']['last_name'];
 
                         $arr_hour["h_" . $index]['status'] = $booking['type'];
                         $arr_hour["h_" . $index]['booking_id'] = $booking['id'];

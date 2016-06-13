@@ -30,9 +30,13 @@ class SearchController extends Controller {
             $results['clubs'][] = ['id' => $query->id, 'value' => $query->name,'image' =>$query->image,'address'=>$query->address];
         }
 
+//        $queries = City::where('name', 'LIKE', '%' . $term . '%')
+//            ->join('zipcodes','zipcodes.city_id','=','citys.id')
+//            ->orWhere('zipcodes.zipcode', 'LIKE', '%' . $term . '%')
+//            ->take(5)->get();
+
         $queries = City::where('name', 'LIKE', '%' . $term . '%')
-            ->join('zipcodes','zipcodes.city_id','=','citys.id')
-            ->orWhere('zipcodes.zipcode', 'LIKE', '%' . $term . '%')
+            ->orWhere('zipcode', 'LIKE', '%' . $term . '%')
             ->take(5)->get();
 
         foreach ($queries as $query) {
