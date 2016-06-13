@@ -98,9 +98,9 @@ class ReportController extends Controller
         $filename_zip = "resources/admin/files/export".date('Y-m-d-His') . ".zip";
         if($zip->open($filename_zip,ZIPARCHIVE::CREATE) === true) {
             $zip->addFile($filename,"data_report".date('Y-m-d-His').".csv");
-            if ($zip->setPassword("MySecretPassword")) {
-                $password = "MySecretPassword";
-            }
+//            if ($zip->setPassword("MySecretPassword")) {
+//                $password = "MySecretPassword";
+//            }
             $zip->close();
             if(file_exists($_SERVER['DOCUMENT_ROOT']."/".$filename)) {
                 try {
