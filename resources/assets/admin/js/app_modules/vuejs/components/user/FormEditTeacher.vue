@@ -68,7 +68,10 @@
                 const teacher = this.teacher;
                 this.$http.post(laroute.route('teacher.edit.post'), teacher).then(res => {
                     if(res.data.error){
-                        var msg = "<div>"+res.data.message+"</div>";
+                        var msg = "";
+                        $.each(res.data.messages,function(k,v){
+                            msg += "<div>"+v+"</div>";
+                        });
                         showNotice('error', msg, 'Error!');
                     }else
                     {

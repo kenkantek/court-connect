@@ -11,3 +11,4 @@ error_log
 /public/resources/vendor/routes.js
 /public/resources/admin/js/app_modules/app.js
 /public/resources/admin/js/app_modules/app.js.map 
+/public/resources/admin/files/

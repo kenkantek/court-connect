@@ -826,9 +826,10 @@
                 type: 'post',
                 data: {id: id_booking},
                 beforeSend: function(){
-                    $(".loader").removeClass('hidden');
+                    $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                 },
                 success: function(res){
+                    $("#mb-create-new-booking .loading").remove();
                     alert(res.message);
                     $(".loader").addClass('hidden');
                 },
