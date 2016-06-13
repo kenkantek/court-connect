@@ -534,7 +534,7 @@ class ManageBookingController extends Controller
                 }})
             ->orWhere(function ($q) use ($name) {
                 if ($name != null && $name != '') {
-                    $q->where('billing_info',"like","%".$name."%");
+                    $q->where('bookings.billing_info',"like","%".$name."%");
                 }})
             ->get(['bookings.*','courts.name as court_name']);
 
