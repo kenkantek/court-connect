@@ -34,7 +34,8 @@ class UserEventListener
     public function onUserBooking($event)
     {
         $booking_id = $event->booking_id;
-        $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$booking_id,'bookings.player_id'=>$event->user_id])->first();
+        $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$booking_id])->first();
+        //$booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$booking_id,'bookings.player_id'=>$event->user_id])->first();
         $data['booking'] = $booking;
         Mail::send('home.bookings.print_confirmation',$data, function($message) use ($booking)
         {

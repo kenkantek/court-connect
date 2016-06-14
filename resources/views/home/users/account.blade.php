@@ -103,7 +103,7 @@
                                                 @endif
 
                                                 <li><a href="#" class="action-booking print-confirmation" data-booking="{{$booking->id}}">Print Confirmation</a></li>
-                                                <li><a href="#" class="action-booking send-mail" data-booking="{{$booking->id}}">Export to Outlook</a></li>
+                                                <li><a href="#" class="action-booking export-outlook" data-booking="{{$booking->id}}">Export to Outlook</a></li>
                                             </ul>
                                         </div>
 
@@ -325,6 +325,10 @@
             }
         }
     </style>
+    <form action="" method="get">
+        <input type="text" name="abc" value="{{ "abc<br>abc#" }}">
+        <input type="submit">
+    </form>
     <script>
         $.ajaxSetup({
             headers: {
@@ -447,6 +451,11 @@
                         console.log(request.responseText);
                     }
                 })
+            });
+
+            //export-outlook
+            $("body").on('click','.cc-action-booking .export-outlook',function(e){
+                location.href = base_url+'/calendar-google/'+$(this).data('booking');
             });
         });
     </script>

@@ -294,14 +294,13 @@ class BookingController extends Controller{
     }
 
     //send mail
-
     public function sendMailOrder(Request $request){
         $id = $request->input('id');
         if(!Auth::check()){
             return redirect('error');
         }
         try{
-            $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
+            $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id])->first();
             event(new UserBookingEvent(Auth::user()->id, $id));
             return response()->json([
                 'error' => false,
@@ -313,6 +312,40 @@ class BookingController extends Controller{
                 'error' => true,
                 'message' => 'Error. Can"t send email. Mail not exist'
             ]);
+        }
+    }
+
+    //calendar google
+    public function getCalendarGoogle($id){
+        if(!Auth::check()){
+            return redirect('error');
+        }
+        try {
+            $booking = Booking::with('court', 'court.club', 'court.surface')->where(['bookings.id' => $id])->first();
+            if($booking) {
+                $param = "text=Tennis court at " . $booking['court']['club']['name']. " Club&location=".$booking['court']['club']['address'];
+                $param .= "&details=Phone club: ".$booking['court']['club']['phone']." , "." Confirmation: ".$booking['id'];
+                if($booking['type'] == 'contract'){
+                    $intpart = floor($booking->hour);
+                    $fraction = str_replace("0.5","30",$booking->hour - $intpart);
+                    $param .= "&dates=".date_from_database($booking['date_range_of_contract']['from'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00"."/";
+                    $intpart = floor($booking->hour + $booking->hour_length);
+                    $fraction = str_replace("0.5","30",$booking->hour + $booking->hour_length - $intpart);
+                    $param .= date_from_database($booking['date_range_of_contract']['to'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
+                }else{
+                    $intpart = floor($booking->hour);
+                    $fraction = str_replace("0.5","30",$booking->hour - $intpart);
+                    $param .= "&dates=".date_from_database($booking['date'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00"."/";
+                    $intpart = floor($booking->hour + $booking->hour_length);
+                    $fraction = str_replace("0.5","30",$booking->hour + $booking->hour_length - $intpart);
+                    $param .= date_from_database($booking['date'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
+                }
+                return redirect()->away("https://calendar.google.com/calendar/render?action=TEMPLATE&tpr=true&".$param);
+            }else
+                return redirect()->route('error');
+
+        }catch(Exception $e){
+
         }
     }
 }

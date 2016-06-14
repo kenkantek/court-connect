@@ -35,7 +35,7 @@ class ManageBookingController extends Controller
     //ajax search player
     public function getSearchPlayers(Request $request){
         $players = User::whereHas('roles', function($query){
-            $query->where('context','players');
+            //$query->where('context','players');
         })->where('email','LIKE','%'.$request['q'].'%')->limit(10)
             ->select(['id','email','address1'])->get();
         return $players;
@@ -44,7 +44,7 @@ class ManageBookingController extends Controller
     public function postCheckPlayerforBooking($player_id){
         $player = User::where('id',$player_id)->first();
         if(!isset($player)){
-            return ['error' => true, "messages" => ["Not found data"]];
+            return ['error' => true, "messages" => ["Not found data. Please, select user member"]];
         }
         return response()->json([
             'error' => false,

@@ -714,7 +714,7 @@
                 this.customerDetail.player_id = $("#player_id").val();
                 $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                 this.$http.post(laroute.route('booking.checkPlayerforBooking', {one: this.customerDetail.player_id})).then(res => {
-                    $("#mb-create-new-booking loading").remove();
+                    $("#mb-create-new-booking .loading").remove();
                 if(!res.data.error)
                 {
                     var player = res.data.player; console.log(player);
@@ -936,8 +936,7 @@
             };
         }
     },ready () {
-        //test model open
-        //$(".create_new_book").click();
+        $("#mb-create-new-booking .loading").remove();
 
         $('.daterange').daterangepicker(
                 {

@@ -370,6 +370,7 @@
         multiTimes: 'enableSelectGrid'
     },
     asyncData(resolve, reject) {
+        this.updateCalendar();
         this.fetchCourts().done((courts) => {
             resolve({courts});
 
@@ -398,12 +399,13 @@
             var arr = [];
             var time = this.now;
             var day_now = new Date();
+            var date_current = this.dateChooise;
             var status = 'date-notcurrent';
             var daysInMonth = this.getDaysInMonth(time.getMonth(), time.getFullYear());
             var index_date_current = 0;
             daysInMonth.forEach(function(date, index){
                 //tmpTime = new Date(time.getFullYear(), time.getMonth(), i + 1);
-                if(date.getDate() == day_now.getDate() ) {
+                if(date.getDate() == date_current.split('/')[1] ) {
                     status = 'date-current';
                     index_date_current = index;
                 }
