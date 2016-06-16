@@ -47,7 +47,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
         'postNewDeal' => 'booking.newDeal',
         'getSearch' => 'booking.search',
-        'postPrintReceipt' => 'booking.printReceipt'
+        'postPrintReceipt' => 'booking.printReceipt',
+        'getClientToken' => 'booking.getClientToken'
     ]);
 
     

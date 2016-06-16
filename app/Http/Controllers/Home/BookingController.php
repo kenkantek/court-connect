@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Input;
 use Exception;
 
 class BookingController extends Controller{
+    
     public function checkout(Request $request)
     {
         $msg_errors = null;
@@ -56,8 +57,8 @@ class BookingController extends Controller{
 
     //post checkOut
     public function postBooking(Request $request){
-
-        ini_set('max_execution_time', 300); // 5 miniute
+      
+        ini_set('max_execution_time', 90); // 1.5 miniute
 
         //return $_POST;
         $input_validate = [
@@ -73,10 +74,8 @@ class BookingController extends Controller{
             'customer.address1' => 'required',
             'customer.city' => 'required',
             'customer.state' => 'required',
-            'payment.method' => 'required',
-            'payment.card-number' => 'required',
-            'payment.card-expiry' => 'required',
-            'payment.cvv' => 'required',
+            'payment.type' => 'required',
+            'payment_method_nonce' => 'required'
         ];
         if($request->input('is_customer') == 0 && !Auth::check()){
             $input_validate['customer.email'] = 'required|max:60|min:6|unique:users,email';
@@ -91,6 +90,7 @@ class BookingController extends Controller{
             $data_order['bookingDetail'] = [];
             $data_order['paymentDetail'] = [];
             $data_order['customerDetail'] = [];
+            $data_order['nonce'] = $request->payment_method_nonce;
             $data_order['players'] = [];
 
             $data_order['bookingDetail'] = [
@@ -112,13 +112,7 @@ class BookingController extends Controller{
                 $data_order['bookingDetail']['dayOfWeek'] = $request->dayOfWeek ? $request->dayOfWeek :null;
             }
 
-            $expiry = explode("/", $request->input('payment.card-expiry'));
-            $data_order['paymentDetail']=[
-                'number'=> $request->input('payment.card-number'),
-                'exp_month' => $expiry['0'],
-                'exp_year' => $expiry['1'],
-                'cvv' => $request->input('payment.cvv'),
-            ];
+            $data_order['paymentDetail']= $request->input('payment');
 
             $input_customer = $request->input('customer');
             unset($input_customer['password_confirmation']);
@@ -245,39 +239,45 @@ class BookingController extends Controller{
             ]);
         }else{
             $booking = Booking::with('payment')->where(['id'=>$request['id'],'player_id'=>Auth::user()->id])->first();
-            try {
-                $refund = Stripe::refunds()->create($booking['payment']['stripe_transaction_id'],$booking['payment']['amount'],[
-                    'metadata' => [
-                        'reason'      => 'Customer requested for the refund.',
-                        'refunded_by' => 'Court Connect',
-                    ],
-                ]);
-                if($refund['status'] == 'succeeded'){
+
+            $tmp_refund_sucess = false;
+            if(is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
+                $tmp_refund_sucess =true;
+            else {
+                $refund = \Braintree_Transaction::refund('8e628z83');
+
+                if ($refund->success) {
+                    $tmp_refund_sucess = true;
                     RefundTransaction::create([
-                        'refund_id' => $refund['id'],
+                        'refund_id' => $booking['payment']['transaction_id'],
                         'amount' => $booking['payment']['amount']
                     ]);
-
-                    if($booking['type'] == 'contract') {
-                        $bookingContracts = Booking::where(['payment_id' => $booking['payment_id'], 'player_id' => Auth::user()->id])
-                            ->update(['status_booking'=>'cancel']);
-                    }else{
-                        $booking->update(['status_booking'=>'cancel']);
+                }else{
+                    $errorString = "";
+                    foreach ($refund->errors->deepAll() as $error) {
+                        $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
                     }
                     return response()->json([
-                        'error' => false,
-                        'message' => 'Cancel success.'
-                    ]);
-                }else{
-                    return response()->json([
                         'error' => true,
-                        'message' => "Transaction error. Please contact Admin website"
+                        'message' => $errorString
                     ]);
                 }
-            }catch (Exception $e){
+            }
+            if($tmp_refund_sucess){
+                if($booking['type'] == 'contract') {
+                    $bookingContracts = Booking::where(['payment_id' => $booking['payment_id'], 'player_id' => Auth::user()->id])
+                        ->update(['status_booking'=>'cancel']);
+                }else{
+                    $booking->update(['status_booking'=>'cancel']);
+                }
+                return response()->json([
+                    'error' => false,
+                    'message' => 'Cancel success.'
+                ]);
+            }else{
                 return response()->json([
                     'error' => true,
-                    'message' => "Charge has already been refunded. Please contact Admin website"//$e->getMessage()
+                    'message' => "Transaction error. Please contact Admin website"
                 ]);
             }
         }

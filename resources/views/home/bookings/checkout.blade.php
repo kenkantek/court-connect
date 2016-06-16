@@ -251,7 +251,7 @@
                                                 </div>
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="payment[method]" value="mastercard" checked="checked">Mastercard
+                                                        <input type="radio" name="payment[type]" value="mastercard" checked="checked">Mastercard
                                                     </label>
                                                 </div>
                                             </div>
@@ -261,7 +261,7 @@
                                                 </div>
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="payment[method]" value="visa">Visa
+                                                        <input type="radio" name="payment[type]" value="visa">Visa
                                                     </label>
                                                 </div>
                                             </div>
@@ -271,7 +271,7 @@
                                                 </div>
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="payment[method]" value="ax">American Express
+                                                        <input type="radio" name="payment[type]" value="ax">American Express
                                                     </label>
                                                 </div>
                                             </div>
@@ -281,27 +281,18 @@
                                                 </div>
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="payment[method]" value="discover" >Discover
+                                                        <input type="radio" name="payment[type]" value="discover" >Discover
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="text-left">
-                                                <div class="col-lg-5 col-md-5">
-                                                    <label for="card-number">Card Number</label>
-                                                    <input type="text" class="form-control" name="payment[card-number]" required id="card-number" placeholder="Enter Card Number">
-                                                </div>
-                                                <div class="col-lg-4 col-md-4">
-                                                    <label for="expiry">Expiry</label>
-                                                    <div class="">
-                                                        <input type="text" name="payment[card-expiry]" class="form-control" required id="card-expiry" placeholder="06/17">
+                                                <section class="col-lg-11 col-md-11">
+                                                    <div class="bt-drop-in-wrapper">
+                                                        <div id="bt-dropin"></div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2">
-                                                    <label for="ccv">CCV*</label>
-                                                    <input type="text" class="form-control" name="payment[cvv]" id="cvv" required placeholder="On Back Of Card">
-                                                </div>
+                                                </section>
                                                 <div class="col-lg-1 col-md-1">
                                                     <label style="display:block;">&nbsp;</label>
                                                     <img src="resources/home/images/rear-of-card.jpg" class="img-responsive" alt="Rear Of Card">
@@ -379,6 +370,61 @@
         </div>
     </div>
 
+    <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+    <script>
+        var client_token = "<?php echo(Braintree\ClientToken::generate()); ?>";
+        var checkout;
+        braintree.setup(client_token, "dropin", {
+            container: "bt-dropin",
+            onError: function(data) {
+                $(".alert-message-box").removeClass('hide').find('.alert-content').html(data.message);
+                $(".loader").addClass('hidden');
+            },
+            paymentMethodNonceReceived: function (event,nonce) {
+                $('#checkout-form').append("<input type='hidden' name='payment_method_nonce' value='"+ nonce +"'></input>");
+                if($("input[name=is_customer]").val() == 1)
+                    return;
+
+                $.ajax({
+                    url: base_url + "/checkout",
+                    type: "post",
+                    data: $("#checkout-form").serialize(),
+                    dataType: "json",
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function(){
+                        $(".loader").removeClass('hidden');
+                    },
+                    success: function(result){
+                        console.log(result);
+                        $(".loader").addClass('hidden');
+                        if(result.error){
+                            $('html, body').animate({scrollTop : 0},800);
+                            var msg ="<ul>";
+                            $.each(result.messages,function(k,v){
+                                msg += "<li>"+v+"</li>";
+                            });
+                            msg += "</ul>";
+                            $(".alert-message-box").removeClass('hide').find('.alert-content').html(msg);
+                            $("#form-checkout-wrapper .loading").remove();
+                            $(".loader").addClass('hidden');
+                        }else if(!result.error){
+                            location.href = base_url + "/view-profile"
+                        }
+                    },
+                    error: function(){
+                        $(".alert-message-box").removeClass('hide').find('.alert-content').html("Error, Try again");
+                        $(".loader").addClass('hidden');
+                    }
+                })
+            },
+            onReady: function(integration){
+                checkout = integration;
+            }
+        });
+    </script>
+
     <script>
         $(document).ready(function(){
             $('input[name="is_customer"]').on("change", function(){
@@ -438,40 +484,8 @@
             })
             //checkout form
             $("#checkout-form").on('submit',function(event){
-                event.preventDefault();
-                if($("input[name=is_customer]").val() == 1)
-                    return;
-                $.ajax({
-                    url: base_url + "/checkout",
-                    type: "post",
-                    data: $("#checkout-form").serialize(),
-                    dataType: "json",
-                    headers:{
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: function(){
-                        $(".loader").removeClass('hidden');
-                    },
-                    success: function(result){
-                        if(result.error){
-                            $('html, body').animate({scrollTop : 0},800);
-                            var msg ="<ul>";
-                            $.each(result.messages,function(k,v){
-                                msg += "<li>"+v+"</li>";
-                            });
-                            msg += "</ul>";
-                            $(".alert-message-box").removeClass('hide').find('.alert-content').html(msg);
-                            $("#form-checkout-wrapper .loading").remove();
-                            $(".loader").addClass('hidden');
-                        }else if(!result.error){
-                            location.href = base_url + "/view-profile"
-                        }
-                    },
-                    error: function(){
-                        $(".alert-message-box").removeClass('hide').find('.alert-content').html("Error, Try again");
-                        $(".loader").addClass('hidden');
-                    }
-                })
+                //event.preventDefault();
+
             })
         })
 

@@ -3,6 +3,10 @@
 	Manager Bookings
 @stop
 @section('content')
+	<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+	<script>
+		var checkout;
+	</script>
 	<div class="box box-primary">
 		<div class="box-body">
 			<manage-booking

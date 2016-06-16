@@ -325,10 +325,7 @@
             }
         }
     </style>
-    <form action="" method="get">
-        <input type="text" name="abc" value="{{ "abc<br>abc#" }}">
-        <input type="submit">
-    </form>
+
     <script>
         $.ajaxSetup({
             headers: {

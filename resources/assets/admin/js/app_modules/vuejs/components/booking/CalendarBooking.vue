@@ -72,16 +72,18 @@
                                         <div v-if="grid.g_start || grid.g_end" data-court="{{court['id']}}" data-hour="{{grid.hour}}" class="day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}"
                                              @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)">
                                             <div v-if=" !grid.g_end">
-                                        <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
-                                            ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
-                                        </span>
-                                                <template v-if="grid.status != 'available'">{{grid.content}}</template>
+                                                <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
+                                                    ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
+                                                </span>
+                                                <template v-if="grid.status != 'available'">{{grid.content}}
+                                                    <div v-if="grid.is_cash" class="pay-cash">$</div>
+                                                </template>
                                             </div>
                                         </div>
                                         <div v-else data-court="{{court['id']}}" data-hour="{{grid.hour}}" @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
-                                    <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
-                                         ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
-                                    </span>
+                                            <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
+                                                 ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
+                                            </span>
                                             <template v-if="grid.status != 'available'">{{grid.content}}</template>
                                         </div>
                                     </template>
@@ -293,8 +295,19 @@
             </div>
         </div>
     </div>
-
-
+    <style>
+        .pay-cash{
+            background: red;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            position: absolute;
+            width: 20px;
+            height: 25px;
+            bottom: 0px;
+        }
+    </style>
 </template>
 <script>
     var _ = require('lodash'),

@@ -45,7 +45,6 @@ return [
         'redirect'      => env('GOOGLE_REDIRECT_URL'),
     ],
     'braintree' => [
-        'model'  => App\Models\Player::class,
         'environment' => env('BRAINTREE_ENV'),
         'merchant_id' => env('BRAINTREE_MERCHANT_ID'),
         'public_key' => env('BRAINTREE_PUBLIC_KEY'),

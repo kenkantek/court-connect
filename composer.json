@@ -18,7 +18,7 @@
         "cartalyst/sentinel": "2.0.",
         "nicolaslopezj/searchable": "1.*",
         "cviebrock/eloquent-sluggable": "^3.1",
-        "google/apiclient": "1.*"
+        "laravel/cashier-braintree": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -32,8 +32,7 @@
     },
     "autoload": {
         "classmap": [
-            "database",
-            "vendor/google/apiclient/src/Google"
+            "database"
         ],
         "psr-4": {
             "App\\": "app/"

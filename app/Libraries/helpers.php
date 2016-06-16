@@ -9,8 +9,6 @@ use App\Models\Deal;
 use App\Models\SetOpenDay;
 use App\Models\TimeUnavailable;
 use Carbon\Carbon;
-use Cartalyst\Stripe\Exception\CardErrorException;
-use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Payments\Payment;
@@ -362,7 +360,7 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
         $text_notes = ""; //notes
 
         //check Cost Adjustment
-        if(isset($input['paymentDetail']['cost_adj']) && !empty($input['paymentDetail']['cost_adj'])){
+        if($input['paymentDetail']['type'] != 'cash' && isset($input['paymentDetail']['cost_adj']) && !empty($input['paymentDetail']['cost_adj'])){
             $input['paymentDetail']['cost_adj'] = abs($input['paymentDetail']['cost_adj']);
             if($input['paymentDetail']['cost_adj']> $result_prices['total_price']){
                 return [
@@ -383,88 +381,41 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
             $billing_info = $input['customerDetail'];
         }
 
-        //stripe
         try {
-            $token = Stripe::tokens()->create([
-                'card' => $input['paymentDetail'],
-            ]);
-        } catch (CardErrorException $e) {
-            return ['error' => true, "messages" => [$e->getMessage()]];
-        }
+            $payment = null;
+            if($input['paymentDetail']['type'] != 'cash') {
+                $transaction = Braintree\Transaction::sale([
+                    'amount' => $result_prices['total_price'],
+                    'paymentMethodNonce' => $input['nonce']
+                ]);
 
-        try {
-            $customer_stripe = Stripe::customers()->create([
-                'email' => $input['customerDetail']['email'],
-                'source' => $token['id'],
-            ]);
-        } catch (CardErrorException $e) {
-            return ['error' => true, "messages" => [$e->getMessage()]];
-        }
+                if ($transaction->success || !is_null($transaction->transaction)) {
+                    //save payment
+                    $payment = Payment::create([
+                        'amount' => $transaction->transaction->amount, //$result_prices['total_price'],
+                        'transaction_id' => $transaction->transaction->id,
+                        'card_type' => $transaction->transaction->creditCardDetails->cardType,
+                        'expiration_date' => $transaction->transaction->creditCardDetails->expirationDate,
+                        'last_4' => $transaction->transaction->creditCardDetails->last4,
+                    ]);
 
-        try {
-            $charge = Stripe::charges()->create([
-                'customer' => $customer_stripe['id'],
-                'currency' => 'USD',
-                'amount' => $result_prices['total_price'],
-            ]);
-        } catch (CardErrorException $e) {
-            return ['error' => true, "messages" => [$e->getMessage()]];
-        }
+                } else {
+                    $errorString = "";
+                    foreach ($transaction->errors->deepAll() as $error) {
+                        $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+                    }
+                    return ['error' => true, "messages" => [$errorString.$input['nonce']]];
+                }
+            }
 
-        $payment = Payment::create([
-            'card_number' => $input['paymentDetail']['number'],
-            'amount' => $result_prices['total_price'],
-            'exp_month' => $input['paymentDetail']['exp_month'],
-            'exp_year' => $input['paymentDetail']['exp_year'],
-            'cvv' => $input['paymentDetail']['cvv'],
-            'stripe_transaction_id' => $charge['id'],
-        ]);
-
-        //save with type open
-        if($input['bookingDetail']['type'] == 'open' || $input['bookingDetail']['type'] == 'lesson') {
-            $booking = Booking::create([
-                'payment_id' => $payment['id'],
-                'type' => $input['bookingDetail']['type'],
-                'date' => $input['bookingDetail']['date'],
-                'status' => 'required',
-                'status_booking' => 'create',
-                'day_of_week' => isset($input['bookingDetail']['dayOfWeek']) ? $input['bookingDetail']['dayOfWeek'] : null,
-                'court_id' => $input['bookingDetail']['court_id'],
-                'extra_id' => json_encode(isset($input['bookingDetail']['extra_id']) ? $input['bookingDetail']['extra_id'] : []),
-                'teacher_id' => $input['bookingDetail']['teacher_id'] ? $input['bookingDetail']['teacher_id'] : 0,
-                'is_member' => $input['bookingDetail']['member'],
-                'price_teacher' => isset($result_prices['price_teacher']) ? $result_prices['price_teacher'] : 0,
-                'total_price' => $result_prices['total_price'],
-                'hour' => $input['bookingDetail']['hour_start'],
-                'hour_length' => $input['bookingDetail']['hour_length'],
-                'player_id' => $input['customerDetail']['player_id'],
-                'num_player' => isset($input['players']['player_num']) ? $input['players']['player_num'] : null,
-                'billing_info' => json_encode($billing_info),
-                'payment_info' => json_encode($input['paymentDetail']),
-                'players_info' => json_encode(['name'=>isset($input['players']['names']) ? $input['players']['names']: [],
-                    'email'=>isset($input['players']['emails']) ? $input['players']['emails'] : [] ]),
-                'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
-                'notes' => isset($text_notes) ? $text_notes : null
-            ]);
-            return [
-                'error' => false,
-                'booking' => $booking
-            ];
-        }else if($input['bookingDetail']['type'] == 'contract') { //save with type contract
-
-            $contract = Contract::where('id',$input['bookingDetail']['contract_id'])->first();
-            $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['bookingDetail']['dayOfWeek']);
-
-            $booking = null;
-            foreach($range_date as $date) {
+            //save with type open
+            if ($input['bookingDetail']['type'] == 'open' || $input['bookingDetail']['type'] == 'lesson') {
                 $booking = Booking::create([
-                    'payment_id' => $payment['id'],
+                    'payment_id' => isset($payment['id']) ? $payment['id'] : null,
                     'type' => $input['bookingDetail']['type'],
-                    'date' => $date,
-                    'date_range_of_contract' => json_encode(['from'=>$contract['start_date'],'to'=>$contract['end_date']]),
+                    'date' => $input['bookingDetail']['date'],
                     'status' => 'required',
                     'status_booking' => 'create',
-                    'info_contract' => json_encode(['id'=>$contract['id'], 'start_date'=> $contract['start_date'],'end_date'=> $contract['end_date']]),
                     'day_of_week' => isset($input['bookingDetail']['dayOfWeek']) ? $input['bookingDetail']['dayOfWeek'] : null,
                     'court_id' => $input['bookingDetail']['court_id'],
                     'extra_id' => json_encode(isset($input['bookingDetail']['extra_id']) ? $input['bookingDetail']['extra_id'] : []),
@@ -478,17 +429,58 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
                     'num_player' => isset($input['players']['player_num']) ? $input['players']['player_num'] : null,
                     'billing_info' => json_encode($billing_info),
                     'payment_info' => json_encode($input['paymentDetail']),
-                    'players_info' => json_encode(['name'=>isset($input['players']['names']) ? $input['players']['names']: [],
-                        'email'=>isset($input['players']['emails']) ? $input['players']['emails'] : [] ]),
+                    'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [],
+                        'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
                     'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
                     'notes' => isset($text_notes) ? $text_notes : null
                 ]);
+                return [
+                    'error' => false,
+                    'booking' => $booking
+                ];
+            } else if ($input['bookingDetail']['type'] == 'contract') { //save with type contract
+
+                $contract = Contract::where('id', $input['bookingDetail']['contract_id'])->first();
+                $range_date = createRangeDate($contract['start_date'], $contract['end_date'], $input['bookingDetail']['dayOfWeek']);
+
+                $booking = null;
+                foreach ($range_date as $date) {
+                    $booking = Booking::create([
+                        'payment_id' => isset($payment['id']) ? $payment['id'] : null,
+                        'type' => $input['bookingDetail']['type'],
+                        'date' => $date,
+                        'date_range_of_contract' => json_encode(['from' => $contract['start_date'], 'to' => $contract['end_date']]),
+                        'status' => 'required',
+                        'status_booking' => 'create',
+                        'info_contract' => json_encode(['id' => $contract['id'], 'start_date' => $contract['start_date'], 'end_date' => $contract['end_date']]),
+                        'day_of_week' => isset($input['bookingDetail']['dayOfWeek']) ? $input['bookingDetail']['dayOfWeek'] : null,
+                        'court_id' => $input['bookingDetail']['court_id'],
+                        'extra_id' => json_encode(isset($input['bookingDetail']['extra_id']) ? $input['bookingDetail']['extra_id'] : []),
+                        'teacher_id' => $input['bookingDetail']['teacher_id'] ? $input['bookingDetail']['teacher_id'] : 0,
+                        'is_member' => $input['bookingDetail']['member'],
+                        'price_teacher' => isset($result_prices['price_teacher']) ? $result_prices['price_teacher'] : 0,
+                        'total_price' => $result_prices['total_price'],
+                        'hour' => $input['bookingDetail']['hour_start'],
+                        'hour_length' => $input['bookingDetail']['hour_length'],
+                        'player_id' => $input['customerDetail']['player_id'],
+                        'num_player' => isset($input['players']['player_num']) ? $input['players']['player_num'] : null,
+                        'billing_info' => json_encode($billing_info),
+                        'payment_info' => json_encode($input['paymentDetail']),
+                        'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [],
+                            'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
+                        'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
+                        'notes' => isset($text_notes) ? $text_notes : null
+                    ]);
+                }
+
+                return [
+                    'error' => false,
+                    'booking' => $booking
+                ];
             }
 
-            return [
-                'error' => false,
-                'booking' => $booking
-            ];
+        } catch (Exception $e) {
+            return ['error' => true, "messages" => [$e->getMessage()]];
         }
 
     }

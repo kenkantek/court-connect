@@ -10,6 +10,7 @@ use App\Models\Contexts\Court;
 use App\Models\Contract;
 use App\Models\CourtRate;
 use App\Models\Deal;
+use App\Models\Payments\Payment;
 use App\Models\Player;
 use App\Models\RefundTransaction;
 use App\Models\SetOpenDay;
@@ -307,10 +308,10 @@ class ManageBookingController extends Controller
                     $index = floatval($i);
                     if(isset($arr_hour["h_".$index]['hour'])) {
                         $arr_hour["h_" . $index]['content'] = $booking['billing_info']['first_name'] . " " . $booking['billing_info']['last_name'];
-
                         $arr_hour["h_" . $index]['status'] = $booking['type'];
                         $arr_hour["h_" . $index]['booking_id'] = $booking['id'];
-
+                        if(is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
+                            $arr_hour["h_" . $index]['is_cash'] = true;
                         if ($tmp_i % 2 == 0)
                             $arr_hour["h_" . $index]['g_start'] = "start";
                         else
@@ -412,19 +413,18 @@ class ManageBookingController extends Controller
 
     //payment
     public function postPayment(Request $request){
+        $inputBookingDetail = json_decode($request->input('infoBooking'));
+        $customerDetail = (array)json_decode($request->input('customer'));
+        $paymentDetail = json_decode($request->input('payment'));
+
         $fields_validate = [
-            'type' => 'required',
-            'card_number' => 'required',
-            'expiry' => 'required',
-            'cvv' => 'required|integer',
             'cost_adj' =>'sometimes|integer',
         ];
 
-        $cc_info_payment = json_decode($request->input('payment'));
-        if(!empty($cc_info_payment->cost_adj)){
+        if($paymentDetail->type != 'cash' && !empty($paymentDetail->cost_adj)){
             $fields_validate['adj_reason'] = "required";
         }
-        $v = \Validator::make((array) $cc_info_payment, $fields_validate);
+        $v = \Validator::make((array) $paymentDetail, $fields_validate);
 
 
         if($v->fails())
@@ -432,9 +432,18 @@ class ManageBookingController extends Controller
             return ['error' => true,"messages"=>$v->errors()->all()];
         }
 
-        $inputBookingDetail = json_decode($request->input('infoBooking'));
-        $customerDetail = (array)json_decode($request->input('customer'));
-        $paymentDetail = json_decode($request->input('payment'));
+        if($paymentDetail->type != 'cash') {
+            $v = \Validator::make($request->all(), [
+                'nonce' => 'required',
+            ], [
+                'nonce.required' => "Method payment invalid"
+            ]);
+
+
+            if ($v->fails()) {
+                return ['error' => true, "messages" => $v->errors()->all()];
+            }
+        }
 
         $data_order['bookingDetail'] = [];
         $data_order['paymentDetail'] = [];
@@ -460,14 +469,11 @@ class ManageBookingController extends Controller
             $data_order['bookingDetail']['dayOfWeek'] = $request->dayOfWeek ? $request->dayOfWeek :null;
         }
 
-        $expiry = explode("/", $paymentDetail->expiry);
+        $data_order['nonce'] = $request->nonce;
         $data_order['paymentDetail']=[
-            'number' => $paymentDetail->card_number,
-            'exp_month' => $expiry[0],
-            'exp_year' => $expiry[1],
-            'cvv' => $paymentDetail->cvv,
             'cost_adj' => $paymentDetail->cost_adj,
             'adj_reason' => $paymentDetail->adj_reason,
+            'type' => $paymentDetail->type
         ];
 
         $result_prices = getPriceForBooking($data_order['bookingDetail']); // get prices
@@ -484,12 +490,22 @@ class ManageBookingController extends Controller
             //call booking from helper
             $booking = booking($data_order);
 
-            if(!$booking['error'])
+            if(!$booking['error']) {
+                $payment_type = "Cash";
+                $last4 = '';
+                if($booking['booking']['payment_id'] != null) {
+                    $payment = Payment::whereId($booking['booking']['payment_id'])->first();
+                    $payment_type = $payment['card_type'] != null ? "Credit Card | " . $payment['card_type'] : "Paypal";
+                    $last4 = $payment['card_type'] != null ? "****-****-****-".$payment['last_4']: '';
+                }
                 return response()->json([
                     'error' => false,
                     'total_price' => $booking['booking']['total_price'],
-                    'payment_id' => $booking['booking']['id']
+                    'booking_reference' => $booking['booking']['id'],
+                    'payment_type' => $payment_type,
+                    'last4' => $last4
                 ]);
+            }
             else{
                 return response()->json([
                     'error' => true,
@@ -564,18 +580,36 @@ class ManageBookingController extends Controller
             return ['error' => true, "messages" => ["Not found data"]];
         }
         try {
-            $refund = Stripe::refunds()->create($booking['payment']['stripe_transaction_id'],$booking['payment']['amount'],[
-                'metadata' => [
-                    'reason'      => 'Customer requested for the refund.',
-                    'refunded_by' => 'Court Connect',
-                ],
-            ]);
-            if($refund['status'] == 'succeeded'){
-                RefundTransaction::create([
-                    'refund_id' => $refund['id'],
-                    'amount' => $booking['payment']['amount']
-                ]);
-                $booking->update(['status_booking'=>'cancel']);
+            $tmp_refund_sucess = false;
+            if(is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
+                $tmp_refund_sucess =true;
+            else {
+                $refund = \Braintree_Transaction::refund('8e628z83');
+
+                if ($refund->success) {
+                    $tmp_refund_sucess = true;
+                    RefundTransaction::create([
+                        'refund_id' => $booking['payment']['transaction_id'],
+                        'amount' => $booking['payment']['amount']
+                    ]);
+                }else{
+                    $errorString = "";
+                    foreach ($refund->errors->deepAll() as $error) {
+                        $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+                    }
+                    return response()->json([
+                        'error' => true,
+                        'message' => $errorString
+                    ]);
+                }
+            }
+            if($tmp_refund_sucess){
+                if($booking['type'] == 'contract') {
+                    $bookingContracts = Booking::where(['payment_id' => $booking['payment_id'], 'player_id' => Auth::user()->id])
+                        ->update(['status_booking'=>'cancel']);
+                }else{
+                    $booking->update(['status_booking'=>'cancel']);
+                }
                 return response()->json([
                     'error' => false,
                     'message' => 'Cancel success.'
@@ -624,5 +658,13 @@ class ManageBookingController extends Controller
         $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id])->first();
         $print = true;
         return view('home.bookings.print_confirmation',compact('booking','print'));
+    }
+
+    public function getClientToken(){
+        $client_token = \Braintree\ClientToken::generate();
+        return response()->json([
+            'error' => false,
+            'client_token' => $client_token
+        ]);
     }
 }

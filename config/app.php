@@ -174,6 +174,7 @@ return [
         //Laravel\Cashier\CashierServiceProvider::class
         'Cartalyst\Stripe\Laravel\StripeServiceProvider',
         Caffeinated\Flash\FlashServiceProvider::class,
+        Laravel\Cashier\CashierServiceProvider::class
     ],
 
     /*

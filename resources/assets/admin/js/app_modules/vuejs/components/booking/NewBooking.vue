@@ -325,7 +325,7 @@
                                     <h4 class="bold pull-left">Payment Details</h4>
                                     <hr style="clear: both; margin-top: 0px; border: 1px solid #ddd;">
                                     <div class="clearfix"></div>
-                                    <form method="POST" action="/sadmin/booking/abc" accept-charset="UTF-8" enctype="multipart/form-data"><input name="_token" type="hidden" value="DbSaxkk2WraIAh6Jav0pV8o8wIgYs4NIANN5oPpv">
+                                    <form method="POST" id="checkout-form" action="/sadmin/booking" accept-charset="UTF-8" enctype="multipart/form-data"><input name="_token" type="hidden" value="DbSaxkk2WraIAh6Jav0pV8o8wIgYs4NIANN5oPpv">
                                         <div class="form-group">
                                             <div class="col-xs-12 col-md-3">
                                                 <label for="cost-adjustment">Cost Adjustment</label>
@@ -342,59 +342,47 @@
                                                 <div class="img-wrap">
                                                     <img src="/resources/admin/img/icon_payment_mastercard.png" alt="mastercard">
                                                 </div>
-                                                <input name="payment" type="radio" value="mastercard" id="mastercard" v-model="paymentDetail.type">
+                                                <input name="payment" type="radio" value="mastercard" id="mastercard" v-model="paymentDetail.type" v-on:change="changePaymentType">
                                                 <label for="mastercard">Mastercard</label>
                                             </div>
                                             <div class="pull-left payment-item">
                                                 <div class="img-wrap">
                                                     <img src="/resources/admin/img/icon_payment_visa.png" alt="visa">
                                                 </div>
-                                                <input name="payment" type="radio" value="visa" id="visa" v-model="paymentDetail.type">
+                                                <input name="payment" type="radio" value="visa" id="visa" v-model="paymentDetail.type" v-on:change="changePaymentType">
                                                 <label for="visa">Visa</label>
                                             </div>
                                             <div class="pull-left payment-item" style="width: 32%">
                                                 <div class="img-wrap">
                                                     <img src="/resources/admin/img/icon_payment_emerican_express.png" alt="american-express">
                                                 </div>
-                                                <input name="payment" type="radio" value="american-express" id="american-express" v-model="paymentDetail.type">
+                                                <input name="payment" type="radio" value="american-express" id="american-express" v-model="paymentDetail.type" v-on:change="changePaymentType">
                                                 <label for="mastercard">American Express</label>
                                             </div>
                                             <div class="pull-left payment-item">
                                                 <div class="img-wrap">
                                                     <img src="/resources/admin/img/icon_payment_discover.png" alt="discover">
                                                 </div>
-                                                <input name="payment" type="radio" value="discover" id="discover" v-model="paymentDetail.type">
+                                                <input name="payment" type="radio" value="discover" id="discover" v-model="paymentDetail.type" v-on:change="changePaymentType">
                                                 <label for="discover">Discover</label>
                                             </div>
-                                            <!--<div class="pull-left payment-item">-->
-                                                <!--<div class="img-wrap">-->
-                                                    <!--<img src="/resources/admin/img/icon_payment_cash.png" alt="cash">-->
-                                                <!--</div>-->
-                                                <!--<input name="cash" type="radio" value="cash" id="cash" v-model="paymentDetail.type">-->
-                                                <!--<label for="mastercard">Cash</label>-->
-                                            <!--</div>-->
-                                        </div>
-
-                                        <div class="form-group clearfix">
-                                            <div class="pull-left">
-                                                <label for="card-number">Card Number</label>
-                                                <input type="text" name="card-number" class="form-control" id="card-number" placeholder="12345672234566" v-model="paymentDetail.card_number" style="width: 240px;">
-                                            </div>
-                                            <div class="pull-left" style="position: relative">
-                                                <label for="card-expiry">Expiry</label>
-                                                <input type="text" name="card-expiry" class="form-control" id="card-expiry" placeholder="06/17" v-model="paymentDetail.expiry" style="width: 120px; margin: 0px 10px;">
-                                            </div>
-                                            <div class="pull-left">
-                                                <label for="card-cvv">CVV*</label>
-                                                <input type="text" name="card-cvv" class="form-control" id="card-cvv" placeholder="123" v-model="paymentDetail.cvv" style="width: 100px; margin-right: 10px;">
-                                            </div>
-                                            <div class="pull-right">
-                                                <img src="/resources/admin/img/icon_payment-cart.png" alt="card" style="margin-top: 25px;" >
+                                            <div class="pull-left payment-item">
+                                                <div class="img-wrap">
+                                                    <img src="/resources/admin/img/icon_payment_cash.png" alt="cash">
+                                                </div>
+                                                <input name="cash" type="radio" value="cash" id="cash" v-model="paymentDetail.type" v-on:change="changePaymentType">
+                                                <label for="mastercard">Cash</label>
                                             </div>
                                         </div>
+                                        <section class="">
+                                            <div v-show="!payment_is_cash" class="bt-drop-in-wrapper">
+                                                <div id="bt-dropin"></div>
+                                            </div>
+                                        </section>
 
                                         <div class="form-group clearfix">
-                                            <input type="submit" value="Next" class="btn btn-primary pull-right" @click.prevent="nextConfirmation()">
+                                            <input v-show="!payment_is_cash" type="submit" value="Next" class="btn btn-primary pull-right">
+                                            <input v-show="payment_is_cash" type="submit" value="Next" class="btn btn-primary pull-right" @click.prevent="nextConfirmation()">
                                         </div>
                                     </form>
                                 </div>
@@ -478,7 +466,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Card Number: </td>
-                                                <td>{{paymentDetail.card_number}}</td>
+                                                <td v-if="paymentDetail.card_number != null">{{paymentDetail.card_number}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Payment Reference: </td>
@@ -502,7 +490,7 @@
     var _ = require('lodash'),
             deferred = require('deferred');
     export default {
-        props: ['clubSettingId','clickNewBooking','flagChangeDataOfDate'],
+        props: ['clubSettingId','clickNewBooking','flagChangeDataOfDate','client_token'],
         data (){
         return {
             courts: [],
@@ -542,6 +530,8 @@
                 expiry: null,
                 cvv: null,
             },
+            nonce: null,
+            pre_nonce: null,
             court_detail:{
                 name: null,
             },
@@ -553,6 +543,8 @@
                 total_week: null,
                 extras: []
             },
+            payment_is_cash: false,
+            is_process_booking: false,
             hours:[
                 {key: 5, value: "5am"}, {key: 5.50, value: "5:30am"}, {key: 6, value: "6am"}, {key: 6.50, value: "6:30am"},
                 {key: 7, value: "7am"}, {key: 7.50, value: "7:30am"}, {key: 8, value: "8am"}, {key: 8.50, value: "8:30am"},
@@ -577,7 +569,6 @@
         }, (error) => {
             console.log(error);
         });
-
     },
     methods: {
         fetchCourts() {
@@ -606,6 +597,13 @@
                 });
             }
 
+        },
+        changePaymentType(){
+            if(this.paymentDetail.type == 'cash'){
+                this.payment_is_cash = true;
+            }else{
+                this.payment_is_cash = false;
+            }
         },
         changeContract(){
             if(this.inputBookingDetail.contract_id == '' || this.inputBookingDetail.contract_id == null){
@@ -642,7 +640,6 @@
                 if(res.data.error) {
                     var msg = "";
                     if(res.data.status){
-                        console.log("abc");
                         switch(res.data.status){
                             case 'booking': msg = "This was book. Please select another time or date"; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
@@ -667,6 +664,7 @@
                 });
         },
         nextCustomerDetail(){
+
             this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
             this.$set('inputBookingDetail.date',$("#mb-book-day-open").val());
             this.$set('inputBookingDetail.club_id',this.clubSettingId);
@@ -706,6 +704,8 @@
             });
         },
         nextPayment(){
+            this.changePaymentType();
+            this.createFormBrainTree();
             this.$set('customerDetail.address1',$("#input-address1").val());
             this.$set('customerDetail.state',$("#input-state").val());
             this.$set('customerDetail.city',$("#input-city").val());
@@ -777,17 +777,21 @@
             }
         },
         nextConfirmation(){
-            var data = new FormData();
+            if(this.is_process_booking)
+                return;
+            this.is_process_booking = true;
+
+            var data =  new FormData();
             data.append('infoBooking',JSON.stringify(this.inputBookingDetail));
             data.append('customer',JSON.stringify(this.customerDetail));
             data.append('payment',JSON.stringify(this.paymentDetail));
             data.append('total_price', this.total_price);
+            data.append('nonce', this.nonce);
 
             // check validate customer
             $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post('/sadmin/booking/payment', data).then(res => {
-                if(res.data.error)
-                {
+                if(res.data.error){
                     var msg = "";
                     if(res.data.status){
                         switch(res.data.status){
@@ -802,13 +806,16 @@
                     });
                     showNotice('error', msg, 'Error!');
                 }else{
-                    this.booking_reference = res.data.payment_id;
+                    this.booking_reference = res.data.booking_reference;
+                    this.paymentDetail.type = res.data.payment_type;
+                    this.paymentDetail.card_number = res.data.last4;
                     this.total_price = res.data.total_price
                     this.flagChangeDataOfDate = Math.random();
                     this.$dispatch('child-change-flagChangeDataOfDate', this.flagChangeDataOfDate);
                     this.tabClick("mb-confirmation-content")
                 }
                 $("#mb-create-new-booking .loading").remove();
+                this.is_process_booking = false;
             }, res => {
 
             });
@@ -927,6 +934,7 @@
             this.court_detail = {
                 name: null,
             };
+            this.is_process_booking = false;
             this.booking_reference = null;
             this.total_price = '';
             this.contracts = [];
@@ -934,6 +942,33 @@
                 total_week: null,
                 extras: []
             };
+            this.pre_nonce = this.nonce;
+            this.nonce = null;
+        },
+        createFormBrainTree(){
+            if (checkout != null) {
+                checkout.teardown(function () {
+                    checkout = null;
+                    // braintree.setup can safely be run again!
+                });
+            }
+
+            var _this = this;
+            //$("#bt-dropin").html('');
+            braintree.setup(this.client_token, "dropin", {
+                container: "bt-dropin",
+                onReady: function (integration) {
+                    checkout = integration;
+                },
+                onError: function(data) {
+                    $(".alert-message-box").removeClass('hide').find('.alert-content').html(data.message);
+                    $(".loader").addClass('hidden');
+                },
+                paymentMethodNonceReceived: function (event,nonce) {
+                    _this.nonce = nonce;
+                    _this.nextConfirmation();
+                }
+            });
         }
     },ready () {
         $("#mb-create-new-booking .loading").remove();

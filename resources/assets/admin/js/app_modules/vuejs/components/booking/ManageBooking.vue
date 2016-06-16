@@ -30,7 +30,8 @@
     <new-booking
             :club-setting-id.sync="clubSettingId",
             :click-new-booking.sync="clickNewBooking"
-            :flag-change-data-of-date="flagChangeDataOfDate"
+            :flag-change-data-of-date="flagChangeDataOfDate",
+            :client_token.sync="client_token"
             ></new-booking>
     <!-- Modal -->
 </template>
@@ -47,7 +48,8 @@
                 dateChooise: (new Date()).getMonth()+1+"/"+(new Date()).getDate()+"/"+(new Date()).getFullYear(),
                 clickNewBooking: null,
                 flagChangeDataOfDate: Math.random(),
-                multiTimes: null
+                multiTimes: null,
+                client_token: null
             }
         },
         watch: {
@@ -58,14 +60,24 @@
 
         },
         asyncData(resolve, reject) {
-
+            this.getClientTokenBrainTree();
         },
         computed: {
 
         },
         methods:{
+            getClientTokenBrainTree(){
+                var _this = this;
+                this.$http.get(laroute.route('booking.getClientToken')).then(res => {
+                    this.client_token = res.data.client_token;
+                }, res => {
+
+                });
+            },
             openModalNewBooking(){
                 $("#myModal").modal('show');
+                $("#mb-create-new-booking .loading").remove();
+                this.getClientTokenBrainTree();
                 this.clickNewBooking = Math.random();
             },
             clickMultiTimes(){
