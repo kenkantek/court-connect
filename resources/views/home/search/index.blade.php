@@ -94,21 +94,27 @@
                 style: google.maps.ScaleControlStyle.DEFAULT
             };
             var zoomControlOptions = {
-                position: google.maps.ControlPosition.LEFT_TOP,
-                style: google.maps.ZoomControlStyle.DEFAULT
+                position: google.maps.ControlPosition.LEFT_CENTER,
+                style: google.maps.ZoomControlStyle.SMALL
             };
             var myMapOptions = {
-                draggable : false,
-                scrollwheel : false,
+                draggable : true,
+                scrollwheel : true,
                 mapTypeControlOptions: mapTypeControlOptions,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 overviewMapControlOptions: overviewMapControlOptions,
                 panControlOptions: panControlOptions,
                 rotateControlOptions: rotateControlOptions,
                 scaleControlOptions: scaleControlOptions,
-                zoom: 0,
+                zoom: 12,
                 zoomControlOptions: zoomControlOptions,
-                center: latlng
+                center: latlng,
+                scaleControl: true,
+                streetViewControl: true,
+                streetViewControlOptions: {
+                    position: google.maps.ControlPosition.LEFT_TOP
+                },
+                fullscreenControl: true
             };
             var map = new google.maps.Map(document.getElementById("map"), myMapOptions);
             @if( is_null($msg_errors) && $clubs)

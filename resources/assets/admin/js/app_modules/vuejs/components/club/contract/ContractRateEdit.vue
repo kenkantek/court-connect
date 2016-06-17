@@ -72,15 +72,15 @@
 					</table>
 		</div>
 		<div class="col-xs-12 col-md-6">
-			<h3 class="title-box">Allow Members Price</h3>
+			<h3 class="title-box">Price of</h3>
 				<div class="form-group">
 		          <label>
 		            <input v-model="contractSelect.is_member" type="radio" name="is_member" value="1" checked>
-		            Yes
+		            Member
 		          </label>
 		          <label>
 		            <input v-model="contractSelect.is_member" type="radio" name="is_member" value="0">
-		            No
+		            No member
 		          </label>
 			  </div>
 		</div>

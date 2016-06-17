@@ -137,7 +137,7 @@
                                     </tr>
                                     <tr>
                                         <td align="right">Start Time</td>
-                                        <td>{{booking['hour'] + " - " + (booking['hour'] + booking['hour_length'])}}</td>
+                                        <td>{{booking['hour'] + " - " + (booking['hour'] + booking['hour_length'])}} | {{booking['date']}}</td>
                                     </tr>
                                     <tr>
                                         <td align="right">Length</td>
@@ -182,7 +182,8 @@
                             <div class="col-xs-3">
                                 <div id="mb-print-receipt" class="btn btn-primary btn-mb-ex icon-fa-print" @click="printReceipt(booking['id'])">Print Receipt</div>
                                 <div v-if="booking['status'] == 'required'" @click="acceptPayment(booking['id'])" id="mb-accept-payment" class="btn btn-primary btn-mb-ex icon-fa-accept">Accept Payment</div>
-                                <div v-else id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-check">Check Players In</div>
+                                <div v-if="booking['is_checkIn']" id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-accept">Check Players In</div>
+                                <div v-else @click="checkInBooking(booking['id'])" id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-cancel">Check Players In</div>
                                 <div id="mb-edit-booking" @click="editBooking(booking['id'])" class="btn btn-primary btn-mb-ex icon-fa-edit">Edit Booking</div>
                                 <div id="mb-cancel-booking" @click="cancelBooking(booking['id'])"class="btn btn-primary btn-mb-ex btn-custom icon-fa-cancel">Cancel Booking</div>
                             </div>
@@ -525,24 +526,34 @@
         editBooking(booking_id){
             //$("#md-booking-content-expand .editable_").removeClass('editable_').addClass('editable');
         },
+        checkInBooking(booking_id){
+            this.$http.get(laroute.route('booking.check-in', {one: booking_id})).then(res => {
+                if(res.data.error == false){
+                showNotice('success', "Update accept payment success!", 'Update Success!');
+
+            }else showNotice('error', res.data.message, 'Error!');
+        }, res => {
+
+            });
+        },
         cancelBooking(booking_id){
             var parent = this;
             $('#confirm-booking-delete').modal({ backdrop: 'static', keyboard: false })
-                .one('click', '#booking-delete', function (e) {
+                    .one('click', '#booking-delete', function (e) {
                         $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                         parent.$http.get(laroute.route('booking.cancel', {one: booking_id}),(data) => {
                             console.log(data);
-                            if(data.error == false){
-                                parent.flagChangeDataOfDate = Math.random();
-                                showNotice('success', "Cancel booking success!", 'Cancel Success!');
-                            }else{
-                                showNotice('error', data.message, 'Error!');
-                            }
-                            $("body .loading").remove();
-                        }).error((data) => {
+                        if(data.error == false){
+                            parent.flagChangeDataOfDate = Math.random();
+                            showNotice('success', "Cancel booking success!", 'Cancel Success!');
+                        }else{
+                            showNotice('error', data.message, 'Error!');
+                        }
+                        $("body .loading").remove();
+                    }).error((data) => {
 
                         });
-                });
+                    });
         },
         changeDay(element,day){
             $(".days-in-month-wrap .days .date-current ").removeClass('date-current').addClass('date-notcurrent');

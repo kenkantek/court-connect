@@ -660,6 +660,21 @@ class ManageBookingController extends Controller
         return view('home.bookings.print_confirmation',compact('booking','print'));
     }
 
+    public function getCheckIn($id){
+        $booking = Booking::where(['id'=>$id])->first();
+        if(isset($booking)){
+            $booking->is_CheckIn = true;
+            $booking->save();
+            return response()->json([
+                'error' => false,
+            ]);
+        }
+        return response()->json([
+            'error' => true,
+            'messsage' => 'Data not found'
+        ]);
+    }
+
     public function getClientToken(){
         $client_token = \Braintree\ClientToken::generate();
         return response()->json([

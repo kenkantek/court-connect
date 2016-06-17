@@ -88,7 +88,7 @@
 		>
 		<div class="clearfix" slot="headercontract">
 			<h3 class="title-box pull-left">Contract Time</h3>
-			<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Create Contract Time Period</a>
+			<!--<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Create Contract Time Period</a>-->
 		</div>
 		</contract-time>
 	</div>
