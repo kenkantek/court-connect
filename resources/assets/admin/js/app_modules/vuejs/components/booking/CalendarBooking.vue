@@ -44,7 +44,7 @@
             <div class="days">
                 <div v-for="(index,date) in dates" @click="changeDay('cal_day'+index,date.dayFullFormat)" id="cal_day{{index}}" class="day-item {{date.status}}"  data-value="{{ date.dayFullFormat}}">
                     {{ days[date.day_of_week] }} <br>
-                    <span>{{ date.day + " " + months[date.month] + " " + date.year % 100 }} </span>
+                    <span>{{ months[date.month] + " " + date.day + " " + " " + date.year % 100 }} </span>
                 </div>
             </div>
             <div class="days-in-month-control">
@@ -79,6 +79,7 @@
                                                     <div v-if="grid.is_cash" class="pay-cash">$</div>
                                                 </template>
                                             </div>
+                                            <div class="v-else">{{grid.content}}</div>
                                         </div>
                                         <div v-else data-court="{{court['id']}}" data-hour="{{grid.hour}}" @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
                                             <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"

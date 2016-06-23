@@ -140,6 +140,9 @@
                                                     <label style="display:block">&nbsp;</label>
                                                     <button type="button" class="btn-sub" id="btn-login-booking">Sign In</button>
                                                 </div>
+                                                <div class="col-md-12">
+                                                    <a href="{{route('auth.password.reset')}}" style="color: red; padding-top: 10px; font-style: italic; display: block; text-align: center;">Forgot Password?</a>
+                                                </div>
                                             </fieldset>
                                         </div>
                                     </div>
@@ -149,9 +152,9 @@
                                     <fieldset>
                                         <legend class="text-left">Customer Details</legend>
                                         <div class="form-group">
-                                            <label for="title" class="control-label col-lg-2 col-md-3">Title *</label>
+                                            <label for="title" class="control-label col-lg-2 col-md-3">Title</label>
                                             <div class="col-lg-3 col-md-3">
-                                                <input class="form-control" required name="customer[title]" type="text" id="title" placeholder="Enter Title"/>
+                                                <input class="form-control" name="customer[title]" type="text" id="title" placeholder="Enter Title"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -317,7 +320,7 @@
                         <div class="col-lg-3 col-lg-offset-1 col-md-4 right-sidebar">
                             <div class="detail-header">
                                 <h4>Booking Details</h4>
-                                <button type="button" class="btn-sub">Edit</button>
+                                <button onclick="window.history.back()" type="button" class="btn-sub">Edit</button>
                             </div>
                             <div class="detail-image">
                                 <img src="{{url("/").$court->club->image}}" class="img-responsive" alt="club-image" style="width: 100%">
@@ -376,6 +379,11 @@
         var checkout;
         braintree.setup(client_token, "dropin", {
             container: "bt-dropin",
+            paypal: {
+                button: {
+                    type: 'checkout'
+                }
+            },
             onError: function(data) {
                 $(".alert-message-box").removeClass('hide').find('.alert-content').html(data.message);
                 $(".loader").addClass('hidden');

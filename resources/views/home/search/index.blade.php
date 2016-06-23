@@ -50,11 +50,11 @@
                     <div id="map" style="min-height: 600px; margin-top: 30px"></div>
                 </div>
             </div>
-            {{-- End #search-results --}}
+        {{-- End #search-results --}}
 
-            <!-- deal -->
-            @include('home.partials.deal')
-                    <!-- end deal -->
+        <!-- deal -->
+        @include('home.partials.deal')
+        <!-- end deal -->
         </div>
     </div>
     <script src="http://maps.googleapis.com/maps/api/js"></script>
@@ -118,30 +118,38 @@
             };
             var map = new google.maps.Map(document.getElementById("map"), myMapOptions);
             @if( is_null($msg_errors) && $clubs)
-                @foreach($clubs as $k=>$club)
+                    @foreach($clubs as $k=>$club)
                     markers[{{$k}}] = new google.maps.Marker({
-                    //icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{$k+1}}|FF7B6F",
-                    title: "{{$club['name']}}",
-                    label: "{{$club['name']}}",
-                    position: new google.maps.LatLng({{$club['latitude']}},{{$club['longitude']}}),
-                    map: map
-                });
-                infos[{{$k}}] = new google.maps.InfoWindow({
-                    content: "{{$club['name']}}"
-                });
+                        //icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{$k+1}}|FF7B6F",
+                        title: "{{$club['name']}}",
+                        label: "{{$club['name']}}",
+                        position: new google.maps.LatLng({{$club['latitude']}},{{$club['longitude']}}),
+                        map: map
+                    });
+                    var infowindow = new google.maps.InfoWindow({
+                        id: markers[{{$k}}],
+                        content:markers[{{$k}}].title,
+                        position:markers[{{$k}}].getPosition()
+                    });
+                    google.maps.event.addListenerOnce(infowindow, 'closeclick', function(){
+                        markers[{{$k}}].setVisible(true);
+                    });
+                    markers[{{$k}}].setVisible(false);
+                    infowindow.open(map);
 
-                google.maps.event.addListener(map, "click", function(event){
-                    this.setOptions({scrollwheel:true,draggable:true})
-                })
+                    google.maps.event.addListener(map, "click", function(event){
+                        this.setOptions({scrollwheel:true,draggable:true})
+                    })
 
-                @endforeach
-            @endif
+                    @endforeach
+                    @endif
 
             var latlngbounds = new google.maps.LatLngBounds();
             @for($i=0; $i< count($clubs); $i++)
                 latlngbounds.extend(markers[{{$i}}].position);
             @endfor
             map.fitBounds(latlngbounds);
+
             if (typeof mbOnAfterInit == "function") mbOnAfterInit(map);
 
             @if(empty($clubs) || count($clubs) < 1)

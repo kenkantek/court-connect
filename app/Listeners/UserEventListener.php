@@ -28,6 +28,8 @@ class UserEventListener
             $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
             $message->to($user['email'])
                 ->subject('Verify your email address');
+            $message->cc(env('MAIL_CC1'));
+            $message->cc(env('MAIL_CC2'));
         });
     }
 
@@ -41,6 +43,8 @@ class UserEventListener
         {
             $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
             $message->to($booking['billing_info']['email'])->subject('Court Connect: Order#'.$booking['id']);
+            $message->cc(env('MAIL_CC1'));
+            $message->cc(env('MAIL_CC2'));
         });
     }
 

@@ -61,7 +61,8 @@
                                         @else
                                         <div>{{date('l jS F Y', strtotime($booking->date))}}</div>
                                         @endif
-                                        <div>at {{($booking->hour <=12 ? str_replace(".5",":30",$booking->hour)."am" : str_replace(".5",":30",($booking->hour - 12))."pm") }}</div>
+                                        <?php $tmp_hour = str_replace(".00",":00",str_replace(".5",":30",$booking->hour)); ?>
+                                        <div>at {{($booking->hour <=12 ? $tmp_hour."am" : $tmp_hour."pm") }}</div>
                                         <div>for {{$booking->hour_length}} Hour</div>
 
                                     </td>
@@ -83,7 +84,7 @@
                                         ?>
                                         <div class="dropdown yr-booking">
                                             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                Modify
+                                                Action
                                                 <span class="glyphicon glyphicon-menu-down"></span>
                                             </button>
                                             <ul class="cc-action-booking dropdown-menu" aria-labelledby="">
@@ -103,27 +104,27 @@
                                                 @endif
 
                                                 <li><a href="#" class="action-booking print-confirmation" data-booking="{{$booking->id}}">Print Confirmation</a></li>
-                                                <li><a href="#" class="action-booking export-outlook" data-booking="{{$booking->id}}">Export to Outlook</a></li>
+                                                <li><a href="#" class="action-booking export-outlook" data-booking="{{$booking->id}}">Export to Calendar</a></li>
                                             </ul>
                                         </div>
 
                                         @if($booking->type == 'contract')
                                                 @if($booking->status_booking == 'cancel')
-                                                    <div class='status-booking'>Status:<span>Cancel</span></div>
+                                                    <div class='status-booking'>Status:<span>Cancelled</span></div>
                                                 @elseif(strtotime(date_format(date_create($booking->date_range_of_contract['from']), 'Y-m-d H:i:s')) > strtotime("now") ||
                                                 (strtotime(date_format(date_create($booking->date_range_of_contract['from']), 'Y-m-d H:i:s')) < strtotime("now") &&
                                                     strtotime(date_format(date_create($booking->date_range_of_contract['to']), 'Y-m-d H:i:s')) > strtotime("now")))
-                                                    <div class='status-booking'>Status:<span>Accept</span></div>
+                                                    <div class='status-booking'>Status:<span>Booked</span></div>
                                                 @else
                                                     <div class='status-booking'>Status:<span>Expired</span></div>
                                                 @endif
                                         @else
                                                 @if($booking->status_booking == 'cancel')
-                                                    <div class='status-booking'>Status:<span>Canceled</span></div>"
+                                                    <div class='status-booking'>Status:<span>Cancelled</span></div>"
                                                 @elseif(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
                                                     <div class='status-booking'>Status:<span>Expired</span></div>
                                                 @else
-                                                    <div class='status-booking'>Status:<span>Accept</span></div>
+                                                    <div class='status-booking'>Status:<span>Booked</span></div>
                                                 @endif
                                         @endif
                                     </td>
@@ -243,7 +244,9 @@
                                         $skill  = Auth::user()->getPlayer() ? Auth::user()->getPlayer()->tenis_level : null;
                                         $cb_offers  = Auth::user()->getPlayer() ? Auth::user()->getPlayer()->receive_discount_offers : 0;
                                     ?>
-                                    {!! Form::select("skill",['0'=>'Beginner','1'=>'Professional'],$skill,['class'=>"form-control select2"]) !!}
+                                    {!! Form::select("skill",
+                                        ['0'=>'Beginner','1'=>'Professional','2'=>'Advanced','3'=>'3.0','4'=>'3.5', '5'=> '4.0', '6'=> '4.5', '7'=>'5.0', '8'=>'5.0+'],$skill,
+                                    ['class'=>"form-control select2"]) !!}
                                 </div>
                             </div>
                             <div class="form-group">

@@ -24,6 +24,7 @@ class SearchController extends Controller {
             ->orWhere('city', 'LIKE', '%' . $term . '%')
             ->orWhere('state', 'LIKE', '%' . $term . '%')
             ->orWhere('address', 'LIKE', '%' . $term . '%')
+            ->orWhere('zipcode', 'LIKE', '%' . $term . '%')
             ->take(5)->get(['id','name','image','address']);
 
         foreach ($queries as $query) {

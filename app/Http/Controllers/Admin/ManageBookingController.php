@@ -584,7 +584,8 @@ class ManageBookingController extends Controller
             if(is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
                 $tmp_refund_sucess =true;
             else {
-                $refund = \Braintree_Transaction::refund('8e628z83');
+                $payment = Payment::whereId($booking['payment_id'])->first();
+                $refund = \Braintree_Transaction::refund($payment['transaction_id']);
 
                 if ($refund->success) {
                     $tmp_refund_sucess = true;

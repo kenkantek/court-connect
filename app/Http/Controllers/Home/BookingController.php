@@ -66,7 +66,7 @@ class BookingController extends Controller{
             'court' => 'required',
             'hour_start' => 'required',
             'hour_length' => 'required',
-            'customer.title' => 'required',
+            //'customer.title' => 'required',
             'customer.first_name' => 'required',
             'customer.last_name' => 'required',
             'customer.phone' => 'required',
@@ -240,14 +240,15 @@ class BookingController extends Controller{
         }else{
             $booking = Booking::with('payment')->where(['id'=>$request['id'],'player_id'=>Auth::user()->id])->first();
 
-            $tmp_refund_sucess = false;
+            $tmp_refund_success = false;
             if(is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
-                $tmp_refund_sucess =true;
+                $tmp_refund_success =true;
             else {
-                $refund = \Braintree_Transaction::refund('8e628z83');
+                $payment = Payment::whereId($booking['payment_id'])->first();
+                $refund = \Braintree_Transaction::refund($payment['transaction_id']);
 
                 if ($refund->success) {
-                    $tmp_refund_sucess = true;
+                    $tmp_refund_success = true;
                     RefundTransaction::create([
                         'refund_id' => $booking['payment']['transaction_id'],
                         'amount' => $booking['payment']['amount']
@@ -263,7 +264,7 @@ class BookingController extends Controller{
                     ]);
                 }
             }
-            if($tmp_refund_sucess){
+            if($tmp_refund_success){
                 if($booking['type'] == 'contract') {
                     $bookingContracts = Booking::where(['payment_id' => $booking['payment_id'], 'player_id' => Auth::user()->id])
                         ->update(['status_booking'=>'cancel']);

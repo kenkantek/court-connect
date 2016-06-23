@@ -165,6 +165,7 @@ form.form-court{
 #form_search_booking{
     background: #f2f2f2;
     padding: 20px 0px;
+    position: relative;
 }
 #result_search table{
     width: 80%;

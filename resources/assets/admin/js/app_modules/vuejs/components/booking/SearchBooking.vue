@@ -19,26 +19,33 @@
             <input class="btn btn-primary" style="display: block" type="submit" value="Search" @click.prevent="searchFindBooking()">
         </div>
         <div class="clearfix"></div>
+        <div class="close-search hidden" #click.prevent="resetResultSearch()" style="position: absolute;top: 10px;right: 20px;font-size: 3em; cursor: pointer">
+            <span aria-hidden="true">X</span>
+        </div>
         <div id="result_search" class="hidden">
             <h3 class="text-center">Search Results</h3>
             <table>
-                <tr>
-                    <th>Booking Reference</th>
-                    <th>Customer Name</th>
-                    <th>Customer Phone</th>
-                    <th>Booking Details</th>
-                </tr>
-                <tr v-for="(index,item) in search_result">
-                    <td>{{item['id']}}</td>
-                    <td>{{item['billing_info']['first_name'] + " " + item['billing_info']['last_name']}}</td>
-                    <td>{{item['billing_info']['phone']}}</td>
-                    <td>
-                        Court {{item['court_name']}} - {{item['date']}} @ {{item['hour']}}
-                        <a href="#" @click="fetchDataOfBooking(item['id'])" class="viewbooking btn btn-primary">View</a>
-                        <a href="#" class="editbooking btn btn-primary">Edit</a>
-                        <a href="#" @click.prevent="checkInBooking(item[id])" class="checkIn btn btn-primary">Check In</a>
-                    </td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Booking Reference</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone</th>
+                        <th>Booking Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(index,item) in search_result">
+                        <td>{{item['id']}}</td>
+                        <td>{{item['billing_info']['first_name'] + " " + item['billing_info']['last_name']}}</td>
+                        <td>{{item['billing_info']['phone']}}</td>
+                        <td>
+                            Court {{item['court_name']}} - {{item['date']}} @ {{item['hour']}}
+                            <a href="#" @click="fetchDataOfBooking(item['id'])" class="viewbooking btn btn-primary">View</a>
+                            <a href="#" class="editbooking btn btn-primary">Edit</a>
+                            <a href="#" @click.prevent="checkInBooking(item[id])" class="checkIn btn btn-primary">Check In</a>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </form>
@@ -151,7 +158,8 @@
         methods: {
             searchFindBooking(){
                 $("#result_search").addClass('hidden');
-                $("#cc-modal-view-booking-search").addClass('hide')
+                $("#cc-modal-view-booking-search").addClass('hide');
+                $(".close-search").removeClass('hidden');
                 $("#form_search_booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                 this.$http.get(laroute.route('booking.search',{reference:this.search_reference,name: this.search_name})).then(res => {
                     if(!res.data.error)
@@ -169,6 +177,11 @@
                 }, res => {
 
                 });
+            },
+            resetResultSearch(){
+                this.search_result = [];
+                $(".close-search").addClass('hidden');
+                $("#result_search").addClass('hidden');
             },
             fetchDataOfBooking(booking_id){
                 this.booking = [];

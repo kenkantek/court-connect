@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Events\UserCreateEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlayerRequest;
 use App\Models\Auth\User;
@@ -50,7 +51,8 @@ class PlayerController extends Controller
         $player->save();
 
         Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')]);
-        return redirect(route("home.acount"));
+        event(new UserCreateEvent(Auth::user()));
+        return redirect(route("home.index"));
     }
 
     public function getAccount()

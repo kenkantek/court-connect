@@ -1,8 +1,8 @@
 (function ( $ ) {
     $.fn.cityAutocomplete = function(options) {
         var predictionsDropDown = $('<div class="city-autocomplete"></div>').appendTo('body');
-        var CitysDropDown = $('<div class="citys"></div>').appendTo('.city-autocomplete');
         var ClubsDropDown = $('<div class="clubs"></div>').appendTo('.city-autocomplete');
+        var CitysDropDown = $('<div class="citys"></div>').appendTo('.city-autocomplete');
         var input = this;
         var xhr ;
             input.keyup(function() {
