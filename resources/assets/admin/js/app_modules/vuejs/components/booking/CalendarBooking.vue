@@ -307,7 +307,8 @@
             position: absolute;
             width: 20px;
             height: 25px;
-            bottom: 0px;
+            top: 0px;
+            z-index: 9;
         }
     </style>
 </template>

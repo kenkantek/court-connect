@@ -160,7 +160,7 @@
                                             <div v-else>
                                                 Date Period: <br><b>{{info_contract.start_date + " - " + info_contract.end_date}}</b>
                                             </div>
-                                            <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? (inputBookingDetail.hour_start).replace(".5",":30") + " am" : (inputBookingDetail.hour_start - 12).replace(".5",":30") + " pm"}}</b></div>
+                                            <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? (inputBookingDetail.hour_start + "").replace(".5",":30") + " am" : ((inputBookingDetail.hour_start - 12)+"").replace(".5",":30") + " pm"}}</b></div>
                                             <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>
                                         </td>
 
@@ -282,7 +282,7 @@
                                             <div v-else>
                                                 Date Period: <br><b>{{info_contract.start_date + " - " + info_contract.end_date}}</b>
                                             </div>
-                                            <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? (inputBookingDetail.hour_start).replace(".5",":30") + " am" : (inputBookingDetail.hour_start - 12).replace(".5",":30") + " pm"}}</b></div>
+                                            <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? (inputBookingDetail.hour_start  + "").replace(".5",":30") + " am" : ((inputBookingDetail.hour_start - 12)+"").replace(".5",":30") + " pm"}}</b></div>
                                             <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>
                                         </td>
 
@@ -415,7 +415,7 @@
                                                 <div v-else>
                                                     Date Period: <br><b>{{info_contract.start_date + " - " + info_contract.end_date}}</b>
                                                 </div>
-                                                <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? (inputBookingDetail.hour_start).replace(".5",":30") + " am" : (inputBookingDetail.hour_start - 12).replace(".5",":30") + " pm"}}</b></div>
+                                                <div>Time: <b>{{inputBookingDetail.hour_start <= 12 ? (inputBookingDetail.hour_start  + "").replace(".5",":30") + " am" : ((inputBookingDetail.hour_start - 12)+"").replace(".5",":30") + " pm"}}</b></div>
                                                 <div>Length: <b>{{inputBookingDetail.hour_length}} Hour</b></div>
                                             </td>
 

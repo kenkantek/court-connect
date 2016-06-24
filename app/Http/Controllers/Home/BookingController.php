@@ -212,11 +212,19 @@ class BookingController extends Controller{
                     ]);
                 }
             }else{
-                if (strtotime(date_format($date_booking, 'Y-m-d H:i:s')) - strtotime("now") < 86400) // < 24hour
+                if (strtotime(date_format($date_booking, 'Y-m-d H:i:s')) - strtotime("now") <= 0) // < 24hour
                 {
                     return response()->json([
                         'error' => true,
                         'message' => 'A Reservation cannot be cancelled 24 hours before the booking time.'
+                    ]);
+                }
+                if (strtotime(date_format($date_booking, 'Y-m-d H:i:s')) - strtotime("now") <= 86400) // < 24hour
+                {
+                    return response()->json([
+                        'error' => false,
+                        'less_than_24_hour' => true,
+                        'message' => 'A Reservation is cancelled LESS than 24 hours, we don\'t give a refund'
                     ]);
                 }
             }
@@ -229,8 +237,8 @@ class BookingController extends Controller{
 
     //cancel booking
     public function cancelBooking(Request $request){
-        $check = $this->checkActionUpdateBooking($request);
-        $tmp_check = $check->getData();
+        $checkCancelBooking = $this->checkActionUpdateBooking($request);
+        $tmp_check = $checkCancelBooking->getData();
 
         if($tmp_check->error){
             return response()->json([
@@ -241,27 +249,31 @@ class BookingController extends Controller{
             $booking = Booking::with('payment')->where(['id'=>$request['id'],'player_id'=>Auth::user()->id])->first();
 
             $tmp_refund_success = false;
-            if(is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
-                $tmp_refund_success =true;
-            else {
-                $payment = Payment::whereId($booking['payment_id'])->first();
-                $refund = \Braintree_Transaction::refund($payment['transaction_id']);
-
-                if ($refund->success) {
+            if(isset($tmp_check->less_than_24_hour) && $tmp_check->less_than_24_hour){
+                $tmp_refund_success = true;
+            }else {
+                if (is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
                     $tmp_refund_success = true;
-                    RefundTransaction::create([
-                        'refund_id' => $booking['payment']['transaction_id'],
-                        'amount' => $booking['payment']['amount']
-                    ]);
-                }else{
-                    $errorString = "";
-                    foreach ($refund->errors->deepAll() as $error) {
-                        $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+                else {
+                    $payment = Payment::whereId($booking['payment_id'])->first();
+                    $refund = \Braintree_Transaction::refund($payment['transaction_id']);
+
+                    if ($refund->success) {
+                        $tmp_refund_success = true;
+                        RefundTransaction::create([
+                            'refund_id' => $booking['payment']['transaction_id'],
+                            'amount' => $booking['payment']['amount']
+                        ]);
+                    } else {
+                        $errorString = "";
+                        foreach ($refund->errors->deepAll() as $error) {
+                            $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
+                        }
+                        return response()->json([
+                            'error' => true,
+                            'message' => $errorString
+                        ]);
                     }
-                    return response()->json([
-                        'error' => true,
-                        'message' => $errorString
-                    ]);
                 }
             }
             if($tmp_refund_success){

@@ -120,7 +120,7 @@
                                                 @endif
                                         @else
                                                 @if($booking->status_booking == 'cancel')
-                                                    <div class='status-booking'>Status:<span>Cancelled</span></div>"
+                                                    <div class='status-booking'>Status:<span>Cancelled</span></div>
                                                 @elseif(strtotime(date_format($date_booking, 'Y-m-d H:i:s')) < strtotime("now"))
                                                     <div class='status-booking'>Status:<span>Expired</span></div>
                                                 @else

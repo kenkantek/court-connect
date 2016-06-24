@@ -312,6 +312,8 @@ class ManageBookingController extends Controller
                         $arr_hour["h_" . $index]['booking_id'] = $booking['id'];
                         if(is_null($booking['payment_id']) && json_decode($booking['payment_info'])->type)
                             $arr_hour["h_" . $index]['is_cash'] = true;
+                        if($booking['status'] != 'paid')
+                            $arr_hour["h_" . $index]['is_cash'] = true;
                         if ($tmp_i % 2 == 0)
                             $arr_hour["h_" . $index]['g_start'] = "start";
                         else

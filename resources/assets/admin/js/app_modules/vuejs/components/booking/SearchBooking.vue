@@ -19,7 +19,7 @@
             <input class="btn btn-primary" style="display: block" type="submit" value="Search" @click.prevent="searchFindBooking()">
         </div>
         <div class="clearfix"></div>
-        <div class="close-search hidden" #click.prevent="resetResultSearch()" style="position: absolute;top: 10px;right: 20px;font-size: 3em; cursor: pointer">
+        <div class="close-search hidden" @click.prevent="resetResultSearch()" style="position: absolute;top: 10px;right: 20px;font-size: 3em; cursor: pointer">
             <span aria-hidden="true">X</span>
         </div>
         <div id="result_search" class="hidden">

@@ -276,14 +276,20 @@ $(function () {
         if($("#input-zip_code").length)
             zipcode = $("#input-zip_code").val();
         else zipcode = $("input[name=zipcode]").val();
-        console.log(zipcode);
         $.ajax({
             url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode,
             method: "post",
             success:function(data){
-                console.log(data);
-                $("input[name=state], #input-state").val(data.results[0].address_components[3].long_name);
-                $("input[name=city], #input-city").val(data.results[0].address_components[1].long_name);
+                $.each(data.results[0].address_components, function(index, val) {
+                    if (typeof val.types[0] != "undefined" ) {
+                        if(val.types[0] == 'administrative_area_level_1'){
+                            $("input[name=state], #input-state").val(val.long_name);
+                        }
+                        if(val.types[0] == "locality"){
+                            $("input[name=city], #input-city").val(val.long_name);
+                        }
+                    }
+                });
             }
         });
     });
