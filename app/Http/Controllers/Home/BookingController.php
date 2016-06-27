@@ -329,7 +329,8 @@ class BookingController extends Controller{
     }
 
     //calendar google
-    public function getCalendarGoogle($id){
+    public function getExportCalendar($id, $type){
+
         if(!Auth::check()){
             return redirect('error');
         }
@@ -338,22 +339,34 @@ class BookingController extends Controller{
             if($booking) {
                 $param = "text=Tennis court at " . $booking['court']['club']['name']. " Club&location=".$booking['court']['club']['address'];
                 $param .= "&details=Phone club: ".$booking['court']['club']['phone']." , "." Confirmation: ".$booking['id'];
+
+                $param_outlook = "&summary="."Tennis court at " . $booking['court']['club']['name']."&location=".$booking['court']['club']['address'];
+                $param_outlook .= "&description="."Phone club: ".$booking['court']['club']['phone']." , "." Confirmation: ".$booking['id'];
+
                 if($booking['type'] == 'contract'){
                     $intpart = floor($booking->hour);
                     $fraction = str_replace("0.5","30",$booking->hour - $intpart);
-                    $param .= "&dates=".date_from_database($booking['date_range_of_contract']['from'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00"."/";
+                    $start_date = date_from_database($booking['date_range_of_contract']['from'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
                     $intpart = floor($booking->hour + $booking->hour_length);
                     $fraction = str_replace("0.5","30",$booking->hour + $booking->hour_length - $intpart);
-                    $param .= date_from_database($booking['date_range_of_contract']['to'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
+                    $end_date = date_from_database($booking['date_range_of_contract']['to'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
                 }else{
                     $intpart = floor($booking->hour);
                     $fraction = str_replace("0.5","30",$booking->hour - $intpart);
-                    $param .= "&dates=".date_from_database($booking['date'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00"."/";
+                    $start_date = date_from_database($booking['date'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
                     $intpart = floor($booking->hour + $booking->hour_length);
                     $fraction = str_replace("0.5","30",$booking->hour + $booking->hour_length - $intpart);
-                    $param .= date_from_database($booking['date'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
+                    $end_date = date_from_database($booking['date'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
                 }
-                return redirect()->away("https://calendar.google.com/calendar/render?action=TEMPLATE&tpr=true&".$param);
+
+                $param .= "&dates=".$start_date."/".$end_date;
+                $param_outlook .= "&dtstart=".$start_date."Z&dtend=".$end_date."Z&&allday=false";
+
+                if($type == 'google') {
+                    return redirect()->away("https://calendar.google.com/calendar/render?action=TEMPLATE&tpr=true&" . $param);
+                }else{
+                    return redirect()->away("https://bay02.calendar.live.com/calendar/calendar.aspx?rru=addevent".$param_outlook."&uid=");
+                }
             }else
                 return redirect()->route('error');
 

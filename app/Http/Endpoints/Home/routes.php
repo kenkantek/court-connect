@@ -34,5 +34,5 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post('/cancel-booking', 'BookingController@cancelBooking');
 
 	Route::get('price', ['as' => 'home.send_mail', 'uses' => 'SearchController@checkPrice']);
-	Route::get('calendar-google/{id}', ['as' => 'home.calendar-google', 'uses' => 'BookingController@getCalendarGoogle']);
+	Route::get('export-calendar/{id}/{type}', ['as' => 'home.export-calendar', 'uses' => 'BookingController@getExportCalendar']);
 });
