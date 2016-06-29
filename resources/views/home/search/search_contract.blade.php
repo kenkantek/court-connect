@@ -73,7 +73,6 @@ $dayOfWeek = [
                                                         <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start']): str_replace(".5",":30",($item['hour_start'] - 12))}} -
                                                             {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
                                                                         </span>
-
                                                     <a href="{{route('home.checkout',['date'=>$request->input('date'),'dayOfWeek'=>$request->input('dayOfWeek')[$k],'contract_id'=>$contract['contract_id'],'court'=>$contract['court']->id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="{{$contract['court']->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
                                                         @if(isset($item['total_price']) && $item['total_price'] == 'N/A' )
                                                             <span>N/A</span>
