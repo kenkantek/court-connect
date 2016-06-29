@@ -74,20 +74,45 @@ class SearchController extends Controller {
         if ($request->input('date') && $keyword_hour < 5 || $keyword_hour > 22) {
             $msg_errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
         }else if (!empty($keyword_clubs)){
-            $clubs = Club::search($keyword_clubs)
-                ->join('courts','courts.club_id','=','clubs.id')
-                ->where(function ($q) use ($keyword_surface) {
-                    if ($keyword_surface != null) {
-                        $q->where('courts.surface_id', '=', $keyword_surface);
-                    }})
-                ->with(['courts' => function ($q) use ($keyword_surface) {
-                    if ($keyword_surface != null) {
-                        $q->where('surface_id', '=', $keyword_surface);
-                    }
-                }])
-                ->groupBy('clubs.id')
-                ->select(['clubs.*'])
-                ->paginate(5);
+            //contract
+            if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
+                $clubs = Club::search($keyword_clubs)
+                    ->join('courts','courts.club_id','=','clubs.id')
+                    ->join('contracts_club','contracts_club.club_id','=','clubs.id')
+                    ->where(function ($q) use ($keyword_surface) {
+                        if ($keyword_surface != null) {
+                            $q->where('courts.surface_id', '=', $keyword_surface);
+                        }})
+                    ->with(['courts' => function ($q) use ($keyword_surface) {
+                        if ($keyword_surface != null) {
+                            $q->where('surface_id', '=', $keyword_surface);
+                        }
+                    }])
+                    ->where(function ($q) use ($request) {
+                        if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
+                            $q->where('contracts_club.is_member',0);
+                        }
+                    })
+                    ->groupBy('clubs.id')
+                    ->select(['clubs.*'])
+                    ->paginate(5);
+            }else { //open time
+                $clubs = Club::search($keyword_clubs)
+                    ->join('courts', 'courts.club_id', '=', 'clubs.id')
+                    ->where(function ($q) use ($keyword_surface) {
+                        if ($keyword_surface != null) {
+                            $q->where('courts.surface_id', '=', $keyword_surface);
+                        }
+                    })
+                    ->with(['courts' => function ($q) use ($keyword_surface) {
+                        if ($keyword_surface != null) {
+                            $q->where('surface_id', '=', $keyword_surface);
+                        }
+                    }])
+                    ->groupBy('clubs.id')
+                    ->select(['clubs.*'])
+                    ->paginate(5);
+            }
             if ($clubs->count() == 0 ) {
 
             } else {
@@ -106,8 +131,12 @@ class SearchController extends Controller {
                             ->limit(5)->orderBy('updated_at', 'desc')->get(['id','start_date','end_date','is_member','total_week']);
 
                         if($contracts && count($contracts)  > 0) {
+                            $arr_tmp_contract = null;
                             foreach ($contracts as $m => $contract) {
                                 $tmp_count = count($club->courts);
+                                $index_min = -1;
+                                $tmp_price_min = -1;
+                                $tmp_court = 0;
                                 foreach ($club->courts as $p => $court) {
                                     $input['court_id'] = $court['id'];
                                     $input['club_id'] = $club['id'];
@@ -116,25 +145,54 @@ class SearchController extends Controller {
                                     $lprice = [];
                                     foreach($request->dayOfWeek as $dayOfWeek) {
                                         $input['dayOfWeek'] = intval($dayOfWeek);
-                                        $lprice[] = $this->getListPriceOfCourt($input);
+                                        $lprice[] = getPriceForBooking($input);
                                     }
                                     if(!isset($clubs[$k]['courts'][$m*$tmp_count+$p])) {
                                         $clubs[$k]['courts'][$m * $tmp_count + $p] = clone($clubs[$k]['courts'][$p]);
                                     }
-                                    $clubs[$k]['courts'][$m*$tmp_count+$p]['contract_id'] = $contract['id'];
-                                    $clubs[$k]['courts'][$m*$tmp_count+$p]['prices'] = $lprice;
+
+                                    if(isset($lprice[0]) && $lprice[0]['error'] == false){
+                                        if($lprice[0]['total_price'] < $tmp_price_min || $tmp_price_min < 0){
+                                            $tmp_price_min = $lprice[0]['total_price'];
+                                            $index_min = $p;
+                                            $tmp_court = $court['id'];
+                                        }
+                                    }
                                 }
+                                if($index_min < 0){
+                                    $index_min = 0;
+                                }
+                                $tmp['court'] = $clubs[$k]['courts'][$index_min];
+                                $tmp['contract_id'] = $contract['id'];
+                                $input['court_id'] = $tmp_court;
+                                $input['club_id'] = $club['id'];
+                                $tmp['min_price'] = $tmp_price_min;
+
+                                $lprice = [];
+                                foreach($request->dayOfWeek as $dayOfWeek) {
+                                    $input['dayOfWeek'] = intval($dayOfWeek);
+                                    $lprice[] = $this->getListPriceOfCourt($input);
+                                }
+
+                                $tmp['prices'] = $lprice;
+                                $tmp['start_date'] = $contract['start_date'];
+                                $tmp['end_date'] = $contract['end_date'];
+                                $tmp['range_date'] = createRangeDate($contract['start_date'], $contract['end_date'], $input['dayOfWeek']);
+
+                                $arr_tmp_contract[] = $tmp;
                             }
+
+                            usort($arr_tmp_contract,function($a,$b){
+                                return $a['min_price'] > $b['min_price'];
+                            });
+                            $clubs[$k]['contracts'] = $arr_tmp_contract;
+                            unset($clubs[$k]['courts']);
                             $clubs[$k]['type'] = 'contract';
-                            $clubs[$k]['start_date'] = $contract['start_date'];
-                            $clubs[$k]['end_date'] = $contract['end_date'];
-                            $clubs[$k]['range_date'] = createRangeDate($contract['start_date'], $contract['end_date'], $input['dayOfWeek']);
                         }else{
                             unset($clubs[$k]);
                         }
                     }
                 }else { // open
-
                     foreach ($clubs as $k => $club) {
                         $clubs[$k]['type'] = 'open';
                         $index_min = -1;
@@ -162,6 +220,7 @@ class SearchController extends Controller {
                 }
             }
         }
+        //return $clubs;
         $deals = getDeals();
         return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour','msg_errors'));
     }
@@ -211,15 +270,26 @@ class SearchController extends Controller {
     }
 
     public function checkPrice(){
+//        $input = [
+//            'date' => "05/09/2016",
+//            'type' => 'open',
+//            'hour_start' => 7,
+//            'hour_length' => 1,
+//            'member' => 0,
+//            'court_id' => '179'
+//        ];
         $input = [
             'date' => "05/09/2016",
-            'type' => 'open',
+            'dayOfWeek' => 1,
+            'type' => 'contract',
+            'contract_id' => 16,
+            'court_id' => 5,
+            'club_id' => 1,
             'hour_start' => 7,
             'hour_length' => 1,
             'member' => 0,
-            'court_id' => '179'
         ];
-        $price = $this->getPriceOfCourt($input);
+        $price = getPriceForBooking($input);
         dd($price);
     }
 }

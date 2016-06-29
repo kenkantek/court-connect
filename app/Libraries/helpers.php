@@ -281,6 +281,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         foreach($range_date as $date) {
             //check book yet
             $check_book = Booking::where('date', $date)
+                ->where('court_id',$input['court_id'])
                 ->where('status_booking','!=','cancel')
                 ->where(function ($q) use ($input) {
                     $q->whereIn('hour', range($input['hour_start'], $input['hour_start'] + $input['hour_length'] - 0.5, 0.5))
@@ -297,7 +298,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             if (!empty($check_book)) {
                 $err = "Please select another time or range date. ";
                 $err .= "Detail: Date " . $date . " at " . $input['hour_start'] . " - " . ($input['hour_start'] + $input['hour_length']) . "hour was booked";
-                return ['error' => true, "messages" => [$err]];
+                return ['error' => true, "messages" => [$err],'status'=>'booked'];
             }
         }
 

@@ -37,8 +37,6 @@
                         <div class="col-md-12">
                             <div class="club-time text-center club-time-wrap">
                                 <div class="first-court">
-                                    <div class="court-name">Court: {!! $club->court->name !!}</div>
-                                    <hr style="width: 100%">
                                     <div class="intro-court clearfix">
                                         <div class="court-io-door pull-right">
                                             Indoor/Outdoor:

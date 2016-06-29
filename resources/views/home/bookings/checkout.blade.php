@@ -405,8 +405,7 @@
                         $(".loader").removeClass('hidden');
                     },
                     success: function(result){
-                        console.log(result);
-                        $(".loader").addClass('hidden');
+                        //console.log(result);
                         if(result.error){
                             $('html, body').animate({scrollTop : 0},800);
                             var msg ="<ul>";

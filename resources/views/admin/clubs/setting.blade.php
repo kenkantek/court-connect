@@ -23,6 +23,9 @@
 				$(".contentTab .content-item").slideUp();
 				$($(this).attr('data-href')).slideDown();
 			})
+			$(function(argument) {
+				$('#lch-same_price').bootstrapSwitch();
+			})
 		});
 	</script>
 @stop

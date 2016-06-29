@@ -9,8 +9,8 @@
 		</h3>
 		<div class="pull-right">
 			<label>
-				<input type="checkbox" id="lch-same_price" v-model="same_price" @click="checkSamePrice()">
-				<span>Same both</span>
+				<input type="checkbox" id="lch-same_price" v-model="same_price" data-check="false" @click="checkSamePrice()">
+				<span>Offer member price</span>
 			</label>
 			<ul id="tabRate">
 				<li :class="{'active': is_member == 1}"  @click="setMember(1)">Members</li>
@@ -193,7 +193,6 @@
 		z-index: 999;
 	}
 	#lch-same_price{
-		margin-top: 25px;
 		display: inline-block;
 	}
 </style>
@@ -410,14 +409,17 @@
 			},
 			checkSamePrice(){
 				if(!this.same_price){
-					$("#tabRate").addClass('h')
+					$("#tabRate").addClass('h');
+					this.same_price = 1;
 				}else{
 					$("#tabRate").removeClass('h');
+					this.same_price = 0;
 				}
 			},
 			resetSamePrice(){
 				this.same_price = false;
 				$("#tabRate").removeClass('h');
+				$('#lch-same_price').bootstrapSwitch('state',false);
 			},
 			addNewCourtRate(){
 				//set price default

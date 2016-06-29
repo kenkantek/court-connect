@@ -367,6 +367,14 @@ return [
                     'cdn' => '',
                 ],
             ],
+            'bootstrap-switch' => [
+                'use_cdn' => false,
+                'location' => 'bottom',
+                'src' => [
+                    'local' => '/resources/vendor/bootstrap-switch/dist/js/bootstrap-switch.js',
+                    'cdn' => '',
+                ],
+            ],
             // End JS
         ],
         /* -- STYLESHEET ASSETS -- */
@@ -602,6 +610,14 @@ return [
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/vendor/multiple-select/multiple-select.css',
+                    'cdn' => '',
+                ],
+            ],
+            'bootstrap-switch' => [
+                'use_cdn' => false,
+                'location' => 'top',
+                'src' => [
+                    'local' => '/resources/vendor/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                     'cdn' => '',
                 ],
             ],

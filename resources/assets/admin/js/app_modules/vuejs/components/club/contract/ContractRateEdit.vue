@@ -73,7 +73,7 @@
 				<h3 class="title-box">Price of</h3>
 				<div class="form-group">
 					<label>
-						<input v-model="contractSelect.is_member" type="radio" name="is_member" value="1" checked>
+						<input v-model="contractSelect.is_member" type="radio" name="is_member" value="1">
 						Member
 					</label>
 					<label>
@@ -166,6 +166,7 @@
 					showNotice('success', res.data.success_msg, 'Success!');
 				this.reloadContracts =  Math.floor(Math.random() * 10000);
 				this.$set('contractSelect', null);
+				this.ifContractEdit = false;
 			},(res) => {
 					showNotice('error', 'Error', 'Error Delete!');
 				});
@@ -225,6 +226,7 @@
 				showNotice('success', res.data.success_msg, 'Update Success!');
 				this.removeSelect();
 				$("#clubSetting-wrapper .loading").remove();
+				this.ifContractEdit = false;
 			}, (res) => {
 					showNotice('error', 'Error', 'Error!');
 					$("#clubSetting-wrapper .loading").remove();
