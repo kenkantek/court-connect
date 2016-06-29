@@ -30,7 +30,7 @@
                             </thead>
                             <tbody>
                             @foreach($bookings as $booking)
-                                <tr class="booking-row booking-row-{{$booking->id}}" style="height: 150px">
+                                <tr class="booking-row booking-row-{{$booking->id}}" style="height: 170px">
                                     <td>
                                         <div class="col-md-4">
                                             <img src="{{ asset($booking->club_image) }}" class="img-circle" alt="{!! $booking->name !!}" width="58" height="58">

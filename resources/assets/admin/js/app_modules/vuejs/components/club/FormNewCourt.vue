@@ -36,7 +36,7 @@
 				<div class="col-sm-8">
 					<select class="form-control" name="price" v-model='court.base_price' @change="updateDataRates">
 						<option value="0">-------</option>
-						<option  v-for="court in courts" value="{{court.id}}">Base of {{court.name}}</option>
+						<option  v-for="court in courts" value="{{court.id}}">Same price as {{court.name}}</option>
 					</select>
 				</div>
 			</div>

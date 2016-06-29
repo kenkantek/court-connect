@@ -57,11 +57,11 @@
 
 
 		<section class="col-xs-12 col-md-12" id="box-set-open-days">
-			<h3 class="title-box">Set Opening Hours/Holiday Days</h3>
-			<p>This form allows you to change multiple dates at the same time.
-				Start by selecting the day(s) of the week you want to apply the opening times to and then a range of dates for this to be applied.
-				The opening times you enter will then be changed for all dates in the date range where the day matches what you've selected. Holiday days and closed days will not count towards contract time bookings</p>
-
+			<h3 class="title-box">Set Club Hours/Holidays</h3>
+			<p>This allows you to change multiple dates at the same time.
+				Start by entering a date range and the days of the week you want to apply the opening times.
+				The opening times you enter will then be charged for all dates in the date range where the day matches what you have selected.
+				Holidays and days when the club is closed do not count toward contract times.
 			<div class="clearfix"></div>
 			<date-time
 				:club-setting-id="clubSettingId"
@@ -74,7 +74,7 @@
 				</li>
 				<li>
 					<img src="/uploads/images/config/plane_icon.png" alt="">
-					<span>: Vacation but club open</span>
+					<span>: Holiday but club open</span>
 				</li>
 				<li>
 					<img src="/uploads/images/config/clock_icon.png" alt="">

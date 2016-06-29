@@ -31,7 +31,7 @@ class CourtController extends Controller
         $court->fill($request->all());
         $court->status = 1;
         $court->save();
-         $inputRates = $request->input('dataRates');
+        $inputRates = $request->input('dataRates');
 
         $this->updateTableRates($court, $inputRates);
         return response([
@@ -60,9 +60,10 @@ class CourtController extends Controller
     {
         $courts = $request->input('courts');
         $inputRates = $request->input('dataRates');
+        $cal_fl_price_of_member = $request->input('cal_fl_price_of_member');
         foreach ($courts as $k => $court) {
             CourtRate::where('court_id', $court['id'])->delete();
-            $this->updateTableRates($court, $inputRates);
+            $this->updateTableRates($court, $inputRates, $cal_fl_price_of_member);
         }
         return response([
             'success_msg' => 'Courts has been updated!',
@@ -70,15 +71,25 @@ class CourtController extends Controller
     }
 
     //update rate
-    protected function updateTableRates($court, $dataRates)
+    protected function updateTableRates($court, $dataRates, $cal_fl_price_of_member = false)
     {
         ini_set('max_execution_time', 3000);
 
         //set rate
         foreach ($dataRates as $key => $inputRate) {
             $rate = new CourtRate;
-            $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);
-            $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
+            if($cal_fl_price_of_member >= 0) {
+                if ($cal_fl_price_of_member) {
+                    $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);
+                    $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_member']);
+                } else {
+                    $rate->rates_member = json_encode($inputRate['datarate']['rates_nonmember']);
+                    $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
+                }
+            }else{
+                $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);
+                $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
+            }
             $rate->end_date = $inputRate['datarate']['end_date'];
             $rate->start_date = $inputRate['datarate']['start_date'];
             $rate->name = $inputRate['datarate']['name'];

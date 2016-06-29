@@ -24,8 +24,7 @@
                         <div class="text-left clearfix" id="show-results">
                             @if (isset($clubs) && count($clubs) > 0)
                                 <div class="pull-left show-result">
-                                    Showing Results <span>{!! $clubs->currentPage()!!}-{!! $clubs->count() !!}</span> of <span>{!! $clubs->total() !!}</span>
-
+                                    Showing Results <span>{!! $clubs->perPage() * ($clubs->currentPage() - 1) + 1!!}-{!! $clubs->perPage() * ($clubs->currentPage() - 1) + $clubs->count() !!}</span> of <span>{!! $clubs->total() !!}</span>
                                 </div>
                                 <div class="pull-right">
                                     {!! $clubs->appends($request->input())->render() !!}
@@ -40,6 +39,9 @@
                             @else
                                 @include("home.search.search_open")
                             @endif
+                                <div class="pull-right">
+                                    {!! $clubs->appends($request->input())->render() !!}
+                                </div>
                         @else
                             <h4 class="text-center">No result</h4>
                         @endif

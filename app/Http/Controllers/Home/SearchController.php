@@ -134,13 +134,30 @@ class SearchController extends Controller {
                         }
                     }
                 }else { // open
+
                     foreach ($clubs as $k => $club) {
                         $clubs[$k]['type'] = 'open';
+                        $index_min = -1;
+                        $tmp_price_min = -1;
                         foreach ($club->courts as $p => $court) {
                             $input['court_id'] = $court['id'];
                             $input['club_id'] = $club['id'];
-                            $clubs[$k]['courts'][$p]['prices'] = $this->getListPriceOfCourt($input);
+                            $get_price = getPriceForBooking($input);
+                            if($get_price['error'] == false){
+                                if($get_price['total_price'] < $tmp_price_min || $tmp_price_min < 0){
+                                    $tmp_price_min = $get_price['total_price'];
+                                    $index_min = $p;
+                                }
+                            }
                         }
+
+                        if($index_min < 0){
+                            $index_min = 0;
+                        }
+                        $clubs[$k]['court'] = $clubs[$k]['courts'][$index_min];
+                        $input['court_id'] = $clubs[$k]['courts'][$index_min]['id'];
+                        $clubs[$k]['court']['prices'] = $this->getListPriceOfCourt($input);
+                        unset($clubs[$k]['courts']);
                     }
                 }
             }

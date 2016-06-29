@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => env('MAIL_USERNAME'), 'name' => 'Court Connect'],
+    'from' => ['address' => env('MAIL_FROM'), 'name' => 'Court Connect'],
 
     /*
     |--------------------------------------------------------------------------

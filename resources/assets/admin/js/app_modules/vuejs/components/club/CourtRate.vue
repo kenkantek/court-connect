@@ -1,6 +1,6 @@
 <template>
 	<div class="court_rate courtbox">
-		<h3 class="title-box pull-left">Court Rates For
+		<h3 class="title-box pull-left">Rates For
 			<span v-if="courts_choice.length == 0"><strong>New Court</strong></span>
 		<span v-else v-for="c in courts_choice">
 		<strong>{{ c.name }}</strong>
@@ -8,6 +8,10 @@
 
 		</h3>
 		<div class="pull-right">
+			<label>
+				<input type="checkbox" id="lch-same_price" v-model="same_price" @click="checkSamePrice()">
+				<span>Same both</span>
+			</label>
 			<ul id="tabRate">
 				<li :class="{'active': is_member == 1}"  @click="setMember(1)">Members</li>
 				<li :class="{'active': is_member == 0}"  @click="setMember(0)">Non/Members</li>
@@ -175,6 +179,23 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
+	#tabRate{
+		display: inline-block;
+		position: relative;
+	}
+	#tabRate.h:before{
+		display: block;
+		content: ' ';
+		width: 100%;
+		height: 100%;
+		background: rgba(255,255,255,.7);
+		position: absolute;
+		z-index: 999;
+	}
+	#lch-same_price{
+		margin-top: 25px;
+		display: inline-block;
+	}
 </style>
 <script>
 	var _ = require('lodash'),
@@ -280,6 +301,7 @@
 				showNotice:false,
 				rateIndex:null,
 				is_member:1,
+				same_price: false,
 			}
 		},
 		watch: {
@@ -293,6 +315,7 @@
 					$(".box-data-rates .overlight").hide();
 				}
 				else $(".box-data-rates .overlight").show();
+				this.resetSamePrice();
 			},
 			reloadCourts: function () {
 				this.priceSet =  20;
@@ -314,9 +337,11 @@
 				}else{
 					this.dataRate = _.cloneDeep(this.defaultRate);
 				}
+				this.resetSamePrice();
 			}
 		},
 		ready(){
+			this.resetSamePrice();
 			$('.add_tooltip').click(function(event) {
 				event.preventDefault();
 				$('.tooltip1').toggleClass('hidden');
@@ -352,14 +377,20 @@
 			updateMulti(){
 				const courts = _.cloneDeep(this.courts_choice);
 				const dataRates = _.cloneDeep(this.dataRates);
+
+				//check price same both of member and nonmember
+				var cal_fl_price_of_member = this.is_member;
+				if(!this.same_price)
+					cal_fl_price_of_member = -1;
 				$("#clubSetting-wrapper").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
-				this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates}).then(res => {
+				this.$http.post(laroute.route('courts.update.multi'), {courts,dataRates,cal_fl_price_of_member}).then(res => {
 					this.reloadCourts =  Math.floor(Math.random() * 10000);
 				this.courts_choice = [];
 				this.dataRates = [];
 				this.dataRate = _.cloneDeep(this.defaultRate);
 				showNotice('success', res.data.success_msg, 'Update Multi Success!');
 				$("#clubSetting-wrapper .loading").remove();
+				this.removeSelect();
 			}, (res) => {
 					showNotice('error', 'Error', 'Error!');
 					$("#clubSetting-wrapper .loading").remove();
@@ -376,6 +407,17 @@
 			setMember(number){
 				this.$set('is_member', number);
 				this.removeSelect();
+			},
+			checkSamePrice(){
+				if(!this.same_price){
+					$("#tabRate").addClass('h')
+				}else{
+					$("#tabRate").removeClass('h');
+				}
+			},
+			resetSamePrice(){
+				this.same_price = false;
+				$("#tabRate").removeClass('h');
 			},
 			addNewCourtRate(){
 				//set price default

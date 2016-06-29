@@ -142,6 +142,10 @@
     .date-pass .monthly-indicator-wrap, .date-future .monthly-indicator-wrap{
         display: none;
     }
+    .txt-holiday{
+        text-transform: uppercase;
+        font-weight: bold;
+    }
     .dlg-setopenday{
         position: absolute;
         left: 0px;
@@ -149,6 +153,15 @@
         top: 70px;
         background: #e2e2e2;
         border: 1px solid #ccc;
+        width: 100%;
+    }
+    .block{
+        display: block !important;
+    }
+    .monthly-indicator-wrap .time{
+        position: absolute;
+        text-align: center;
+        width: 100%;
     }
 </style>
 
@@ -222,11 +235,11 @@
                                 <div class="dlg-setopenday hidden">
                                     <div style="width: 50%; float: left">
                                         <label for="opentime" >Open Time</label>
-                                        <input class="form-control" name="opentime" type="time" v-model="date[i*7+j].hours_open">
+                                        <input class="form-control timepicker" name="opentime" type="" v-model="date[i*7+j].hours_open">
                                     </div>
                                     <div style="width: 50%; float: left">
                                         <label for="closetime" >Closing Time</label>
-                                        <input class="form-control" name="closetime" type="time" v-model="date[i*7+j].hours_close" >
+                                        <input class="form-control timepicker" name="closetime" type="" v-model="date[i*7+j].hours_close" >
                                     </div>
                                     <div >
                                         <input class="btn btn-primary" style="margin-top: 6px; width: auto;" type="button" @click="setTimeClick(i * 7 + j)" value="Apply" >
@@ -273,7 +286,7 @@
         data () {
         return {
             show: true,
-            days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+            days: ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             date: [],
             now: new Date(),
@@ -426,10 +439,12 @@
                 }
                 else if(item.is_close == 1) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_close');
-                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('close');
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('closed');
                 }else if(item.is_holiday == 1) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_holiday');
-                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html('Holiday<br>' + item.open_time != '' ?item.open_time + " - " + item.close_time: '' );
+                    text_holiday = '<div class="txt-holiday" style="text-transform: uppercase; padding-top: 5px;margin-bottom: -15px;font-weight: bold;">Holiday</div>';
+                    text_holiday += item.open_time != '' ? item.open_time + " - " + item.close_time: '';
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(text_holiday);
                 }else{
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap');
                 }
@@ -524,6 +539,7 @@
 
         $(function() {
             $("body").on('click','.btn-clock',function(){
+                $(this).parent().toggleClass('block');
                 $(this).parent().find('.dlg-setopenday').toggleClass('hidden');
             })
         });
