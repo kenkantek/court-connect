@@ -39,7 +39,7 @@
 				<div>
 					<select name="list-period" id="inputList-Period" class="form-control" required="required" v-model="indexDataRates">
 						<option v-for="(index,d) in dataRates" track-by="$index" value="{{index}}" :selected="index == 0 ? 'selected':''">
-							{{d.datarate.name}} -- {{d.nameCourt}}
+							{{d.datarate.name}} -- {{d.nameCourt}} -- created: {{d.datarate.created_at | formatDate}}
 						</option>
 					</select>
 				</div>
@@ -301,6 +301,11 @@
 				rateIndex:null,
 				is_member:1,
 				same_price: false,
+			}
+		},
+		filters: {
+			formatDate: function (date) {
+				return moment(date).format('MM-DD-YYYY, hh:mm:ss a');
 			}
 		},
 		watch: {

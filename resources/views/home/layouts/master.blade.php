@@ -60,23 +60,23 @@
                         <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5)">
                             <span>COMPANY</span>
                             <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="{{url('page/about-us')}}">About Us</a></li>
+                                <li><a href="{{route('home.contact-us')}}">Contact Us</a></li>
                                 <li><a href="#">Press</a></li>
                             </ul>
                         </div>
                         <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
                             <span>LEGAL</span>
                             <ul>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Terms of Use</a></li>
+                                <li><a href="{{url('page/privacy-policy')}}">Privacy Policy</a></li>
+                                <li><a href="{{url('page/terms-of-use')}}">Terms of Use</a></li>
                             </ul>
                         </div>
                         <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
                             <span>HELP</span>
                             <ul>
-                                <li><a href="#">Support Center</a></li>
-                                <li><a href="#">FAQ</a></li>
+                                <li><a href="{{url('page/support')}}">Support Center</a></li>
+                                <li><a href="{{route('home.faq')}}">FAQ</a></li>
                             </ul>
                         </div>
                     </div>

@@ -45,6 +45,7 @@
                                         <div class="court-type pull-left">
                                             Court Type:
                                             <b>{{$club->court->surface->label}}</b>
+                                            <span class="hidden"><b>{{$club->court->name}}</b></span>
                                         </div>
                                     </div>
                                     <div class="club-time text-center club-time-wrap clearfix">
@@ -61,7 +62,7 @@
                                                         @if(isset($item['total_price']))
                                                             <span>${!! $item['total_price'] !!}</span>
                                                         @else
-                                                            <span>{!! isset($item['status']) ? $item['status'] : "unavai" !!}</span>
+                                                            <span>{!! isset($item['status']) ? ($item['status'] == 'unavailable' ? 'booked' : ($item['status'] == 'nosetprice' ? 'unavai' : $item['status'])) : "unavai" !!}</span>
                                                         @endif
                                                     @endif
                                                 </a>

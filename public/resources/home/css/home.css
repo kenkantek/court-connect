@@ -194,7 +194,7 @@ div.modal-body {
     color: red;
 }
 
-.app-bar .col-md-6 {
+.app-bar .col-md-4 {
     min-height: 49px;
     color: #fff;
     font-size: 25px;
@@ -202,7 +202,7 @@ div.modal-body {
     line-height: 2em
 }
 
-.app-bar .col-md-6 span {
+.app-bar .col-md-4 span {
     font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
     color: #63ac1e
 }
@@ -457,7 +457,8 @@ h1 {
     color: #63ac1e;
     font-size: 20px;
     top: 7px;
-    left: 25px
+    left: 25px;
+    z-index: 1;
 }
 
 .form-icon input,
@@ -1293,8 +1294,8 @@ a.ui-state-default.ui-state-highlight {
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #2d3a42;
-    color: white;
+    background-color: #ccc;
+    color: black;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -1557,4 +1558,16 @@ a.ui-state-default.ui-state-highlight {
     #search-results .content-left-info {
         padding-right: 0px;
     }
+}
+#cc-search-form .select2-selection__placeholder, #select2-inputID-container{
+    text-align: center;
+    display: block;
+}
+.select-court{
+    text-align: center;
+    display: block;
+}
+.content .content iframe{
+    margin: 0px auto;
+    width: 100%;
 }

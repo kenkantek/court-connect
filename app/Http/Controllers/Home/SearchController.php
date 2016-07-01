@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Contexts\Club;
 use App\Models\Contract;
+use App\Models\SetOpenDay;
 use App\Models\State;
 use Illuminate\Http\Request;
 
@@ -25,10 +26,10 @@ class SearchController extends Controller {
             ->orWhere('state', 'LIKE', '%' . $term . '%')
             ->orWhere('address', 'LIKE', '%' . $term . '%')
             ->orWhere('zipcode', 'LIKE', '%' . $term . '%')
-            ->take(5)->get(['id','name','image','address']);
+            ->take(5)->get(['id','name','image','city','state']);
 
         foreach ($queries as $query) {
-            $results['clubs'][] = ['id' => $query->id, 'value' => $query->name,'image' =>$query->image,'address'=>$query->address];
+            $results['clubs'][] = ['id' => $query->id, 'value' => $query->name,'image' =>$query->image,'address'=>$query->city.", ".$query->city];
         }
 
 //        $queries = City::where('name', 'LIKE', '%' . $term . '%')
@@ -57,8 +58,7 @@ class SearchController extends Controller {
     public function search(Request $request) {
         ini_set('max_execution_time', 300);
         $keyword_clubs = $request->input('s_name');
-        $keyword_day = $request->input('date');
-        $keyword_day = date("Y-m-d", strtotime($keyword_day));
+        $keyword_day = date("Y-m-d", strtotime($request->input('date')));
         $keyword_hour_length = $request->input('mb-book-in-hour') >=1 ? $request->input('mb-book-in-hour') : 1;
         $keyword_hour = $request->input('s_time');
         $keyword_hour = date("G", strtotime($keyword_hour)) + date("i", strtotime($keyword_hour)) / 60;
@@ -271,19 +271,20 @@ class SearchController extends Controller {
 
     public function checkPrice(){
 //        $input = [
-//            'date' => "05/09/2016",
+//            'date' => "07/07/2016",
 //            'type' => 'open',
-//            'hour_start' => 7,
+//            'hour_start' => 8,
 //            'hour_length' => 1,
 //            'member' => 0,
-//            'court_id' => '179'
+//            'court_id' => '218'
 //        ];
+
         $input = [
-            'date' => "05/09/2016",
+            'date' => "07/07/2016",
             'dayOfWeek' => 1,
             'type' => 'contract',
-            'contract_id' => 16,
-            'court_id' => 5,
+            'contract_id' => 13,
+            'court_id' => 218,
             'club_id' => 1,
             'hour_start' => 7,
             'hour_length' => 1,

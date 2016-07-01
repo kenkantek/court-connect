@@ -818,3 +818,8 @@ table .arrow{
     width: 100%;
     min-height: 200px;
 }
+.dataTable thead th {
+    background: none;
+    color: #000;
+    cursor: pointer;
+}

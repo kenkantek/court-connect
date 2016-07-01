@@ -28,6 +28,13 @@ function date_from_database($time, $format = 'Y-m-d')
     return format_time(Carbon::parse($time), $format);
 }
 
+function format_hour($hour)
+{
+    $hour = number_format($hour,2);
+    return $hour <=12 ? str_replace(".50",":30",str_replace(".00",":00",$hour))."am" : str_replace(".50",":30",str_replace(".00",":30",($hour - 12)))."pm";
+}
+
+
 function get_lat_long($address)
 {
     $address = str_replace(" ", "+", $address);
@@ -197,8 +204,22 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             return ['error' => true,"messages"=>$v->errors()->all()];
         }
 
-        //$date = Carbon::createFromFormat('m/d/Y', $input['date'])->format("Y-m-d");
-        $date = Carbon::createFromTimestamp(strtotime($input['date']))->format("Y-m-d");;
+        //check time open and close of club
+        $date = Carbon::createFromTimestamp(strtotime($input['date']))->format("Y-m-d");
+        $check_open_close_date = SetOpenDay::where('date',$date)->first();
+        if(isset($check_open_close_date)) {
+            $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
+            $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+            $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
+            $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
+            if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] > $close_time_date + 1){
+                //$text = " ".$check_open_close_date['open_time']." ".($input['hour_start'] + $input['hour_length']);
+                return [
+                    'error' => true,
+                    "messages"=>['Club opens at '.$check_open_close_date['open_time'].' and closes at '.$check_open_close_date['close_time']]
+                ];
+            }
+        }
         //check book is exist
         $check_book = Booking::where('date',$date)
             ->where('court_id',$input['court_id'])
@@ -276,7 +297,21 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             return ['error' => true,"messages"=>"Data invalid"];
         }
 
+
+
         $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
+        
+        //check time open and close of club
+        $date = Carbon::createFromTimestamp(strtotime($range_date[0]))->format("Y-m-d");
+        $check_open_close_date = SetOpenDay::where('date',$date)->first();
+        if(isset($check_open_close_date)) {
+            $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
+            $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
+            if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] > $close_time_date + 1){
+                return ['error' => true,"messages"=>['Club opens at '.$check_open_close_date['open_time'].' and closes at '.$check_open_close_date['close_time']]];
+            }
+        }
+
 
         foreach($range_date as $date) {
             //check book yet
@@ -489,4 +524,95 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
         'error' => true,
         "messages" => ['Error. Input invalid or it was booked']
     ]);
+}
+
+//create slug
+function unicode_convert($str){
+
+    if(!$str) return false;
+
+    $unicode = array(
+
+        'a'=>array('á','à','ả','ã','ạ','ă','ắ','ặ','ằ','ẳ','ẵ','â','ấ','ầ','ẩ','ẫ','ậ'),
+
+        'A'=>array('Á','À','Ả','Ã','Ạ','Ă','Ắ','Ặ','Ằ','Ẳ','Ẵ','Â','Ấ','Ầ','Ẩ','Ẫ','Ậ'),
+
+        'd'=>array('đ'),
+
+        'D'=>array('Đ'),
+
+        'e'=>array('é','è','ẻ','ẽ','ẹ','ê','ế','ề','ể','ễ','ệ'),
+
+        'E'=>array('É','È','Ẻ','Ẽ','Ẹ','Ê','Ế','Ề','Ể','Ễ','Ệ'),
+
+        'i'=>array('í','ì','ỉ','ĩ','ị'),
+
+        'I'=>array('Í','Ì','Ỉ','Ĩ','Ị'),
+
+        'o'=>array('ó','ò','ỏ','õ','ọ','ô','ố','ồ','ổ','ỗ','ộ','ơ','ớ','ờ','ở','ỡ','ợ'),
+
+        '0'=>array('Ó','Ò','Ỏ','Õ','Ọ','Ô','Ố','Ồ','Ổ','Ỗ','Ộ','Ơ','Ớ','Ờ','Ở','Ỡ','Ợ'),
+
+        'u'=>array('ú','ù','ủ','ũ','ụ','ư','ứ','ừ','ử','ữ','ự'),
+
+        'U'=>array('Ú','Ù','Ủ','Ũ','Ụ','Ư','Ứ','Ừ','Ử','Ữ','Ự'),
+
+        'y'=>array('ý','ỳ','ỷ','ỹ','ỵ'),
+
+        'Y'=>array('Ý','Ỳ','Ỷ','Ỹ','Ỵ'),
+
+        '-'=>array(' ','&quot;','.')
+
+    );
+
+
+
+    foreach($unicode as $nonUnicode=>$uni){
+
+        foreach($uni as $value)
+
+            $str = str_replace($value,$nonUnicode,$str);
+
+    }
+
+    return strtolower($str);
+
+}
+
+//expert limit
+// Intelligently truncate a string to a certain number of characters.
+// Each uppercase or wider-than-normal character reduces the final length.
+
+function truncate($string, $length = 100, $ellipsis = true) {
+    // Count all the uppercase and other wider-than-normal characters
+    $wide = strlen(preg_replace('/[^A-Z0-9_@#%$&]/', '',($string)));
+
+    // Reduce the length accordingly
+    $length = round($length - $wide * 0.2);
+
+    // Condense all entities to one character
+    $clean_string = preg_replace('/&[^;]+;/', '-', $string);
+    if (strlen($clean_string) <= $length) return $string;
+
+    // Use the difference to determine where to clip the string
+    $difference = $length - strlen($clean_string);
+    $result = substr($string, 0, $difference);
+
+    if ($result != $string and $ellipsis) {
+        $result = add_ellipsis($result);
+    }
+
+    return $result;
+}
+
+// Replaces the last 3 characters of a string with "...". If there is a space
+// followed by three letters or less at the end of the string, those will
+// also be removed, along with any extra white space.
+// Replaces the last 3 characters of a string with "...". If there is a space
+// followed by three letters or less at the end of the string, those will
+// also be removed, along with any extra white space.
+
+function add_ellipsis($string) {
+    $string = substr($string, 0, strlen($string) - 3);
+    return trim(preg_replace('/ .{1,3}$/', '', $string)) . '...';
 }

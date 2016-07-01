@@ -448,6 +448,7 @@
                 }else{
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap');
                 }
+                $(".timepicker").timepicker();
             });
         },
         close () {
@@ -539,6 +540,7 @@
 
         $(function() {
             $("body").on('click','.btn-clock',function(){
+                $(".monthly-indicator-wrap .overflow").removeClass('block');
                 $(this).parent().toggleClass('block');
                 $(this).parent().find('.dlg-setopenday').toggleClass('hidden');
             })

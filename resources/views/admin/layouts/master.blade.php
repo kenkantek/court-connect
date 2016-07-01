@@ -32,7 +32,7 @@
     </script>
 </head>
 <?php if (!isset($title)) {
-    $title = "Admin Manager";
+    $title = "Booking Manager";
 }
 ?>
 <body class="skin-blue sidebar-mini  pace-done sidebar-collapse">
@@ -90,6 +90,15 @@
                         </a>
                     </li>
                 @endif
+
+                @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
+                    <li>
+                        <a href="{{ route('admin.setting') }}" data-toggle="tooltip" data-placement="right" title="Setting Website">
+                            <i class="fa fa-th"></i>
+                        </a>
+                    </li>
+                @endif
+
             </ul>
         </section>
         <!-- /.sidebar -->

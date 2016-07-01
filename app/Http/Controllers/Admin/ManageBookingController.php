@@ -276,6 +276,7 @@ class ManageBookingController extends Controller
             foreach($courts as $k=>$court){
                 $arr_hour_tmp = [];
                 foreach($hours as $key=>$hour) {
+                    $hour = "".str_replace(".","_",$hour);
                     $arr_hour["h_" . $hour]['hour'] = $hour;
                     $arr_hour["h_" . $hour]['status'] = 'day_close';
                     $arr_hour["h_" . $hour]['content'] = '';
@@ -294,6 +295,7 @@ class ManageBookingController extends Controller
         foreach($courts as $k=>$court){
             $arr_hour = [];
             foreach($hours as $key=>$hour) {
+                $hour = "".str_replace(".","_",$hour);
                 $arr_hour["h_" . $hour]['hour'] = $hour;
                 $arr_hour["h_" . $hour]['status'] = 'available';
                 $arr_hour["h_" . $hour]['content'] = '';
@@ -305,7 +307,7 @@ class ManageBookingController extends Controller
             foreach($bookings as $booking){
                 $tmp_i = 0;
                 for($i=$booking['hour']; $i < $booking['hour'] + $booking['hour_length']; $i+=0.5){
-                    $index = floatval($i);
+                    $index = str_replace("_00","",str_replace(".","_",floatval($i)));
                     if(isset($arr_hour["h_".$index]['hour'])) {
                         $arr_hour["h_" . $index]['content'] = $booking['billing_info']['first_name'] . " " . $booking['billing_info']['last_name'];
                         $arr_hour["h_" . $index]['status'] = $booking['type'];
@@ -328,8 +330,9 @@ class ManageBookingController extends Controller
             foreach($unavailables as $unavailable){
                 $tmp_i = 0;
                 for($i=$unavailable['hour']; $i < $unavailable['hour'] + $unavailable['hour_length']; $i+=0.5){
-                    $arr_hour["h_".$i]['status'] = 'unavailable';
-                    $arr_hour["h_".$i]['content'] = $unavailable['reason'];
+                    $index = str_replace("_00","",str_replace(".","_",$i));
+                    $arr_hour["h_".$index]['status'] = 'unavailable';
+                    $arr_hour["h_".$index]['content'] = $unavailable['reason'];
                     $tmp_i++;
                 }
             }

@@ -5,11 +5,13 @@ namespace App\Listeners;
 use App\Events\UserAcceptFriendEvent;
 use App\Events\UserAddFriendEvent;
 use App\Events\UserBookingEvent;
+use App\Events\UserContactEvent;
 use App\Events\UserCreateEvent;
 use App\Events\UserEventFollowing;
 use App\Events\UserPostChatEvent;
 use App\Events\UserPostFeedEvent;
 use App\Models\Booking;
+use App\Models\Setting\Contact;
 use Illuminate\Support\Facades\Redirect;
 use App\Feed;
 use App\User;
@@ -48,6 +50,24 @@ class UserEventListener
         });
     }
 
+    public function onContactEvent($event)
+    {
+        $contact_id = $event->contact_id;
+        $contact = Contact::where('id',$contact_id)->first();
+        $text = 'Name: '.$contact->name."\n";
+        $text .= 'Email: '.$contact->email."\n";
+        $text .= 'Phone: '.$contact->phone."\n";
+        $text .= 'Message: '.$contact->messages."\n";
+        Mail::queue([],[], function($message) use($text)
+        {
+            $message->subject('Message Contact form Court-Connect');
+            $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
+            $message->to(env('MAIL_CC1'));
+            $message->setBody($text);
+        });
+    }
+
+
     public function subscribe($events)
     {
         $events->listen(
@@ -57,6 +77,10 @@ class UserEventListener
         $events->listen(
             UserBookingEvent::class,
             static::class . '@onUserBooking'
+        );
+        $events->listen(
+            UserContactEvent::class,
+            static::class . '@onContactEvent'
         );
     }
 

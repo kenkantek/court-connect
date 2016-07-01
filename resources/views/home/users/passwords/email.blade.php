@@ -6,7 +6,7 @@
     <div class="row">
         <div class="container content">
             <div class="instruction">
-                <h2><span>Forgot Password</span></h2>
+                <h2 style="margin-top: 50px; margin-bottom: -50px;"><span>Forgot Password</span></h2>
             </div>
 
             <div class="col-sm-12">
@@ -23,8 +23,7 @@
                     @else
                         <div class="form-group">
                             <br>
-                            <p>Have you forgotten your password?</p>
-                            <p>Please enter your Email address. System will send a email with active link to reset your password.</p>
+                            <p>Enter your email address and we'll send you link to reset your password.</p>
                         </div>
                     @endif
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback">

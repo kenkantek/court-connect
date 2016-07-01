@@ -37,4 +37,9 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::get('price', ['as' => 'home.send_mail', 'uses' => 'SearchController@checkPrice']);
 	Route::get('export-calendar/{id}/{type}', ['as' => 'home.export-calendar', 'uses' => 'BookingController@getExportCalendar']);
+
+	Route::get('/page/{slug}', 'PageController@getViewPage');
+	Route::get('contact-us', ['as' => 'home.contact-us', 'uses' => 'PageController@getPageContactUs']);
+	Route::post('contact-us', ['as' => 'home.contact-us', 'uses' => 'PageController@postPageContactUs']);
+	Route::get('faq', ['as' => 'home.faq', 'uses' => 'PageController@pageFaq']);
 });

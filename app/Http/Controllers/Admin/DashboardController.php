@@ -48,4 +48,9 @@ class DashboardController extends Controller
         $clubs = $user->clubs()->get();
         return $clubs;
     }
+
+    /*setting*/
+    public function getSetting(){
+        return view('admin.settings.index');
+    }
 }

@@ -88,7 +88,7 @@ return [
     'resources' => [
         'javascript' => [
             'jquery' => [
-                'use_cdn' => true,
+                'use_cdn' => false,
                 'fallback' => 'jQuery',
                 'location' => 'top',
                 'src' => [
@@ -138,7 +138,7 @@ return [
                 ],
             ],
             'bootstrap' => [
-                'use_cdn' => true,
+                'use_cdn' => false,
                 'location' => 'bottom',
                 'src' => [
                     'local' => '/resources/vendor/bootstrap/js/bootstrap.min.js',
@@ -380,7 +380,7 @@ return [
         /* -- STYLESHEET ASSETS -- */
         'stylesheets' => [
             'bootstrap' => [
-                'use_cdn' => true,
+                'use_cdn' => false,
                 'location' => 'top',
                 'src' => [
                     'local' => '/resources/vendor/bootstrap/css/bootstrap.min.css',

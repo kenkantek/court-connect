@@ -348,7 +348,7 @@
                                 </div>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Time:</span>
-                                    <label class="col-lg-6 col-md-6 text-left">{{$request->input('hour_start') <=12 ? str_replace(".5",":30",$request->input('hour_start'))."am" : str_replace(".5",":30",($request->input('hour_start') - 12))."pm"}}</label>
+                                    <label class="col-lg-6 col-md-6 text-left">{{format_hour($request->input('hour_start'))}}</label>
                                 </div>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Length:</span>

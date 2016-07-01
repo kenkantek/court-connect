@@ -26,11 +26,11 @@
                 <div class="form-group col-md-4 form-icon">
                     <i class="fa fa-map-marker"></i>
                     <input type="text" class="form-control" name="s_name" id="q" oninvalid="this.setCustomValidity('A location is required')" oninput="setCustomValidity('')" required title="A location is required"
-                           placeholder="Search by Zip/Address or Club Name" autocomplete="off" data-country="us">
+                           placeholder="Search by City or Club Name" autocomplete="off" data-country="us">
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i class="fa fa-calendar"></i>
-                    <input type="text" class="form-control" name="date" required id="datepicker" placeholder="Date">
+                    <input type="text" class="form-control" name="date" id="datepicker" placeholder="Date">
 
                     <div id="calendar-switch">
                         <span id="calendar-switch-header">Select the days of the week<br/>you'd like to book</span>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::selectRange('court',1,4,null,['id'=>'inputID','class' => 'form-control','style'=>'text-align-last:center; ']) !!}
+                    {!! Form::selectRange('court',1,4,null,['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# Courts']) !!}
                             <!-- <input type="text" class="form-control" name="" id="" placeholder="# Courts"> -->
                 </div>
                 <div class="form-group col-md-2">
@@ -113,10 +113,10 @@
 <div class="app-bar" style="padding: 11px 0 11px 0">
     <div class="container">
         <div class="row">
-            <div class="col-md-6 divine-appbar-r">
-                <a href="{!! route("home.deals") !!}" style="text-decoration: none; color: #fff"><span>Looking For The Best Deals?</span> Click here</a>
+            <div class="col-md-4 divine-appbar-r">
+                <a href="{!! route("home.deals") !!}" style="text-decoration: none; color: #fff"><span>Click here to find the best deals</span></a>
             </div>
-            <div class="col-md-6 divine-appbar-l">
+            <div class="col-md-8 divine-appbar-l">
                 <div class="col-md-4" style="font-size: 14px; line-height: 1.2em; margin-top: 10px">
                     Download the<br>
                     <span style="color: #63ac1e">Court Connect</span> App

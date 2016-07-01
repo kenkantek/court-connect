@@ -6,7 +6,7 @@
     <div class="row">
         <div class="container content">
             <div class="row">
-                <h2 style="color: #63ac1e; margin-top: 77px">Deals</h2>
+                <h2 style="color: #63ac1e; margin-top: 50px; margin-bottom: 30px;">Deals</h2>
                 <div class="deal-list-wrapper col-md-12">
                     @foreach($deals as $k=>$deal)
                         <div class="item ">

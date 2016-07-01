@@ -3,6 +3,8 @@
 Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth', 'manager']], function () {
 
     Route::get('/', ['as' => 'admin.index', 'uses' => 'DashboardController@getIndex']);
+    Route::get('/setting', ['as' => 'admin.setting', 'uses' => 'DashboardController@getSetting']);
+
 
     Route::controller('users', UserController::class, [
         'getList' => 'users.list',
@@ -89,6 +91,38 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getDownload' => 'reports.download'
     ]);
 
+    /*setting page*/
+    # pages Management
+    Route::group(array('prefix' => 'setting/pages'), function () {
+        Route::get('/', array('as' => 'admin.setting.pages', 'uses' => 'Setting\PageController@getIndex'));
+        Route::get('list', array('as' => 'admin.setting.pages.list', 'uses' => 'Setting\PageController@getDataList'));
+        Route::get('create', array('as' => 'admin.setting.pages.create', 'uses' => 'Setting\PageController@create'));
+        Route::post('create', array('as' => 'admin.setting.pages.create', 'uses' => 'Setting\PageController@store'));
+        Route::get('edit-{id}', array('as' => 'admin.setting.pages.edit', 'uses' => 'Setting\PageController@edit'));
+        Route::post('edit-{id}', array('as' => 'admin.setting.pages.edit', 'uses' => 'Setting\PageController@update'));
+        Route::get('delete-{id}', array('as' => 'admin.setting.pages.delete', 'uses' => 'Setting\PageController@destroy'));
+        Route::get('{id}', array('as' => 'admin.setting.pages.show', 'uses' => 'Setting\PageController@show'));
+    });
+
+    # question and answer Management
+    Route::group(array('prefix' => 'setting/faq'), function () {
+        Route::get('/', array('as' => 'admin.setting.faq', 'uses' => 'Setting\FaqController@getIndex'));
+        Route::get('list', array('as' => 'admin.setting.faq.list', 'uses' => 'Setting\FaqController@getDataList'));
+        Route::get('create', array('as' => 'admin.setting.faq.create', 'uses' => 'Setting\FaqController@create'));
+        Route::post('create', array('as' => 'admin.setting.faq.create', 'uses' => 'Setting\FaqController@store'));
+        Route::get('edit-{id}', array('as' => 'admin.setting.faq.edit', 'uses' => 'Setting\FaqController@edit'));
+        Route::post('edit-{id}', array('as' => 'admin.setting.faq.edit', 'uses' => 'Setting\FaqController@update'));
+        Route::get('delete-{id}', array('as' => 'admin.setting.faq.delete', 'uses' => 'Setting\FaqController@destroy'));
+        Route::get('{id}', array('as' => 'admin.setting.faq.show', 'uses' => 'Setting\FaqController@show'));
+    });
+
+    # contact Management
+    Route::group(array('prefix' => 'setting/contacts'), function () {
+        Route::get('/', array('as' => 'admin.setting.contacts', 'uses' => 'Setting\ContactController@getIndex'));
+        Route::get('list', array('as' => 'admin.setting.contacts.list', 'uses' => 'Setting\ContactController@getDataList'));
+        Route::get('delete-{id}', array('as' => 'admin.setting.contacts.delete', 'uses' => 'Setting\ContactController@destroy'));
+        Route::get('{id}', array('as' => 'admin.setting.contacts.show', 'uses' => 'Setting\ContactController@show'));
+    });
 });
 
 Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth','admin','super']], function () {

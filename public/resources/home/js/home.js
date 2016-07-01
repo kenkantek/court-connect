@@ -165,7 +165,27 @@ $(function () {
 
     $("#search-timepicker").click(function(){
         $(".search-tooltip").toggleClass('hidden');
-    })
+        if(!$(".search-tooltip").hasClass('hidden')){
+            $("#cc-input-search-time").focus();
+        }
+    });
+
+    $(".group-search-home-timepicker").mouseleave(function() {
+        $(".search-tooltip").addClass('hidden');
+    });
+
+    $(".placeholder-single").select2({
+        placeholder: "# Courts",
+        allowClear: true,
+        containerCss: 'wrap',
+        templateResult: function(result){
+            $(".select2-search__field").remove();
+            var el = $('<span>');
+            el.text( result.text );
+            el.addClass('select-court');
+            return el;
+        }
+    });
 
     $("#mb-book-in-hour").ionRangeSlider({
         min: 1,
@@ -176,7 +196,8 @@ $(function () {
         postfix: " Hour",
         prettify: false,
         hasGrid: true,
-        hideMinMax: false,
+        hideMinMax: true,
+        hide_min_max: true
     });
 
     $("#mb-book-distance").ionRangeSlider({
@@ -243,6 +264,18 @@ $(function () {
 
     //validate time search
     $("#cc-search-form").on('submit',function(e){
+
+        var tmp_day_of_w = $("input[name='dayOfWeek[]']:checked").map(function() {
+            return this.value;
+        }).get();
+        if(tmp_day_of_w.length <= 0) {
+            if($("#datepicker").val() == null || $("#datepicker").val() == ''){
+                alert("Date is required!");
+                e.preventDefault();
+                return false;
+            }
+        }
+
         //for safari
         var ref = $(this).find("[required]");
         var error_safari = false;

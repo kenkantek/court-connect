@@ -17,7 +17,7 @@
                     </div>
 
                     <div class="caption title">Search</div>
-                    <div class="caption">Explore over 1,000’s courts to find the one perfect for you</div>
+                    <div class="caption">Find nearby clubs with available court time</div>
                 </div>
                 <div class="col-md-4">
                     <div class="thumbnail">
@@ -26,7 +26,7 @@
 
                     <div class="caption title">Book</div>
                     <div class="caption">
-                        A couple of clicks and you’re booked! Manage your bookings in your account
+                        Click to reserve your court
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -36,7 +36,7 @@
 
                     <div class="caption title">Play</div>
                     <div class="caption">
-                        Arrive at your selected venue with you booking refrence and get playing
+                        Arrive at your club and play
                     </div>
                 </div>
             </div>
@@ -63,11 +63,11 @@
                     Club Owners!</p>
 
                 <p style="color: #eaffd6; font-family: RobotoThin, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px">
-                    This is Photoshop's version of auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.
-                    Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. </p>
+                    Court Connect can help you fill your court time and help with your books. Click here to learn how to get started with Court Connect today!
+                </p>
             </div>
             <div class="col-md-4 text-center">
-                <a href="#" class="btn btn-club">Find Out More</a>
+                <a href="http://www.facebook.com/courtconnect" class="btn btn-club">Find Out More</a>
             </div>
         </div>
     </article>

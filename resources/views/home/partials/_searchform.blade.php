@@ -7,13 +7,13 @@
                 <div class="form-group col-md-3 form-icon">
                     <i class="fa fa-map-marker"></i>
                     {!! Form::text('s_name', $request->input('s_name'), ['id' => 'q', 'class' => 'form-control', 'autocomplete' => 'off',
-                     'data-country' => 'us', 'placeholder' => 'Search by Zip/Address or Club Name', 'required' => 'required',
+                     'data-country' => 'us', 'placeholder' => 'Search by City or Club Name', 'required' => 'required',
                      'oninvalid' => "this.setCustomValidity('A location is required')", 'oninput' =>"setCustomValidity('')"
                      ] ) !!}
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i class="fa fa-calendar"></i>
-                    <input type="text" class="form-control" name="date" required value="{!! $request->input('date') !!}" id="datepicker" placeholder="Date">
+                    <input type="text" class="form-control" name="date" value="{!! $request->input('date') !!}" id="datepicker" placeholder="Date">
                     <p align="center"
                        style="color: white; font-family: RobotoLight, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 13px; margin-top: 5px">
                     </p>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::selectRange('court',1,4,$request->input('court'),['id'=>'inputID','class' => 'form-control','style'=>'text-align-last:center; ']) !!}
+                    {!! Form::selectRange('court',1,4,$request->input('court'),['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# Courts']) !!}
                 </div>
                 <div class="form-group col-md-1">
                     <button type="submit" class="btn btn-search">SEARCH</button>

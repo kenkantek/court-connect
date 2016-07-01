@@ -9,7 +9,7 @@
 <!-- Header Navbar: style can be found in header.less -->
 <nav class="navbar navbar-static-top" role="navigation">
 	<div class="navbar-header-menu">
-		<div class="header-block col-md-4">
+		<div class="header-block col-sm-4 col-xs-4">
 			<div class="info-box-img">
 				<img src="/uploads/images/tiger-raquest.jpeg" class="club-thump-image" alt="Club Image">
 			</div>
@@ -21,12 +21,12 @@
 			</div>
 			<!-- /.info-box-content -->
 		</div>
-		<div class="col-md-5 text-center">
+		<div class="col-sm-5 col-xs-5 text-center">
 			<h1>
 			{{ title }}
 			</h1>
 		</div>
-		<div class="col-md-3">
+		<div class="col-sm-3 col-xs-3">
 			<ul class="nav navbar-nav pull-right">
 				<li class="pull-right">
 					<a href="/sadmin/logout" style="font-size: 35px"><i class="fa fa-sign-out"></i></a>
