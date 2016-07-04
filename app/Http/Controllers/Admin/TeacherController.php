@@ -56,11 +56,11 @@ class TeacherController extends Controller
     public function getDelete(Request $request)
     {
         if (\Auth::user()->id == $request->id) {
-            return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
+            return response()->json(['error' => true, 'message' => 'Can\'t delete this pro. This pro is logged on!']);
         }
         $response = $this->userRepository->delete($request->id);
         return response()->json([
-            'error' => false, 'message' => 'Deleted user successfully!',
+            'error' => false, 'message' => 'Deleted pro successfully!',
         ]);
     }
     public function postCreate(Request $request)
@@ -92,7 +92,7 @@ class TeacherController extends Controller
         $teacher->user()->associate($user);
         $teacher->save();
         return response()->json([
-            'error' => false, 'success' => 'Teacher created successfully!',
+            'error' => false, 'success' => 'Pro created successfully!',
         ]);
 
     }
@@ -134,7 +134,7 @@ class TeacherController extends Controller
 
         return response()->json([
             'error' => false,
-            'success' => 'User updated successfully!',
+            'success' => 'Pro updated successfully!',
             'user' => $user,
         ]);
     }

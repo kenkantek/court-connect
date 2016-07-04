@@ -69,10 +69,10 @@
                 @endif
 
                 <li>
-                    <a href="{{ route('users.list') }}" data-toggle="tooltip" data-placement="right" title="User"><i class="fa fa-users"></i></a>
+                    <a href="{{ route('users.list') }}" data-toggle="tooltip" data-placement="right" title="Employees"><i class="fa fa-users"></i></a>
                 </li>
                 <li>
-                    <a href="{{ route('teacher.listAll') }}" data-toggle="tooltip" data-placement="right" title="Teacher"><i class="fa fa-user-plus"></i></a>
+                    <a href="{{ route('teacher.listAll') }}" data-toggle="tooltip" data-placement="right" title="Pros"><i class="fa fa-user-plus"></i></a>
                 </li>
 
                 @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
@@ -93,7 +93,7 @@
 
                 @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
                     <li>
-                        <a href="{{ route('admin.setting') }}" data-toggle="tooltip" data-placement="right" title="Setting Website">
+                        <a href="{{ route('admin.setting') }}" data-toggle="tooltip" data-placement="right" title="Website Setting">
                             <i class="fa fa-th"></i>
                         </a>
                     </li>

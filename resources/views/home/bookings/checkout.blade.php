@@ -12,9 +12,13 @@
                         <button type="button" class="close" data-dismiss="alert">×</button>
                         @if($msg_errors)
                             <ul>
-                                @foreach($msg_errors as $message)
-                                    <li>{{$message}}</li>
-                                @endforeach
+                                @if(is_array($msg_errors))
+                                    @foreach($msg_errors as $message)
+                                        <li>{{$message}}</li>
+                                    @endforeach
+                                @else
+                                    <li>{{$msg_errors}}</li>
+                                @endif
                             </ul>
                         @else
                             @if(isset($court->price['messages']))
@@ -42,7 +46,7 @@
                     date_time_set($date_booking, $intpart, $fraction);
                 ?>
                 <div class="container" id="form-checkout-wrapper">
-                    @if( strtotime('now') > strtotime(date_format($date_booking, 'Y-m-d H:i:s')))
+                    @if($court['booking_type'] == 'open' && strtotime('now') > strtotime(date_format($date_booking, 'Y-m-d H:i:s')))
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <div>Warning. Date booking less than today!</div>
@@ -344,11 +348,32 @@
                                 </div>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Date:</span>
-                                    <label class="col-lg-6 col-md-6 text-left">{{$request->input('date')}}</label>
+                                    <label class="col-lg-6 col-md-6 text-left">
+                                        @if($court->booking_type =='open')
+                                            {{$request->input('date')}}
+                                        @elseif($court->booking_type =='contract')
+                                            {{'form '.$court->contract->start_date.' to '. $court->contract->end_date}}
+                                        @endif
+                                    </label>
                                 </div>
+                                <?php
+                                $dayOfWeek = [
+                                        "1" => "Mondays",
+                                        "2" =>"Tuesdays",
+                                        "3"=>"Wednesdays",
+                                        "4"=>"Thursdays",
+                                        "5"=>"Fridays",
+                                        "6" => "Saturdays",
+                                        "7" => "Sundays"
+                                ];
+                                ?>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Time:</span>
-                                    <label class="col-lg-6 col-md-6 text-left">{{format_hour($request->input('hour_start'))}}</label>
+                                    <label class="col-lg-6 col-md-6 text-left">
+                                        @if($court->booking_type =='contract')
+                                            {{$dayOfWeek[$request->input('dayOfWeek')]." - "}}
+                                        @endif
+                                        {{format_hour($request->input('hour_start'))}}</label>
                                 </div>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Length:</span>

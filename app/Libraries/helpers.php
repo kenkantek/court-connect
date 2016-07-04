@@ -212,7 +212,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
             $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
             $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
-            if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] > $close_time_date + 1){
+            if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] >= $close_time_date + 1){
                 //$text = " ".$check_open_close_date['open_time']." ".($input['hour_start'] + $input['hour_length']);
                 return [
                     'error' => true,
@@ -220,6 +220,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
                 ];
             }
         }
+
         //check book is exist
         $check_book = Booking::where('date',$date)
             ->where('court_id',$input['court_id'])
@@ -302,15 +303,23 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
         
         //check time open and close of club
+        /*
         $date = Carbon::createFromTimestamp(strtotime($range_date[0]))->format("Y-m-d");
         $check_open_close_date = SetOpenDay::where('date',$date)->first();
         if(isset($check_open_close_date)) {
+            $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
+            $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
             $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
             $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
             if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] > $close_time_date + 1){
-                return ['error' => true,"messages"=>['Club opens at '.$check_open_close_date['open_time'].' and closes at '.$check_open_close_date['close_time']]];
+                //$text = " ".$check_open_close_date['open_time']." ".($input['hour_start'] + $input['hour_length']);
+                return [
+                    'error' => true,
+                    "messages"=>['Club opens at '.$check_open_close_date['open_time'].' and closes at '.$check_open_close_date['close_time']]
+                ];
             }
         }
+        */
 
 
         foreach($range_date as $date) {

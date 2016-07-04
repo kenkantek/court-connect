@@ -64,11 +64,11 @@ class UserController extends Controller
     public function getDelete(Request $request)
     {
         if (\Auth::user()->id == $request->id) {
-            return response()->json(['error' => true, 'message' => 'Can\'t delete this user. This user is logged on!']);
+            return response()->json(['error' => true, 'message' => 'Can\'t delete this employee. This employee is logged on!']);
         }
         $response = $this->userRepository->delete($request->id);
         return response()->json([
-            'error' => false, 'message' => 'Deleted user successfully!',
+            'error' => false, 'message' => 'Deleted employee successfully!',
         ]);
     }
     public function postCreate(Request $request)
@@ -97,7 +97,7 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'error' => false, 'success' => 'User created successfully!',
+            'error' => false, 'success' => 'Employee created successfully!',
         ]);
 
     }

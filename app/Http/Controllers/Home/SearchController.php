@@ -131,22 +131,25 @@ class SearchController extends Controller {
                             ->limit(5)->orderBy('updated_at', 'desc')->get(['id','start_date','end_date','is_member','total_week']);
 
                         if($contracts && count($contracts)  > 0) {
-                            $arr_tmp_contract = null;
+                            $arr_tmp_contract = [];
                             foreach ($contracts as $m => $contract) {
                                 $tmp_count = count($club->courts);
                                 $index_min = -1;
                                 $tmp_price_min = -1;
                                 $tmp_court = 0;
+
                                 foreach ($club->courts as $p => $court) {
                                     $input['court_id'] = $court['id'];
                                     $input['club_id'] = $club['id'];
                                     $input['type'] = 'contract';
                                     $input['contract_id'] = $contract['id'];
                                     $lprice = [];
+
                                     foreach($request->dayOfWeek as $dayOfWeek) {
                                         $input['dayOfWeek'] = intval($dayOfWeek);
                                         $lprice[] = getPriceForBooking($input);
                                     }
+
                                     if(!isset($clubs[$k]['courts'][$m*$tmp_count+$p])) {
                                         $clubs[$k]['courts'][$m * $tmp_count + $p] = clone($clubs[$k]['courts'][$p]);
                                     }
@@ -162,24 +165,27 @@ class SearchController extends Controller {
                                 if($index_min < 0){
                                     $index_min = 0;
                                 }
-                                $tmp['court'] = $clubs[$k]['courts'][$index_min];
-                                $tmp['contract_id'] = $contract['id'];
-                                $input['court_id'] = $tmp_court;
-                                $input['club_id'] = $club['id'];
-                                $tmp['min_price'] = $tmp_price_min;
+                                if($tmp_court != 0) {
+                                    $tmp['court'] = $clubs[$k]['courts'][$index_min];
+                                    $tmp['contract_id'] = $contract['id'];
+                                    $input['court_id'] = $tmp_court;
+                                    $input['club_id'] = $club['id'];
+                                    $tmp['min_price'] = $tmp_price_min;
 
-                                $lprice = [];
-                                foreach($request->dayOfWeek as $dayOfWeek) {
-                                    $input['dayOfWeek'] = intval($dayOfWeek);
-                                    $lprice[] = $this->getListPriceOfCourt($input);
+                                    //return $input;
+                                    $lprice = [];
+                                    foreach ($request->dayOfWeek as $dayOfWeek) {
+                                        $input['dayOfWeek'] = intval($dayOfWeek);
+                                        $lprice[] = $this->getListPriceOfCourt($input);
+                                    }
+
+                                    $tmp['prices'] = $lprice;
+                                    $tmp['start_date'] = $contract['start_date'];
+                                    $tmp['end_date'] = $contract['end_date'];
+                                    $tmp['range_date'] = createRangeDate($contract['start_date'], $contract['end_date'], $input['dayOfWeek']);
+
+                                    $arr_tmp_contract[] = $tmp;
                                 }
-
-                                $tmp['prices'] = $lprice;
-                                $tmp['start_date'] = $contract['start_date'];
-                                $tmp['end_date'] = $contract['end_date'];
-                                $tmp['range_date'] = createRangeDate($contract['start_date'], $contract['end_date'], $input['dayOfWeek']);
-
-                                $arr_tmp_contract[] = $tmp;
                             }
 
                             usort($arr_tmp_contract,function($a,$b){

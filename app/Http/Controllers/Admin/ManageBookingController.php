@@ -650,6 +650,7 @@ class ManageBookingController extends Controller
             'address' => $city
         ]);
     }
+    
     public function getCustomerLookup($search){
         $user = User::search($search)
             ->first();

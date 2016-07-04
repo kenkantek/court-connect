@@ -78,7 +78,7 @@
 					</label>
 					<label>
 						<input v-model="contractSelect.is_member" type="radio" name="is_member" value="0">
-						No member
+						Non member
 					</label>
 				</div>
 			</div>
