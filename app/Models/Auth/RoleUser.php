@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class RoleUser extends Model
 {
-    protected $table = 'user_has_role';
+    protected $table = 'user_has_roles';
 
     /**
     * The date fields for the model.clear

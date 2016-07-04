@@ -155,8 +155,6 @@
 			})
 			$('#mb-book-day-contract').daterangepicker()
 
-			$(".irs-slider.single").css('background',"abc");
-
 			$("input[name='book-type']").on('change',function(){
 				$(".slc-type-group").addClass('hidden');
 				$(".slc-type-" + $(this).val()).removeClass('hidden');
@@ -202,6 +200,7 @@
 				});
 			};
 			callSelectPlayer();
+
 			function formatRepo (repo) {
 				if (repo.loading) return repo.text;
 

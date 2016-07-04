@@ -43,7 +43,7 @@
                                     {!! $clubs->appends($request->input())->render() !!}
                                 </div>
                         @else
-                            <h4 class="text-center">No result</h4>
+                            <h4 class="text-center">No result found. Please modify your search above.</h4>
                         @endif
                     @endif
                 </div>

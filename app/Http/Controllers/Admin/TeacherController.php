@@ -20,7 +20,7 @@ class TeacherController extends Controller
 
     public function getList()
     {
-        $title = 'Teacher Manager';
+        $title = 'Manage pros';
         return view('admin.users.list-teacher', compact('title'));
     }
 

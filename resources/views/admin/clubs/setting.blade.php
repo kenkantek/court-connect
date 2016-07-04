@@ -3,13 +3,18 @@
 	Club Settings
 @stop
 @section('content')
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.2/jquery.ui.touch-punch.min.js"></script>
+
 	<div class="box box-primary">
-		<div class="box-body">
+		<div class="row box-body">
 			<club-setting
 				:club-setting-id = "clubSettingId"
 			></club-setting>
 		</div>
 	</div>
+
 	<script type="text/javascript">
 		$(function() {
 			$('.daterange').daterangepicker();

@@ -1,6 +1,6 @@
 <template>
     <div class="court_new courtbox">
-        <h3 class="title-box">Add New User</h3>
+        <h3 class="title-box">Add New Employee</h3>
         <form class="form-horizontal">
             <div class="form-group" :class=" {'has-error' : (user.first_name == null && submit == true)}">
                 <label for="first_name" class="col-sm-4 control-label">First Name *</label>
@@ -30,7 +30,7 @@
             </div>
 
             <div class="form-group">
-                <label for="is_admin" class="col-sm-4 control-label">Is Admin? *</label>
+                <label for="is_admin" class="col-sm-4 control-label">Admin rights? *</label>
                 <div class="col-sm-8">
                     <input id="is_admin" class="styled" name="is_admin" type="checkbox" value="0" @click="changeIsAdmin">
                 </div>
@@ -50,7 +50,7 @@
 
             <div>
                 <slot name="temp"></slot>
-                <button type="button" id="btnAddnewUser"  class="btn btn-primary pull-right" @click.prevent="addUser()">Add User</button>
+                <button type="button" id="btnAddnewUser"  class="btn btn-primary pull-right" @click.prevent="addUser()">Add Employee</button>
             </div>
             <!-- /.box-footer -->
         </form>

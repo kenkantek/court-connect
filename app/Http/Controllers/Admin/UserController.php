@@ -33,7 +33,7 @@ class UserController extends Controller
         \Assets::addJavascript(['multiple-select']);
         \Assets::addStylesheets(['multiple-select']);
         \Assets::addAppModule(['app']);
-        $title = 'User Manager';
+        $title = 'Manage Employees';
         return view('admin.users.list', compact('title'));
     }
 
@@ -43,7 +43,7 @@ class UserController extends Controller
         $data = User::with('roles')->whereHas('roles', function($query) use ($request) {
             $query->where('context_id', $request->input('clubid'))
                 ->where('role_id','<>',4);
-        })->select("id", "first_name",'last_name' ,"email")->orderBy('updated_at','desc')->paginate($take);
+        })->select("id", "first_name",'last_name' ,"email")->orderBy('first_name','asc')->paginate($take);
 
         foreach($data as $user){
             if($user->hasRole('admin')){
@@ -137,9 +137,11 @@ class UserController extends Controller
             $user->removeRole('user');
             $user->removeRole('admin');
             $clubs_id = array_unique($request->input('clubs'));
+            $roles = RoleUser::where('context','clubs')->where('user_id',$user->id)->delete();
             foreach ($clubs_id as $club_id) {
                 $user->assignRole('admin', 'clubs', $club_id);
             }
+
             //$user->assignRole('admin',$user->InfoClub['context'],$user->InfoClub['context_id']);
         }
         if ($request->input('is_admin') == 0 && !$user->hasRole('user')) {

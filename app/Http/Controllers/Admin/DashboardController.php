@@ -51,6 +51,7 @@ class DashboardController extends Controller
 
     /*setting*/
     public function getSetting(){
-        return view('admin.settings.index');
+        return redirect()->route('admin.setting.pages');
+        //return view('admin.settings.index');
     }
 }

@@ -125,7 +125,7 @@
                                     <div class="mb-group-sl">
                                         <div class="col-xs-12 col-md-12">
                                             <h4 class="mb-title-h4-modal text-center">Order Total: <strong class="price" style="">${{total_price}} </strong></h4>
-                                            <div id="viewPriceOrder" class="btn" @click.prevent="viewPriceOrder()">View price</div>
+                                            <!--<div id="viewPriceOrder" class="btn" @click.prevent="viewPriceOrder()">View price</div>-->
                                         </div>
                                     </div>
 
@@ -999,6 +999,17 @@
             prettify: false,
             hasGrid: true,
             hideMinMax: true,
+
+            min: 1,
+            max: 3.5,
+            type: 'single',
+            step: 0.5,
+            grid: false,
+            postfix: " Hour",
+            prettify: false,
+            hasGrid: true,
+            hideMinMax: true,
+            hide_min_max: true
         });
 
         //lookup address

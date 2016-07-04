@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xs-12 col-md-7">
                     <div class="court_list courtbox">
-                        <h3 class="title-box pull-left">User list</h3>
+                        <h3 class="title-box pull-left">Employee list</h3>
                         <list-user
                                 :club-setting-id="clubSettingId"
                                 :users_choice.sync="users_choice"

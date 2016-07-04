@@ -1,6 +1,6 @@
 <template>
     <div class="court_new courtbox"  v-if="users_choice.length == 1">
-        <h3 class="title-box">Edit User</h3>
+        <h3 class="title-box">Edit Employee</h3>
         <form class="form-horizontal fm-user">
 
             <div class="form-group" :class=" {'has-error' : (user.first_name == null && submit == true)}">
@@ -32,7 +32,7 @@
             </div>
 
             <div class="form-group">
-                <label for="is_admin" class="col-sm-4 control-label">Is Admin? *</label>
+                <label for="is_admin" class="col-sm-4 control-label">Admin rights? *</label>
                 <div class="col-sm-8">
                     <input v-if="user.is_admin == true" id="is_admin" checked="checked" class="styled is_admin" name="is_admin" type="checkbox" @click="is_admin()">
                     <input v-else id="is_admin" class="styled" name="is_admin" type="checkbox" @click="is_admin()">
@@ -44,7 +44,6 @@
                 <div class="col-sm-8">
                     <select id="cc-ms" multiple="multiple" name="clubs" v-model="user.clubs">
                         <template v-for="club in clubs">
-                            <option v-if="club.id == clubSettingId" selected="selected" disabled="disabled" value="{{club.id}}">{{club.name}}</option>
                             <option v-if="user.arr_club.indexOf(club.id) > -1" selected="selected" value="{{club.id}}">{{club.name}}</option>
                             <option v-else value="{{club.id}}">{{club.name}}</option>
                         </template>
@@ -54,9 +53,9 @@
 
             <div>
                 <slot name="temp"></slot>
-                <button type="button" id="btnDeleteUser"  class="btn btn-danger pull-left" @click.prevent="deleteUser()">Delete User
+                <button type="button" id="btnDeleteUser"  class="btn btn-danger pull-left" @click.prevent="deleteUser()">Delete Employee
                 </button>
-                <button type="button" id="btnEditUser"  class="btn btn-primary pull-right" @click.prevent="editUser()">Edit User
+                <button type="button" id="btnEditUser"  class="btn btn-primary pull-right" @click.prevent="editUser()">Edit Employee
                 </button>
             </div>
             <!-- /.box-footer -->
@@ -91,11 +90,12 @@
     methods: {
         editUser(){
             this.$set('user.club_id',this.clubSettingId);
-            this.user.clubs = $("#cc-ms").val();
-            this.user.clubs.unshift(this.clubSettingId);
+            if(this.user.clubs.length < 1){
+                showNotice('error', 'Please select at least 1 club ', 'Error!');
+                return
+            }
             const user = this.user;
             this.$http.post(laroute.route('users.edit.post'), user).then(res => {
-                console.log(res)
             if(res.data.error)
             {
                 var msg = "";
@@ -105,6 +105,8 @@
                 showNotice('error', msg, 'Error!');
             }else
             {
+                this.user = null;
+                this.users_choice = null;
                 this.reloadUsers =  Math.floor(Math.random() * 10000);
                 showNotice('success', res.data.success, 'Update Success!');
             }

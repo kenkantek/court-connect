@@ -1,5 +1,5 @@
 <template>
-    <a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewTeacher()"><i class="fa fa-plus-circle"></i> Add New Teacher</a>
+    <a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewTeacher()"><i class="fa fa-plus-circle"></i> Add New Pro</a>
     <table id="tbl-listteacher" class="table table-bordered table-hover table-th">
         <thead>
         <tr>

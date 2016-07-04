@@ -4,7 +4,7 @@
         <div class="teach-clubs">
             <div class="row">
                 <div class="col-xs-12 col-md-7">
-                    <h3 class="title-box pull-left">Teacher list</h3>
+                    <h3 class="title-box pull-left">Pro list</h3>
                     <list-teacher
                             :club-setting-id="clubSettingId"
                             :teachers_choice.sync="teachers_choice"

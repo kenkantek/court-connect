@@ -1,6 +1,6 @@
 <template>
     <div class="court_new courtbox"  v-if="teachers_choice.length == 1">
-        <h3 class="title-box">Edit Teacher</h3>
+        <h3 class="title-box">Edit Pro</h3>
         <form class="form-horizontal fm-user">
 
             <div class="form-group" :class=" {'has-error' : (teacher.first_name == null && submit == true)}">
@@ -40,9 +40,9 @@
 
             <div>
                 <slot name="temp"></slot>
-                <button type="button" id="btnDeleteUser"  class="btn btn-danger pull-left" @click.prevent="deleteTeacher()">Delete teacher
+                <button type="button" id="btnDeleteUser"  class="btn btn-danger pull-left" @click.prevent="deleteTeacher()">Delete pro
                 </button>
-                <button type="button" id="btnEditUser"  class="btn btn-primary pull-right" @click.prevent="editTeacher()">Edit teacher
+                <button type="button" id="btnEditUser"  class="btn btn-primary pull-right" @click.prevent="editTeacher()">Edit pro
                 </button>
             </div>
             <!-- /.box-footer -->

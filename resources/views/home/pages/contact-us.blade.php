@@ -58,16 +58,16 @@
                             <form>
                                 <legend><span class="glyphicon glyphicon-globe"></span> Our office</legend>
                                 <address>
-                                    <strong>Twitter, Inc.</strong><br>
-                                    795 Folsom Ave, Suite 600<br>
-                                    San Francisco, CA 94107<br>
+                                    <strong>Court Connect</strong><br>
+                                    135 Mayhew Dr<br>
+                                    South Orange, NJ 07079, USA<br>
                                     <abbr title="Phone">
-                                        P:</abbr>
-                                    (123) 456-7890
+                                        Phone:</abbr>
+                                    (862) 205­3858
                                 </address>
                                 <address>
-                                    <strong>Full Name</strong><br>
-                                    <a href="mailto:#">first.last@example.com</a>
+                                    <strong>Support</strong><br>
+                                    <a href="mailto:support@court­connect.com">support@court­connect.com</a>
                                 </address>
                             </form>
                         </div>

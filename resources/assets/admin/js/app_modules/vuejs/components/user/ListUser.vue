@@ -1,12 +1,12 @@
 <template>
-    <a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewUser()"><i class="fa fa-plus-circle"></i> Add New User</a>
+    <a class="btn btn-primary pull-right btn-new-court" href="" @click.prevent="scrollAddnewUser()"><i class="fa fa-plus-circle"></i> Add New Employee</a>
     <table id="tbl-listuser" class="table table-bordered table-hover table-th" id="datatables">
         <thead>
         <tr>
             <th></th>
             <th>Name</th>
             <th>Email</th>
-            <th>Is Admin ?</th>
+            <th>Admin rights ?</th>
         </tr>
         </thead>
         <tbody>
@@ -50,6 +50,8 @@
         asyncData(resolve, reject) {
         this.fetchUsers(this.api).done((data) => {
             resolve({data});
+            this.users_choice = [];
+            tmp_choice = null;
         }, (error) => {
             console.log(error);
         });

@@ -1,6 +1,6 @@
 <template>
     <div class="court_new courtbox">
-        <h3 class="title-box">Add New Teacher</h3>
+        <h3 class="title-box">Add New Pro</h3>
         <form class="form-horizontal">
             <div class="form-group" :class=" {'has-error' : (teacher.first_name == null && submit == true)}">
                 <label for="first_name" class="col-sm-4 control-label">First Name *</label>
@@ -37,7 +37,7 @@
 
             <div>
                 <slot name="temp"></slot>
-                <button type="button" id="btnAddnewteacher"  class="btn btn-primary pull-right" @click.prevent="addTeacher()">Add Teacher</button>
+                <button type="button" id="btnAddnewteacher"  class="btn btn-primary pull-right" @click.prevent="addTeacher()">Add Pro</button>
             </div>
             <!-- /.box-footer -->
         </form>

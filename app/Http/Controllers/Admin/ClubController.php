@@ -19,7 +19,7 @@ class ClubController extends Controller
 
     public function getSetting()
     {
-        \Assets::addJavascript(['select2', 'bootstrap-switch', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
+        \Assets::addJavascript(['select2', 'bootstrap-switch', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
         \Assets::addStylesheets(['select2', 'bootstrap-switch', 'uniform', 'monthly', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect', 'jquery-ui']);
         $title = 'Club Setting';
         return view('admin.clubs.setting', compact('title'));

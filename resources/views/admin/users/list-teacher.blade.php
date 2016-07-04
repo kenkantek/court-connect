@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title_heading')
-	Teacher Manager
+	Pro Manager
 @stop
 @section('content')
 

@@ -164,7 +164,7 @@ form.form-court{
 /* PAGE MANAGER BOOKINGS */
 #form_search_booking{
     background: #f2f2f2;
-    padding: 20px 0px;
+    padding: 5px 0px;
     position: relative;
 }
 #result_search table{
@@ -822,4 +822,15 @@ table .arrow{
     background: none;
     color: #000;
     cursor: pointer;
+}
+#clubSetting-wrapper{
+    width: 100%;
+}
+.irs-slider {
+    background: url(../../home/images/balltime_05.png) top;
+    width: 20px;
+    height: 20px;
+}
+.irs-slider:hover{
+    background-position: top;
 }
