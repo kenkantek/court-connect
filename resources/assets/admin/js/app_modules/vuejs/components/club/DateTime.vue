@@ -235,11 +235,11 @@
                                 <div class="dlg-setopenday hidden">
                                     <div style="width: 50%; float: left">
                                         <label for="opentime" >Open Time</label>
-                                        <input class="form-control timepicker" name="opentime" type="" v-model="date[i*7+j].hours_open">
+                                        <input class="form-control timepicker" name="opentime" value="" v-model="date[i*7+j].hours_open">
                                     </div>
                                     <div style="width: 50%; float: left">
                                         <label for="closetime" >Closing Time</label>
-                                        <input class="form-control timepicker" name="closetime" type="" v-model="date[i*7+j].hours_close" >
+                                        <input class="form-control timepicker" name="closetime" value="" v-model="date[i*7+j].hours_close" >
                                     </div>
                                     <div >
                                         <input class="btn btn-primary" style="margin-top: 6px; width: auto;" type="button" @click="setTimeClick(i * 7 + j)" value="Apply" >
@@ -387,7 +387,6 @@
             d.club_id = this.clubSettingId;
             $("#box-set-open-days").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
             this.$http.post(laroute.route('clubs.courts.setOpenDay'), d).then(res => {
-
                 if(res.data.error)
                 {
                     var msg = "";
@@ -436,6 +435,8 @@
                 var  d = item.date.split("-");
                 if(item.is_close == 0 && item.is_holiday == 0 ) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(item.open_time != '' ?item.open_time + " - " + item.close_time: '' );
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=opentime]").val(item.open_time);
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=closetime]").val(item.close_time);
                 }
                 else if(item.is_close == 1) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_close');
@@ -445,6 +446,7 @@
                     text_holiday = '<div class="txt-holiday" style="text-transform: uppercase; padding-top: 5px;margin-bottom: -15px;font-weight: bold;">Holiday</div>';
                     text_holiday += item.open_time != '' ? item.open_time + " - " + item.close_time: '';
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(text_holiday);
+
                 }else{
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap');
                 }

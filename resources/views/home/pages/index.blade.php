@@ -11,7 +11,7 @@
             <h2>How <span>Court Connect</span> Works</h2>
 
             <div class="row line-content">
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4">
                     <div class="thumbnail">
                         <img src="resources/home/images/search_07.png" alt="">
                     </div>
@@ -19,7 +19,7 @@
                     <div class="caption title">Search</div>
                     <div class="caption">Find nearby clubs with available court time</div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4">
                     <div class="thumbnail">
                         <img src="resources/home/images/book_09.png" alt="">
                     </div>
@@ -29,7 +29,7 @@
                         Click to reserve your court
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4">
                     <div class="thumbnail">
                         <img src="resources/home/images/play_13.png" alt="">
                     </div>

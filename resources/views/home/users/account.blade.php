@@ -57,13 +57,14 @@
                                     </td>
                                     <td>
                                         @if($booking->type == "contract")
-                                            <div style="font-weight: bold">Period: {{$booking->date_range_of_contract['from']." - ".$booking->date_range_of_contract['to']}}</div>
+                                            <div style="font-weight: bold">Date: {{$booking->date_range_of_contract['from']." - ".$booking->date_range_of_contract['to']}}</div>
+                                            <div>Day of Week: {{dayOfWeek($booking->day_of_week)}}</div>
+                                            <div>Number of Weeks: {{daysOfWeekBetween($booking->date_range_of_contract['from'],$booking->date_range_of_contract['to'],$booking->day_of_week)}}</div>
                                         @else
                                         <div>{{date('l jS F Y', strtotime($booking->date))}}</div>
                                         @endif
-                                        <?php $tmp_hour = str_replace(".00",":00",str_replace(".5",":30",$booking->hour)); ?>
-                                        <div>at {{($booking->hour <=12 ? $tmp_hour."am" : $tmp_hour."pm") }}</div>
-                                        <div>for {{$booking->hour_length}} Hour</div>
+                                        <div>at {{format_hour($booking->hour) }}</div>
+                                        <div>for {{str_replace('am','',str_replace('pm','',format_hour($booking->hour_length)))}} hour</div>
 
                                     </td>
                                     <td>
@@ -194,7 +195,7 @@
                         <div class="form-blocks">
                             <h4 class="text-left">Address</h4>
                             <form class="form-horizontal" role="form" method="POST" action="{{ route('home.account.setting.address')}}">
-                                {!! csrf_field() !!}
+
                                 <div class="form-group">
                                     <label for="input-zip_code" class="control-label col-sm-3">Zipcode</label>
                                     <div class="col-sm-2">
@@ -277,11 +278,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Confirm change booking</h4>
+                    <h4 class="modal-title">Change booking</h4>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger">
-                        <p>You can't perform the updates. Please cancel booking and book again !</p>
+                        <p>You cannot change the booking. Please cancel and book again !</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -304,16 +305,18 @@
                     <table style="text-align: center">
                         <thead>
                             <tr>
-                                <th class="col-md-2">Reservation#</th>
-                                <th class="col-md-3">Date/Time</th>
+                                <th style="padding: 10px 0px;" class="col-md-2 align-left">Reservation#</th>
+                                <th style="padding: 10px 0px;" class="col-md-3 align-left">Date/Time</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody align="left">
+
+                        </tbody>
                     </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary btn-submit">Accept Delete</button>
+                    <button type="button" class="btn btn-primary btn-submit">Accept Cancel</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -331,13 +334,8 @@
     </style>
 
     <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $(document).ready(function(){
 
+        $(document).ready(function(){
             //change booking
             $("body").on('click','.cc-action-booking .change-booking',function(e){
                 e.preventDefault();
@@ -352,6 +350,9 @@
                     url: base_url +"/check-update-booking",
                     type: 'post',
                     data: {id: id_booking},
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     dataType: "json",
                     beforeSend: function(){
                         $(".loader").removeClass('hidden');
@@ -387,6 +388,9 @@
                 $.ajax({
                     url: base_url +"/cancel-booking",
                     type: 'post',
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     data: {id: id_booking},
                     dataType: "json",
                     beforeSend: function(){
@@ -415,6 +419,9 @@
                 $.ajax({
                     url: base_url +"/print-confirmation",
                     type: 'post',
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     data: {id: id_booking},
 //                    dataType: 'json',
                     beforeSend: function(){
@@ -440,6 +447,9 @@
                 $.ajax({
                     url: base_url +"/send-mail",
                     type: 'post',
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     data: {id: id_booking},
                     beforeSend: function(){
                         $(".loader").removeClass('hidden');

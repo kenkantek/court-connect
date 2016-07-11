@@ -356,22 +356,11 @@
                                         @endif
                                     </label>
                                 </div>
-                                <?php
-                                $dayOfWeek = [
-                                        "1" => "Mondays",
-                                        "2" =>"Tuesdays",
-                                        "3"=>"Wednesdays",
-                                        "4"=>"Thursdays",
-                                        "5"=>"Fridays",
-                                        "6" => "Saturdays",
-                                        "7" => "Sundays"
-                                ];
-                                ?>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Time:</span>
                                     <label class="col-lg-6 col-md-6 text-left">
                                         @if($court->booking_type =='contract')
-                                            {{$dayOfWeek[$request->input('dayOfWeek')]." - "}}
+                                            {{dayOfWeek($request->input('dayOfWeek'))." - "}}
                                         @endif
                                         {{format_hour($request->input('hour_start'))}}</label>
                                 </div>

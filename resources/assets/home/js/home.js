@@ -9,6 +9,10 @@ $(function () {
             width: '100%',
             minimumResultsForSearch: -1
         });
+        $('.select2-full').select2({
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
     }
 
     $( "#q1" ).autocomplete({

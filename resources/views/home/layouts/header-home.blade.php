@@ -6,7 +6,7 @@
                 <nav class="navbar navbar-default" role="navigation">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" style="margin-top: 20px"
                                 data-target=".navbar-ex1-collapse">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="row">
-            <h1>Find Your Court</h1>
+            <h1 class="h1-mobile">Find Your Court</h1>
             <div class="col-md-12">
                 {!!  Form::open(array('route' => 'home.search','method' => 'post','id'=>'cc-search-form')) !!}
                 <div class="form-group col-md-4 form-icon">
@@ -95,7 +95,7 @@
                 </div>
                 <div class="form-group col-md-2 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::selectRange('court',1,4,null,['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# Courts']) !!}
+                    {!! Form::selectRange('court',1,4,null,['id'=>'inputID','class' => 'form-control placeholder-single select2','placeholder'=>'# Courts']) !!}
                             <!-- <input type="text" class="form-control" name="" id="" placeholder="# Courts"> -->
                 </div>
                 <div class="form-group col-md-2">
@@ -113,18 +113,18 @@
 <div class="app-bar" style="padding: 11px 0 11px 0">
     <div class="container">
         <div class="row">
-            <div class="col-md-4 divine-appbar-r">
+            <div class="col-md-4 col-xs-12 divine-appbar-r">
                 <a href="{!! route("home.deals") !!}" style="text-decoration: none; color: #fff"><span>Click here to find the best deals</span></a>
             </div>
-            <div class="col-md-8 divine-appbar-l">
-                <div class="col-md-4" style="font-size: 14px; line-height: 1.2em; margin-top: 10px">
+            <div class="col-md-8 col-xs-12 divine-appbar-l">
+                <div class="col-md-4 col-xs-12" style="font-size: 14px; line-height: 1.2em; margin-top: 10px">
                     Download the<br>
                     <span style="color: #63ac1e">Court Connect</span> App
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-xs-6">
                     <a href=""><img src="resources/home/images/app-store_05.png"></a>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-xs-6">
                     <a href=""><img src="resources/home/images/play-store_09.png"></a>
                 </div>
             </div>

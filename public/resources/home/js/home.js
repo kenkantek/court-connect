@@ -313,6 +313,8 @@ $(function () {
             url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode,
             method: "post",
             success:function(data){
+                $("#input-address1").val('');
+                $("#input-address2").val('');
                 $.each(data.results[0].address_components, function(index, val) {
                     if (typeof val.types[0] != "undefined" ) {
                         if(val.types[0] == 'administrative_area_level_1'){

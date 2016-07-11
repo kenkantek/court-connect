@@ -28,7 +28,7 @@
     src: url(../fonts/Roboto/Roboto-Bold.ttf)
 }
 body{
-    font-family: 'Source Sans Pro',sans-serif;
+    font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 13px;
 }
 button,input,a{
@@ -517,6 +517,9 @@ a.ui-state-default.ui-state-highlight {
 .divine-appbar-l {
     border-left: 1px solid #4d4d4d
 }
+.divine-appbar-l img{
+    max-width: 100%;
+}
 
 .ui-widget-header .ui-state-highlight {
     background: none!important
@@ -640,13 +643,16 @@ a.ui-state-default.ui-state-highlight {
     padding-right: 47px;
     color: #fff;
     border-radius: 0;
+    border: 0px;
 }
 
 .content form .dropdown-menu{
     min-width:auto;
     width:100%;
 }
-
+.red{
+    color: red;
+}
 .content form .dropdown button{
     min-width:auto;
     width:100%;
@@ -1198,7 +1204,7 @@ a.ui-state-default.ui-state-highlight {
 /* Tooltip text */
 .search-tooltip .tooltiptext {
     visibility: visible;
-    width: 260px;
+    width: 200px;
     background-color: #fff;
     color: #000;
     text-align: center;
@@ -1479,7 +1485,7 @@ a.ui-state-default.ui-state-highlight {
 }
 .booking-row .status-booking span{
     font-weight: bold;
-    color: #0000AA;
+    color: #63ac1e;
     font-size: 1.2em;
     display: block;
 }
@@ -1570,4 +1576,35 @@ a.ui-state-default.ui-state-highlight {
 .content .content iframe{
     margin: 0px auto;
     width: 100%;
+}
+.btn{
+    border-radius: 0px;
+}
+.btn-primary{
+    background-color: #63ac1e;
+}
+@media screen and (max-width: 992px){
+    .h1-mobile{
+        margin: 15px auto;
+        font-size: 4em;
+    }
+    .header{
+        height: auto;
+    }
+    .content h2{
+        font-size: 3em;
+        margin-bottom: 30px;
+    }
+}
+@media screen and (max-width: 600px){
+    .h1-mobile{
+        margin: 15px auto;
+        font-size: 2em;
+    }
+    .form-icon input, .form-icon select{
+        height: 30px;
+    }
+    .app-bar{
+        text-align: center;
+    }
 }

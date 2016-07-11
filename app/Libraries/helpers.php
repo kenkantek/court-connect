@@ -34,6 +34,39 @@ function format_hour($hour)
     return $hour <=12 ? str_replace(".50",":30",str_replace(".00",":00",$hour))."am" : str_replace(".50",":30",str_replace(".00",":30",($hour - 12)))."pm";
 }
 
+function datediffInWeeks($date1, $date2)
+{
+    if($date1 > $date2) return datediffInWeeks($date2, $date1);
+    $first = DateTime::createFromFormat('m/d/Y', $date1);
+    $second = DateTime::createFromFormat('m/d/Y', $date2);
+    return floor($first->diff($second)->days/7);
+}
+
+function dayOfWeek($no){
+    $dayOfWeek = [
+        "1" => "Monday",
+        "2" =>"Tuesday",
+        "3"=>"Wednesday",
+        "4"=>"Thursday",
+        "5"=>"Friday",
+        "6" => "Saturday",
+        "7" => "Sunday"
+    ];
+    if($no >=1 && $no <=7)
+        return $dayOfWeek[$no];
+    return 'unknown';
+}
+function daysOfWeekBetween($start_date, $end_date, $weekDay)
+{
+    $weekDay = dayOfWeek($weekDay);
+    $first_date = strtotime($start_date." -1 days");
+    $first_date = strtotime(date("M d Y",$first_date)." next ".$weekDay);
+
+    $last_date = strtotime($end_date." +1 days");
+    $last_date = strtotime(date("M d Y",$last_date)." last ".$weekDay);
+
+    return  floor(($last_date - $first_date)/(7*86400)) + 1;
+}
 
 function get_lat_long($address)
 {

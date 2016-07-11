@@ -37,7 +37,7 @@ class BookingController extends Controller{
         if(!Input::has('court') || !Input::has('hour_start') ||  !Input::has('hour_length')){
         }
         else{
-            if(!in_array($request->dayOfWeek,$this->dayOfWeek)){
+            if(isset($request->dayOfWeek) && !in_array($request->dayOfWeek,$this->dayOfWeek)){
                 $error = true;
                 $msg_errors[] = "Data day of week invalid";
             }
@@ -273,7 +273,7 @@ class BookingController extends Controller{
         }
         return response()->json([
             'error' => false,
-            'message' => 'Amount for booking will full refund after cancel booking'
+            'message' => 'Refund will be issued after cancellation'
         ]);
     }
 

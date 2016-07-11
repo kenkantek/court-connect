@@ -7,9 +7,9 @@
         <div class="container content">
             <div class="instruction">
                 <h2><span>Sign Up To Court Connect</span></h2>
-                <span style="font-weight: bold;">Signing up with Court Connect will allow you to view and edit all your bookings and make reserveing your perfect court even quicker</span>
-                <br>
-                <small>* Manditory Field</small>
+                <span style="font-weight: bold;">Create a Court Connect account to book, edit and review your court reservations.</span>
+                <br><br>
+                <small><span class="red"> *</span> Manditory Field</small>
                 <br>
                 <br>
             </div>
@@ -21,35 +21,35 @@
                 {{-- <form class="form-horizontal" role="form" method="POST" action="{!! URL::route('home.signup') !!}">   --}}
                 {{ csrf_field() }}
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="firstname">First Name*</label>
+                    <label class="control-label col-sm-4" for="firstname">First Name<span class="red"> *</span></label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter First Name" value="{!! old('firstname') !!}">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="lastname">Last Name*</label>
+                    <label class="control-label col-sm-4" for="lastname">Last Name<span class="red"> *</span></label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter Last Name" value="{!! old('lastname') !!}">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="email">Email Address*</label>
+                    <label class="control-label col-sm-4" for="email">Email Address<span class="red"> *</span></label>
                     <div class="col-sm-5">
                         <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="{!! old('email') !!}">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="password">Password*</label>
+                    <label class="control-label col-sm-4" for="password">Password<span class="red"> *</span></label>
                     <div class="col-sm-5">
                         <input type="password" class="form-control" id="password" name="password" placeholder="***********">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="cfrpassword">Confirm Password*</label>
+                    <label class="control-label col-sm-4" for="cfrpassword">Confirm Password<span class="red"> *</span></label>
                     <div class="col-sm-5">
                         <input type="password" class="form-control" id="cfrpassword" name="cfrpassword" placeholder="***********">
                     </div>

@@ -57,7 +57,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <div class="row">
-                        <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5)">
+                        <div class="col-md-4  col-sm-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5)">
                             <span>COMPANY</span>
                             <ul>
                                 <li><a href="{{url('page/about-us')}}">About Us</a></li>
@@ -65,14 +65,14 @@
                                 <li><a href="#">Press</a></li>
                             </ul>
                         </div>
-                        <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
+                        <div class="col-md-4 col-sm-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
                             <span>LEGAL</span>
                             <ul>
                                 <li><a href="{{url('page/privacy-policy')}}">Privacy Policy</a></li>
                                 <li><a href="{{url('page/terms-of-use')}}">Terms of Use</a></li>
                             </ul>
                         </div>
-                        <div class="col-md-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
+                        <div class="col-md-4 col-sm-4" style="border-right: 2px solid rgba(101, 117, 86, 0.5);min-height: 140px">
                             <span>HELP</span>
                             <ul>
                                 <li><a href="{{url('page/support')}}">Support Center</a></li>
@@ -84,8 +84,11 @@
                 <div class="col-md-5">
                     <span>CONNECT WITH US</span>
 
-                    <div class="social"><i class="fa fa-facebook"></i> <i class="fa fa-twitter"></i> <i
-                                class="fa fa-linkedin"></i></div>
+                    <div class="social">
+                        <a href="http://www.facebook.com/court-connect"><i class="fa fa-facebook"></i></a>
+                        <i class="fa fa-twitter"></i> 
+                        <i class="fa fa-linkedin"></i>
+                    </div>
                 </div>
             </div>
             <div class="row copyright">

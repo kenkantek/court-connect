@@ -521,13 +521,13 @@ form.form-court{
 }
 .court-name-wrap .grid{
     float: left;
-    border: 1px solid #ccc;
+    border-left: 1px solid #ccc;
     padding: 5px 10px 0px 10px;
     width: 150px;
     background: #f2f2f2;
     color: #000;
     text-align: center;
-    height: 50px;
+    height: 49px;
     cursor: pointer;
 }
 .grid-content-wap .grid-row{
@@ -551,6 +551,9 @@ form.form-court{
     border-right: 0px;
     height: 20px;
 }
+.grid-content-wap .grid-row:last-child .day-grid{
+    border-right: 1px solid #ddd;
+}
 .grid-row.col-hour .grid-null{
     width: 100px;
     height: 50px;
@@ -565,11 +568,21 @@ form.form-court{
 .grid-content-wap .grid-row .grid.g2{
     height: 40px;
 }
-.grid-content-wap .grid-row .grid.g0{
+.grid-content-wap .grid-row .grid.g0:not(.unavailable),.grid-content-wap .grid-row .grid.g0:not(.closed){
     height: 0px;
     padding: 0;
     opacity: 0;
     display: none;
+}
+.grid-content-wap .grid-row .grid.g2.unavailable, .grid-content-wap .grid-row .grid.g2.closed{
+    height: 20px;
+}
+.grid-content-wap .grid-row .grid.g0.unavailable, .grid-content-wap .grid-row .grid.g0.closed{
+    display: block;
+    height: 20px;
+    font-size: 0px;
+    opacity: 1;
+    border-left: 1px solid #ccc;
 }
 .grid-content-wap .grid-row .grid.g0.gn{
     display: block;
@@ -578,6 +591,11 @@ form.form-court{
     height: 20px;
     cursor: text;
     font-size: 0px;
+}
+.grid-content-wap .grid-row .grid.g0.gn.available, .grid-content-wap .grid-row .grid.g0.gn.closed{
+    height: 20px;
+    border-left: 1px solid #ccc;
+    opacity: 1;
 }
 .grid-content-wap .grid-row .grid.g1{
     height: 20px;

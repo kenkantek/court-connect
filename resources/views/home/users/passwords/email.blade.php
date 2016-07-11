@@ -9,7 +9,7 @@
                 <h2 style="margin-top: 50px; margin-bottom: -50px;"><span>Forgot Password</span></h2>
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-12" style="margin-top: 5%">
                 @include('home.blocks.error')
             </div>
 

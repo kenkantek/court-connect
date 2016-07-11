@@ -2,18 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\UserAcceptFriendEvent;
-use App\Events\UserAddFriendEvent;
 use App\Events\UserBookingEvent;
 use App\Events\UserContactEvent;
 use App\Events\UserCreateEvent;
-use App\Events\UserEventFollowing;
-use App\Events\UserPostChatEvent;
-use App\Events\UserPostFeedEvent;
 use App\Models\Booking;
 use App\Models\Setting\Contact;
 use Illuminate\Support\Facades\Redirect;
-use App\Feed;
 use App\User;
 use Caffeinated\Flash\Facades\Flash;
 use Illuminate\Support\Facades\Auth;

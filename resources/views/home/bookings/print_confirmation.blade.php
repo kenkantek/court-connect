@@ -1,14 +1,3 @@
-<?php
-$dayOfWeek = [
-        "1" => "Mondays",
-        "2" =>"Tuesdays",
-        "3"=>"Wednesdays",
-        "4"=>"Thursdays",
-        "5"=>"Fridays",
-        "6" => "Saturdays",
-        "7" => "Sundays"
-];
-?>
 <table width="650px" border="0" cellspacing="0" cellpadding="0" style="margin:10px auto">
     <tbody>
     <tr style="background: url({{ url("/")."/resources/home/images/header-bg.jpg"}}) ">
@@ -32,7 +21,7 @@ $dayOfWeek = [
     <tr>
         <td>
             <div style="line-height:18px;color:#333">
-                <h1 style="font-size:20px;font-weight:bold;color:#cc0000">Congratulations you have successfully ordered!</h1>
+                <h1 style="font-size:20px;font-weight:bold;color:#cc0000">Congratulations you have reserved a court!</h1>
                     <span style="display:block;padding:10px 0">Hello
                         <strong>{{$booking['billing_info']['first_name']. " ". $booking['billing_info']['last_name']}}</strong>,
                     </span>
@@ -125,15 +114,23 @@ $dayOfWeek = [
                     <table bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tbody>
                         <tr bgcolor="#13234e" style="color:#fff;height:25px; text-align: left">
-                            <th scope="col" style="padding:5px">Booking Type</th>
-                            <th scope="col" style="padding:5px">Date</th>
-                            <th scope="col" style="padding:5px">Time/Length</th>
-                            <th scope="col" style="padding:5px">Cost</th>
+                            <th scope="col" style="padding:5px 5px 5px 0px">Booking Type</th>
+                            <th scope="col" style="padding:5px 5px 5px 0px">Date</th>
+                            <th scope="col" style="padding:5px 5px 5px 0px">Time/Length</th>
+                            <th scope="col" style="padding:5px 5px 5px 0px">Cost</th>
                         </tr>
                         <tr>
                             <td style="padding:5px 0;">{{$booking['type']}}</td>
-                            <td style="padding:5px 0;">{{$booking['type'] == 'contract' ? $booking['date_range_of_contract']['from']." - ".$booking['date_range_of_contract']['to']." / ".$dayOfWeek[$booking['day_of_week']] : $booking['date']}}</td>
-                            <td style="padding:5px 0;">{{$booking['hour'] <=12 ? str_replace(".5",":30",$booking['hour'])."am" : str_replace(".5",":30",($booking['hour'] - 12))."pm"}} / {{$booking['hour_length']}}Hour</td>
+                            <td>
+                                @if($booking->type == "contract")
+                                    <div style="font-weight: bold">Date: {{$booking->date_range_of_contract['from']." - ".$booking->date_range_of_contract['to']}}</div>
+                                    <div>Day of Week: {{dayOfWeek($booking->day_of_week)}}</div>
+                                    <div>Number of Weeks: {{daysOfWeekBetween($booking->date_range_of_contract['from'],$booking->date_range_of_contract['to'],$booking->day_of_week)}}</div>
+                                @else
+                                    <div>{{date('l jS F Y', strtotime($booking->date))}}</div>
+                                @endif
+                            </td>
+                            <td style="padding:5px 0;">{{format_hour($booking['hour'])}} / {{str_replace('am','',str_replace('pm','',format_hour($booking->hour_length)))}} hour</td>
                             <td style="padding:5px 0;">${{$booking['total_price']}}</td>
                         </tr>
                         <tr align="center">
@@ -156,7 +153,7 @@ $dayOfWeek = [
         <td style="padding-top:20px"></td>
     </tr>
     <tr>
-        <td align="center">Thank you for using the service at the Court Connect!</td>
+        <td align="center">Thank you for booking with Court Connect!</td>
     </tr>
 
     </tbody>
