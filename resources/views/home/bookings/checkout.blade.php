@@ -54,7 +54,6 @@
                     @endif
 
                     <div class="alert-message-box alert alert-danger alert-dismissible hide" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <div class="alert-content"></div>
                     </div>
 
@@ -185,7 +184,7 @@
                                         <div class="form-group">
                                             <label for="zip_code" class="control-label col-lg-2 col-md-3">Zipcode *</label>
                                             <div class="col-lg-3 col-md-3">
-                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->zip_code: ""}}" name="customer[zip_code]" type="text" id="input-zip_code" placeholder="Enter Zipcode" value="" />
+                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->zip_code: ""}}" required name="customer[zip_code]" type="text" id="input-zip_code" placeholder="Enter Zipcode" value="" />
                                             </div>
                                             <div class="col-lg-3 col-md-3">
                                                 <button class="btn-sub btn-get-address-lookup" type="button" style="padding: 9px;"> Address Lookup</button>
@@ -194,11 +193,11 @@
                                         <div class="form-group">
                                             <label for="input-address1" class="control-label col-lg-2 col-md-3">Address 1 *</label>
                                             <div class="col-lg-10 col-md-9">
-                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->address1: ""}}" name="customer[address1]" type="text" id="input-address1" placeholder="Enter Address 1" value=""/>
+                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->address1: ""}}" required name="customer[address1]" type="text" id="input-address1" placeholder="Enter Address 1" value=""/>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="input-address2" class="control-label col-lg-2 col-md-3">Address 2 *</label>
+                                            <label for="input-address2" class="control-label col-lg-2 col-md-3">Address 2</label>
                                             <div class="col-lg-10 col-md-9">
                                                 <input class="form-control" value="{{Auth::user() ? Auth::user()->address2: ""}}" name="customer[address2]" type="text" id="input-address2" placeholder="Enter Address 2"/>
                                             </div>
@@ -206,13 +205,13 @@
                                         <div class="form-group">
                                             <label for="input-city" class="control-label col-lg-2 col-md-3">City *</label>
                                             <div class="col-lg-10 col-md-9">
-                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->city: ""}}" name="customer[city]" type="text" id="input-city" placeholder="Enter City"/>
+                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->city: ""}}" required name="customer[city]" type="text" id="input-city" placeholder="Enter City"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="input-state" class="control-label col-lg-2 col-md-3">State *</label>
                                             <div class="col-lg-10 col-md-9">
-                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->state: ""}}" name="customer[state]" type="text" id="input-state" placeholder="Enter State"/>
+                                                <input class="form-control" value="{{Auth::user() ? Auth::user()->state: ""}}" required name="customer[state]" type="text" id="input-state" placeholder="Enter State"/>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -238,11 +237,11 @@
                                             <div class="form-group">
                                                 <div class="col-lg-5 col-md-5 text-left">
                                                     <label for="player-1-name">Player Name</label>
-                                                    <input class="form-control player_name" value="{{Auth::user() ? Auth::user()->first_name ." ". Auth::user()->last_name: ""}}" type="text" placeholder="Player Name"/>
+                                                    <input class="form-control player_name" value="" type="text" placeholder="Player Name"/>
                                                 </div>
                                                 <div class="col-lg-7 col-md-7 text-left">
                                                     <label for="player-1-email">Player Email</label>
-                                                    <input class="form-control player_email" value="{{Auth::user() ? Auth::user()->email: ""}}" type="email" placeholder="Player Email"/>
+                                                    <input class="form-control player_email" value="" type="email" placeholder="Player Email"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -357,6 +356,14 @@
                                     </label>
                                 </div>
                                 <div class="form-group">
+                                    @if($court->booking_type =='contract')
+                                        <span class="col-lg-6 col-md-6 text-right">Number of Weeks:</span>
+                                        <label class="col-lg-6 col-md-6 text-left">
+                                            <div class="title-day" style="display: inline-block">{{daysOfWeekBetween($court->contract->start_date,$court->contract->end_date,$request->input('dayOfWeek'))}}</div>
+                                        </label>
+                                    @endif
+                                </div>
+                                <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Time:</span>
                                     <label class="col-lg-6 col-md-6 text-left">
                                         @if($court->booking_type =='contract')
@@ -464,16 +471,16 @@
                 $("#group-player").append($("#alone-form-player-info").html())
             }
             $("#group-player input[type=text]").attr('required',"required");
-            $("#group-player .player_name").attr({'name':'player_name[]','required':'required'});
-            $("#group-player .player_email").attr({'name':'player_email[]','required':'required'});
+            $("#group-player .player_name").attr({'name':'player_name[]'});
+            $("#group-player .player_email").attr({'name':'player_email[]'});
 
 
             $("#numplayer").change(function(){
                 $("#group-player").html('');
                 for(var i=0; i < parseInt($(this).val()); i++){
                     $("#group-player").append($("#alone-form-player-info").html());
-                    $("#group-player .player_name").attr({'name':'player_name[]','required':'required'});
-                    $("#group-player .player_email").attr({'name':'player_email[]','required':'required'});
+                    $("#group-player .player_name").attr({'name':'player_name[]'});
+                    $("#group-player .player_email").attr({'name':'player_email[]'});
                 }
             });
 

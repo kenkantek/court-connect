@@ -86,7 +86,7 @@
 
                     <div class="social">
                         <a href="http://www.facebook.com/court-connect"><i class="fa fa-facebook"></i></a>
-                        <i class="fa fa-twitter"></i> 
+                        <a href=" http://www.twitter.com/court_connect"><i class="fa fa-twitter"></i></a>
                         <i class="fa fa-linkedin"></i>
                     </div>
                 </div>

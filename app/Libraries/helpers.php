@@ -31,7 +31,7 @@ function date_from_database($time, $format = 'Y-m-d')
 function format_hour($hour)
 {
     $hour = number_format($hour,2);
-    return $hour <=12 ? str_replace(".50",":30",str_replace(".00",":00",$hour))."am" : str_replace(".50",":30",str_replace(".00",":30",($hour - 12)))."pm";
+    return $hour <=12 ? str_replace(".50",":30",str_replace(".00",":00",$hour))."am" : str_replace(".50",":30",str_replace(".00",":00",number_format($hour - 12,2)))."pm";
 }
 
 function datediffInWeeks($date1, $date2)
@@ -492,7 +492,7 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
                     'payment_id' => isset($payment['id']) ? $payment['id'] : null,
                     'type' => $input['bookingDetail']['type'],
                     'date' => $input['bookingDetail']['date'],
-                    'status' => 'required',
+                    'status' => isset($payment['id']) ? 'paid' :  'required',
                     'status_booking' => 'create',
                     'day_of_week' => isset($input['bookingDetail']['dayOfWeek']) ? $input['bookingDetail']['dayOfWeek'] : null,
                     'court_id' => $input['bookingDetail']['court_id'],
@@ -507,8 +507,7 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
                     'num_player' => isset($input['players']['player_num']) ? $input['players']['player_num'] : null,
                     'billing_info' => json_encode($billing_info),
                     'payment_info' => json_encode($input['paymentDetail']),
-                    'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [],
-                        'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
+                    'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [], 'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
                     'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
                     'notes' => isset($text_notes) ? $text_notes : null
                 ]);

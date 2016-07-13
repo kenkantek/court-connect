@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PlayerRequest;
 use App\Models\Auth\User;
 use App\Models\Booking;
+use App\Models\Payments\Payment;
 use App\Models\Player;
 use Exception;
 use Illuminate\Http\Request;
@@ -70,7 +71,7 @@ class PlayerController extends Controller
     {
         $user = Auth::user();
         if ($request->password != $request->cfrpassword) {
-            return back()->withInput()->with(['flash_level' => 'danger', 'flash_message' => 'Password Is Not Match']);
+            return back()->withInput()->with(['flash_level' => 'danger', 'flash_message' => 'Password doesn\'t match']);
         }else if (!Hash::check($request->old_password, $user->password)) {
             return back()->withInput()->with(['flash_level' => 'danger', 'flash_message' => 'Old Password Is Not Correct']);
         } else {

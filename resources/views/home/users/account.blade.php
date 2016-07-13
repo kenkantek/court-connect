@@ -9,7 +9,7 @@
                 <h2><span>Your Account</span></h2>
                 <div class="container">
                     @if (Session::has('flash_message'))
-                        <div class="alert alert-{!! Session::get('flash_level') !!}">
+                        <div class="alert alert-{!! Session::get('flash_level') !!}" style="text-align: center">
                             {!! Session::get('flash_message') !!}
                         </div>
                     @endif
@@ -63,15 +63,18 @@
                                         @else
                                         <div>{{date('l jS F Y', strtotime($booking->date))}}</div>
                                         @endif
-                                        <div>at {{format_hour($booking->hour) }}</div>
-                                        <div>for {{str_replace('am','',str_replace('pm','',format_hour($booking->hour_length)))}} hour</div>
+                                        <div>Time: {{format_hour($booking->hour) }}</div>
+                                        <div>Length: {{str_replace('am','',str_replace('pm','',format_hour($booking->hour_length)))}} hour</div>
 
                                     </td>
                                     <td>
                                         <div>
+                                            Number of players: {{count(json_decode($booking->players_info))}}
                                             <ul>
                                                 @foreach(json_decode($booking->players_info)->name as $item)
-                                                    <li>{!! $item !!}</li>
+                                                    @if(!is_null($item) && $item != '')
+                                                        <li>{!! $item !!}</li>
+                                                    @endif
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -282,7 +285,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger">
-                        <p>You cannot change the booking. Please cancel and book again !</p>
+                        <p>You cannot change the booking. Please cancel and book again.</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -306,7 +309,7 @@
                         <thead>
                             <tr>
                                 <th style="padding: 10px 0px;" class="col-md-2 align-left">Reservation#</th>
-                                <th style="padding: 10px 0px;" class="col-md-3 align-left">Date/Time</th>
+                                <th style="padding: 10px 0px;" class="col-md-3 align-left">Date/Day/Time/Length</th>
                             </tr>
                         </thead>
                         <tbody align="left">

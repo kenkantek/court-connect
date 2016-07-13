@@ -8,14 +8,16 @@
 
 		</h3>
 		<div class="pull-right">
-			<label>
-				<input type="checkbox" id="lch-same_price" v-model="same_price" data-check="false" @click="checkSamePrice()">
-				<span>Offer member price</span>
-			</label>
-			<ul id="tabRate">
-				<li :class="{'active': is_member == 1}"  @click="setMember(1)">Members</li>
-				<li :class="{'active': is_member == 0}"  @click="setMember(0)">Non/Members</li>
-			</ul>
+			<div id="offer-price-court-rate" class="overlight">
+				<label>
+					<span>Offer member price</span>
+					<input type="checkbox" id="lch-same_price" data-check="false" @click="checkSamePrice()" style="width: 100%; height: 100%;">
+				</label>
+				<ul id="tabRate" class="h">
+					<li :class="{'active': is_member == 1}"  @click="setMember(1)">Members</li>
+					<li :class="{'active': is_member == 0}"  @click="setMember(0)">NonMembers</li>
+				</ul>
+			</div>
 		</div>
 		<div class="clearfix"></div>
 		<div id="contentMember" class="content-item">
@@ -317,8 +319,12 @@
 				}
 				if(this.indexDataRates != null){
 					$(".box-data-rates .overlight").hide();
+					$("#offer-price-court-rate").removeClass('overlight');
 				}
-				else $(".box-data-rates .overlight").show();
+				else {
+					$(".box-data-rates .overlight").show();
+					$("#offer-price-court-rate").addClass('overlight');
+				}
 				this.resetSamePrice();
 			},
 			reloadCourts: function () {
@@ -346,6 +352,10 @@
 		},
 		ready(){
 			this.resetSamePrice();
+			var _this = this;
+			$(".bootstrap-switch-id-lch-same_price span").on('click',function(){
+				_this.checkSamePrice();
+			});
 			$('.add_tooltip').click(function(event) {
 				event.preventDefault();
 				$('.tooltip1').toggleClass('hidden');
@@ -392,7 +402,7 @@
 				this.courts_choice = [];
 				this.dataRates = [];
 				this.dataRate = _.cloneDeep(this.defaultRate);
-				showNotice('success', res.data.success_msg, 'Update Multi Success!');
+				showNotice('success', res.data.success_msg, 'Rate for Multiple Courts Updated !');
 				$("#clubSetting-wrapper .loading").remove();
 				this.removeSelect();
 			}, (res) => {
@@ -413,17 +423,17 @@
 				this.removeSelect();
 			},
 			checkSamePrice(){
-				if(!this.same_price){
+				if($(".bootstrap-switch-id-lch-same_price").hasClass('bootstrap-switch-off')){
 					$("#tabRate").addClass('h');
 					this.same_price = 1;
-				}else{
+				}else if($(".bootstrap-switch-id-lch-same_price").hasClass('bootstrap-switch-on')){
 					$("#tabRate").removeClass('h');
 					this.same_price = 0;
 				}
 			},
 			resetSamePrice(){
 				this.same_price = false;
-				$("#tabRate").removeClass('h');
+				$("#tabRate").addClass('h');
 				$('#lch-same_price').bootstrapSwitch('state',false);
 			},
 			addNewCourtRate(){

@@ -34,14 +34,14 @@ class PlayerRequest extends Request
     public function messages()
     {
         return [
-            'firstname.required' => "Please Enter First Name",
-            'lastname.required' => "Please Enter Last Name",
-            'email.required' => "Please Enter Email",
-            'email.email' => "Email Is Not Correct",
-            'email.unique' => "Email Is Exists",
-            'password.required' => "Please Enter Password",
-            'cfrpassword.required' => "Please Enter Confirm Password",
-            'cfrpassword.same' => "Password Is Not Match",
+            'firstname.required' => "Please Enter First Name.",
+            'lastname.required' => "Please Enter Last Name.",
+            'email.required' => "Please Enter Email.",
+            'email.email' => "Invalid email address.",
+            'email.unique' => "Email already exists.",
+            'password.required' => "Please Enter Password.",
+            'cfrpassword.required' => "Please Enter Confirm Password.",
+            'cfrpassword.same' => "Password doesn't match.",
         ];
     }
 }

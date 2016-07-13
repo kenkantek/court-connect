@@ -6,9 +6,6 @@
                 <h2 style="margin-top: 50px; margin-bottom: -50px;"><span>Forgot Password</span></h2>
             </div>
 
-            <div class="col-sm-12">
-                @include('home.blocks.error')
-            </div>
 
             <div class="login-box">
                 <div>
@@ -16,7 +13,7 @@
                         {!! csrf_field() !!}
                         <input type="hidden" name="token" value="{{ $token }}">
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback">
-                            <input type="email" class="form-control" name="email" value="{{ $email or old('email') }}" placeholder="E-Mail Address">
+                            <input type="email" class="form-control hidden" name="email" value="{{ $email or old('email') }}" placeholder="E-Mail Address">
                             <span class="fa fa-envelope-o form-control-feedback"></span>
                             @if ($errors->has('email'))
                                 <span class="help-block">

@@ -66,7 +66,8 @@ $dayOfWeek = [
                                             @foreach ($contract['prices'] as $k=>$price)
                                                 <div class="row-day clearfix">
                                                     <div class="title-day">{{$dayOfWeek[$request->input('dayOfWeek')[$k]]}} | Contract</div>
-                                                    <div class="title-day" style="font-weight: bold; font-size: 1.2em">{{$contract['start_date']." - ".$contract['end_date']}}</div>
+                                                    <div class="title-day" style="font-weight: bold; font-size: 1.2em; display: inline-block">{{$contract['start_date']." - ".$contract['end_date']}} | </div>
+                                                    <div class="title-day" style="display: inline-block">Number of Weeks: {{daysOfWeekBetween($contract['start_date'],$contract['end_date'],$request->input('dayOfWeek')[$k])}}</div>
                                                     <hr>
                                                     @foreach ($price as $item)
                                                     <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">

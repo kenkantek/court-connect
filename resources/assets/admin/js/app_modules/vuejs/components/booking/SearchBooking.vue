@@ -22,7 +22,7 @@
         <div class="close-search hidden" @click.prevent="resetResultSearch()" style="position: absolute;top: 10px;right: 20px;font-size: 3em; cursor: pointer">
             <span aria-hidden="true">X</span>
         </div>
-        <div id="result_search" class="hidden">
+        <div id="result_search" class="hidden" style="max-height: 200px; overflow: scroll">
             <h3 class="text-center">Search Results</h3>
             <table>
                 <thead>
@@ -42,7 +42,7 @@
                             Court {{item['court_name']}} - {{item['date']}} @ {{item['hour']}}
                             <a href="#" @click="fetchDataOfBooking(item['id'])" class="viewbooking btn btn-primary">View</a>
                             <a href="#" class="editbooking btn btn-primary">Edit</a>
-                            <a href="#" @click.prevent="checkInBooking(item[id])" class="checkIn btn btn-primary">Check In</a>
+                            <a v-if="item['is_checkIn'] == 0" href="#" @click.prevent="checkInBooking(item['id'])" class="checkIn btn btn-primary">Check In</a>
                         </td>
                     </tr>
                 </tbody>
@@ -222,7 +222,7 @@
                 this.$http.get(laroute.route('booking.check-in', {one: booking_id})).then(res => {
                     if(res.data.error == false){
                         showNotice('success', "Update accept payment success!", 'Update Success!');
-                        this.payment_info.is_checkIn = 1;
+                        this.booking.is_checkIn = 1;
                     }else showNotice('error', res.data.message, 'Error!');
                 }, res => {
 

@@ -58,7 +58,7 @@ $(function () {
         });
     });
 
-    $("#cc-request-acount").click(function(e){
+    $(".cc-request-acount").click(function(e){
         e.preventDefault();
         $('#cc-modal-request-account').modal()
     })

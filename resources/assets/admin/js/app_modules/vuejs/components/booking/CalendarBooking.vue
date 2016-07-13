@@ -42,7 +42,7 @@
         <div class="clearfix"></div>
         <div class="days-in-month-wrap" class="clearfix">
             <div class="days">
-                <div v-for="(index,date) in dates" @click="changeDay('cal_day'+index,date.dayFullFormat)" id="cal_day{{index}}" class="day-item {{date.status}}"  data-value="{{ date.dayFullFormat}}">
+                <div v-for="(index,date) in dates" @click="changeDay('cal_day'+index,date.dayFullFormat)" id="cal_day{{index}}" class="day-item {{date.status}}"  data-value="{{ date.dayFullFormat}}" style="width: {{width_day_item}}px">
                     {{ days[date.day_of_week] }} <br>
                     <span>{{ months[date.month] + " " + date.day + " " + " " + date.year % 100 }} </span>
                 </div>
@@ -138,7 +138,7 @@
                                     </tr>
                                     <tr>
                                         <td align="right">Start Time</td>
-                                        <td>{{booking['hour'] + " - " + (booking['hour'] + booking['hour_length'])}} | {{booking['date']}}</td>
+                                        <td>{{booking['hour']}} | {{booking['date']}}</td>
                                     </tr>
                                     <tr>
                                         <td align="right">Length</td>
@@ -369,16 +369,17 @@
                 },
                 multi_deal: {},
                 grids_selected: [],
+                width_day_item: 0
             }
         },
     watch: {
         now()
         {
-            this.updateCalendar();
+
         },
         show()
         {
-            this.updateCalendar();
+
         },
         clubSettingId: 'reloadAsyncData',
         dateChooise: 'reloadAsyncData',
@@ -411,14 +412,15 @@
             }
             return days;
         },
-        updateCalendar () {
+        updateCalendar() {
+
             var arr = [];
-            var time = this.now;
             var day_now = new Date();
             var date_current = this.dateChooise;
             var status = 'date-notcurrent';
-            var daysInMonth = this.getDaysInMonth(time.getMonth(), time.getFullYear());
+            //var daysInMonth = this.getDaysInMonth(day_now.getMonth(), day_now.getFullYear());
             var index_date_current = 0;
+            var daysInMonth = this.getDaysInMonth(date_current.split('/')[0] - 1, date_current.split('/')[2]);
             daysInMonth.forEach(function(date, index){
                 //tmpTime = new Date(time.getFullYear(), time.getMonth(), i + 1);
                 if(date.getDate() == date_current.split('/')[1] ) {
@@ -431,6 +433,7 @@
             this.dates = arr;
             //set margin left
             var w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
+            this.width_day_item = w_grid;
             if(index_date_current >= 3) {
                 $('#calendar_bookings .days-in-month-wrap .days').css('margin-left', -(index_date_current - 3) * w_grid);
                 //console.log(index_date_current);
@@ -736,6 +739,7 @@
     ready () {
         this.now = this.dateChooise === null ? new Date(): this.parse(this.dateChooise);
         $(".gn" ).prop( "disabled", true );
+        this.updateCalendar();
     },
     beforeDestroy () {
 

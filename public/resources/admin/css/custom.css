@@ -779,6 +779,9 @@ form.form-court{
 #cc-modal-view-booking-search{
     outline: none;
 }
+#offer-price-court-rate{
+    position: relative;
+}
 .box-data-rates{
     position: relative;
 }
@@ -792,6 +795,9 @@ form.form-court{
     overflow: auto;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
+}
+#offer-price-court-rate.overlight{
+    opacity: 0;
 }
 table .arrow{
     padding: 8px;

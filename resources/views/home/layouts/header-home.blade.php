@@ -78,8 +78,17 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2 form-icon group-search-home-timepicker">
-                    <i class="glyphicon glyphicon-time"></i>
-                    <input type="time" class="form-control" name="s_time" id="search-timepicker" step="1800" placeholder="Time">
+                    <?php
+                        $arr_time = [
+                                "5:00"=>"5:00 AM","5:30"=>"5:30 AM","6:00"=>"6:00 AM","6:30"=>"6:30 AM","7:00"=>"7:00 AM","7:30"=>"7:30 AM",
+                                "8:00"=>"8:00 AM","8:30"=>"8:30 AM","9:00"=>"9:00 AM","9:30"=>"9:30 AM","10:00"=>"10:00 AM","10:30"=>"10:30 AM",
+                                "11:00"=>"11:00 AM","11:30"=>"11:30 AM","12:00"=>"12:00 PM","12:30"=>"12:30 PM","13:00"=>"1:00 PM","13:30"=>"1:30 PM",
+                                "14:00"=>"2:00 PM","14:30"=>"2:30 PM","15:00"=>"3:00 PM","15:30"=>"3:30 PM","16:00"=>"4:00 PM","16:30"=>"4:30 PM",
+                                "17:00"=>"5:00 PM","17:30"=>"5:30 PM","18:00"=>"6:00 PM","18:30"=>"6:30 PM","19:00"=>"7:00 PM","19:30"=>"7:30 PM",
+                                "20:00"=>"8:00 PM","20:30"=>"8:30 PM","21:00"=>"9:00 PM","21:30"=>"9:30 PM","22:00"=>"10:00 PM"
+                        ] ;
+                    ?>
+                    <input type="time" class="form-control glyphicon glyphicon-time" name="s_time" id="search-timepicker" step="900" placeholder="Time">
                     <div class="search-tooltip hidden">
                         <div class="tooltiptext time-kicker">
                             <div >
@@ -87,6 +96,7 @@
                                 <input class="form-control search-time" id="cc-input-search-time" value="08:00" type="time" step="1800">
                             </div>
                             <div>
+                                <br>
                                 <label for="opentime">Length</label>
                                 <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" value="">
                             </div>

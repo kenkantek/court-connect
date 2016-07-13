@@ -67,7 +67,7 @@
                 </p>
             </div>
             <div class="col-md-4 text-center">
-                <a href="http://www.facebook.com/courtconnect" class="btn btn-club">Find Out More</a>
+                <a href="#" class="btn btn-club cc-request-acount">Find Out More</a>
             </div>
         </div>
     </article>

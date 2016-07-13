@@ -556,6 +556,8 @@ class ManageBookingController extends Controller
 //            if($billing_info)
 //                $booking['billing_info'] = $billing_info;
 //        }
+        $booking['hour'] = format_hour($booking['hour']);
+        $booking['hour_length'] = str_replace("am","",str_replace("pm","",format_hour($booking['hour_length'])));
         return response()->json([
             'error' => false,
             'booking' => $booking

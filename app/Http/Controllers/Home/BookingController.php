@@ -119,7 +119,19 @@ class BookingController extends Controller{
             $input_validate['customer.password_confirmation'] = 'required|min:8';
         }
 
-        $v = \Validator::make($request->all(), $input_validate);
+        $messages = [
+            'customer.first_name.required' => 'The customer first name field is required.',
+            'customer.last_name.required' => 'The customer last name field is required.',
+            'customer.zip_code.required' => 'The customer zipcode field is required.',
+            'customer.address1.required' => 'The customer address field is required.',
+            'customer.city.required' => 'The customer city field is required.',
+            'customer.state.required' => 'The customer state field is required.',
+            'payment.type.required' => 'The payment type field is required.',
+            'customer.email.required' => 'The customer email field is required.',
+            'customer.password.required' => 'The customer password field is required.',
+            'customer.password_confirmation.required' => 'The confirm password field is required.'
+        ];
+        $v = \Validator::make($request->all(), $input_validate,$messages);
         if($v->fails())
             return response()->json(['error' => true,"messages"=>$v->errors()->all()]);
         else{

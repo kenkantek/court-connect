@@ -2,7 +2,6 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right">
-
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->fullname }}<b
                         class="caret"></b></a>
@@ -54,7 +53,7 @@
 
                     <div class="form-group">
                         <h3 class="caption title" style="font-size: 21px; width: 100%; margin-top: 20px; margin-bottom: 5px;">Manage a Tennis Club?</h3>
-                        <a href="#" id="cc-request-acount"><label class="form-label">Request an account</label></a>
+                        <a href="#" id="cc-request-acount" class="cc-request-acount"><label class="form-label">Request an account</label></a>
                     </div>
 
                 </form>
@@ -118,8 +117,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <img style="margin: auto; width: 180px;" src="{{ asset('resources/home/images/logo-color_05.png') }}" class="img-responsive logo" alt="logo">
                 <h4 class="caption title" style="width: 100%; font-size: 22px; margin: 20px 0px;">Clubs Owners - Request an Account</h4>
-                <p style="color:#000">Court Connect is a complete schedualing solution to connect your club with tennis fans. Call us now to discuss how managing and taking bookings can be made easy using Court-Connect.com</p>
-                <div class="md-phone" style="font-size: 26px; color: #000; padding-top: 25px;">Call <strong>123456789</strong></div>
+                <p style="color:#000">Court Connect is a complete scheduling solution to connect your club with tennis players. Call us now to discuss how managing and taking bookings can be made easy using court-connect.com</p>
+                <div class="md-phone" style="font-size: 26px; color: #000; padding-top: 25px;">Call <strong style="color: #63ac1e;">862-205-3858</strong></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

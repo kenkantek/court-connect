@@ -23,7 +23,7 @@
                     @else
                         <div class="form-group">
                             <br>
-                            <p>Enter your email address and we'll send you link to reset your password.</p>
+                            <p>Enter your email address and we will send a link to reset your password.</p>
                         </div>
                     @endif
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback">

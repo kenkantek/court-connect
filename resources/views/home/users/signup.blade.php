@@ -9,7 +9,7 @@
                 <h2><span>Sign Up To Court Connect</span></h2>
                 <span style="font-weight: bold;">Create a Court Connect account to book, edit and review your court reservations.</span>
                 <br><br>
-                <small><span class="red"> *</span> Manditory Field</small>
+                <small><span class="red"> *</span> Mandatory Field</small>
                 <br>
                 <br>
             </div>
@@ -70,7 +70,7 @@
                     <div class="col-sm-offset-3 col-sm-5">
                         <button type="submit" class="btn btn-default">Sign Up</button>
                         <div class="submit-text">
-                            <span>By Clicking Sign Up, You Agree to <a href="{{url('page/term-of-service')}}">Term of Service</a></span>
+                            <span>By clicking sign up, you agree to <a href="{{url('page/terms-of-use')}}" target="_blank">Terms of Service</a></span>
                         </div>
                     </div>
                 </div>

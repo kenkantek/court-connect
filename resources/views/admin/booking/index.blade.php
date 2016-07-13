@@ -85,7 +85,9 @@
 			}
 
 			var w_grid = ($('#calendar_bookings .days-in-month-wrap').width())/7;
+			console.log($('#calendar_bookings .days .day-item').css('width'));
 			$('#calendar_bookings .days .day-item').css('width',w_grid);
+			console.log($('#calendar_bookings .days .day-item').css('width'));
 
 			$("body").on('click','#next-day-in-month',function(){
 				var w_left = parseFloat($('#calendar_bookings .days-in-month-wrap .days').css('margin-left'));

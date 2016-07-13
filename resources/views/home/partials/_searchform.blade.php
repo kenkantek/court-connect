@@ -64,8 +64,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2 form-icon">
-                    <i class="glyphicon glyphicon-time"></i>
-                    {!! Form::time('s_time', $request->input('s_time'), ['id'=>'search-timepicker','class' => 'form-control'] ) !!}
+                    {!! Form::time('s_time', $request->input('s_time'), ['id'=>'search-timepicker','class' => 'form-control glyphicon glyphicon-time'] ) !!}
                     <div class="search-tooltip hidden">
                         <div class="tooltiptext">
                             <div >
