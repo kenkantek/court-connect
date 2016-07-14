@@ -22,8 +22,8 @@
                             <thead>
                             <tr>
                                 <th class="col-md-3">Club</th>
-                                <th class="col-md-2">Reservation#</th>
-                                <th class="col-md-3">Date/Time</th>
+                                <th class="col-md-2">Reservation/Price</th>
+                                <th class="col-md-3">Date/Time/# of Weeks</th>
                                 <th class="col-md-2">Players</th>
                                 <th class="col-md-2"></th>
                             </tr>
