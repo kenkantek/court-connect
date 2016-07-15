@@ -745,8 +745,9 @@ a.ui-state-default.ui-state-highlight {
 }
 
 .right-sidebar .detail-information .form-group{
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .right-sidebar .detail-price{
@@ -1234,6 +1235,7 @@ a.ui-state-default.ui-state-highlight {
     border: 1px solid #d8d8d8;
     margin: 0px auto;
     outline: none;
+    max-width: 100%;
 }
 .city-autocomplete{
     padding: 10px;
@@ -1610,6 +1612,12 @@ a.ui-state-default.ui-state-highlight {
 }
 .header .navbar-ex1-collapse{
 
+}
+.btn-info,.btn-info:hover{
+    background: green;
+    color: #fff;
+    outline: none;
+    border: 0px;
 }
 .header .navbar-ex1-collapse.in{
     position: fixed;

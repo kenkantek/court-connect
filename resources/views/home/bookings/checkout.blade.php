@@ -355,7 +355,7 @@
                                         @endif
                                     </label>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group clearfix">
                                     @if($court->booking_type =='contract')
                                         <span class="col-lg-6 col-md-6 text-right">Number of Weeks:</span>
                                         <label class="col-lg-6 col-md-6 text-left">
@@ -363,15 +363,16 @@
                                         </label>
                                     @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group clearfix">
                                     <span class="col-lg-6 col-md-6 text-right">Time:</span>
                                     <label class="col-lg-6 col-md-6 text-left">
                                         @if($court->booking_type =='contract')
                                             {{dayOfWeek($request->input('dayOfWeek'))." - "}}
                                         @endif
-                                        {{format_hour($request->input('hour_start'))}}</label>
+                                        {{format_hour($request->input('hour_start'))}}
+                                    </label>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group clearfix">
                                     <span class="col-lg-6 col-md-6 text-right">Length:</span>
                                     <label class="col-lg-6 col-md-6 text-left">{{$request->input('hour_length')}} Hour</label>
                                 </div>
@@ -470,7 +471,7 @@
             for(var i=0; i < parseInt($("#numplayer").val()); i++){
                 $("#group-player").append($("#alone-form-player-info").html())
             }
-            $("#group-player input[type=text]").attr('required',"required");
+            //$("#group-player input[type=text]").attr('required',"required");
             $("#group-player .player_name").attr({'name':'player_name[]'});
             $("#group-player .player_email").attr({'name':'player_email[]'});
 

@@ -509,7 +509,8 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
                     'payment_info' => json_encode($input['paymentDetail']),
                     'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [], 'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
                     'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
-                    'notes' => isset($text_notes) ? $text_notes : null
+                    'notes' => isset($text_notes) ? $text_notes : null,
+                    'str_random' => str_random(50)
                 ]);
                 return [
                     'error' => false,
@@ -521,13 +522,14 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
                 $range_date = createRangeDate($contract['start_date'], $contract['end_date'], $input['bookingDetail']['dayOfWeek']);
 
                 $booking = null;
+                $str_random = str_random(50);
                 foreach ($range_date as $date) {
                     $booking = Booking::create([
                         'payment_id' => isset($payment['id']) ? $payment['id'] : null,
                         'type' => $input['bookingDetail']['type'],
                         'date' => $date,
                         'date_range_of_contract' => json_encode(['from' => $contract['start_date'], 'to' => $contract['end_date']]),
-                        'status' => 'required',
+                        'status' => isset($payment['id']) ? 'paid' :  'required',
                         'status_booking' => 'create',
                         'info_contract' => json_encode(['id' => $contract['id'], 'start_date' => $contract['start_date'], 'end_date' => $contract['end_date']]),
                         'day_of_week' => isset($input['bookingDetail']['dayOfWeek']) ? $input['bookingDetail']['dayOfWeek'] : null,
@@ -546,7 +548,8 @@ function booking($input){ //$input['bookingDetail'], $input['paymentDetail'], $i
                         'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [],
                             'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
                         'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
-                        'notes' => isset($text_notes) ? $text_notes : null
+                        'notes' => isset($text_notes) ? $text_notes : null,
+                        'str_random' => $str_random
                     ]);
                 }
 

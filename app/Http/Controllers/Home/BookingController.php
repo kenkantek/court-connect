@@ -199,12 +199,14 @@ class BookingController extends Controller{
                 //call booking from helper
                 $booking = booking($data_order);
 
-                if(!$booking['error'])
+                if(!$booking['error']) {
+                    if ($booking['booking']['player_id'])
+                        event(new UserBookingEvent($booking['booking']['player_id'], $booking['booking']['id']));
                     return response()->json([
                         'error' => false,
                         'payment_id' => $booking['booking']['id']
                     ]);
-                else{
+                }else{
                     return response()->json([
                         'error' => true,
                         'messages' => $booking['messages'] ? $booking['messages'] : "An error occurred in the implementation process"
