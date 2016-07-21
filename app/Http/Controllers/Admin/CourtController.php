@@ -86,10 +86,13 @@ class CourtController extends Controller
                     $rate->rates_member = json_encode($inputRate['datarate']['rates_nonmember']);
                     $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
                 }
+                $rate->is_same_price = 1;
             }else{
                 $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);
                 $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
+                $rate->is_same_price = 0;
             }
+            
             $rate->end_date = $inputRate['datarate']['end_date'];
             $rate->start_date = $inputRate['datarate']['start_date'];
             $rate->name = $inputRate['datarate']['name'];

@@ -25,7 +25,7 @@ class SuperAdminController extends Controller
         \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect','apimap','geocomplete']);
         \Assets::addStylesheets(['select2', 'uniform', 'monthly', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
         \Assets::addAppModule(['app']);
-        $title = 'Dashboard Super Admin';
+        $title = 'Super Admin';
         return view('admin.super.index', compact('title'));
     }
     public function getClubs($skip, $limit)

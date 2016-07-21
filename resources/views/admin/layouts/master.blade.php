@@ -16,17 +16,17 @@
             {!! HTML::script($script['url']) !!}
             @if ($script['fallback'])
                 <script>window.{!! $script['fallback'] !!} || document.write('<script src="{{ $script['fallbackURL'] }}"><\/script>')</script>
-                @endif
-                @else
-                {!! HTML::script($script) !!}
-                @endif
-                @endforeach
-                        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-                <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-                <!--[if lt IE 9]>
-                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-                <![endif]-->
+        @endif
+    @else
+        {!! HTML::script($script) !!}
+    @endif
+@endforeach
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
     <script>
         var base_url = "{{url('/')}}";
     </script>
@@ -44,7 +44,7 @@
                 :delete_club.sync = "delete_club"
                 :title="'{!! $title !!}'"
                 :user="user"
-                ></header-main>
+        ></header-main>
 
     </header>
     <!-- Left side column. contains the logo and sidebar -->
@@ -63,9 +63,9 @@
                 </li>
 
                 @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
-                <li>
-                    <a href="{{ route('reports.index') }}" data-toggle="tooltip" data-placement="right" title="Reports"><i class="fa fa-area-chart"></i></a>
-                </li>
+                    <li>
+                        <a href="{{ route('reports.index') }}" data-toggle="tooltip" data-placement="right" title="Reports"><i class="fa fa-area-chart"></i></a>
+                    </li>
                 @endif
 
                 <li>
@@ -76,11 +76,11 @@
                 </li>
 
                 @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
-                <li>
-                    <a href="{{ route('clubs.setting') }}" data-toggle="tooltip" data-placement="right" title="Club Setting">
-                        <i class="fa fa-cogs"></i>
-                    </a>
-                </li>
+                    <li>
+                        <a href="{{ route('clubs.setting') }}" data-toggle="tooltip" data-placement="right" title="Club Setting">
+                            <i class="fa fa-cogs"></i>
+                        </a>
+                    </li>
                 @endif
 
                 @if (Auth::user()->is_super)
@@ -163,16 +163,11 @@
                 type: 'GET',
                 dataType: 'json',
                 data: {csrf_token: csrf_token,club_id:club_id},
+            }).done(function(data) {
+                console.log(data);
+            }).fail(function(data) {
+                console.log("error");
             })
-                    .done(function(data) {
-                        console.log("success");
-                        console.log(data);
-                    })
-                    .fail(function(data) {
-                        console.log("error");
-                    })
-
-
         });
     });
 </script>

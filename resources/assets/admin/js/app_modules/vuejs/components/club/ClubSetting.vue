@@ -4,8 +4,6 @@
 			<section class="col-xs-12 col-md-5">
 				<div class="court_list courtbox clearfix">
 					<h3 class="title-box pull-left">Courts</h3>
-					
-					
 				</div>
 
 				<list-court
@@ -16,7 +14,7 @@
 					:index-data-rates.sync = "indexDataRates"
 				></list-court>
 			<div>
-					<a class="btn btn-primary btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
+				<a class="btn btn-primary btn-new-court" href="" @click.prevent="scrollAddnewCourt()"><i class="fa fa-plus-circle"></i> Add New Court</a>
 				<form-edit-court
 					v-if="courts_choice.length < 2"
 					:courts_choice="courts_choice"
@@ -36,6 +34,7 @@
 					:data-rates.sync="dataRates"
 					:btn-add-court.sync = "btnAddCourt"
 					:index-data-rates.sync = "indexDataRates"
+					:default-price.sync = "defaultPrice"
 					>
 						<span slot="temp">When creating a new court you can set the initial prices to match a previously created court. Select the court you'd like to copy the prices from.
 						</span>
@@ -50,6 +49,7 @@
 				:btn-add-court.sync = "btnAddCourt"
 				:index-data-rates.sync = "indexDataRates"
 				:reload-courts.sync = "reloadCourts"
+				:default-price.sync = "defaultPrice"
 				></court-rate>
 				
 			</section>
@@ -112,7 +112,8 @@
 			courts:[],
 			reloadCourts:1,
 			btnAddCourt:false,
-			indexDataRates: null
+			indexDataRates: null,
+			defaultPrice: 20
 		}
 	},
 	watch: {

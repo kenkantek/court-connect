@@ -202,96 +202,91 @@
 	var _ = require('lodash'),
 			deferred = require('deferred');
 	export default {
-		props:   ['clubSettingId','dataRates','courts_choice','btnAddCourt','reloadCourts','indexDataRates'],
-
+		props:   ['clubSettingId','dataRates','courts_choice','btnAddCourt','reloadCourts','indexDataRates','defaultPrice'],
 		data() {
 			return {
 				daterange_period: null,
 				dataRate : {
-					rates_member :[
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					rates_member: [
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
 					],
-					rates_nonmember :[
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					rates_nonmember:[
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
 					],
 					end_date:0,
 					start_date:0,
 					name:null,
 				},
 				defaultRate : {
-					rates_member :[
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					rates_member: [
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
 					],
-					rates_nonmember :[
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
-						{ A1: 20 , A2: 20, A3: 20, A4: 20, A5: 20, A6: 25, A7: 25 },
+					rates_nonmember: [
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+						{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
 					],
 					end_date:0,
 					start_date:0,
@@ -302,7 +297,8 @@
 				showNotice:false,
 				rateIndex:null,
 				is_member:1,
-				same_price: false,
+				same_price: true,
+				text: null
 			}
 		},
 		filters: {
@@ -311,11 +307,22 @@
 			}
 		},
 		watch: {
+			defaultPrice: function(){
+
+			},
 			indexDataRates: function () {
+				this.resetSamePrice();
 				if (this.dataRates.length >0 && this.indexDataRates != null) {
 					var index = this.indexDataRates ;
 					this.dataRate = this.dataRates[index].datarate;
 					this.rateIndex = index;
+
+					if(this.dataRate.is_same_price == 0){
+
+						this.same_price = false;
+						$("#tabRate").removeClass('h');
+						$('#lch-same_price').bootstrapSwitch('state',true);
+					}
 				}
 				if(this.indexDataRates != null){
 					$(".box-data-rates .overlight").hide();
@@ -325,7 +332,6 @@
 					$(".box-data-rates .overlight").show();
 					$("#offer-price-court-rate").addClass('overlight');
 				}
-				this.resetSamePrice();
 			},
 			reloadCourts: function () {
 				this.priceSet =  20;
@@ -432,11 +438,51 @@
 				}
 			},
 			resetSamePrice(){
-				this.same_price = false;
+				this.same_price = true;
 				$("#tabRate").addClass('h');
 				$('#lch-same_price').bootstrapSwitch('state',false);
 			},
 			addNewCourtRate(){
+
+				this.defaultRate.rates_member = [
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+				];
+				this.defaultRate.rates_nonmember = [
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+					{ A1: this.defaultPrice , A2: this.defaultPrice, A3: this.defaultPrice, A4: this.defaultPrice, A5: this.defaultPrice, A6: this.defaultPrice, A7: this.defaultPrice },
+				];
+
 				//set price default
 				this.dataRate = _.cloneDeep(this.defaultRate);
 

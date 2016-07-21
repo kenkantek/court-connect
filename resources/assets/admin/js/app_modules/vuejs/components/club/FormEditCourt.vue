@@ -33,6 +33,15 @@
 					</select>
 				</div>
 			</div>
+
+			<div class="form-group" :class=" {'has-error' : (court.rate == null && submit == true)}">
+				<label for="name" class="col-sm-4 control-label">Default rate</label>
+				<div class="col-sm-8">
+					<input class="form-control" placeholder="Default rate" name="default_rate" type="text" id="default_rate"
+						   v-model='court.default_rate'>
+				</div>
+			</div>
+
 			<div>
 				<slot name="temp"></slot>
 				<button type="button" id="btnEditCourt"  class="btn btn-primary pull-right" @click.prevent="editCourt()">Save Court</button>

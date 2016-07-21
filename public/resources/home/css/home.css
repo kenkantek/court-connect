@@ -465,7 +465,7 @@ h1 {
 select {
     padding-left: 35px;
     font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
-    height: 38px
+    height: 35px
 }
 
 div.ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all {
@@ -1534,11 +1534,18 @@ a.ui-state-default.ui-state-highlight {
 }
 #search-timepicker{
     font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
+    width: 100%;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    height: 35px;
+    line-height: 35px;
 }
 #search-timepicker:before{
     color: #63ac1e;
     font-family: 'Glyphicons Halflings';
     padding-right: 10px;
+    height: 35px;
+    line-height: 35px;
 }
 #cc-search-form select[name="court"] ~ .select2{
     width: 100% !important;
@@ -1626,6 +1633,7 @@ a.ui-state-default.ui-state-highlight {
     position: fixed;
     z-index: 999;
     left: 0px;
+    height: 100%;
 }
 .alert-danger{
     background: none;
@@ -1636,6 +1644,9 @@ a.ui-state-default.ui-state-highlight {
     text-align: center;
 }
 @media screen and (max-width: 600px){
+    .app-bar .col-md-4 span{
+        font-size: 20px;
+    }
     .h1-mobile{
         margin: 15px auto;
         font-size: 2em;
@@ -1649,6 +1660,10 @@ a.ui-state-default.ui-state-highlight {
     .row.line-content{
         width: auto;
         box-sizing: border-box;
+    }
+    .line-content:before {
+        content: '';
+        border-top: 0px;
     }
     .row.line-content .thumbnail{
         width: 100%;

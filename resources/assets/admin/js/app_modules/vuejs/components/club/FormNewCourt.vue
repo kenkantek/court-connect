@@ -22,7 +22,7 @@
 			<div class="form-group" :class=" {'has-error' : (court.surface_id == null && submit == true)}">
 				<label for="surface_type" class="col-sm-4 control-label">Surface Type *</label>
 				<div class="col-sm-8">
-					<select class="form-control" name="surface" v-model='court.surface_id'>
+					<select class="form-control" id="surface_type" name="surface" v-model='court.surface_id'>
 						<option
 							v-for="val in surface"
 							:value="val.id">
@@ -34,12 +34,21 @@
 			<div class="form-group" >
 				<label for="basic_price" class="col-sm-4 control-label">Basic Price *</label>
 				<div class="col-sm-8">
-					<select class="form-control" name="price" v-model='court.base_price' @change="updateDataRates">
+					<select class="form-control" id="basic_price" name="price" v-model='court.base_price' @change="updateDataRates">
 						<option value="0">-------</option>
 						<option  v-for="court in courts" value="{{court.id}}">Same price as {{court.name}}</option>
 					</select>
 				</div>
 			</div>
+
+			<div class="form-group" :class=" {'has-error' : (court.rate == null && submit == true)}">
+				<label for="name" class="col-sm-4 control-label">Default rate</label>
+				<div class="col-sm-8">
+					<input class="form-control" placeholder="Default rate" name="default_rate" type="text" id="default_rate"
+						   v-model='defaultPrice' value="20">
+				</div>
+			</div>
+
 			<div>
 				<slot name="temp"></slot>
 				<button type="button" id="btnAddnewCourt"  class="btn btn-primary pull-right" @click.prevent="addCourt()">Add Court
@@ -51,7 +60,7 @@
 </template>
 <script>
 	export default {
-		props:['surface','courts','clubSettingId','reloadCourts','dataRates','btnAddCourt','indexDataRates'],
+		props:['surface','courts','clubSettingId','reloadCourts','dataRates','btnAddCourt','indexDataRates','defaultPrice'],
 		data() {
 		return {
 			court : {
