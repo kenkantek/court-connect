@@ -1,7 +1,7 @@
 /vendor
 /node_modules
 /public/storage
-/composer.lock
+composer.lock
 _ide_helper.php
 Homestead.yaml
 Homestead.json
@@ -12,3 +12,4 @@ error_log
 /public/resources/admin/js/app_modules/app.js
 /public/resources/admin/js/app_modules/app.js.map 
 /public/resources/admin/files/
+composer.phar
