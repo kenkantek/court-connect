@@ -120,13 +120,13 @@
 
 <!--END HEADER-->
 <!--App bar-->
-<div class="app-bar" style="padding: 11px 0 11px 0">
+<div class="app-bar" style="padding: 11px 0 11px 0;">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-xs-12 divine-appbar-r">
                 <a href="{!! route("home.deals") !!}" style="text-decoration: none; color: #fff"><span>Click here to find the best deals</span></a>
             </div>
-            <div class="col-md-8 col-xs-12 divine-appbar-l">
+            <div class="col-md-8 col-xs-12 divine-appbar-l" style="display: none !important;">
                 <div class="col-md-4 col-xs-12" style="font-size: 14px; line-height: 1.2em; margin-top: 10px">
                     Download the<br>
                     <span style="color: #63ac1e">Court Connect</span> App
