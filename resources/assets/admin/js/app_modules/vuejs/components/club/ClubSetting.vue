@@ -24,6 +24,7 @@
 					:reload-courts.sync="reloadCourts"
 					:data-rates.sync="dataRates",
 					:delete_court.sync = "delete_court",
+					:default-price.sync = "defaultPrice"
 					></form-edit-court>
 				<form-new-court
 					v-if="!courts_choice.length && btnAddCourt"
@@ -122,7 +123,6 @@
 				//this.dataRates = _.cloneDeep(this.courts_choice[0].rates);
 				this.dataRates = [];
 				for (var index in this.courts_choice) {    // don't actually do this
-
 					for (var i in this.courts_choice[index].rates) {
 						const datarate = _.cloneDeep(this.courts_choice[index].rates[i]);
 						const nameCourt = _.cloneDeep(this.courts_choice[index].name);

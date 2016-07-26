@@ -382,6 +382,7 @@
             d.days = $("#form_set_openday select[name=date_open]").val();
             d.open_time = $("#form_set_openday input[name=opentime]").val();
             d.close_time = $("#form_set_openday input[name=closetime]").val();
+
             d.end_date =  $("#daterange_open").data('daterangepicker').endDate.format('YYYY/MM/DD');
             d.start_date =  $("#daterange_open").data('daterangepicker').startDate.format('YYYY/MM/DD');
             d.club_id = this.clubSettingId;
@@ -450,7 +451,8 @@
                 }else{
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap');
                 }
-                $(".timepicker").timepicker();
+                $(".timepicker").timepicker('setTime', '6:00 AM');
+                $(".timepicker.closetime").timepicker('setTime', '22:00 PM');
             });
         },
         close () {

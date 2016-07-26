@@ -35,8 +35,11 @@
 				</thead>
 				<tbody>
 				<tr v-for="(index,time) in contractSelect.rates" track-by="$index">
-					<td class="td_field_label" v-if="index > 7"> {{ index - 7 }} pm</td>
-					<td class="td_field_label" v-else> {{ index + 5 }} am</td>
+					<td class="td_field_label" v-if="index == 0 "> 12 pm</td>
+					<template v-else>
+						<td class="td_field_label" v-if="index < 13"> {{ index }} am</td>
+						<td class="td_field_label" v-else> {{ index - 12 }} pm</td>
+					</template>
 					<td v-for="(key,rate) in time" class="price_hours" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</td>
 				</tr>
 				</tbody>
@@ -102,6 +105,10 @@
 		data() {
 			return {
 				rates :[
+					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
+					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
+					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
+					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
 					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
 					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
 					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },

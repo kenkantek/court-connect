@@ -97,6 +97,7 @@
 
 			}else{
 				this.$set('court.club_id', this.clubSettingId);
+				this.$set('court.default_rate', this.defaultPrice);
 				const court = this.court;
 				court.dataRates = _.cloneDeep(this.dataRates);
 				this.submit = true;
@@ -115,7 +116,7 @@
 					$('.unSelected').click();
 					$("#clubSetting-wrapper .loading").remove();
 				}, (res) => {
-					showNotice('error', 'Court Name is required!', 'Error!');
+					showNotice('error', 'Data invalid!', 'Error!');
 					$("#clubSetting-wrapper .loading").remove();
 				});
 			}

@@ -159,6 +159,8 @@ form.form-court{
 }
 #tabRate li.active{
     opacity: 1;
+    font-weight: bold;
+    color: #272902;
 }
 
 /* PAGE MANAGER BOOKINGS */

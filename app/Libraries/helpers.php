@@ -159,7 +159,7 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
 //                'error' => true,
 //                'message' => "The court is not a set price"
 //            ];
-        for($i=0; $i<17; $i++){
+        for($i=0; $i<24; $i++){
             $rates[$i]['A1'] = "N/A";
             $rates[$i]['A2'] = "N/A";
             $rates[$i]['A3'] = "N/A";
@@ -195,13 +195,44 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
         $rates_full[] = $rate;
     }
 
+    //check open time
+    $check_open_close_date = SetOpenDay::where('date',$date)->first();
+    if(isset($check_open_close_date)) {
+        if($check_open_close_date['open_time'] == "12:00 PM")
+            $check_open_close_date['open_time'] = "0:00";
+        else
+            $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
+
+        if($check_open_close_date['close_time'] == "12:00 PM")
+            $check_open_close_date['close_time'] = "24:00";
+        else
+            $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+
+        $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
+        $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
+
+    }
+
     for($i= $hour_start; $i< $hour_start + $hour_length; $i+=0.5){
-        $tmp_index = ($i - 5) *2;
+        if(isset($check_open_close_date)){
+            if($i < $open_time_date || $i >= $close_time_date ){
+                return [
+                    'error' => true,
+                    'price' => "N/A",
+                    'status' => 'close'
+                ];
+            }
+        }
+        $tmp_index = ($i) *2;
         if(!isset($rates_full[$tmp_index][$index_json])){
             $total_price ="ERROR";
             break;
         }
-        if($rates_full[$tmp_index][$index_json] == "N/A"){
+        else if(isset($court) && $court['default_rate'] != null){
+            $total_price = $court['default_rate'];
+            break;
+        }
+        else if($rates_full[$tmp_index][$index_json] == "N/A"){
             return [
                 'error' => true,
                 'price' => "N/A",

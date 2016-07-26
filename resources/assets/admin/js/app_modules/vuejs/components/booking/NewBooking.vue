@@ -125,7 +125,7 @@
                                     <div class="mb-group-sl">
                                         <div class="col-xs-12 col-md-12">
                                             <h4 class="mb-title-h4-modal text-center">Order Total: <strong class="price" style="">${{total_price}} </strong></h4>
-                                            <!--<div id="viewPriceOrder" class="btn" @click.prevent="viewPriceOrder()">View price</div>-->
+                                            <div id="viewPriceOrder" class="btn" @click.prevent="viewPriceOrder()">View price</div>
                                         </div>
                                     </div>
 
@@ -546,7 +546,7 @@
             payment_is_cash: false,
             is_process_booking: false,
             hours:[
-                {key: 5, value: "5am"}, {key: 5.50, value: "5:30am"}, {key: 6, value: "6am"}, {key: 6.50, value: "6:30am"},
+                {key: 6, value: "6am"}, {key: 6.50, value: "6:30am"},
                 {key: 7, value: "7am"}, {key: 7.50, value: "7:30am"}, {key: 8, value: "8am"}, {key: 8.50, value: "8:30am"},
                 {key: 9, value: "9am"}, {key: 9.50, value: "9:30am"}, {key: 10, value: "10am"}, {key: 10.50, value: "10:30am"},
                 {key: 11, value: "11am"}, {key: 11.50, value: "11:30am"}, {key: 12, value: "12am"}, {key: 12.50, value: "12:30pm"},
@@ -554,7 +554,11 @@
                 {key: 15, value: "3pm"}, {key: 15.50, value: "3:30pm"}, {key: 16, value: "4pm"}, {key: 16.50, value: "4:30pm"},
                 {key: 17, value: "5pm"}, {key: 17.50, value: "5:30pm"}, {key: 18, value: "6pm"}, {key: 18.50, value: "6:30pm"},
                 {key: 19, value: "7pm"}, {key: 19.50, value: "7:30pm"}, {key: 20, value: "8pm"}, {key: 20.50, value: "8:30pm"},
-                {key: 21, value: "9pm"}, {key: 21.50, value: "9:30pm"}, {key: 22, value: "10pm"}
+                {key: 21, value: "9pm"}, {key: 21.50, value: "9:30pm"}, {key: 22, value: "10pm"}, {key: 22.50, value: "10:30pm"},
+                {key: 23, value: "11pm"}, {key: 23.50, value: "11:30pm"}, {key: 0, value: "12pm"}, {key: 0.50, value: "0:30am"},
+                {key: 1, value: "1am"}, {key: 1.50, value: "1:30am"}, {key: 2, value: "2am"}, {key: 2.50, value: "2:30am"},
+                {key: 3, value: "3am"}, {key: 3.50, value: "3:30am"}, {key: 4, value: "4am"}, {key: 4.50, value: "4:30am"},
+                {key: 5, value: "5am"}, {key: 5.50, value: "5:30am"}
             ],
         }
     },

@@ -59,7 +59,7 @@ class ManageBookingController extends Controller
         $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
         $hour = $request->input('hour');
         $court_id = $request->input('court_id');
-        $limit_hour = $hour + 5 <= 22 ? 5 : (int)(22 - $hour);
+        $limit_hour = $hour + 5 <= 24 ? 5 : (int)(24 - $hour);
 
         $arr_lb_hour = [];
         $tmp_inc_hour = 1;
@@ -266,7 +266,8 @@ class ManageBookingController extends Controller
 
     public function getDataOfClub(Request $request){
         $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
-        $hours = range(5,22.5,0.5);
+        $hours = range(6,23.5,0.5);
+        $hours = array_merge($hours,range(0,5.5,0.5));
         $courts = Court::where('club_id',$request->input('club_id'))
             ->select(['id','name'])->orderBy('name')->get();
 
@@ -306,10 +307,19 @@ class ManageBookingController extends Controller
 
                 $check_open_close_date = SetOpenDay::where('date',$date)->first();
                 if(isset($check_open_close_date)) {
-                    $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
-                    $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+                    if($check_open_close_date['open_time'] == "12:00 PM")
+                        $check_open_close_date['open_time'] = "0:00";
+                    else
+                        $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
+
+                    if($check_open_close_date['close_time'] == "12:00 PM")
+                        $check_open_close_date['close_time'] = "24:00";
+                    else
+                        $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+
                     $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
                     $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
+
                     if($tmp_hour < $open_time_date || $tmp_hour >= $close_time_date ){
                         //$text = " ".$check_open_close_date['open_time']." ".($input['hour_start'] + $input['hour_length']);
                         $arr_hour["h_" . $hour]['status'] = 'unavailable';
@@ -318,7 +328,6 @@ class ManageBookingController extends Controller
                     $arr_hour["h_" . $hour]['status'] = 'closed';
                 }
             }
-
 
             //get booking
             $bookings = Booking::where('status_booking','!=','cancel')->where(['date'=>$date,'court_id'=>$court['id']])->get();

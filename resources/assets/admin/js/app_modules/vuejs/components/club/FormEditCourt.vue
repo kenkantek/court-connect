@@ -38,7 +38,7 @@
 				<label for="name" class="col-sm-4 control-label">Default rate</label>
 				<div class="col-sm-8">
 					<input class="form-control" placeholder="Default rate" name="default_rate" type="text" id="default_rate"
-						   v-model='court.default_rate'>
+						   v-model='defaultPrice'>
 				</div>
 			</div>
 
@@ -53,7 +53,7 @@
 </template>
 <script>
 	export default {
-		props:['courts_choice','surface','courts','clubSettingId','reloadCourts','dataRates','delete_court'],
+		props:['courts_choice','surface','courts','clubSettingId','reloadCourts','dataRates','delete_court','defaultPrice'],
 		data() {
 		return {
 			submit : false,
@@ -61,14 +61,17 @@
 	},
 	computed: {
 		court: function () {
-			if(this.courts_choice.length > 0)
+			if(this.courts_choice.length > 0) {
+				this.defaultPrice = this.courts_choice[0].default_rate;
 				return this.courts_choice[0];
+			}
 			else return null;
 		}
 	},
 	methods: {
 		editCourt(){
 			if(this.dataRates.length > 0 && this.court != null ){
+				this.$set('court.default_rate', this.defaultPrice);
 				const court = this.court;
 				court.dataRates = _.cloneDeep(this.dataRates);
 				console.log(court);
