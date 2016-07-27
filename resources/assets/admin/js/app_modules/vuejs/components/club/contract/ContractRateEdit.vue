@@ -18,33 +18,23 @@
 				<p>Select hours from grid and press apply to adjust hours</p>
 			</form>
 			<div class="clearfix"></div>
-			<table id="table-contract-rate-edit" class="table table-bordered table-hover table-th clearfix" style="margin-top: 20px"  >
-				<thead>
-				<tr>
-					<th style="text-align: right">
-						Starting Date <br>
-						Day of the Week <br>
-						Total Days w/ Holidays
-					</th>
-					<th v-for="(index,item) in dataDateTb" track-by="$index">
-						<div class="db-tb-day">{{item.date}}</div>
-						<div class="db-tb-day">{{item.day_of_week}}</div>
-						<div class="db-tb-day">{{item.count_weekday + "-days"}}</div>
-					</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr v-for="(index,time) in contractSelect.rates" track-by="$index">
-					<td class="td_field_label" v-if="index == 0 "> 12 pm</td>
-					<template v-else>
-						<td class="td_field_label" v-if="index < 13"> {{ index }} am</td>
-						<td class="td_field_label" v-else> {{ index - 12 }} pm</td>
-					</template>
-					<td v-for="(key,rate) in time" class="price_hours" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</td>
-				</tr>
-				</tbody>
-			</table>
+			<div id="table-contract-rate-edit" class="table table-bordered table-hover table-th clearfix" style="position: relative; padding-bottom: 210px;; margin-top: 20px"  >
+				<div class="th" style="text-align: right; font-size: 11px;">
+					Starting Date <br>
+					Day of the Week <br>
+					Total Days w/ Holidays
+				</div>
+				<div v-for="(index,item) in dataDateTb" class="th" track-by="$index">
+					<div class="db-tb-day">{{item.date}}</div>
+					<div class="db-tb-day">{{item.day_of_week}}</div>
+					<div class="db-tb-day">{{item.count_weekday + "-days"}}</div>
+				</div>
 
+				<div v-for="(index,time) in contractSelect.rates" class="{{index < 6 ? 'clearfix row-edit row-edit'+index : 'clearfix' }}" track-by="$index">
+					<div class="td_field_label">{{index == 0 ? "12 am" : (index < 12 ? index + "am" : (index == 12 ? index + "pm" : (index -12) + "pm") )}}</div>
+					<div v-for="(key,rate) in time" class="price_hours box-price" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</div>
+				</div>
+			</div>
 
 		</div>
 		<div class="courtbox extras clearfix">
@@ -94,6 +84,61 @@
 	</div>
 </template>
 <style scoped>
+	.row-edit{
+		clear: both;
+		width: 100%;
+		height: 35px;
+		position: absolute;
+		bottom: 0px;
+	}
+	.row-edit5{
+		bottom: 0px;
+	}
+	.row-edit4{
+		bottom: 35px;
+	}
+	.row-edit3{
+		bottom: 70px;
+	}
+	.row-edit2{
+		bottom: 105px;
+	}
+	.row-edit1{
+		bottom: 140px;
+	}
+	.row-edit0{
+		bottom: 175px;
+	}
+	.th{
+		float: left;
+		border: 1px solid #ddd;
+		padding: 8px;
+		background: #f2f2f2;
+		color: #000;
+		width: calc( 100% / 8);
+		height: 100px;
+	}
+	.td_field_label{
+		float: left;
+		width: calc( 100% / 8);
+		height: 35px;
+		border: 1px solid #ddd;
+		border-top: 0px;
+		text-align: center;
+		line-height: 1.42857143;
+		padding: 8px;
+		background: #f2f2f2;
+	}
+	.box-price{
+		width: calc( 100% / 8);
+		height: 35px;
+		float: left;
+		border-bottom: 1px solid #ddd;
+		border-right: 1px solid #ddd;
+		text-align: center;
+		line-height: 1.42857143;
+		padding: 8px;
+	}
 	#table-contract-rate-edit .ui-selected {
 		background: #0f494d;
 		color: white;

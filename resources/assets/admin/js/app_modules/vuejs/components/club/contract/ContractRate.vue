@@ -16,101 +16,116 @@
 			<p>Select hours from grid and press apply to adjust hours</p>
 	</form>
 	<div class="clearfix"></div>
-	<table id="table-contract-rate" class="table table-bordered table-hover table-th clearfix ui-selectable" style="margin-top: 20px">
-		<thead>
-			<tr>
-				<th style="text-align: right">
-					Starting Date <br>
-					Day of the Week <br>
-					Total Days w/ Holidays
-				</th>
-				<th>Mon</th>
-				<th>Tue</th>
-				<th>Web</th>
-				<th>Thur</th>
-				<th>Fri</th>
-				<th>Sat</th>
-				<th>Sun</th>
-			</tr>
-		</thead>
-		<tbody >
-		<tr >
-			<td class="td_field_label" > 12 pm</td>
-			<td class="price_hours ui-selectee"  data-x="0" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="0" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="0" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="0" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="0" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="0" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="0" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 1 am</td>
-			<td class="price_hours ui-selectee"  data-x="1" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="1" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="1" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="1" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="1" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="1" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="1" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 2 am</td>
-			<td class="price_hours ui-selectee"  data-x="2" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="2" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="2" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="2" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="2" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="2" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="2" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 3 am</td>
-			<td class="price_hours ui-selectee"  data-x="3" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="3" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="3" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="3" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="3" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="3" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="3" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 4 am</td>
-			<td class="price_hours ui-selectee"  data-x="4" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="4" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="4" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="4" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="4" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="4" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="4" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 5 am</td>
-			<td class="price_hours ui-selectee"  data-x="5" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="5" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="5" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="5" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="5" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="5" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="5" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 6 am</td>
-			<td class="price_hours ui-selectee"  data-x="6" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="6" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="6" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="6" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="6" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="6" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="6" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 7 am</td>
-			<td class="price_hours ui-selectee"  data-x="7" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="7" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="7" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="7" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="7" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="7" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="7" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 8 am</td>
-			<td class="price_hours ui-selectee"  data-x="8" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="8" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="8" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="8" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="8" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="8" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="8" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 9 am</td>
-			<td class="price_hours ui-selectee"  data-x="9" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="9" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="9" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="9" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="9" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="9" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="9" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 10 am</td>
-			<td class="price_hours ui-selectee"  data-x="10" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="10" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="10" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="10" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="10" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="10" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="10" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 11 am</td>
-			<td class="price_hours ui-selectee"  data-x="11" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="11" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="11" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="11" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="11" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="11" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="11" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 12 am</td>
-			<td class="price_hours ui-selectee"  data-x="12" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="12" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="12" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="12" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="12" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="12" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="12" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 1 pm</td>
-			<td class="price_hours ui-selectee"  data-x="13" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="13" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="13" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="13" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="13" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="13" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="13" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 2 pm</td>
-			<td class="price_hours ui-selectee"  data-x="14" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="14" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="14" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="14" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="14" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="14" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="14" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 3 pm</td>
-			<td class="price_hours ui-selectee"  data-x="15" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="15" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="15" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="15" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="15" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="15" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="15" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 4 pm</td>
-			<td class="price_hours ui-selectee"  data-x="16" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="16" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="16" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="16" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="16" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="16" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="16" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 5 pm</td>
-			<td class="price_hours ui-selectee"  data-x="17" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="17" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="17" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="17" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="17" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="17" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="17" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 6 pm</td>
-			<td class="price_hours ui-selectee"  data-x="18" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="18" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="18" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="18" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="18" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="18" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="18" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 7 pm</td>
-			<td class="price_hours ui-selectee"  data-x="19" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="19" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="19" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="19" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="19" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="19" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="19" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 8 pm</td>
-			<td class="price_hours ui-selectee"  data-x="20" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="20" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="20" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="20" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="20" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="20" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="20" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 9 pm</td>
-			<td class="price_hours ui-selectee"  data-x="21" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="21" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="21" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="21" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="21" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="21" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="21" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 10 pm</td>
-			<td class="price_hours ui-selectee"  data-x="22" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="22" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="22" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="22" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="22" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="22" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="22" data-y="A7">$1200</td>
-		</tr><tr >
-			<td class="td_field_label" > 11 pm</td>
-			<td class="price_hours ui-selectee"  data-x="23" data-y="A1">$1200</td><td class="price_hours ui-selectee"  data-x="23" data-y="A2">$1200</td><td class="price_hours ui-selectee"  data-x="23" data-y="A3">$1200</td><td class="price_hours ui-selectee"  data-x="23" data-y="A4">$1200</td><td class="price_hours ui-selectee"  data-x="23" data-y="A5">$1200</td><td class="price_hours ui-selectee"  data-x="23" data-y="A6">$1200</td><td class="price_hours ui-selectee"  data-x="23" data-y="A7">$1200</td>
-		</tr>
-		</tbody>
-	</table>
-		
+		<div id="table-contract-rate-edit" class="table table-bordered table-hover table-th clearfix ui-selectable" style="position: relative; padding-bottom: 210px;; margin-top: 20px" _v-2d9bc549="">
+			<div class="th" style="text-align: right;font-size: 11px;" _v-2d9bc549="">
+				Starting Date <br _v-2d9bc549="">
+				Day of the Week <br _v-2d9bc549="">
+				Total Days w/ Holidays
+			</div>
+			<div class="th" _v-2d9bc549="">
+				<div class="db-tb-day" _v-2d9bc549="">09/30</div>
+				<div class="db-tb-day" _v-2d9bc549="">Fri</div>
+				<div class="db-tb-day" _v-2d9bc549="">35-days</div>
+			</div><div class="th" _v-2d9bc549="">
+			<div class="db-tb-day" _v-2d9bc549="">10/01</div>
+			<div class="db-tb-day" _v-2d9bc549="">Sat</div>
+			<div class="db-tb-day" _v-2d9bc549="">35-days</div>
+		</div><div class="th" _v-2d9bc549="">
+			<div class="db-tb-day" _v-2d9bc549="">10/02</div>
+			<div class="db-tb-day" _v-2d9bc549="">Sun</div>
+			<div class="db-tb-day" _v-2d9bc549="">35-days</div>
+		</div><div class="th" _v-2d9bc549="">
+			<div class="db-tb-day" _v-2d9bc549="">10/03</div>
+			<div class="db-tb-day" _v-2d9bc549="">Mon</div>
+			<div class="db-tb-day" _v-2d9bc549="">35-days</div>
+		</div><div class="th" _v-2d9bc549="">
+			<div class="db-tb-day" _v-2d9bc549="">10/04</div>
+			<div class="db-tb-day" _v-2d9bc549="">Tue</div>
+			<div class="db-tb-day" _v-2d9bc549="">35-days</div>
+		</div><div class="th" _v-2d9bc549="">
+			<div class="db-tb-day" _v-2d9bc549="">10/05</div>
+			<div class="db-tb-day" _v-2d9bc549="">Wed</div>
+			<div class="db-tb-day" _v-2d9bc549="">35-days</div>
+		</div><div class="th" _v-2d9bc549="">
+			<div class="db-tb-day" _v-2d9bc549="">10/06</div>
+			<div class="db-tb-day" _v-2d9bc549="">Thur</div>
+			<div class="db-tb-day" _v-2d9bc549="">34-days</div>
+		</div>
 
+			<div _v-2d9bc549="" class="clearfix row-edit row-edit0">
+				<div class="td_field_label" _v-2d9bc549="">12 am</div>
+				<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="0" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="0" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="0" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="0" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="0" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="0" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="0" data-y="A7">$1200</div>
+			</div><div _v-2d9bc549="" class="clearfix row-edit row-edit1">
+			<div class="td_field_label" _v-2d9bc549="">1am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="1" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="1" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="1" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="1" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="1" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="1" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="1" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix row-edit row-edit2">
+			<div class="td_field_label" _v-2d9bc549="">2am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="2" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="2" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="2" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="2" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="2" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="2" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="2" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix row-edit row-edit3">
+			<div class="td_field_label" _v-2d9bc549="">3am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="3" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="3" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="3" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="3" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="3" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="3" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="3" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix row-edit row-edit4">
+			<div class="td_field_label" _v-2d9bc549="">4am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="4" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="4" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="4" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="4" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="4" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="4" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="4" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix row-edit row-edit5">
+			<div class="td_field_label" _v-2d9bc549="">5am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="5" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="5" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="5" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="5" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="5" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="5" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="5" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">6am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="6" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="6" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="6" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="6" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="6" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="6" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="6" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">7am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="7" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="7" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="7" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="7" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="7" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="7" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="7" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">8am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="8" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="8" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="8" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="8" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="8" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="8" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="8" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">9am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="9" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="9" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="9" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="9" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="9" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="9" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="9" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">10am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="10" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="10" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="10" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="10" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="10" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="10" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="10" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">11am</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="11" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="11" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="11" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="11" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="11" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="11" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="11" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">12pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="12" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="12" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="12" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="12" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="12" data-y="A5">$1121</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="12" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="12" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">1pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="13" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="13" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="13" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="13" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="13" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="13" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="13" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">2pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="14" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="14" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="14" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="14" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="14" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="14" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="14" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">3pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="15" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="15" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="15" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="15" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="15" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="15" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="15" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">4pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="16" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="16" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="16" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="16" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="16" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="16" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="16" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">5pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="17" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="17" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="17" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="17" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="17" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="17" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="17" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">6pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="18" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="18" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="18" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="18" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="18" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="18" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="18" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">7pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="19" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="19" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="19" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="19" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="19" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="19" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="19" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">8pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="20" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="20" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="20" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="20" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="20" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="20" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="20" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">9pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="21" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="21" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="21" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="21" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="21" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="21" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="21" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">10pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="22" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="22" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="22" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="22" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="22" data-y="A5">$1122</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="22" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="22" data-y="A7">$1200</div>
+		</div><div _v-2d9bc549="" class="clearfix">
+			<div class="td_field_label" _v-2d9bc549="">11pm</div>
+			<div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="23" data-y="A1">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="23" data-y="A2">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="23" data-y="A3">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="23" data-y="A4">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="23" data-y="A5">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="23" data-y="A6">$1200</div><div class="price_hours box-price ui-selectee" _v-2d9bc549="" data-x="23" data-y="A7">$1200</div>
+		</div>
+		</div>
 </div>
 <div class="courtbox extras clearfix">
 		<div class="col-xs-12 col-md-6">

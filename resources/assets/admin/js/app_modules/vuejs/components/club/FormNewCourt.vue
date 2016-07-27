@@ -75,7 +75,6 @@
 	},
 	methods: {
 		updateDataRates(){
-
 			for (var index in this.courts) {
 				if (this.court.base_price == this.courts[index].id) {
 					for (var i in this.courts[index].rates) {

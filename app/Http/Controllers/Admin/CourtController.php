@@ -56,6 +56,7 @@ class CourtController extends Controller
             'court' => $court,
         ]);
     }
+    
     public function postUpdateCourts(Request $request)
     {
         $courts = $request->input('courts');
@@ -71,21 +72,16 @@ class CourtController extends Controller
     }
 
     //update rate
-    protected function updateTableRates($court, $dataRates, $cal_fl_price_of_member = false)
+    protected function updateTableRates($court, $dataRates)
     {
         ini_set('max_execution_time', 3000);
 
         //set rate
         foreach ($dataRates as $key => $inputRate) {
             $rate = new CourtRate;
-            if($cal_fl_price_of_member >= 0) {
-                if ($cal_fl_price_of_member) {
-                    $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);
-                    $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_member']);
-                } else {
-                    $rate->rates_member = json_encode($inputRate['datarate']['rates_nonmember']);
-                    $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
-                }
+            if($inputRate['datarate']['is_same_price'] == 1) {
+                $rate->rates_member = json_encode($inputRate['datarate']['rates_nonmember']);
+                $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
                 $rate->is_same_price = 1;
             }else{
                 $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);

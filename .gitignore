@@ -1,14 +1,12 @@
 /vendor
 /node_modules
 /public/storage
-/composer.lock
+composer.lock
 _ide_helper.php
 Homestead.yaml
 Homestead.json
 .env
 .idea
 error_log
-/public/resources/vendor/routes.js
-/public/resources/admin/js/app_modules/app.js
-/public/resources/admin/js/app_modules/app.js.map 
 /public/resources/admin/files/
+composer.phar

@@ -114,7 +114,8 @@
 			reloadCourts:1,
 			btnAddCourt:false,
 			indexDataRates: null,
-			defaultPrice: 20
+			defaultPrice: 20,
+			same_price: true
 		}
 	},
 	watch: {

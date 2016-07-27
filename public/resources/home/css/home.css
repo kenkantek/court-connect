@@ -951,7 +951,15 @@ a.ui-state-default.ui-state-highlight {
 .content #search-results .club-time .active .price {
     background-color: #63ac1e;
 }
-
+.header-1 .navbar-default .navbar-collapse.in{
+    border-color: #e7e7e7;
+    width: 100%;
+    background: rgba(0,0,0,0.7);
+    position: fixed;
+    z-index: 999;
+    left: 0px;
+    height: 100%;
+}
 .content #search-results .club-time .unvailable .price {
     background-color: #cbcbcb;
     font-size: 10px;

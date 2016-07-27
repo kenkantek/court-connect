@@ -69,42 +69,32 @@
 					</div>
 				</div>
 				<div class="clearfix"></div>
-				<table class="table table-bordered table-hover table-th clearfix" style="margin-top: 20px" id="table-rate">
-					<thead>
-					<tr>
-						<th></th>
-						<th>Mon</th>
-						<th>Tue</th>
-						<th>Web</th>
-						<th>Thur</th>
-						<th>Fri</th>
-						<th>Sat</th>
-						<th>Sun</th>
-					</tr>
-					</thead>
-					<tbody>
+				<div class="table table-bordered table-hover table-th clearfix" style="margin-top: 20px; padding-bottom: 210px;" id="table-rate">
+					<div>
+						<div class="th"></div>
+						<div class="th">Mon</div>
+						<div class="th">Tue</div>
+						<div class="th">Web</div>
+						<div class="th">Thur</div>
+						<div class="th">Fri</div>
+						<div class="th">Sat</div>
+						<div class="th">Sun</div>
+					</div>
+
 					<template v-if="this.is_member == 1">
-						<tr v-for="(index,time) in dataRate.rates_member" track-by="$index">
-							<td class="td_field_label" v-if="index == 0 "> 12 pm</td>
-							<template v-else>
-								<td class="td_field_label" v-if="index < 13"> {{ index }} am</td>
-								<td class="td_field_label" v-else> {{ index - 12 }} pm</td>
-							</template>
-							<td v-for="(key,rate) in time" class="price_hours" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</td>
-						</tr>
+						<div v-for="(index,time) in dataRate.rates_member" class="{{index < 6 ? 'clearfix row-edit row-edit'+index : 'clearfix' }}" track-by="$index">
+							<div class="td_field_label">{{index == 0 ? "12 am" : (index < 12 ? index + "am" : (index == 12 ? index + "pm" : (index -12) + "pm") )}}</div>
+							<div v-for="(key,rate) in time" class="price_hours box-price" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</div>
+						</div>
 					</template>
 					<template v-if="this.is_member == 0">
-						<tr v-for="(index,time) in dataRate.rates_nonmember" track-by="$index">
-							<td class="td_field_label" v-if="index == 0 "> 12 pm</td>
-							<template v-else>
-								<td class="td_field_label" v-if="index < 13"> {{ index }} am</td>
-								<td class="td_field_label" v-else> {{ index - 12 }} pm</td>
-							</template>
-							<td v-for="(key,rate) in time" class="price_hours" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</td>
-						</tr>
+						<div v-for="(index,time) in dataRate.rates_nonmember" class="{{index < 6 ? 'clearfix row-edit row-edit'+index : 'clearfix' }}" track-by="$index">
+							<div class="td_field_label">{{index == 0 ? "12 am" : (index < 12 ? index + "am" : (index == 12 ? index + "pm" : (index -12) + "pm") )}}</div>
+							<div v-for="(key,rate) in time" class="price_hours box-price" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</div>
+						</div>
 					</template>
-					</tbody>
-				</table>
+
+				</div>
 			</div>
 
 		</div>
@@ -136,6 +126,61 @@
 	</div>
 </template>
 <style scope>
+	.row-edit{
+		clear: both;
+		width: 100%;
+		height: 35px;
+		position: absolute;
+		bottom: 0px;
+	}
+	.row-edit5{
+		bottom: 0px;
+	}
+	.row-edit4{
+		bottom: 35px;
+	}
+	.row-edit3{
+		bottom: 70px;
+	}
+	.row-edit2{
+		bottom: 105px;
+	}
+	.row-edit1{
+		bottom: 140px;
+	}
+	.row-edit0{
+		bottom: 175px;
+	}
+	.th{
+		float: left;
+		border: 1px solid #ddd;
+		padding: 8px;
+		background: #f2f2f2;
+		color: #000;
+		width: calc( 100% / 8);
+		height: 35px;
+	}
+	.td_field_label{
+		float: left;
+		width: calc( 100% / 8);
+		height: 35px;
+		border: 1px solid #ddd;
+		border-top: 0px;
+		text-align: center;
+		line-height: 1.42857143;
+		padding: 8px;
+		background: #f2f2f2;
+	}
+	.box-price{
+		width: calc( 100% / 8);
+		height: 35px;
+		float: left;
+		border-bottom: 1px solid #ddd;
+		border-right: 1px solid #ddd;
+		text-align: center;
+		line-height: 1.42857143;
+		padding: 8px;
+	}
 	#table-rate .ui-selected {
 		background: #0f494d;
 		color: white;
@@ -216,6 +261,7 @@
 					end_date:0,
 					start_date:0,
 					name:null,
+					is_same_price: 1
 				},
 				defaultRate : {
 					rates_member: [
@@ -273,14 +319,15 @@
 					end_date:0,
 					start_date:0,
 					name:null,
+					is_same_price: 1
 				},
 				selected:  [],
 				priceSet: 20,
 				showNotice:false,
 				rateIndex:null,
 				is_member: 0,
-				same_price: true,
-				text: null
+				text: null,
+				same_price: 1
 			}
 		},
 		filters: {
@@ -300,10 +347,13 @@
 					this.rateIndex = index;
 
 					if(this.dataRate.is_same_price == 0){
-
-						this.same_price = false;
+						this.same_price = 0;
 						$("#tabRate").removeClass('h');
 						$('#lch-same_price').bootstrapSwitch('state',true);
+					}else{
+						this.same_price = 1;
+						$("#tabRate").addClass('h');
+						$('#lch-same_price').bootstrapSwitch('state',false);
 					}
 				}
 				if(this.indexDataRates != null){
@@ -418,11 +468,13 @@
 			checkSamePrice(){
 				if($(".bootstrap-switch-id-lch-same_price").hasClass('bootstrap-switch-off')){
 					$("#tabRate").addClass('h');
+					this.dataRates[this.indexDataRates].datarate.is_same_price = 1;
 					this.same_price = 1;
 					this.is_member = 0;
 				}else if($(".bootstrap-switch-id-lch-same_price").hasClass('bootstrap-switch-on')){
 					$("#tabRate").removeClass('h');
 					this.same_price = 0;
+					this.dataRates[this.indexDataRates].datarate.is_same_price = 0;
 				}
 			},
 			resetSamePrice(){
