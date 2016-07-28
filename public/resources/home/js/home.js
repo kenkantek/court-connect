@@ -167,8 +167,10 @@ $(function () {
         $(".search-tooltip").toggleClass('hidden');
         if(!$(".search-tooltip").hasClass('hidden')){
             $("#cc-input-search-time").focus();
-            $("#search-timepicker-text").val($("#cc-input-search-time option:selected").text());
-            $("#search-timepicker").val($("#cc-input-search-time option:selected").val());
+            if($("#search-timepicker-text").val() == null || $("#search-timepicker-text").val() == '') {
+                $("#search-timepicker-text").val($("#cc-input-search-time option:selected").text());
+                $("#search-timepicker").val($("#cc-input-search-time option:selected").val());
+            }
         }
     });
 
