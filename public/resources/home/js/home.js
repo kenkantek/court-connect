@@ -180,6 +180,13 @@ $(function () {
         }
     });
 
+    $(document).click(function(e) {
+        var container = $(".group-search-home-timepicker");
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+            $(".search-tooltip").addClass('hidden');
+        }
+    });
+
     $(".placeholder-single").select2({
         placeholder: "# Courts",
         allowClear: true,
