@@ -163,15 +163,19 @@ $(function () {
         $("#datepicker").datepicker( "show" );
     });
 
-    $("#search-timepicker").click(function(){
+    $("#search-timepicker-text").click(function(){
         $(".search-tooltip").toggleClass('hidden');
         if(!$(".search-tooltip").hasClass('hidden')){
             $("#cc-input-search-time").focus();
+            $("#search-timepicker-text").val($("#cc-input-search-time option:selected").text());
+            $("#search-timepicker").val($("#cc-input-search-time option:selected").val());
         }
     });
 
     $(".group-search-home-timepicker").mouseleave(function() {
-        $(".search-tooltip").addClass('hidden');
+        if (!$('.group-search-home-timepicker .select2-container').hasClass('select2-container--open')) {
+            $(".search-tooltip").addClass('hidden');
+        }
     });
 
     $(".placeholder-single").select2({
@@ -257,9 +261,10 @@ $(function () {
         }
         $("#cc-input-search-time").val((hours < 10 ? "0" + hours : hours) + ":" + minutes);
     }
-    $("#search-timepicker").val($("#cc-input-search-time").val());
+
     $("#cc-input-search-time").change(function(){
-        $("#search-timepicker").val($(this).val());
+        $("#search-timepicker-text").val($("#cc-input-search-time option:selected").text());
+        $("#search-timepicker").val($("#cc-input-search-time option:selected").val());
     })
 
     //validate time search

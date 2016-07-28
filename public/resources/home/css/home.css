@@ -1540,15 +1540,17 @@ a.ui-state-default.ui-state-highlight {
     font-size: 0.9em;
     margin: 15px 0 10px 0;
 }
-#search-timepicker{
+#search-timepicker-text{
     font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
     width: 100%;
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
     height: 35px;
+    padding-left: 35px;
     line-height: 35px;
+    background: #fff !important;
 }
-#search-timepicker:before{
+#search-timepicker-text:before{
     color: #63ac1e;
     font-family: 'Glyphicons Halflings';
     padding-right: 10px;
@@ -1698,4 +1700,8 @@ a.ui-state-default.ui-state-highlight {
         width: 40px;
         font-size: 2em;
     }
+}
+
+.irs-bar-edge {
+    background-position: 0 -60px;
 }
