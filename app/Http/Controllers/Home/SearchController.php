@@ -29,7 +29,7 @@ class SearchController extends Controller {
             ->take(5)->get(['id','name','image','city','state']);
 
         foreach ($queries as $query) {
-            $results['clubs'][] = ['id' => $query->id, 'value' => $query->name,'image' =>$query->image,'address'=>$query->city.", ".$query->city];
+            $results['clubs'][] = ['id' => $query->id, 'value' => $query->name,'image' =>$query->image,'address'=>$query->city.", ".$query->state];
         }
 
 //        $queries = City::where('name', 'LIKE', '%' . $term . '%')
@@ -39,7 +39,8 @@ class SearchController extends Controller {
 
         $queries = City::where('name', 'LIKE', '%' . $term . '%')
             ->orWhere('zipcode', 'LIKE', '%' . $term . '%')
-            ->take(5)->get();
+            ->groupBy('state_code')
+            ->take(10)->get();
 
         foreach ($queries as $query) {
             $results['citys'][] = ['id' => $query->id, 'value' => $query->name, 'state' => $query->state_code];

@@ -4,14 +4,14 @@
         <div class="container">
             {!!  Form::open(array('route' => 'home.search','method' => 'post','id'=>'cc-search-form')) !!}
             <div class="row">
-                <div class="form-group col-md-3 form-icon">
+                <div class="form-group col-md-3 col-xs-6 form-icon">
                     <i class="fa fa-map-marker"></i>
                     {!! Form::text('s_name', $request->input('s_name'), ['id' => 'q', 'class' => 'form-control', 'autocomplete' => 'off',
                      'data-country' => 'us', 'placeholder' => 'Search by City or Club Name', 'required' => 'required',
                      'oninvalid' => "this.setCustomValidity('A location is required')", 'oninput' =>"setCustomValidity('')"
                      ] ) !!}
                 </div>
-                <div class="form-group col-md-2 form-icon">
+                <div class="form-group col-md-2 col-xs-6 form-icon">
                     <i class="fa fa-calendar"></i>
                     <input type="text" class="form-control" name="date" value="{!! $request->input('date') !!}" id="datepicker" placeholder="Date">
                     <p align="center"
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-2 form-icon  form-icon group-search-home-timepicker">
+                <div class="form-group col-md-2 col-xs-6 form-icon  form-icon group-search-home-timepicker">
                     <?php
                     $arr_time = [
                             '5:00' => '5:00 AM','5:30' => '5:30 AM','6:00' => '6:00 AM','6:30' => '6:30 AM','7:00' => '7:00 AM','7:30' => '7:30 AM',
@@ -105,18 +105,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-2 form-icon time-kicker">
+                <div class="form-group col-md-2 col-xs-6 form-icon time-kicker">
                     <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" data-from="{!! $request->input('mb-book-in-hour') !!}">
                 </div>
-                <div class="form-group col-md-2 form-icon">
+                <div class="form-group col-md-2 col-xs-6 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
                     {!! Form::selectRange('court',1,4,$request->input('court'),['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# Courts']) !!}
                 </div>
-                <div class="form-group col-md-1">
+                <div class="form-group col-md-1 col-xs-6">
                     <button type="submit" class="btn btn-search">SEARCH</button>
                 </div>
             </div>
-            <div class="row" style="color:#fff; margin: 20px 0 10px 0;">
+            <div class="row frm-g-distance-search">
                 <div class="form-group col-md-5">
                     <span style="padding-right: 20px">Court Type: </span>
                     <?php $surface_arr = $request->input('surface_id') ? $request->input('surface_id') : []; ?>

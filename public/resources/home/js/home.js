@@ -180,6 +180,14 @@ $(function () {
         }
     });
 
+    //for safari
+    $('.group-search-home-timepicker').on('touchstart', function (e) {
+        "use strict";
+        if (!$('.group-search-home-timepicker .select2-container').hasClass('select2-container--open')) {
+            $(".search-tooltip").addClass('hidden');
+        }
+    });
+
     $(".placeholder-single").select2({
         placeholder: "# Courts",
         allowClear: true,

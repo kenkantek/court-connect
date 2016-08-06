@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="col-md-4 content-right-map">
-                    <div id="map" style="min-height: 600px; margin-top: 30px"></div>
+                    <div id="map"></div>
                 </div>
             </div>
         {{-- End #search-results --}}
@@ -67,14 +67,15 @@
             $( "."+viewTogle ).toggle( "slow" );
 
         });
+        var map;
+        var markers = new Array();
+        var infos = new Array();
+        var polylines = new Array();
+        var polygons = new Array();
+        var geoMarker = null;
+        var geoInfo = null;
+        var gmarkers;
         function initialize() {
-            var map;
-            var markers = new Array();
-            var infos = new Array();
-            var polylines = new Array();
-            var polygons = new Array();
-            var geoMarker = null;
-            var geoInfo = null;
 
             var latlng = new google.maps.LatLng(0, 0);
             var mapTypeControlOptions = {
@@ -108,7 +109,7 @@
                 panControlOptions: panControlOptions,
                 rotateControlOptions: rotateControlOptions,
                 scaleControlOptions: scaleControlOptions,
-                zoom: 12,
+                zoom: 5,
                 zoomControlOptions: zoomControlOptions,
                 center: latlng,
                 scaleControl: true,
@@ -118,7 +119,7 @@
                 },
                 fullscreenControl: true
             };
-            var map = new google.maps.Map(document.getElementById("map"), myMapOptions);
+            map = new google.maps.Map(document.getElementById("map"), myMapOptions);
             @if( is_null($msg_errors) && $clubs)
                     @foreach($clubs as $k=>$club)
                     markers[{{$k}}] = new google.maps.Marker({
@@ -144,6 +145,7 @@
                     })
 
                     @endforeach
+                            gmarkers = markers;
                     @endif
 
             var latlngbounds = new google.maps.LatLngBounds();
@@ -189,6 +191,17 @@
             }
             @endif
         }
+        @if(count($clubs) == 1)
+            $(document).ready(function(){
+                setTimeout(function(){
+                    var z = map.getZoom();
+                    console.log(z);
+                    map.setZoom(17);
+                    var z = map.getZoom();
+                    console.log(z);
+                },1000);
+            });
+        @endif
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 @stop
