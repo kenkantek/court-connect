@@ -394,10 +394,10 @@ class BookingController extends Controller{
             $booking = Booking::with('court', 'court.club', 'court.surface')->where(['bookings.id' => $id])->first();
             if($booking) {
                 $param = "text=Tennis court at " . $booking['court']['club']['name']. " Club&location=".$booking['court']['club']['address'];
-                $param .= "&details=Phone club: ".$booking['court']['club']['phone']." , "." Confirmation: ".$booking['id'];
+                $param .= "&details=Phone club: ".$booking['court']['club']['phone']." , "." %0AConfirmation: ".$booking['id'];
 
                 $param_outlook = "&summary="."Tennis court at " . $booking['court']['club']['name']."&location=".$booking['court']['club']['address'];
-                $param_outlook .= "&description="."Phone club: ".$booking['court']['club']['phone']." , "." Confirmation: ".$booking['id'];
+                $param_outlook .= "&description="."Phone club: ".$booking['court']['club']['phone']." , "." %0AConfirmation: ".$booking['id'];
 
                 if($booking['type'] == 'contract'){
                     $intpart = floor($booking->hour);
@@ -406,6 +406,8 @@ class BookingController extends Controller{
                     $intpart = floor($booking->hour + $booking->hour_length);
                     $fraction = str_replace("0.5","30",$booking->hour + $booking->hour_length - $intpart);
                     $end_date = date_from_database($booking['date_range_of_contract']['to'],'Ymd')."T".str_pad($intpart, 2, '0', STR_PAD_LEFT).str_pad($fraction, 2, '0', STR_PAD_LEFT)."00";
+                    $param .= " %0APlease, add repeat weekly on ".dayOfWeek($booking['day_of_week']);
+                    $param_outlook .= " %0APlease, add repeat weekly on ".dayOfWeek($booking['day_of_week']);
                 }else{
                     $intpart = floor($booking->hour);
                     $fraction = str_replace("0.5","30",$booking->hour - $intpart);

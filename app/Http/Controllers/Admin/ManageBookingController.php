@@ -305,7 +305,7 @@ class ManageBookingController extends Controller
 
                 //check time open and close of club
 
-                $check_open_close_date = SetOpenDay::where('date',$date)->first();
+                $check_open_close_date = SetOpenDay::where(['date' => $date, 'club_id' => $request->input('club_id')])->first();
                 if(isset($check_open_close_date)) {
                     if($check_open_close_date['open_time'] == "12:00 PM")
                         $check_open_close_date['open_time'] = "0:00";

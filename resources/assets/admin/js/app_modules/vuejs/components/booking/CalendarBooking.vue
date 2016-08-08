@@ -73,19 +73,20 @@
                                              @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)">
                                             <div v-if=" !grid.g_end">
                                                 <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
-                                                    ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
+                                                    ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status == 'day_close' ? "Closed" : grid.status == 'unavailable' ? "Unavailable" : grid.status}}
+                                                    <template v-if="grid.status == 'unavailable'">
+                                                        <br> {{grid.content}}
+                                                    </template>
                                                 </span>
-                                                <template v-if="grid.status != 'available'">{{grid.content}}
-                                                    <div v-if="grid.is_cash" class="pay-cash">$</div>
-                                                </template>
+
                                             </div>
-                                            <div class="v-else">{{grid.content}}</div>
+                                            <div v-else>{{grid.content}}</div>
                                         </div>
                                         <div v-else data-court="{{court['id']}}" data-hour="{{grid.hour}}" @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
                                             <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
-                                                 ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status}}
+                                                 ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status == 'day_close' ? "Closed" : grid.status == 'unavailable' ? "Unavailable \n" : grid.status}}
                                             </span>
-                                            <template v-if="grid.status != 'available'">{{grid.content}}</template>
+                                            <div v-if="grid.status != 'available'" class="content-unavailable">{{grid.content}}</div>
                                         </div>
                                     </template>
                                 </div>

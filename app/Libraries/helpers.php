@@ -228,7 +228,7 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             $total_price ="ERROR";
             break;
         }
-        else if(isset($court) && $court['default_rate'] != null){
+        else if($type == "open" && isset($court) && $court['default_rate'] != null){ //price default of book open
             $total_price = $court['default_rate'];
             break;
         }

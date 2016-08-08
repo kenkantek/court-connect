@@ -543,10 +543,22 @@
     };
 
         $(function() {
-            $("body").on('click','.btn-clock',function(){
-                $(".monthly-indicator-wrap .overflow").removeClass('block');
+            $("body").on('click','.btn-clock',function(e){
+                e.preventDefault();
+                $(".monthly-indicator-wrap .overflow").removeClass('double-click');
                 $(this).parent().toggleClass('block');
                 $(this).parent().find('.dlg-setopenday').toggleClass('hidden');
-            })
+            });
+
+            $("body").on('click','.monthly-indicator-wrap .overflow.block',function(e){
+                e.preventDefault();
+                if($(this).hasClass('double-click')) {
+                    $(".monthly-indicator-wrap .overflow").removeClass('block double-click');
+                    $(this).find('.dlg-setopenday').addClass('hidden');
+                }else{
+                    if(!$(this).find('.dlg-setopenday').hasClass('hidden'))
+                        $(this).addClass('double-click');
+                }
+            });
         });
 </script>

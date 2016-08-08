@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="col-md-4 content-right-map">
-                    <div id="map"></div>
+                    <div id="map" class="clearfix"></div>
                 </div>
             </div>
         {{-- End #search-results --}}

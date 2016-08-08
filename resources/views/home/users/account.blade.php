@@ -469,6 +469,7 @@
 
             //export-outlook
             $("body").on('click','.cc-action-booking .export-outlook',function(e){
+                e.preventDefault();
                 location.href = base_url+'/export-calendar/'+$(this).data('booking')+"/"+$(this).data('type');
             });
         });

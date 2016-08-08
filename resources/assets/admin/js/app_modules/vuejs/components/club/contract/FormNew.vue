@@ -73,6 +73,18 @@
 						}
 			},
 			watch: {
+				startDate: function () {
+					var a = moment(this.startDate, 'MM/DD/YYYY');
+					var b = moment(this.endDate, 'MM/DD/YYYY');
+					var days = b.diff(a, 'days');
+					this.totalWeek = b.diff(a,'weeks');
+					if(days < 30) {
+						this.error = true;
+						showNotice('error', 'Error', 'End date must be greater than start date 30 days!');
+					}else{
+						this.error = false;
+					}
+				},
 				endDate: function () {
 						var a = moment(this.startDate, 'MM/DD/YYYY');
 						var b = moment(this.endDate, 'MM/DD/YYYY');
@@ -84,7 +96,7 @@
 					 	}else{
 					 		this.error = false;
 					 	}
-					}
+				}
 			},
 			ready() {
 				 $('.datepicker-contract').daterangepicker({

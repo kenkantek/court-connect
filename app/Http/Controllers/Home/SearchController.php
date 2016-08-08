@@ -72,7 +72,7 @@ class SearchController extends Controller {
 
         $clubs = null;
         $msg_errors = null;
-        if ($request->input('date') && $keyword_hour < 5 || $keyword_hour > 22) {
+        if ($request->input('date') && $keyword_hour < 0 || $keyword_hour > 24) {
             $msg_errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
         }else if (!empty($keyword_clubs)){
             //contract
@@ -130,7 +130,7 @@ class SearchController extends Controller {
                     foreach ($clubs as $k => $club) {
                         $contracts = Contract::where(['club_id' => $club['id'], 'is_member' => 0])
                             ->limit(5)->orderBy('updated_at', 'desc')->get(['id','start_date','end_date','is_member','total_week']);
-
+                        $clubs[$k]['data_date_open'] = SetOpenDay::where(['date'=>$keyword_day, 'club_id' => $club->id])->first();
                         if($contracts && count($contracts)  > 0) {
                             $arr_tmp_contract = [];
                             foreach ($contracts as $m => $contract) {
@@ -202,13 +202,14 @@ class SearchController extends Controller {
                 }else { // open
                     foreach ($clubs as $k => $club) {
                         $clubs[$k]['type'] = 'open';
+                        $clubs[$k]['data_date_open'] = SetOpenDay::where(['date'=>$keyword_day, 'club_id' => $club->id])->first();
                         $index_min = -1;
                         $tmp_price_min = -1;
                         foreach ($club->courts as $p => $court) {
                             $input['court_id'] = $court['id'];
                             $input['club_id'] = $club['id'];
-                            $get_price = getPriceForBooking($input);
-                            if($get_price['error'] == false){
+                            getPriceForBooking($input);
+                            if(isset($get_price['error']) && $get_price['error'] == false){
                                 if($get_price['total_price'] < $tmp_price_min || $tmp_price_min < 0){
                                     $tmp_price_min = $get_price['total_price'];
                                     $index_min = $p;
@@ -239,31 +240,20 @@ class SearchController extends Controller {
         $hour_end = 0;
 
         if($input['type'] == 'contract'){
-            if($input['hour_start'] - 5 >= 1){
-                $limit_hour = $input['hour_start'] + $input['hour_length'] <23 ? 1: 0;
+            if($input['hour_start'] >= 0){
+                $limit_hour = $input['hour_start'] + $input['hour_length'] <24 ? 1: 0;
                 $hour_start = $input['hour_start'];
                 $hour_end = $input['hour_start'] + $limit_hour;
             }else{
-                $limit_hour = $input['hour_start'] + $input['hour_length'] <23 ? 1: 0;
+                $limit_hour = $input['hour_start'] + $input['hour_length'] <24 ? 1: 0;
                 $hour_start = $input['hour_start'];
                 $hour_end = $input['hour_start'] + $limit_hour;
             }
         }else
         {
-            if($input['hour_start'] - 5 >= 2){
-                $limit_hour = $input['hour_start'] + 2 < 22 - $input['hour_length']? 2 : (int)(22 - $input['hour_start'] - 2);
-                $hour_start = $input['hour_start'] -2;
-                $hour_end = $input['hour_start'] + $limit_hour;
-            }else if($input['hour_start'] - 5 >= 1){
-                $limit_hour = $input['hour_start'] + 3 < 22 - $input['hour_length']? 3 : (int)(22 - $input['hour_start']- 3);
-                $hour_start = $input['hour_start'] -1;
-                $hour_end = $input['hour_start'] + $limit_hour;
-            }
-            else if($input['hour_start'] - 5 >= 0){
-                $limit_hour = $input['hour_start'] + 4 < 22 - $input['hour_length']? 4 : (int)(22 - $input['hour_start']- 4);
-                $hour_start = $input['hour_start'];
-                $hour_end = $input['hour_start'] + $limit_hour;
-            }
+            $limit_hour = $input['hour_start'] + 4 < 23 - $input['hour_length']? 4 : (int)(23 - $input['hour_start']- 4);
+            $hour_start = $input['hour_start'];
+            $hour_end = $input['hour_start'] + $limit_hour;
         }
 
         for($i = $hour_start; $i<= $hour_end; $i++) {
