@@ -2,10 +2,10 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
+        <li class="dropdown menu-manager-account ">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->fullname }}<b
                         class="caret"></b></a>
-            <ul class="dropdown-menu ">
+            <ul class="dropdown-menu">
                 <span class="arrow-up"></span>
                 <li class="text-center"><a href="{{ route('home.account') }}">Manage Account</a></li>
                 <li class="text-center"><a href="{{ route('auth.logout-home') }}">Log out</a></li>

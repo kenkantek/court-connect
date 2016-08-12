@@ -368,5 +368,4 @@ $(function () {
     $("body").on('click','.btn-booking-tennis.disabled',function(e){
         e.preventDefault();
     })
-
 });

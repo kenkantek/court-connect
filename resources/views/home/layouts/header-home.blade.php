@@ -23,12 +23,12 @@
             <h1 class="h1-mobile">Find Your Court</h1>
             <div class="col-md-12">
                 {!!  Form::open(array('route' => 'home.search','method' => 'post','id'=>'cc-search-form')) !!}
-                <div class="form-group col-md-4 form-icon">
+                <div class="form-group col-md-4 col-xs-12 form-icon">
                     <i class="fa fa-map-marker"></i>
                     <input type="text" class="form-control" name="s_name" id="q" oninvalid="this.setCustomValidity('A location is required')" oninput="setCustomValidity('')" required title="A location is required"
                            placeholder="Search by City or Club Name" autocomplete="off" data-country="us">
                 </div>
-                <div class="form-group col-md-2 form-icon">
+                <div class="form-group col-md-2 col-xs-6 md-fright form-icon">
                     <i class="fa fa-calendar"></i>
                     <input type="text" class="form-control" name="date" id="datepicker" placeholder="Date">
 
@@ -77,18 +77,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-2 form-icon group-search-home-timepicker">
+                <div class="form-group col-md-2 col-xs-6 md-fright form-icon group-search-home-timepicker">
                     <?php
                     $arr_time = [
-                            '0:00' => '0:00 AM','0:30' => '0:30 AM','1:00' => '1:00 AM','1:30' => '1:30 AM','2:00' => '2:00 AM','2:30' => '2:30 AM',
-                            '3:00' => '3:00 AM','3:30' => '3:30 AM','4:00' => '4:00 AM','4:30' => '4:30 AM',
-                            '5:00' => '5:00 AM','5:30' => '5:30 AM','6:00' => '6:00 AM','6:30' => '6:30 AM','7:00' => '7:00 AM','7:30' => '7:30 AM',
+                            '6:00' => '6:00 AM','6:30' => '6:30 AM','7:00' => '7:00 AM','7:30' => '7:30 AM',
                             '8:00' => '8:00 AM','8:30' => '8:30 AM','9:00' => '9:00 AM','9:30' => '9:30 AM','10:00' => '10:00 AM','10:30' => '10:30 AM',
-                            '11:00' => '11:00 AM','11:30' => '11:30 AM','12:00' => '12:00 PM','12:30' => '00:30 PM','13:00' => '1:00 PM','13:30' => '1:30 PM',
+                            '11:00' => '11:00 AM','11:30' => '11:30 AM','12:00' => '12:00 PM','12:30' => '12:30 PM','13:00' => '1:00 PM','13:30' => '1:30 PM',
                             '14:00' => '2:00 PM','14:30' => '2:30 PM','15:00' => '3:00 PM','15:30' => '3:30 PM','16:00' => '4:00 PM','16:30' => '4:30 PM',
                             '17:00' => '5:00 PM','17:30' => '5:30 PM','18:00' => '6:00 PM','18:30' => '6:30 PM','19:00' => '7:00 PM','19:30' => '7:30 PM',
                             '20:00' => '8:00 PM','20:30' => '8:30 PM','21:00' => '9:00 PM','21:30' => '9:30 PM','22:00' => '10:00 PM',
-                            '22:30' => '10:30 PM','23:00' => '11:00 PM','23:30' => '11:30 PM','24:00' => '00:00 AM'
+                            '22:30' => '10:30 PM','23:00' => '11:00 PM','23:30' => '11:30 PM','24:00' => '12:00 AM', '0:30' => '12:30 AM','1:00' => '1:00 AM','1:30' => '1:30 AM','2:00' => '2:00 AM','2:30' => '2:30 AM',
+                            '3:00' => '3:00 AM','3:30' => '3:30 AM','4:00' => '4:00 AM','4:30' => '4:30 AM',
+                            '5:00' => '5:00 AM','5:30' => '5:30 AM'
                     ] ;
                     ?>
                     <i class="fa fa-clock-o"></i>
@@ -98,7 +98,7 @@
                         <div class="tooltiptext time-kicker">
                             <div >
                                 <label for="opentime">Start Time</label>
-                                {!! Form::select('cc-input-search-time', $arr_time, null, ['id'=>'cc-input-search-time', 'class' => 'form-control search-time select2']) !!}
+                                {!! Form::select('cc-input-search-time', $arr_time,"6:00", ['id'=>'cc-input-search-time', 'class' => 'form-control search-time select2']) !!}
                             </div>
                             <div>
                                 <br>
@@ -108,12 +108,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-2 form-icon">
+                <div class="form-group col-md-2 col-xs-6 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
                     {!! Form::selectRange('court',1,4,null,['id'=>'inputID','class' => 'form-control placeholder-single select2','placeholder'=>'# Courts']) !!}
                             <!-- <input type="text" class="form-control" name="" id="" placeholder="# Courts"> -->
                 </div>
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-2 col-xs-6">
                     <button type="submit" class="btn btn-search">SEARCH</button>
                 </div>
 

@@ -85,7 +85,7 @@
 
                 @if (Auth::user()->is_super)
                     <li>
-                        <a href="{{ route('super.index') }}" data-toggle="tooltip" data-placement="right" title="Supper Admin">
+                        <a href="{{ route('super.index') }}" data-toggle="tooltip" data-placement="right" title="Super Admin">
                             <i class="fa fa-user"></i>
                         </a>
                     </li>

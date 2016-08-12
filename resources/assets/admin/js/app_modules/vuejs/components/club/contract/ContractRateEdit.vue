@@ -24,10 +24,10 @@
 					Day of the Week <br>
 					Total Days w/ Holidays
 				</div>
-				<div v-for="(index,item) in dataDateTb" class="th" track-by="$index">
-					<div class="db-tb-day">{{item.date}}</div>
-					<div class="db-tb-day">{{item.day_of_week}}</div>
-					<div class="db-tb-day">{{item.count_weekday + "-days"}}</div>
+				<div v-for="(index,item) in contractSelect.daysOfWeek" class="th" track-by="$index">
+					<div class="db-tb-day">{{item.date_first}}</div>
+					<div class="db-tb-day">{{index}}</div>
+					<div class="db-tb-day">{{item.count + "-days"}}</div>
 				</div>
 
 				<div v-for="(index,time) in contractSelect.rates" class="{{index < 6 ? 'clearfix row-edit row-edit'+index : 'clearfix' }}" track-by="$index">
@@ -177,7 +177,6 @@
 				priceSet: 1200,
 				keyExtra:null,
 				valueExtra:null,
-				dataDateTb: ['','','','','','','']
 			}
 		},
 		watch: {
@@ -189,18 +188,16 @@
 			}
 		},
 		ready(){
-			this.calTotalDay();
-			$('#table-contract-rate-edit').selectable({
-						filter: ".price_hours",
-						selected: ( event, ui ) => {
-						$(".unSelected").removeClass('hidden');
-				const x = $(ui.selected).data('x'),
-						y = $(ui.selected).data('y');
-				this.selected.push({x , y});
-			},
+			//this.calTotalDay();
+			$("#table-contract-rate-edit").selectable({
+				filter: ".price_hours",
+				selected: ( event, ui ) => {
+					$(".unSelected").removeClass('hidden');
+					const x = $(ui.selected).data('x'), y = $(ui.selected).data('y');
+					this.selected.push({x , y});
+				},
 				unselected:( event, ui ) => {
-					const x = $(ui.unselected).data('x'),
-							y = $(ui.unselected).data('y');
+					const x = $(ui.unselected).data('x'), y = $(ui.unselected).data('y');
 					$(".unSelected").removeClass('hidden');
 					this.selected = _.reject(this.selected, {x, y});
 				}
@@ -250,7 +247,7 @@
 					dataDateTb[i].date = clone_start_date.format('MM/DD');
 					dataDateTb[i].day_of_week = dayOfWeek[clone_start_date.isoWeekday() - 1];
 				}
-				this.dataDateTb = dataDateTb;
+				return dataDateTb;
 			},
 			weekdaysBetween(d1, d2, isoWeekday) {
 				var daysToAdd = ((7 + isoWeekday) - d1.isoWeekday()) % 7;

@@ -22,6 +22,7 @@
                         </div>
                     @else
                         <div class="text-left clearfix" id="show-results">
+                            <div style="margin: 20px 0px" class="visible-lg"></div>
                             @if (isset($clubs) && count($clubs) > 0)
                                 <div class="pull-left show-result">
                                     Showing Results <span>{!! $clubs->perPage() * ($clubs->currentPage() - 1) + 1!!}-{!! $clubs->perPage() * ($clubs->currentPage() - 1) + $clubs->count() !!}</span> of <span>{!! $clubs->total() !!}</span>

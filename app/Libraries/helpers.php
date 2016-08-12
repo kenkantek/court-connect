@@ -105,7 +105,7 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
     $court = Court::where('id',$court_id)->first();
 
     //check day close
-    $check_close = SetOpenDay::where(['date' => $date, 'club_id' => $court['club_id']])
+    $check_close = SetOpenDay::where(['date' => $date, 'club_id' => $court->club_id])
         ->where('is_close',1)
         ->get();
     if(isset($check_close) && count($check_close) > 0){
@@ -114,6 +114,7 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             'status' => "close"
         ];
     }
+
     $unavailable = TimeUnavailable::where(['date' => $date, 'court_id' => $court_id])
         ->where(function ($q) use($hour_start,$hour_length) {
             $q->orWhere('hour', $hour_start)
@@ -196,14 +197,14 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
     }
 
     //check open time
-    $check_open_close_date = SetOpenDay::where('date',$date)->first();
+    $check_open_close_date = SetOpenDay::where(['date' => $date, 'club_id' => $court->club_id])->first();
     if(isset($check_open_close_date)) {
-        if($check_open_close_date['open_time'] == "12:00 PM")
+        if($check_open_close_date['open_time'] == "12:00 AM")
             $check_open_close_date['open_time'] = "0:00";
         else
             $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
 
-        if($check_open_close_date['close_time'] == "12:00 PM")
+        if($check_open_close_date['close_time'] == "12:00 AM")
             $check_open_close_date['close_time'] = "24:00";
         else
             $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
@@ -224,22 +225,22 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             }
         }
         $tmp_index = ($i) *2;
-        if(!isset($rates_full[$tmp_index][$index_json])){
+
+        if(isset($rates_full[$tmp_index][$index_json]))
+            $total_price += $rates_full[$tmp_index][$index_json] / 2;
+        else if($type == "open" && isset($court) && !isset($rates_full[$tmp_index][$index_json])){ //price default of book open
+            $total_price = $court['default_rate'];
+        }
+        else if(!isset($rates_full[$tmp_index][$index_json])){
             $total_price ="ERROR";
             break;
         }
-        else if($type == "open" && isset($court) && $court['default_rate'] != null){ //price default of book open
-            $total_price = $court['default_rate'];
-            break;
-        }
-        else if($rates_full[$tmp_index][$index_json] == "N/A"){
+        else //if($rates_full[$tmp_index][$index_json] == "N/A")
             return [
                 'error' => true,
                 'price' => "N/A",
                 'status' => 'nosetprice'
             ];
-        }
-        $total_price += $rates_full[$tmp_index][$index_json] / 2;
     }
     return [
         'error' => false,
@@ -269,21 +270,41 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         }
 
         //check time open and close of club
+        $court = Court::where('id',$input['court_id'])->first();
         $date = Carbon::createFromTimestamp(strtotime($input['date']))->format("Y-m-d");
-        $check_open_close_date = SetOpenDay::where('date',$date)->first();
+        $check_open_close_date = SetOpenDay::where(['date' => $date, 'club_id' => $court->club_id])->first();
+        $clone_open_close_date = clone $check_open_close_date;
         if(isset($check_open_close_date)) {
-            $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
-            $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+            if($check_open_close_date['open_time'] == "12:00 AM")
+                $check_open_close_date['open_time'] = "0:00";
+            else
+                $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
+
+            if($check_open_close_date['close_time'] == "12:00 AM")
+                $check_open_close_date['close_time'] = "24:00";
+            else
+                $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+
             $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
             $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
-            if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] >= $close_time_date + 1){
+
+            if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] > $close_time_date){
                 //$text = " ".$check_open_close_date['open_time']." ".($input['hour_start'] + $input['hour_length']);
                 return [
                     'error' => true,
-                    "messages"=>['Club opens at '.$check_open_close_date['open_time'].' and closes at '.$check_open_close_date['close_time']]
+                    "messages"=>['Club Hours:  '.$clone_open_close_date['open_time'].' - '.$clone_open_close_date['close_time']]
                 ];
             }
+
         }
+
+//        if(isset($check_open_close_date)) {
+//            $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
+//            $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+//            $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
+//            $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
+//
+//        }
 
         //check book is exist
         $check_book = Booking::where('date',$date)
@@ -369,7 +390,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         //check time open and close of club
         /*
         $date = Carbon::createFromTimestamp(strtotime($range_date[0]))->format("Y-m-d");
-        $check_open_close_date = SetOpenDay::where('date',$date)->first();
+        $check_open_close_date = SetOpenDay::where(['date' => $date, 'club_id' => $court->club_id])->first();
         if(isset($check_open_close_date)) {
             $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
             $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));

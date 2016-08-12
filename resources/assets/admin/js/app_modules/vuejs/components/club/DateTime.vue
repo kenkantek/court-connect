@@ -436,8 +436,8 @@
                 var  d = item.date.split("-");
                 if(item.is_close == 0 && item.is_holiday == 0 ) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(item.open_time != '' ?item.open_time + " - " + item.close_time: '' );
-                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=opentime]").val(item.open_time);
-                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=closetime]").val(item.close_time);
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=opentime]").attr('value',item.open_time).timepicker('setTime', item.open_time);
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=closetime]").attr('value', item.close_time).timepicker('setTime', item.close_time);
                 }
                 else if(item.is_close == 1) {
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap day_close');
@@ -447,12 +447,13 @@
                     text_holiday = '<div class="txt-holiday" style="text-transform: uppercase; padding-top: 5px;margin-bottom: -15px;font-weight: bold;">Holiday</div>';
                     text_holiday += item.open_time != '' ? item.open_time + " - " + item.close_time: '';
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap .time").html(text_holiday);
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=opentime]").attr('value',item.open_time).timepicker('setTime', item.open_time);
+                    $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .dlg-setopenday input[name=closetime]").attr('value', item.close_time).timepicker('setTime', item.close_time);
 
                 }else{
                     $("#tbody-wrapper-main td[data-id=" + parseInt(d[2]) + "] .monthly-indicator-wrap").attr('class','monthly-indicator-wrap');
                 }
-                $(".timepicker").timepicker('setTime', '6:00 AM');
-                $(".timepicker.closetime").timepicker('setTime', '22:00 PM');
+
             });
         },
         close () {
@@ -542,23 +543,45 @@
         }
     };
 
-        $(function() {
-            $("body").on('click','.btn-clock',function(e){
-                e.preventDefault();
-                $(".monthly-indicator-wrap .overflow").removeClass('double-click');
-                $(this).parent().toggleClass('block');
-                $(this).parent().find('.dlg-setopenday').toggleClass('hidden');
-            });
+//        $(function() {
+//            $("body").on('click','.monthly-indicator-wrap .btn-clock',function(e){
+//                e.preventDefault();
+//                tmp_check_block = false;
+//                if($(this).parent().hasClass('block'))
+//                    tmp_check_block = true;
+//                $(".monthly-indicator-wrap .overflow").removeClass('block block-current');
+//                if(!tmp_check_block) {
+//                    $(this).parent().addClass('block block-current');
+//                    $(this).parent().find('.dlg-setopenday').toggleClass('hidden');
+//                }
+//                console.log("btn-clock");
+//            });
+//
+//            $("body").on('click','.monthly-indicator-wrap .overflow',function(e){
+//                e.preventDefault();
+//                if(!$(this).hasClass('block-current')){
+//                    $(".monthly-indicator-wrap .overflow.block .dlg-setopenday").addClass('hidden');
+//                    $(".monthly-indicator-wrap .overflow").removeClass('block block-current');
+//                    //$(this).find('.btn-clock').trigger('click');
+//                }
+//                console.log("oveflow");
+//            });
+//        });
 
-            $("body").on('click','.monthly-indicator-wrap .overflow.block',function(e){
-                e.preventDefault();
-                if($(this).hasClass('double-click')) {
-                    $(".monthly-indicator-wrap .overflow").removeClass('block double-click');
-                    $(this).find('.dlg-setopenday').addClass('hidden');
-                }else{
-                    if(!$(this).find('.dlg-setopenday').hasClass('hidden'))
-                        $(this).addClass('double-click');
-                }
-            });
+    $(function() {
+        $("body").on('click','.btn-clock',function(e){
+            e.preventDefault();
+            tmp_check_block = false;
+            if($(this).parent().hasClass('block'))
+                tmp_check_block = true;
+            $(".monthly-indicator-wrap .overflow").removeClass('block');
+            if(!tmp_check_block)
+                $(this).parent().addClass('block block-current');
+            $(this).parent().find('.dlg-setopenday').toggleClass('hidden');
         });
+
+        $("body").on('click','.monthly-indicator-wrap .overflow.block',function(e){
+            e.preventDefault();
+        });
+    });
 </script>

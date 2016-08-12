@@ -32,11 +32,11 @@
                         </p>
                     </div>
                     @if(isset($club->data_date_open->is_close) && $club->data_date_open->is_close == 1)
-                        <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; text-transform: uppercase; font-size: 1.2em; color: blue;">Date closed</div>
+                        <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; font-size: 1.2em; color: #63ac1e;">Date closed</div>
                     @endif
 
                     @if(isset($club->court->prices[0]['error']) && $club->court->prices[0]['error'] && isset($club->court->prices[0]['messages'][0]))
-                        <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; text-transform: uppercase; font-size: 1.2em; color: blue;">{{$club->court->prices[0]['messages'][0]}}</div>
+                        <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; font-size: 1.2em; color: #63ac1e;">{{$club->court->prices[0]['messages'][0]}}</div>
                     @endif
 
                 </div>

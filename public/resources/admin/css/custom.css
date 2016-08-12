@@ -863,3 +863,6 @@ table .arrow{
 .irs-slider:hover{
     background-position: top;
 }
+.btn-primary.focus, .btn-primary:focus{
+    background: #082e31 !important;
+}

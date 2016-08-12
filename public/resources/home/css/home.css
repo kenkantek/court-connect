@@ -1473,7 +1473,7 @@ a.ui-state-default.ui-state-highlight {
     margin: 5px 0px;
 }
 .show-result {
-    margin: 20px 0px;
+
 }
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
     z-index: 3;
@@ -1633,9 +1633,21 @@ a.ui-state-default.ui-state-highlight {
     .header-1 .navbar-nav .open .dropdown-menu{
         background: #fff;
     }
+    .menu-manager-account{
+        background: #fff !important;
+    }
+    .menu-manager-account a{
+        color: #000 !important;
+    }
+    .md-clearfix{
+        clear: both;
+    }
+    .md-fright{
+        float: right;
+    }
 }
 .header .navbar-ex1-collapse{
-
+    transition: all 0.001s;
 }
 .btn-info,.btn-info:hover{
     background: green;
@@ -1644,13 +1656,13 @@ a.ui-state-default.ui-state-highlight {
     border: 0px;
 }
 .header .navbar-ex1-collapse.in{
-    position: fixed;
     width: 100%;
     background: rgba(0,0,0,0.7);
     position: fixed;
     z-index: 999;
     left: 0px;
     height: 100%;
+    transition: none;
 }
 .alert-danger{
     background: none;
@@ -1670,6 +1682,7 @@ a.ui-state-default.ui-state-highlight {
     }
     .content #search-results .img-clubs{
         max-height: 120px;
+        object-fit: cover;
     }
     .content #search-results .club-time .col-price{
         width: 33.333%;
@@ -1722,6 +1735,9 @@ a.ui-state-default.ui-state-highlight {
         line-height: 40px;
         width: 40px;
         font-size: 2em;
+    }
+    .xs-clearfix{
+        clear: both;
     }
 }
 

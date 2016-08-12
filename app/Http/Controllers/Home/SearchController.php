@@ -199,7 +199,9 @@ class SearchController extends Controller {
                             unset($clubs[$k]);
                         }
                     }
-                }else { // open
+                }
+                else { // open
+
                     foreach ($clubs as $k => $club) {
                         $clubs[$k]['type'] = 'open';
                         $clubs[$k]['data_date_open'] = SetOpenDay::where(['date'=>$keyword_day, 'club_id' => $club->id])->first();
@@ -251,7 +253,7 @@ class SearchController extends Controller {
             }
         }else
         {
-            $limit_hour = $input['hour_start'] + 4 < 23 - $input['hour_length']? 4 : (int)(23 - $input['hour_start']- 4);
+            $limit_hour = $input['hour_start'] + $input['hour_length'] <= 24 ? 4 : (int)(24 - $input['hour_start']- 4);
             $hour_start = $input['hour_start'];
             $hour_end = $input['hour_start'] + $limit_hour;
         }
