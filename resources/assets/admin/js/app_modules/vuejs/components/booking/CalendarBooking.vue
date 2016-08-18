@@ -173,7 +173,7 @@
                                     </tr>
                                     <tr>
                                         <td align="right">Total Due</td>
-                                        <td>${{booking['total_price']}}</td>
+                                        <td>${{booking['total_price_order']}}</td>
                                     </tr>
                                     <tr>
                                         <td align="right">Notes</td>

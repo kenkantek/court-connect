@@ -54,4 +54,5 @@
     </div>
 </div>
     @endif
+</div>
 {{-- end deals-near-you --}}

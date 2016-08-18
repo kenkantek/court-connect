@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Deal;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class HomeController extends Controller
 {

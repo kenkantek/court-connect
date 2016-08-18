@@ -35,10 +35,9 @@
                         <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; font-size: 1.2em; color: #63ac1e;">Date closed</div>
                     @endif
 
-                    @if(isset($club->court->prices[0]['error']) && $club->court->prices[0]['error'] && isset($club->court->prices[0]['messages'][0]))
-                        <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; font-size: 1.2em; color: #63ac1e;">{{$club->court->prices[0]['messages'][0]}}</div>
+                    @if(isset($club->alert_error))
+                        <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; font-size: 1.2em; color: #63ac1e;">{{$club->alert_error}}</div>
                     @endif
-
                 </div>
                 @if(count($club->courts) > 0)
                     <div class="row">
@@ -48,38 +47,44 @@
                                     <div class="intro-court clearfix">
                                         <div class="court-io-door pull-right">
                                             Indoor/Outdoor:
-                                            <b>{{$club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                                            @if($request->court == 1)
+                                            <b>{{ $club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                                            @endif
                                         </div>
                                         <div class="court-type pull-left">
                                             Court Type:
+                                            @if($request->court == 1)
                                             <b>{{$club->court->surface->label}}</b>
                                             <span class="hidden"><b>{{$club->court->name}}</b></span>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="club-time text-center club-time-wrap clearfix">
-                                        @foreach ($club->court->prices as $item)
-                                            @if(isset($item['status']) || $item['error'] == true)
+                                        @if(isset($club->price_main))
+                                            @foreach ($club->price_main as $item)
+                                                @if(isset($item['status']) || $item['error'] == true)
 
-                                            @else
-                                                <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
-                                                                        <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start']): str_replace(".5",":30",($item['hour_start'] - 12))}} -
-                                                                            {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
-                                                                        </span>
+                                                @else
+                                                    <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                                                            <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start']): str_replace(".5",":30",($item['hour_start'] - 12))}} -
+                                                                                {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
+                                                                            </span>
 
-                                                    <a href="{{route('home.checkout',['date'=>$request->input('date'),'court'=>$club->court->id,'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="{{$club->court->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
-                                                        @if(isset($item['total_price']) && $item['total_price'] == 'N/A' )
-                                                            <span>N/A</span>
-                                                        @else
-                                                            @if(isset($item['total_price']))
-                                                                <span>${!! $item['total_price'] !!}</span>
+                                                        <a href="{{route('home.checkout',['date'=>$request->input('date'), http_build_query(['courts' => $club->arr_count]),'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="{{$club->court->id}}" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
+                                                            @if(isset($item['total_price']) && $item['total_price'] == 'N/A' )
+                                                                <span>N/A</span>
                                                             @else
-                                                                <span>{!! isset($item['status']) ? ($item['status'] == 'unavailable' ? 'unavailable' : ($item['status'] == 'nosetprice' ? 'unavai' : $item['status'])) : "unavai" !!}</span>
+                                                                @if(isset($item['total_price']))
+                                                                    <span>${!! $item['total_price'] !!}</span>
+                                                                @else
+                                                                    <span>{!! isset($item['status']) ? ($item['status'] == 'unavailable' ? 'unavailable' : ($item['status'] == 'nosetprice' ? 'unavai' : $item['status'])) : "unavai" !!}</span>
+                                                                @endif
                                                             @endif
-                                                        @endif
-                                                    </a>
-                                                </div>
-                                            @endif
-                                        @endforeach
+                                                        </a>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             </div>

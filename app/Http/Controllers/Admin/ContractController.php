@@ -25,34 +25,12 @@ class ContractController extends Controller
     {
         $contracts = Contract::where('club_id', $club_id)->orderBy('updated_at', 'desc')->paginate(50);
         foreach ($contracts as $contract){
-            $contract->daysOfWeek = $this->getTotalWeekFromPeriod(strtotime($contract->start_date), strtotime($contract->end_date) , $club_id);
+            $contract->daysOfWeek = getTotalWeekFromPeriod(strtotime($contract->start_date), strtotime($contract->end_date) , $club_id);
         }
         return $contracts;
     }
 
-    public function getTotalWeekFromPeriod($start_date, $last_date, $club_id){
-        $weeksBetween = 0;
-        if($start_date > $last_date)
-            return 0;
-        $no_of_days = ($last_date - $start_date) / 86400; //the diff will be in timestamp hence dividing by timestamp for one day = 86400
-        $get_weekdaysBetween = [];
 
-        for($i = 0; $i < $no_of_days; $i++) {
-            $isoWeekday = date("D", $start_date);
-            $temp_date = date("Y-m-d", $start_date);
-            //check date holiday or close
-            $open_day = SetOpenDay::where(['club_id' => $club_id, 'date' => $temp_date])->first();
-            if(!isset($open_day) || (isset($open_day) && $open_day->is_close == 0)){
-                if(!isset($get_weekdaysBetween[$isoWeekday])) {
-                    $get_weekdaysBetween[$isoWeekday]['count'] = 0;
-                    $get_weekdaysBetween[$isoWeekday]['date_first'] = date("m/d", $start_date);
-                }
-                $get_weekdaysBetween[$isoWeekday]['count'] ++;
-            }
-            $start_date += 86400;
-        }
-        return $get_weekdaysBetween;
-    }
 
     public function getList(Request $request)
     {

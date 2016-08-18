@@ -33,60 +33,44 @@ class BookingController extends Controller{
     {
         $error = false;
         $msg_errors = null;
-        $court = null;
-        if(!Input::has('court') || !Input::has('hour_start') ||  !Input::has('hour_length')){
+        $courts = null;
+        $data_checkout = [];
+        if(!Input::has('courts') || !is_array($request->courts) || !Input::has('hour_start') ||  !Input::has('hour_length')){
+            $msg_errors[] = "Data invalid. Not found data";
         }
         else{
+            $data_checkout = [
+                'total_price' => 0,
+                'booking_type' => "open",
+                'num_court' => count($request->input('courts')),
+                'courts' => null
+            ];
+
             if(isset($request->dayOfWeek) && !in_array($request->dayOfWeek,$this->dayOfWeek)){
                 $error = true;
                 $msg_errors[] = "Data day of week invalid";
             }
+            if(isset($request->dayOfWeek) && !isset($request->contract_id)){
+                $error = true;
+                $msg_errors[] = "Contract not exist";
+            }
+
             if(!$error) {
-                $court = Court::with('club', 'surface')->find($request->input('court'));
-                if ($court) {
-                    $input = [
-                        'date' => $request->input('date'),
-                        'type' => 'open',
-                        'hour_start' => $request->input('hour_start'),
-                        'hour_length' => $request->input('hour_length'),
-                        'member' => 0,
-                        'court_id' => $court['id']
-                    ];
-                    $court['booking_type'] = "open";
-                    if (isset($request->contract_id) && isset($request->dayOfWeek)) {
-                        $contract = Contract::whereId($request->contract_id)
-                            ->where('club_id', $court->club_id)
-                            ->where('user_id', 0)
-                            ->select('id', 'start_date', 'end_date', 'total_week')->first();
-
-                        if (isset($contract)) {
-                            $input['type'] = 'contract';
-                            $input['contract_id'] = $request->contract_id;
-                            $input['dayOfWeek'] = $request->dayOfWeek;
-                            $court['booking_type'] = "contract";
-                            $court['contract'] = $contract;
-                        } else {
-                            $msg_errors[] = "Data invalid. Not found data";
-                        }
-                    }
-                    $get_price = getPriceForBooking($input);
-
-                    if($get_price['error'] || $get_price['total_price'] <= 0){
-                        $error = true;
-                        if(isset($get_price['messages']))
-                            $msg_errors = $get_price['messages'][0];
-                        else
-                            $msg_errors[] = "Data invalid. Not found data";
-                    }
-                    else
-                        $court['price'] = $get_price;
-                } else {
-                    $msg_errors[] = "Data invalid. Not found data";
+                if (isset($request->contract_id) && isset($request->dayOfWeek)) {
+                    $data_checkout['booking_type'] = 'contract';
+                    $get_price_multi_court = getPriceOfMultiCourt($request->input('courts'), 'contract', $request->input('date'),
+                        $request->input('hour_start'), $request->input('hour_length'), $request->dayOfWeek, $request->contract_id);
+                }else{
+                    $get_price_multi_court = getPriceOfMultiCourt($request->input('courts'),'open',$request->input('date'),
+                        $request->input('hour_start'), $request->input('hour_length'));
                 }
+
+                $msg_errors = isset($get_price_multi_court['msg_errors']) ? $get_price_multi_court['msg_errors'] : '';
+                $data_checkout['total_price'] = isset($get_price_multi_court['total_price']) ? $get_price_multi_court['total_price'] : null;
+                $data_checkout['courts'] = isset($get_price_multi_court['list_court']) ? $get_price_multi_court['list_court'] : null;
             }
         }
-
-        return view('home.bookings.checkout',compact('request','court','msg_errors'));
+        return view('home.bookings.checkout',compact('request', 'data_checkout', 'msg_errors'));
     }
 
     //post checkOut
@@ -96,7 +80,7 @@ class BookingController extends Controller{
 
         //return $_POST;
         $input_validate = [
-            'court' => 'required',
+            'courts' => 'required',
             'hour_start' => 'required',
             'hour_length' => 'required',
             //'customer.title' => 'required',
@@ -135,6 +119,32 @@ class BookingController extends Controller{
         if($v->fails())
             return response()->json(['error' => true,"messages"=>$v->errors()->all()]);
         else{
+
+            //check input booking
+            if($request->type && $request->type == 'contract'){
+                if(!in_array($request->dayOfWeek,$this->dayOfWeek)){
+                    return response()->json([
+                        'error' => true,
+                        'messages' => "Data day of week invalid"
+                    ]);
+                }
+                $get_price_multi_court = getPriceOfMultiCourt($request->courts, $type = 'contract', $request->date,
+                    $request->hour_start, $request->hour_length, $request->dayOfWeek, $request->contract_id);
+
+            }else{
+                $get_price_multi_court = getPriceOfMultiCourt($request->courts, $type = 'open', $request->date,
+                    $request->hour_start, $request->hour_length);
+            }
+
+
+            if($get_price_multi_court['msg_errors'])
+                return response()->json([
+                    'error' => true,
+                    'messages' => implode(", ", $get_price_multi_court['msg_errors'])
+                ]);
+
+
+            //set data
             $data_order['bookingDetail'] = [];
             $data_order['paymentDetail'] = [];
             $data_order['customerDetail'] = [];
@@ -150,7 +160,6 @@ class BookingController extends Controller{
                 'teacher_id' => null,
                 'hour_start'=> $request->input('hour_start'),
                 'hour_length'=> $request->input('hour_length'),
-                'court_id'=> $request->input('court'),
                 'member'=> 0
             ];
 
@@ -165,63 +174,50 @@ class BookingController extends Controller{
                 $data_order['bookingDetail']['contract_id'] = $request->contract_id ? $request->contract_id :null;
                 $data_order['bookingDetail']['dayOfWeek'] = $request->dayOfWeek ? $request->dayOfWeek :null;
             }
-
             $data_order['paymentDetail']= $request->input('payment');
-
             $input_customer = $request->input('customer');
             unset($input_customer['password_confirmation']);
 
-            $result_prices = getPriceForBooking($data_order['bookingDetail']); // get prices
-
-            if(isset($result_prices['error']) && (!$result_prices['error'] || $result_prices['total_price'] <= 0)) {
-
-                if($request->input('is_customer') == 0 && !Auth::check()){ //create user
-                    $user = new User;
-                    $input_customer['password'] = bcrypt($input_customer['password']);
-                    $user->fill($input_customer)->save();
-                    $user->assignRole('player', 'players', 0);
-                    Auth::attempt(['email'=>$user['email'],'password'=>$request->input('customer.password')]);
-                    $input_customer['player_id'] = $user['id'];
-                }else{ //get info user is login
-                    $input_customer['player_id'] = Auth::user()->id;
-                    $input_customer['email'] = Auth::user()->email;
-                }
-                unset($input_customer['password']);
-
-
-                $data_order['customerDetail'] = $input_customer;
-
-                $data_order['players']['names'] = $request->input('player_name') ? $request->input('player_name') : [];
-                $data_order['players']['emails'] = $request->input('player_email') ? $request->input('player_email') : [];
-                $data_order['players']['player_num'] = $request->input('player_num');
-                $data_order['players']['source'] = 1;
-
-                //call booking from helper
-                $booking = booking($data_order);
-
-                if(!$booking['error']) {
-                    if ($booking['booking']['player_id'])
-                        event(new UserBookingEvent($booking['booking']['player_id'], $booking['booking']['id']));
-                    return response()->json([
-                        'error' => false,
-                        'payment_id' => $booking['booking']['id']
-                    ]);
-                }else{
-                    return response()->json([
-                        'error' => true,
-                        'messages' => $booking['messages'] ? $booking['messages'] : "An error occurred in the implementation process"
-                    ]);
-                }
+            //create or login user
+            if($request->input('is_customer') == 0 && !Auth::check()){ //create user
+                $user = new User;
+                $input_customer['password'] = bcrypt($input_customer['password']);
+                $user->fill($input_customer)->save();
+                $user->assignRole('player', 'players', 0);
+                Auth::attempt(['email'=>$user['email'],'password'=>$request->input('customer.password')]);
+                $input_customer['player_id'] = $user['id'];
+            }else{ //get info user is login
+                $input_customer['player_id'] = Auth::user()->id;
+                $input_customer['email'] = Auth::user()->email;
             }
-            else{
-                $msg = "Error. Input invalid";
-                if(isset($result_prices['status']) && $result_prices['status'] == 'booking')
-                    $msg.= "This is is booked";
-                if(isset($result_prices['messages']) && is_array($result_prices['messages']))
-                    foreach($result_prices['messages'] as $message)
-                        $msg.= "<br>".$message;
-                return response()->json( ['error' => true, "messages" => [$msg]]);
+            unset($input_customer['password']);
+
+            $data_order['customerDetail'] = $input_customer;
+
+            $data_order['players']['names'] = $request->input('player_name') ? $request->input('player_name') : [];
+            $data_order['players']['emails'] = $request->input('player_email') ? $request->input('player_email') : [];
+            $data_order['players']['player_num'] = $request->input('player_num');
+            $data_order['players']['source'] = 1;
+
+            $data_order['bookingDetail']['court_id'] = $request->input('court');
+
+            //call booking from helper
+            $booking = booking($data_order, $request->courts, $get_price_multi_court);
+
+            if(!$booking['error']) {
+                if (isset($booking['list_booking'][0]['player_id']))
+                    event(new UserBookingEvent($booking['list_booking'][0]['player_id'], $booking['list_booking'][0]['id']));
+                return response()->json([
+                    'error' => false,
+                    'payment_id' => $booking['list_booking'][0]['id']
+                ]);
+            }else{
+                return response()->json([
+                    'error' => true,
+                    'messages' => $booking['messages'] ? $booking['messages'] : "An error occurred in the implementation process"
+                ]);
             }
+
         }
 
     }

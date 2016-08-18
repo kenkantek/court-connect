@@ -510,46 +510,61 @@ class ManageBookingController extends Controller
 
         $result_prices = getPriceForBooking($data_order['bookingDetail']); // get prices
 
-        if(!$result_prices['error']) {
+        //check input booking
+        if($inputBookingDetail->type && $inputBookingDetail->type == 'contract'){
+            $dayOfWeek = [1,2,3,4,5,6,7];
+            if(!in_array($inputBookingDetail->dayOfWeek,$dayOfWeek)){
+                return response()->json([
+                    'error' => true,
+                    'messages' => "Data day of week invalid"
+                ]);
+            }
+            $get_price_multi_court = getPriceOfMultiCourt([0=>$inputBookingDetail->court_id], $type = 'contract', $inputBookingDetail->date,
+                $inputBookingDetail->hour_start, $inputBookingDetail->hour_length, $inputBookingDetail->dayOfWeek, $inputBookingDetail->contract_id);
 
-            $data_order['customerDetail'] = $customerDetail;
+        }else{
+            $get_price_multi_court = getPriceOfMultiCourt([0=>$inputBookingDetail->court_id], $type = 'open', $inputBookingDetail->date,
+                $inputBookingDetail->hour_start, $inputBookingDetail->hour_length);
+        }
+        
+        if($get_price_multi_court['msg_errors'])
+            return response()->json([
+                'error' => true,
+                'messages' => implode(", ", $get_price_multi_court['msg_errors'])
+            ]);
+
+        $data_order['customerDetail'] = $customerDetail;
 
 //            $data_order['players']['names'] = $request->input('player_name') ? $request->input('player_name') : [];
 //            $data_order['players']['emails'] = $request->input('player_email') ? $request->input('player_email') : [];
 //            $data_order['players']['player_num'] = $request->input('player_num');
-            $data_order['players']['source'] = 0;
+        $data_order['players']['source'] = 0;
 
-            //call booking from helper
-            $booking = booking($data_order);
+        //call booking from helper
+        $booking = booking($data_order, [0=>$inputBookingDetail->court_id], $get_price_multi_court);
 
-            if(!$booking['error']) {
-                $payment_type = "Cash";
-                $last4 = '';
-                if($booking['booking']['payment_id'] != null) {
-                    $payment = Payment::whereId($booking['booking']['payment_id'])->first();
-                    $payment_type = $payment['card_type'] != null ? "Credit Card | " . $payment['card_type'] : "Paypal";
-                    $last4 = $payment['card_type'] != null ? "****-****-****-".$payment['last_4']: '';
-                }
-                return response()->json([
-                    'error' => false,
-                    'total_price' => $booking['booking']['total_price'],
-                    'booking_reference' => $booking['booking']['id'],
-                    'payment_type' => $payment_type,
-                    'last4' => $last4
-                ]);
+        if(!$booking['error']) {
+            $payment_type = "Cash";
+            $last4 = '';
+            if (isset($booking['list_booking'][0]['payment_id']) != null){
+                $payment = Payment::whereId($booking['list_booking'][0]['payment_id'])->first();
+                $payment_type = $payment['card_type'] != null ? "Credit Card | " . $payment['card_type'] : "Paypal";
+                $last4 = $payment['card_type'] != null ? "****-****-****-".$payment['last_4']: '';
             }
-            else{
-                return response()->json([
-                    'error' => true,
-                    'messages' => $booking['messages'] ? $booking['messages'] : "An error occurred in the implementation process"
-                ]);
-            }
-
+            return response()->json([
+                'error' => false,
+                'total_price' => $booking['list_booking'][0]['total_price_order'],
+                'booking_reference' => $booking['list_booking'][0]['id'],
+                'payment_type' => $payment_type,
+                'last4' => $last4
+            ]);
         }
-        return response()->json([
-            'error' => true,
-            "messages" => ['Error. Input invalid or it is booking']
-        ]);
+        else{
+            return response()->json([
+                'error' => true,
+                'messages' => $booking['messages'] ? $booking['messages'] : "An error occurred in the implementation process"
+            ]);
+        }
     }
 
     //get view booking
@@ -667,9 +682,8 @@ class ManageBookingController extends Controller
     //get address lookup
     public function getAddressLookup($zipcode){
         $city = City::join('states','states.state_code','=','citys.state_code')
-            ->join('zipcodes','citys.id','=','zipcodes.city_id')
             ->select(['citys.name as city','states.name as state'])
-            ->where('zipcodes.zipcode',"like","%".$zipcode."%")
+            ->where('citys.zipcode',"like","%".$zipcode."%")
             ->first();
         if(!isset($city)){
             return ['error' => true, "messages" => ["Not found data"]];

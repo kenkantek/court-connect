@@ -173,7 +173,7 @@
 			<div class="modal-content">
 				<div class="notify">
 					<p><i class="fa fa-exclamation-triangle"></i></p>
-					<p>Select Contract Timer Period Above to Edit Price</p>
+					<p>Select Contract Time Period Above to Edit Price</p>
 				</div>
 
 			</div>

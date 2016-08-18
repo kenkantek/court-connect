@@ -82,6 +82,7 @@ class ClubController extends Controller
             ]);
         }
     }
+
     public function postSetOpenDay(Request $request){
         $errors = [];
         if(empty($request->input('open_time')) || empty($request->input('close_time'))  || empty($request->input('end_date'))
@@ -100,14 +101,14 @@ class ClubController extends Controller
             $tmp = SetOpenDay::where('club_id',$request->input('club_id'))->where('date',$date)->first();
             if(!isset($tmp)) {
                 $item = new SetOpenDay();
-                $item['date'] = $date;
-                $item['open_time'] = $request->input('open_time');
-                $item['close_time'] = $request->input('close_time');
-                $item['club_id'] = $request->input('club_id');
+                $item->date = $date;
+                $item->open_time = $request->input('open_time');
+                $item->close_time = $request->input('close_time');
+                $item->club_id= $request->input('club_id');
                 $item->save();
             }else{
-                $tmp['open_time'] = $request->input('open_time');
-                $tmp['close_time'] = $request->input('close_time');
+                $tmp->open_time = $request->input('open_time');
+                $tmp->close_time = $request->input('close_time');
                 $tmp->update();
             }
         }
@@ -116,6 +117,7 @@ class ClubController extends Controller
             'success' => 'Set Opening Hours/Holiday Days successfully!',
         ]);
     }
+    
     function createDateRange($startDate, $endDate)
     {
         $range = [];

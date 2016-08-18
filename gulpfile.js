@@ -39,11 +39,11 @@ gulp.task('admin', function() {
 });
 
 gulp.task('home', function() {
-    elixir.config.assetsPath = 'resources/assets/home/';
-    elixir.config.publicPath = 'public/resources/home/';
+    //elixir.config.assetsPath = 'resources/assets/home/';
+    //elixir.config.publicPath = 'public/resources/home/';
     elixir(function(mix) {
-        mix.styles('home.css');
-        mix.scripts('home.js');
+        //mix.styles('home.css');
+        //mix.scripts('home.js');
     });
 });
 gulp.task('default', [ 'admin']);

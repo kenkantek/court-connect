@@ -140,7 +140,7 @@
                         <tr align="center">
                             <td align="right" colspan="3" style="border-bottom:1px solid #eff0f4;padding:5px"><strong>Total</strong></td>
                             <td align="left" style="border-bottom:1px solid #eff0f4;padding:5px 16px 5px 5px">
-                                <strong>${{$booking['total_price']}}</strong>
+                                <strong>${{$booking['total_price_order']}}</strong>
                             </td>
                         </tr>
                         </tbody>

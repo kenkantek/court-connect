@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Payment extends Model
 {
-    protected $table = 'payments_new';
+    protected $table = 'payments';
 
     /**
     * The date fields for the model.clear

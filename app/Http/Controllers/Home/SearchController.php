@@ -10,6 +10,7 @@ use App\Models\Contract;
 use App\Models\SetOpenDay;
 use App\Models\State;
 use Illuminate\Http\Request;
+use Exception;
 
 class SearchController extends Controller {
 
@@ -125,107 +126,150 @@ class SearchController extends Controller {
                     'member' => 0,
                 ];
 
+                $request->court = isset($request->court) && $request->court == '' ? 1 : $request->court;
+                $num_court = $request->court;
+
                 //contract
                 if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
                     foreach ($clubs as $k => $club) {
                         $contracts = Contract::where(['club_id' => $club['id'], 'is_member' => 0])
-                            ->limit(5)->orderBy('updated_at', 'desc')->get(['id','start_date','end_date','is_member','total_week']);
+                            ->limit(5)->orderBy('updated_at', 'desc')->get(['id', 'club_id', 'start_date','end_date','is_member','total_week']);
                         $clubs[$k]['data_date_open'] = SetOpenDay::where(['date'=>$keyword_day, 'club_id' => $club->id])->first();
                         if($contracts && count($contracts)  > 0) {
+
                             $arr_tmp_contract = [];
                             foreach ($contracts as $m => $contract) {
                                 $tmp_count = count($club->courts);
-                                $index_min = -1;
-                                $tmp_price_min = -1;
-                                $tmp_court = 0;
+                                $tmp_contract = null;
+
+                                $tmp_contract['court'] = $club->courts[0];
+                                $tmp_contract['contract_id'] = $contract->id;
+                                $tmp_contract['daysOfWeek'] = getTotalWeekFromPeriod(strtotime($contract->start_date), strtotime($contract->end_date) , $contract->club_id);
+
+                                $tmp_contract['start_date'] = $contract['start_date'];
+                                $tmp_contract['end_date'] = $contract['end_date'];
+                                //$tmp_contract['range_date'] = createRangeDate($contract['start_date'], $contract['end_date'], $input['dayOfWeek']);
+
+                                //cal price of num_court court
+                                $total_price = 0;
+                                $price_main  = null;
+                                $arr_count = [];
+                                $arr_count[] = $club->courts[0]['id'];
+                                $input['type'] = 'contract';
 
                                 foreach ($club->courts as $p => $court) {
-                                    $input['court_id'] = $court['id'];
-                                    $input['club_id'] = $club['id'];
-                                    $input['type'] = 'contract';
+                                    $input['court_id'] = $court->id;
+                                    $input['club_id'] = $court->club_id;
                                     $input['contract_id'] = $contract['id'];
-                                    $lprice = [];
 
-                                    foreach($request->dayOfWeek as $dayOfWeek) {
-                                        $input['dayOfWeek'] = intval($dayOfWeek);
-                                        $lprice[] = getPriceForBooking($input);
-                                    }
-
-                                    if(!isset($clubs[$k]['courts'][$m*$tmp_count+$p])) {
-                                        $clubs[$k]['courts'][$m * $tmp_count + $p] = clone($clubs[$k]['courts'][$p]);
-                                    }
-
-                                    if(isset($lprice[0]) && $lprice[0]['error'] == false){
-                                        if($lprice[0]['total_price'] < $tmp_price_min || $tmp_price_min < 0){
-                                            $tmp_price_min = $lprice[0]['total_price'];
-                                            $index_min = $p;
-                                            $tmp_court = $court['id'];
-                                        }
-                                    }
-                                }
-                                if($index_min < 0){
-                                    $index_min = 0;
-                                }
-                                if($tmp_court != 0) {
-                                    $tmp['court'] = $clubs[$k]['courts'][$index_min];
-                                    $tmp['contract_id'] = $contract['id'];
-                                    $input['court_id'] = $tmp_court;
-                                    $input['club_id'] = $club['id'];
-                                    $tmp['min_price'] = $tmp_price_min;
-
-                                    //return $input;
                                     $lprice = [];
                                     foreach ($request->dayOfWeek as $dayOfWeek) {
                                         $input['dayOfWeek'] = intval($dayOfWeek);
                                         $lprice[] = $this->getListPriceOfCourt($input);
                                     }
 
-                                    $tmp['prices'] = $lprice;
-                                    $tmp['start_date'] = $contract['start_date'];
-                                    $tmp['end_date'] = $contract['end_date'];
-                                    $tmp['range_date'] = createRangeDate($contract['start_date'], $contract['end_date'], $input['dayOfWeek']);
-
-                                    $arr_tmp_contract[] = $tmp;
+                                    if($p==0){
+                                        $price_main[]  = $lprice;
+                                    }
+                                    else if($p != 0){
+                                        $flag_error = 0;
+                                        foreach ($price_main as $p1=> $price) {
+                                            $flag_error = 0;
+                                            foreach ($price as $pd => $price_day) {
+                                                foreach ($price_day as $pdh => $price_day_hour) {
+                                                    if($price_main[$p1][$pd][$pdh]['error'] == 'true'){
+                                                        $flag_error = 1;
+                                                        break;
+                                                    }
+                                                    $price_main[$p1][$pd][$pdh]['total_price'] += $price_day_hour['total_price'];
+                                                }
+                                            }
+                                            if($flag_error)
+                                                continue;
+                                        }
+                                        $arr_count[] = $court->id;
+                                    }
+                                    if($p + 1 >= $num_court)
+                                        break;
                                 }
-                            }
 
-                            usort($arr_tmp_contract,function($a,$b){
-                                return $a['min_price'] > $b['min_price'];
+                                $tmp_contract['price_main'] = $price_main;
+                                $tmp_contract['arr_count'] = $arr_count;
+
+                                $arr_tmp_contract[] = $tmp_contract;
+                                unset($club->courts);
+                            }
+                            usort($arr_tmp_contract, function($a,$b){
+                                return $a['price_main'][0][0][0]['total_price'] > $b['price_main'][0][0][0]['total_price'];
                             });
                             $clubs[$k]['contracts'] = $arr_tmp_contract;
-                            unset($clubs[$k]['courts']);
-                            $clubs[$k]['type'] = 'contract';
-                        }else{
+                        }
+                        else{
                             unset($clubs[$k]);
                         }
                     }
                 }
                 else { // open
+                    foreach ($clubs as $c => $club) {
+                        $club->type = 'open';
+                        $club->data_date_open = SetOpenDay::where(['date'=>$keyword_day, 'club_id' => $club->id])->first();
 
-                    foreach ($clubs as $k => $club) {
-                        $clubs[$k]['type'] = 'open';
-                        $clubs[$k]['data_date_open'] = SetOpenDay::where(['date'=>$keyword_day, 'club_id' => $club->id])->first();
-                        $index_min = -1;
-                        $tmp_price_min = -1;
+                        if($club->courts->count() < $num_court) {
+                            unset($club->courts);
+                            continue;
+                        }
                         foreach ($club->courts as $p => $court) {
                             $input['court_id'] = $court['id'];
                             $input['club_id'] = $club['id'];
-                            getPriceForBooking($input);
-                            if(isset($get_price['error']) && $get_price['error'] == false){
-                                if($get_price['total_price'] < $tmp_price_min || $tmp_price_min < 0){
-                                    $tmp_price_min = $get_price['total_price'];
-                                    $index_min = $p;
+                            $get_price = getPriceForBooking($input);
+
+                            if($get_price['error'] == 'true'){
+                                $club->alert_error = implode(", ", $get_price['messages']);
+                            }
+                            $club->courts[$p]['price'] = $get_price;
+                            $club->courts[$p]['prices'] = $this->getListPriceOfCourt($input);
+
+                        }
+
+                        for($i=0; $i< count($club->courts) - 1; $i++) {
+                            for($j = count($club->courts) - 1; $j > $i; $j--) {
+                                if ($club->courts[$j]['price']['error'] == false && $club->courts[$j - 1]['price']['error'] == false &&
+                                    isset($club->courts[$j]['price']['total_price']) && isset($club->courts[$j - 1]['price']['total_price']) &&
+                                    $club->courts[$j]['price']['total_price'] < $club->courts[$j - 1]['price']['total_price']
+                                ) {
+
+                                    $temp = clone($club->courts[$j - 1]);
+                                    $club->courts[$j - 1] = clone($club->courts[$j]);
+                                    $club->courts[$j] = $temp;
                                 }
                             }
                         }
 
-                        if($index_min < 0){
-                            $index_min = 0;
+                        $club->court = $club->courts[0];
+
+                        //cal price of num_court court
+                        $total_price = 0;
+                        $price_main  = $club->courts[0]->prices;
+                        $arr_count = [];
+                        $arr_count[] = $club->courts[0]->id;
+                        foreach ($club->courts as $p => $court) {
+                            if($p != 0){
+                                foreach ($court->prices as $k=> $price) {
+                                    if($price['error'] == false) {
+                                        $price_main[$k]['total_price'] += $price['total_price'];
+                                        $price_main[$k]['price_teacher'] += $price['price_teacher'];
+                                    }
+                                }
+                                $arr_count[] = $court->id;
+                            }
+                            if($p + 1 >= $num_court)
+                                break;
                         }
-                        $clubs[$k]['court'] = $clubs[$k]['courts'][$index_min];
-                        $input['court_id'] = $clubs[$k]['courts'][$index_min]['id'];
-                        $clubs[$k]['court']['prices'] = $this->getListPriceOfCourt($input);
-                        unset($clubs[$k]['courts']);
+                        $club->price_main = $price_main;
+                        $club->arr_count = $arr_count;
+                        unset($club->court->price);
+                        unset($club->court->prices);
+                        unset($club->courts);
                     }
                 }
             }
@@ -243,11 +287,11 @@ class SearchController extends Controller {
 
         if($input['type'] == 'contract'){
             if($input['hour_start'] >= 0){
-                $limit_hour = $input['hour_start'] + $input['hour_length'] <24 ? 1: 0;
+                $limit_hour = $input['hour_start'] + $input['hour_length'] <24 ? 4: (int)(24 - $input['hour_start']- 4);
                 $hour_start = $input['hour_start'];
                 $hour_end = $input['hour_start'] + $limit_hour;
             }else{
-                $limit_hour = $input['hour_start'] + $input['hour_length'] <24 ? 1: 0;
+                $limit_hour = $input['hour_start'] + $input['hour_length'] <24 ? 4: (int)(24 - $input['hour_start']- 4);
                 $hour_start = $input['hour_start'];
                 $hour_end = $input['hour_start'] + $limit_hour;
             }

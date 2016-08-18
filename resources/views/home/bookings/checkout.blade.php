@@ -7,7 +7,7 @@
         <div class="container content">
             <div class="instruction">
                 <h2><span>Checkout</span></h2>
-                @if($msg_errors || $court->price['error'])
+                @if($msg_errors)
                     <div class="alert alert-danger alert-block">
                         <button type="button" class="close" data-dismiss="alert">×</button>
                         @if($msg_errors)
@@ -20,22 +20,6 @@
                                     <li>{{$msg_errors}}</li>
                                 @endif
                             </ul>
-                        @else
-                            @if(isset($court->price['messages']))
-                                <ul>
-                                    @if(!is_array($court->price['messages']))
-                                        <li>{{$court->price['messages']}}</li>
-                                    @elseif(is_array($court->price['messages']))
-                                        @foreach($court->price['messages'] as $message)
-                                            <li>{{$message}}</li>
-                                        @endforeach
-                                    @endif
-                                </ul>
-                            @elseif(isset($court->price['status']))
-                                <ul>
-                                    <li>{{$court->price['status'] == "booking" ? "This was booked" : $court->price['status']}}</li>
-                                </ul>
-                            @endif
                         @endif
                     </div>
                 @else
@@ -46,7 +30,7 @@
                     date_time_set($date_booking, $intpart, $fraction);
                 ?>
                 <div class="container" id="form-checkout-wrapper">
-                    @if($court['booking_type'] == 'open' && strtotime('now') > strtotime(date_format($date_booking, 'Y-m-d H:i:s')))
+                    @if($data_checkout['booking_type'] == 'open' && strtotime('now') > strtotime(date_format($date_booking, 'Y-m-d H:i:s')))
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <div>Warning. Date booking less than today!</div>
@@ -57,23 +41,19 @@
                         <div class="alert-content"></div>
                     </div>
 
-                    @if(!isset($court))
+                    @if(!isset($data_checkout['courts']))
                         <h3 class="text-center">Can't found data</h3>
                     @else
-                        @if(isset($court['price']['messages']))
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <div>This is {{$court['price']['messages']}}</div>
-                            </div>
 
-                        @else
                         {{-- left content --}}
                         <div class="col-lg-8 col-md-8 left-sidebar">
                             <form action="{{route("home.checkout")}}" class="form-horizontal" role="form" id="checkout-form" method="post">
                                 {{-- Check exist user --}}
                                 {!! csrf_field() !!}
                                 <input type="hidden" name="date" value="{{$request->input('date')}}">
-                                <input type="hidden" name="court" value="{{$request->input('court')}}">
+                                @foreach($request->input('courts') as $c)
+                                    <input type="hidden" name="courts[]" value="{{$c}}">
+                                @endforeach
                                 <input type="hidden" name="hour_start" value="{{$request->input('hour_start')}}">
                                 <input type="hidden" name="hour_length" value="{{$request->input('hour_length')}}">
                                 @if($request->dayOfWeek)
@@ -151,6 +131,7 @@
                                     </div>
                                 @endif
                                 {{-- end check exist user --}}
+
                                 <div id="cc-form-booking-info">
                                     <fieldset>
                                         <legend class="text-left">Customer Details</legend>
@@ -314,6 +295,7 @@
                                         </div>
                                     </fieldset>
                                 </div>
+
                             </form>
 
                         </div>
@@ -326,47 +308,65 @@
                                 <button onclick="window.history.back()" type="button" class="btn-sub">Edit</button>
                             </div>
                             <div class="detail-image">
-                                <img src="{{url("/").$court->club->image}}" class="img-responsive" alt="club-image" style="width: 100%">
+                                <img src="{{url("/").$data_checkout['courts'][0]->club->image}}" class="img-responsive" alt="club-image" style="width: 100%">
                             </div>
                             <div class="detail-top text-left">
-                                <span class="club-name">{{$court->club->name}}</span>
-                                <span class="address" style="color: #a0a0a0">{{$court->club->address}}</span>
+                                <span class="club-name">{{$data_checkout['courts'][0]->club->name}}</span>
+                                <span class="address" style="color: #a0a0a0">{{$data_checkout['courts'][0]->club->address}}</span>
                             </div>
                             <div class="detail-information">
+                                @if(count($data_checkout['courts']) == 1)
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Indoor/Outdoor:</span>
-                                    <label class="col-lg-6 col-md-6 text-left">{{$court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</label>
+                                    <label class="col-lg-6 col-md-6 text-left">{{$data_checkout['courts'][0]->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</label>
                                 </div>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Court Type:</span>
-                                    <label class="col-lg-6 col-md-6 text-left" >{{$court->surface->label}}</label>
+                                    <label class="col-lg-6 col-md-6 text-left" >{{$data_checkout['courts'][0]->surface->label}}</label>
                                 </div>
+                                @else
+                                    <div class="form-group">
+                                        <span class="col-lg-6 col-md-6 text-right"><strong style="color: blue">Courts</strong>:</span>
+                                        <label class="col-lg-6 col-md-6 text-left" >{{count($data_checkout['courts'])}}</label>
+                                    </div>
+                                @endif    
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Booking Type:</span>
-                                    <label class="col-lg-6 col-md-6 text-left" style="text-transform: capitalize">{{$court->booking_type." court"}}</label>
+                                    <label class="col-lg-6 col-md-6 text-left" style="text-transform: capitalize">{{$data_checkout['booking_type']." court"}}</label>
                                 </div>
                                 <div class="form-group">
                                     <span class="col-lg-6 col-md-6 text-right">Date:</span>
                                     <label class="col-lg-6 col-md-6 text-left">
-                                        @if($court->booking_type =='open')
+                                        @if($data_checkout['booking_type'] =='open')
                                             {{$request->input('date')}}
-                                        @elseif($court->booking_type =='contract')
-                                            {{'form '.$court->contract->start_date.' to '. $court->contract->end_date}}
+                                        @elseif($data_checkout['booking_type'] =='contract')
+                                            {{'form '.$data_checkout['courts'][0]->contract->start_date.' to '. $data_checkout['courts'][0]->contract->end_date}}
                                         @endif
                                     </label>
                                 </div>
                                 <div class="form-group clearfix">
-                                    @if($court->booking_type =='contract')
+                                    @if($data_checkout['booking_type'] =='contract')
                                         <span class="col-lg-6 col-md-6 text-right">Number of Weeks:</span>
                                         <label class="col-lg-6 col-md-6 text-left">
-                                            <div class="title-day" style="display: inline-block">{{daysOfWeekBetween($court->contract->start_date,$court->contract->end_date,$request->input('dayOfWeek'))}}</div>
+                                            <?php
+                                            $dayOfWeek = [
+                                                    "1" => "Mondays",
+                                                    "2" =>"Tuesdays",
+                                                    "3"=>"Wednesdays",
+                                                    "4"=>"Thursdays",
+                                                    "5"=>"Fridays",
+                                                    "6" => "Saturdays",
+                                                    "7" => "Sundays"
+                                            ];
+                                            ?>
+                                            <div class="title-day" style="display: inline-block">{{$data_checkout['courts'][0]->contract->daysOfWeek[substr($dayOfWeek[$request->input('dayOfWeek')],0,3)]['count']}}</div>
                                         </label>
                                     @endif
                                 </div>
                                 <div class="form-group clearfix">
                                     <span class="col-lg-6 col-md-6 text-right">Time:</span>
                                     <label class="col-lg-6 col-md-6 text-left">
-                                        @if($court->booking_type =='contract')
+                                        @if($data_checkout['booking_type'] =='contract')
                                             {{dayOfWeek($request->input('dayOfWeek'))." - "}}
                                         @endif
                                         {{format_hour($request->input('hour_start'))}}
@@ -381,12 +381,12 @@
                             <div class="detail-price">
                                 <div class="form-group">
                                     <span class="col-lg-5 text-right"><b>Total</b></span>
-                                    <span class="col-lg-7 text-left price">${{$court->price['total_price']}}</span>
+                                    <span class="col-lg-7 text-left price">${{$data_checkout['total_price']}}</span>
                                 </div>
                             </div>
                         </div>
                         {{-- end right content --}}
-                        @endif
+
                     @endif
                 </div>
 
@@ -438,12 +438,14 @@
                             $(".alert-message-box").removeClass('hide').find('.alert-content').html(msg);
                             $("#form-checkout-wrapper .loading").remove();
                             $(".loader").addClass('hidden');
+                            showNotice("error", msg, "Error");
                         }else if(!result.error){
                             location.href = base_url + "/view-profile"
                         }
                     },
                     error: function(){
                         $(".alert-message-box").removeClass('hide').find('.alert-content').html("Error, Try again");
+                        showNotice("error", "Error. Can't make the checkout.", "Error");
                         $(".loader").addClass('hidden');
                     }
                 })
@@ -452,9 +454,7 @@
                 checkout = integration;
             }
         });
-    </script>
 
-    <script>
         $(document).ready(function(){
             $('input[name="is_customer"]').on("change", function(){
                 if($(this).val()==0){
@@ -500,12 +500,12 @@
                         $("#exist-customer").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                     },
                     success: function(result){
-                        console.log(result);
                         if(!result.error){
                             location.reload();
                         }else{
                             $('html, body').animate({scrollTop : 0},800);
                             $(".alert-message-box").removeClass('hide').find('.alert-content').html('Your email or password does not match!');
+                            showNotice("error", "Your email or password does not match!", "Error");
                             $("#exist-customer .loading").remove();
                         }
                     }
@@ -531,4 +531,6 @@
 @section('javascript')
     {!! HTML::script("resources/vendor/moment/min/moment.min.js") !!}
     {!! HTML::script("resources/vendor/datetimepicker/build/js/bootstrap-datetimepicker.min.js") !!}
+    {!! HTML::style("resources/vendor/toastr/toastr.min.css") !!}
+    {!! HTML::script("resources/vendor/toastr/toastr.min.js") !!}
 @stop

@@ -6,7 +6,7 @@
 
 			<br>
 			<div class="club-balance form-group col-md-2">
-				<strong>Club balance: <span style="border: 1px solid #d8d8d8; padding: 5px 20px">${{total_balance}}</span></strong>
+				<strong>Club balance: <span style="border: 1px solid #d8d8d8; padding: 5px 20px">${{parseFloat(total_balance)}}</span></strong>
 			</div>
 			<div class="form-group col-md-5">
 				<label class="col-sm-2">Date range:</label>
@@ -56,13 +56,13 @@
 						for {{ booking.hour_length }}Hour
 					</div>
 				</td>
-				<td></td>
+				<td>{{ booking.cart_type == null || booking.cart_type == '' ? "Debit / Cash" : "Credit / " + booking.cart_type}}</td>
 				<td>{{ booking.billing_info.first_name + " " + booking.billing_info.last_name }}</td>
 				<td>{{ booking.source == 1 ? "Court Connect" : "Player booking" }}</td>
-				<td>{{ booking.booked_by }}</td>
+				<td>{{ booking.booked_by.fullname }}</td>
 				<td>{{ booking.type }}</td>
 				<td>{{ booking.created_at }}</td>
-				<td>${{ booking.total_price }}</td>
+				<td>${{ booking.total_price_order }}</td>
 			</tr>
 			</tbody>
 		</table>
@@ -139,7 +139,7 @@
 				var _this = this;
 				_this.total_balance = 0;
 				$.each(this.data.data,function(k,v){
-					_this.total_balance +=v.total_price;
+					_this.total_balance += v.total_price;
 				});
 
 			}, res => {
@@ -162,7 +162,7 @@
 				var _this = this;
 				_this.total_balance = 0;
 				$.each(this.data.data,function(k,v){
-					_this.total_balance +=v.total_price;
+					_this.total_balance += v.total_price;
 				});
 
 			}, res => {

@@ -114,7 +114,7 @@
                 </div>
                 <div class="form-group col-md-2 col-xs-6 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::selectRange('court',1,4,$request->input('court'),['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# Courts']) !!}
+                    {!! Form::selectRange('court',1,4,$request->court,['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# Courts']) !!}
                 </div>
                 <div class="form-group col-md-1 col-xs-12 md-clearfix">
                     <button type="submit" class="btn btn-search">SEARCH</button>
@@ -122,7 +122,7 @@
             </div>
             <div class="row frm-g-distance-search">
                 <div class="form-group col-md-5">
-                    <span style="padding-right: 20px">Court Type: </span>
+                    <span style="padding-right: 20px">Court Type:</span>
                     <?php $surface_arr = $request->input('surface_id') ? $request->input('surface_id') : []; ?>
                     <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '1', in_array(1,$surface_arr) ? true : false) !!}Hard</label>
                     <label class="checkbox-inline">{!! Form::checkbox('surface_id[]', '2', in_array(2,$surface_arr) ? true : false) !!}Har-Tru</label>

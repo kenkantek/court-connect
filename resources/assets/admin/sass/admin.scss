@@ -134,7 +134,7 @@ body {
     margin-top: -11px;
 }
 .navbar-top {
-	width:100%;	
+	width:100%;
 }
 li.user:hover,.user-footer:hover a {
 	    background: #fff !important;
@@ -151,7 +151,7 @@ li.user:hover,.user-footer:hover a {
 	    display: block;
 	    font-size: 28px;
 		}
-} 
+}
 .header-block {
     display: inline-block;
     min-height: 62px;
@@ -297,4 +297,16 @@ h1 {
 	    text-decoration: none;
 	    cursor: pointer;
 	}
+}
+
+.bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary, .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
+    color: #fff;
+    background: #082e31;
+}
+.bootstrap-switch-container span, .bootstrap-switch, .bootstrap-switch .bootstrap-switch-container {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -ms-border-radius: 0 !important;
+    -o-border-radius: 0 !important;
+    border-radius: 0 !important;
 }

@@ -109,6 +109,10 @@
         top: 2px;
         left: 2px;
         font-size: 11px;
+        z-index: 1;
+    }
+    .day_holiday ~ .monthly-day-number, .day_close ~ .monthly-day-number{
+        color: #fff
     }
     .monthly-indicator-wrap {
         width: 100%;
@@ -225,7 +229,6 @@
                         :date="date[i * 7 + j] && date[i * 7 + j].date"
                         data-x = "{{i}}" data-y = "{{j}}"
                         data-id= "{{date[i * 7 + j] && date[i * 7 + j].status == 'date-current' && date[i * 7 + j].text }}">
-                        <div class="monthly-day-number" A11>{{date[i * 7 + j] && date[i * 7 + j].text}}</div>
                         <div class="monthly-indicator-wrap" v-if="date[i * 7 + j] && date[i * 7 + j].status == 'date-current'">
                             <div class="time"></div>
                             <div class="overflow">
@@ -234,11 +237,11 @@
                                 <div class="btn-clock action"><img src="/uploads/images/config/clock_icon.png" alt=""> </div>
                                 <div class="dlg-setopenday hidden">
                                     <div style="width: 50%; float: left">
-                                        <label for="opentime" >Open Time</label>
+                                        <label for="opentime" class="lbl-set-date-time">Open Time</label>
                                         <input class="form-control timepicker" name="opentime" value="" v-model="date[i*7+j].hours_open">
                                     </div>
                                     <div style="width: 50%; float: left">
-                                        <label for="closetime" >Closing Time</label>
+                                        <label for="closetime" class="lbl-set-date-time">Closing Time</label>
                                         <input class="form-control timepicker" name="closetime" value="" v-model="date[i*7+j].hours_close" >
                                     </div>
                                     <div >
@@ -247,7 +250,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="monthly-day-number">{{date[i * 7 + j] && date[i * 7 + j].text}}</div>
                     </td>
                 </tr>
                 </tbody>
@@ -269,6 +272,11 @@
         .monthly-indicator-wrap.day_holiday{
             background: #930101;
             color: #fff;
+        }
+        .lbl-set-date-time{
+            line-height: 22px;
+            min-height: 50px;
+            vertical-align: middle;
         }
     </style>
 </template>
@@ -409,13 +417,13 @@
                 }
             );
         },
-        covertHour24to12($hour){
-            var hourEnd = $hour.indexOf(":");
-            var H = +$hour.substr(0, hourEnd);
+        covertHour24to12(hour){
+            var hourEnd = hour.indexOf(":");
+            var H = + hour.substr(0, hourEnd);
             var h = H % 12 || 12;
-            var ampm = H < 12 ? "AM" : "PM";
-            $data = h + $hour.substr(hourEnd, 3) + " "+ ampm;
-            return $data;
+            var ampm = hour.indexOf("AM") >= 0 ? "AM" : hour.indexOf("am") >= 0 ? "AM" : "PM";
+            data = h + hour.substr(hourEnd, 3) + " "+ ampm;
+            return data;
         },
         fetchDataDates() {
             let def = deferred(),

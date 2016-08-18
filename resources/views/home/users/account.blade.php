@@ -52,7 +52,7 @@
                                             Booking type: <strong>{{$booking->type}}</strong>
                                         </div>
                                         <div class="booking-price">
-                                            Price: ${{$booking->total_price}}
+                                            Price: ${{$booking->total_price_order}}
                                         </div>
                                     </td>
                                     <td>
@@ -69,7 +69,7 @@
                                     </td>
                                     <td>
                                         <div>
-                                            Number of players: {{count(json_decode($booking->players_info))}}
+                                            Number of players: {{$booking->number_player}}
                                             <ul>
                                                 @foreach(json_decode($booking->players_info)->name as $item)
                                                     @if(!is_null($item) && $item != '')

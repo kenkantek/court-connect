@@ -250,7 +250,6 @@ div.modal-body {
     background-color: #131101;
     min-height: 254px;
     background: url(../images/footer-bg.png) no-repeat 50%;
-    background-size: cover;
     text-align: center;
     color: #fff;
     font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -1665,7 +1664,6 @@ a.ui-state-default.ui-state-highlight {
     transition: none;
 }
 .alert-danger{
-    background: none;
     border: 0px;
 }
 .alert-danger li{

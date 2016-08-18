@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Auth\User;
+use App\Models\Contexts\Court;
+use App\Models\Payments\Payment;
 use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
@@ -12,16 +15,21 @@ class Booking extends Model
 
     public function court()
     {
-        return $this->belongsTo('App\Models\Contexts\Court','court_id');
+        return $this->belongsTo(Court::class,'court_id');
     }
     public function payment()
     {
-        return $this->belongsTo('App\Models\Payments\Payment','payment_id');
+        return $this->belongsTo(Payment::class,'payment_id');
     }
 
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = date('y-m-d', strtotime($value));
+    }
+
+    public function booked_by()
+    {
+        return $this->belongsTo(User::class,'booked_by');
     }
 
     public function getBillingInfoAttribute($value)

@@ -125,7 +125,7 @@
                                     <div class="mb-group-sl">
                                         <div class="col-xs-12 col-md-12">
                                             <h4 class="mb-title-h4-modal text-center">Order Total: <strong class="price" style="">${{total_price}} </strong></h4>
-                                            <div id="viewPriceOrder" class="btn" @click.prevent="viewPriceOrder()">View price</div>
+                                            <div id="viewPriceOrder" class="btn" @click.prevent="viewPriceOrder()">Check price</div>
                                         </div>
                                     </div>
 
@@ -952,13 +952,14 @@
         createFormBrainTree(){
             if (checkout != null) {
                 checkout.teardown(function () {
+                    $("#bt-dropin").html('');
                     checkout = null;
                     // braintree.setup can safely be run again!
                 });
             }
 
             var _this = this;
-            //$("#bt-dropin").html('');
+
             braintree.setup(this.client_token, "dropin", {
                 container: "bt-dropin",
                 onReady: function (integration) {

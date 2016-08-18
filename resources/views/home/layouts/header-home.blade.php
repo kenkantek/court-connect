@@ -110,7 +110,7 @@
                 </div>
                 <div class="form-group col-md-2 col-xs-6 form-icon">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::selectRange('court',1,4,null,['id'=>'inputID','class' => 'form-control placeholder-single select2','placeholder'=>'# Courts']) !!}
+                    {!! Form::selectRange('court',1,4,1,['id'=>'inputID','class' => 'form-control placeholder-single select2','placeholder'=>'# Courts', 'required'=> 'required']) !!}
                             <!-- <input type="text" class="form-control" name="" id="" placeholder="# Courts"> -->
                 </div>
                 <div class="form-group col-md-2 col-xs-6">

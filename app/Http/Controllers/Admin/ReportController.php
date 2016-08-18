@@ -26,6 +26,7 @@ class ReportController extends Controller
     {
         $take = $request->take ?: 10;
         $data = Booking::join('courts','courts.id','=','bookings.court_id')
+            ->leftJoin('payments','bookings.payment_id','=','payments.id')
             ->where('courts.club_id',$request->clubid)
             ->where('bookings.status_booking',"!=",'cancel')
             ->where(function($query) use ($request){
@@ -40,9 +41,10 @@ class ReportController extends Controller
                 if(isset($request->source) && $request->source == 1)
                     $query->where('bookings.source',1);
             })
-            ->select(["bookings.*",'courts.club_id'])
+            ->with('booked_by')
+            ->selectRaw("bookings.*, courts.club_id, payments.card_type as cart_type")
             ->orderBy('created_at','desc')
-            ->groupBy('bookings.payment_id')
+            ->groupBy('bookings.token_booking')
             ->paginate($take);
         return $data;
     }
