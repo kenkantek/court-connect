@@ -329,12 +329,8 @@ class BookingController extends Controller{
                 }
             }
             if($tmp_refund_success){
-                if($booking['type'] == 'contract') {
-                    $bookingContracts = Booking::where(['payment_id' => $booking['payment_id'], 'player_id' => Auth::user()->id])
-                        ->update(['status_booking'=>'cancel']);
-                }else{
-                    $booking->update(['status_booking'=>'cancel']);
-                }
+                Booking::where(['player_id' => Auth::user()->id, 'token_booking' => $booking->token_booking])
+                    ->update(['status_booking'=>'cancel']);
                 return response()->json([
                     'error' => false,
                     'message' => 'Cancel success.'
@@ -354,8 +350,20 @@ class BookingController extends Controller{
         if(!Auth::check()){
             return redirect('error');
         }
-        $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
-        return view('home.bookings.print_confirmation',compact('booking'));
+        $check_booking = Booking::where(['bookings.id'=>$id,'bookings.player_id'=>Auth::user()->id])->first();
+        if($check_booking) {
+            $booking = Booking::join('courts', 'courts.id', '=', 'bookings.court_id')
+                ->join('clubs', 'clubs.id', '=', 'courts.club_id')
+                ->where('player_id', Auth::user()->id)
+                ->where('bookings.token_booking', $check_booking->token_booking)
+                ->orderBy('created_at', 'desc')
+                ->groupBy('token_booking')
+                ->selectRaw('bookings.*, group_concat(DISTINCT courts.name SEPARATOR \', \') as court_name, clubs.id as club_id, 
+            clubs.image as club_image, clubs.name as club_name, clubs.address as club_address')
+                ->first();
+            return view('home.bookings.print_confirmation', compact('booking'));
+        }
+        return false;
     }
 
     //send mail

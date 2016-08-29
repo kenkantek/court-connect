@@ -92,7 +92,7 @@
                                     </tr>
                                     <tr>
                                         <td>Court: </td>
-                                        <td>{!! $booking['court']['name'] !!}</td>
+                                        <td>{!! $booking['court_name'] !!}</td>
                                     </tr>
                                     <tr>
                                         <td>Court Type: </td>
@@ -131,7 +131,7 @@
                                 @endif
                             </td>
                             <td style="padding:5px 0;">{{format_hour($booking['hour'])}} / {{str_replace('am','',str_replace('pm','',format_hour($booking->hour_length)))}} hour</td>
-                            <td style="padding:5px 0;">${{$booking['total_price']}}</td>
+                            <td style="padding:5px 0;">${{$booking['total_price_order']}}</td>
                         </tr>
                         <tr align="center">
                             <td align="right" colspan="3" style="border-bottom:1px solid #eff0f4;padding:5px">Amount other</td>

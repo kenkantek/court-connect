@@ -17,7 +17,7 @@
                     @endif
                 @endif
                 <div class="col-md-4">
-                    <a class="deal-link" href="{{route('home.checkout',['date'=>$deal->date,'court'=>$deal->court_id,'hour_start'=>$deal->hour,'hour_length'=>$deal->hour_length])}}">
+                    <a class="deal-link" href="{{route('home.checkout',['date'=>$deal->date,http_build_query(['courts'=>[$deal->court_id]]),'hour_start'=>$deal->hour,'hour_length'=>$deal->hour_length])}}">
 
                         <div class="img-carousel">
                             <img src="{!! url("/").$deal->image !!}" width="205" height="205" alt="Chania">

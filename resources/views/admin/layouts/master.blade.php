@@ -75,18 +75,23 @@
                     <a href="{{ route('teacher.listAll') }}" data-toggle="tooltip" data-placement="right" title="Pros"><i class="fa fa-user-plus"></i></a>
                 </li>
 
-                @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
+                @if (Auth::user()->is_super)
                     <li>
-                        <a href="{{ route('clubs.setting') }}" data-toggle="tooltip" data-placement="right" title="Club Setting">
-                            <i class="fa fa-cogs"></i>
+                        <a href="{{ route('customer.listAll') }}" data-toggle="tooltip" data-placement="right" title="Customer">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('super.index') }}" data-toggle="tooltip" data-placement="right" title="Super Admin">
+                            <i class="fa fa-user-md"></i>
                         </a>
                     </li>
                 @endif
 
-                @if (Auth::user()->is_super)
+                @if (Auth::user()->is_super || Auth::user()->hasRole('admin'))
                     <li>
-                        <a href="{{ route('super.index') }}" data-toggle="tooltip" data-placement="right" title="Super Admin">
-                            <i class="fa fa-user"></i>
+                        <a href="{{ route('clubs.setting') }}" data-toggle="tooltip" data-placement="right" title="Club Setting">
+                            <i class="fa fa-cogs"></i>
                         </a>
                     </li>
                 @endif

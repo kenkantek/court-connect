@@ -61,6 +61,30 @@ class UserController extends Controller
         return $data;
     }
 
+    public function getCustomers(Request $request)
+    {
+        $take = $request->take ?: 10;
+        $data = User::with('roles')->whereHas('roles', function($query) use ($request) {
+            $query->where('context_id', $request->input('clubid'))
+                ->where('role_id','<>',3);
+        })->select("id", "first_name",'last_name' ,"email")->orderBy('first_name','asc')->paginate($take);
+
+        foreach($data as $user){
+            if($user->hasRole('admin')){
+                $user['is_admin'] = true;
+            }
+            else{
+                $user['is_admin'] = false;
+            }
+            $arr_club = [];
+            foreach ($user->roles as $role){
+                $arr_club[] = $role->pivot->context_id;
+            }
+            $user['arr_club'] = $arr_club;
+        }
+        return $data;
+    }
+
     public function getDelete(Request $request)
     {
         if (\Auth::user()->id == $request->id) {

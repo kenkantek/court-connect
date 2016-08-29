@@ -56,7 +56,9 @@ class UserEventListener
         {
             $message->subject('Message Contact form Court-Connect');
             $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
-            $message->to(env('MAIL_CC1'));
+            $message->to(env('MAIL_support'));
+            $message->cc(env('MAIL_CC1'));
+            $message->cc(env('MAIL_test'));
             $message->setBody($text);
         });
     }

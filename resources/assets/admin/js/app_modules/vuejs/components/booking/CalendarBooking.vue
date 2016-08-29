@@ -22,7 +22,6 @@
                     <div class="btn btn-primary btn-mb-ex icon-fa-star btn-in-expand icon-fa-angle-down">Create Deal</div>
                     <div class="show-expand">
                         <h4 >Create A New Deal</h4>
-
                             <div class="form-group">
                                 <label>New Price for Member</label>
                                 <input type="text" v-model="multi_deal.new_price_member">
@@ -77,17 +76,18 @@
                                                     <template v-if="grid.status == 'unavailable'">
                                                         <br> {{grid.content}}
                                                     </template>
+                                                    <div v-if="grid.unavailable_id != null" class="cancelUnavailable" @click="removeUnavailable(grid.unavailable_id)"><i class="fa fa-times" aria-hidden="true"></i></div>
                                                 </span>
-
                                             </div>
                                             <div v-else>{{grid.content}}</div>
                                         </div>
                                         <div v-else data-court="{{court['id']}}" data-hour="{{grid.hour}}" @click="openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)" class="day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 && court['hours'][index+1] && grid.status == 'available' && grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 && court['hours'][index-1] && grid.status == 'available' && grid.status != court['hours'][index-1].status ? 'gn' : ''}}">
                                             <span class="title-grid">{{grid.status == "open" ? "Open Time Booking" : grid.status == "contract"
                                                  ? "Contract Time" :  grid.status == "lesson" ? "Lesson" : grid.status == 'day_close' ? "Closed" : grid.status == 'unavailable' ? "Unavailable \n" : grid.status}}
+                                                <div v-if="grid.unavailable_id != null" class="cancelUnavailable" @click="removeUnavailable(grid.unavailable_id)"><i class="fa fa-times" aria-hidden="true"></i></div>
                                             </span>
                                             <div v-if="grid.status != 'available'" class="content-unavailable">{{grid.content}}</div>
-                                        </div>
+                                            </div>
                                     </template>
                                 </div>
                             </template>
@@ -309,6 +309,18 @@
             width: 20px;
             height: 25px;
             top: 0px;
+            z-index: 9;
+        }
+        .cancelUnavailable{
+            color: red;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            position: absolute;
+            width: 20px;
+            height: 25px;
+            top: 0px;
+            right: 0px;
             z-index: 9;
         }
     </style>
@@ -565,6 +577,25 @@
                         });
                     });
         },
+        removeUnavailable(unavailable_id){
+            var parent = this;
+            $('#confirm-booking-delete').modal({ backdrop: 'static', keyboard: false })
+                    .one('click', '#booking-delete', function (e) {
+                        $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                        parent.$http.get(laroute.route('booking.cancelUnavailable', {one: unavailable_id}),(data) => {
+                            console.log(data);
+                        if(data.error == false){
+                            parent.flagChangeDataOfDate = Math.random();
+                            showNotice('success', "Remove success!", 'Cancel Success!');
+                        }else{
+                            showNotice('error', data.message, 'Error!');
+                        }
+                        $("body .loading").remove();
+                    }).error((data) => {
+
+                        });
+                    });
+        },
         changeDay(element,day){
             $(".days-in-month-wrap .days .date-current ").removeClass('date-current').addClass('date-notcurrent');
             $("#"+element).addClass('date-current').removeClass('date-notcurrent');
@@ -594,9 +625,12 @@
             this.$set('deal.hour_length', 1);
             this.$set('deal.date', this.dateChooise);
             const deal = this.deal;
+
             $('#md-new-deal').modal('show');
             $("#md-new-deal .modal-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
-            this.$http.get(laroute.route('booking.getInfoGridForDeal',deal)).then(res => {
+            this.$http.get(laroute.route('booking.getInfoGridForDeal',{date: deal.date, hour: deal.hour, hour_length: deal.hour_length,
+                court_id: deal.court_id
+            })).then(res => {
                 if(res.data.error == false){
                     var data = res.data.data;
                     this.deal.date_text = data['date_text'];
@@ -614,7 +648,9 @@
         },
         createDeal(){
             const deal = this.deal;
-            this.$http.post(laroute.route('booking.newDeal',deal)).then(res => {
+            this.$http.post(laroute.route('booking.newDeal',{date: deal.date, hour: deal.hour, hour_length: deal.hour_length,
+                new_price_member: deal.new_price_member, new_price_nonmember: deal.new_price_nonmember, court_id: deal.court_id
+            })).then(res => {
                 if(res.data.error == false){
                     this.flagChangeDataOfDate = Math.random();
                     $('#md-new-deal').modal('hide');

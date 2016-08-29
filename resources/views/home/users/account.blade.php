@@ -41,7 +41,7 @@
                                                 <br/>
                                                 <span>{!! $booking->club_address !!}</span>
                                             </p>
-                                            <span>Court #{!! $booking->court_name !!}</span>
+                                            <span>Court: {!! $booking->court_name !!}</span>
                                         </div>
                                     </td>
                                     <td>

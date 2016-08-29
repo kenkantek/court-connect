@@ -29941,6 +29941,10 @@ var _ReportSetting = require('./vuejs/components/report/ReportSetting.vue');
 
 var _ReportSetting2 = _interopRequireDefault(_ReportSetting);
 
+var _CustomerSetting = require('./vuejs/components/user/CustomerSetting.vue');
+
+var _CustomerSetting2 = _interopRequireDefault(_CustomerSetting);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.use(require('vue-resource'));
@@ -29966,13 +29970,14 @@ new _vue2.default({
 		HeaderMain: _HeaderMain2.default,
 		UserSetting: _UserSetting2.default,
 		TeacherSetting: _TeacherSetting2.default,
+		CustomerSetting: _CustomerSetting2.default,
 		ManageBooking: _ManageBooking2.default,
 		NewBooking: _NewBooking2.default,
 		ReportSetting: _ReportSetting2.default
 	}
 });
 
-},{"./vuejs/components/booking/ManageBooking.vue":123,"./vuejs/components/booking/NewBooking.vue":124,"./vuejs/components/club/ClubSetting.vue":126,"./vuejs/components/header/HeaderMain.vue":139,"./vuejs/components/report/ReportSetting.vue":141,"./vuejs/components/super/SuperSetting.vue":145,"./vuejs/components/user/TeacherSetting.vue":152,"./vuejs/components/user/UserSetting.vue":153,"deferred":29,"lodash":88,"vue":119,"vue-async-data":93,"vue-resource":108}],122:[function(require,module,exports){
+},{"./vuejs/components/booking/ManageBooking.vue":123,"./vuejs/components/booking/NewBooking.vue":124,"./vuejs/components/club/ClubSetting.vue":126,"./vuejs/components/header/HeaderMain.vue":139,"./vuejs/components/report/ReportSetting.vue":141,"./vuejs/components/super/SuperSetting.vue":145,"./vuejs/components/user/CustomerSetting.vue":146,"./vuejs/components/user/TeacherSetting.vue":154,"./vuejs/components/user/UserSetting.vue":155,"deferred":29,"lodash":88,"vue":119,"vue-async-data":93,"vue-resource":108}],122:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30209,6 +30214,22 @@ exports.default = {
                 }).error(function (data) {});
             });
         },
+        removeUnavailable: function removeUnavailable(unavailable_id) {
+            var parent = this;
+            $('#confirm-booking-delete').modal({ backdrop: 'static', keyboard: false }).one('click', '#booking-delete', function (e) {
+                $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+                parent.$http.get(laroute.route('booking.cancelUnavailable', { one: unavailable_id }), function (data) {
+                    console.log(data);
+                    if (data.error == false) {
+                        parent.flagChangeDataOfDate = Math.random();
+                        showNotice('success', "Remove success!", 'Cancel Success!');
+                    } else {
+                        showNotice('error', data.message, 'Error!');
+                    }
+                    $("body .loading").remove();
+                }).error(function (data) {});
+            });
+        },
         changeDay: function changeDay(element, day) {
             $(".days-in-month-wrap .days .date-current ").removeClass('date-current').addClass('date-notcurrent');
             $("#" + element).addClass('date-current').removeClass('date-notcurrent');
@@ -30240,9 +30261,12 @@ exports.default = {
             this.$set('deal.hour_length', 1);
             this.$set('deal.date', this.dateChooise);
             var deal = this.deal;
+
             $('#md-new-deal').modal('show');
             $("#md-new-deal .modal-content").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
-            this.$http.get(laroute.route('booking.getInfoGridForDeal', deal)).then(function (res) {
+            this.$http.get(laroute.route('booking.getInfoGridForDeal', { date: deal.date, hour: deal.hour, hour_length: deal.hour_length,
+                court_id: deal.court_id
+            })).then(function (res) {
                 if (res.data.error == false) {
                     var data = res.data.data;
                     _this8.deal.date_text = data['date_text'];
@@ -30260,7 +30284,9 @@ exports.default = {
             var _this9 = this;
 
             var deal = this.deal;
-            this.$http.post(laroute.route('booking.newDeal', deal)).then(function (res) {
+            this.$http.post(laroute.route('booking.newDeal', { date: deal.date, hour: deal.hour, hour_length: deal.hour_length,
+                new_price_member: deal.new_price_member, new_price_nonmember: deal.new_price_nonmember, court_id: deal.court_id
+            })).then(function (res) {
                 if (res.data.error == false) {
                     _this9.flagChangeDataOfDate = Math.random();
                     $('#md-new-deal').modal('hide');
@@ -30397,7 +30423,7 @@ exports.default = {
     beforeDestroy: function beforeDestroy() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<section class=\"col-xs-12 col-md-12\" id=\"calendar_bookings\">\n\n    <div id=\"manageMultiTimes\" class=\"hide text-center\">\n        <button type=\"button\" class=\"close-md close\" @click.prevent=\"closeMultiTimes()\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n        <h2>Multi-Day Management</h2>\n        <p>Select the day from the grid below you want to manage and choose and option below to update all\n        the selected times.</p>\n        <div class=\"col-xs-12\">\n            <div id=\"mb-multi-make-time-unavailable\" class=\"col-md-6\">\n                <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\">\n                    <div class=\"btn btn-primary btn-mb-ex btn-in-expand fright icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                    <div class=\"show-expand\">\n                        <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                        <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" v-model=\"multi_make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                        <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"multiMakeTimeUnavailable()\">\n                    </div>\n                </form>\n            </div>\n\n            <div id=\"mb-multi-create-deal\" style=\"float: left\" class=\"col-md-6\">\n                <div class=\"btn btn-primary btn-mb-ex icon-fa-star btn-in-expand icon-fa-angle-down\">Create Deal</div>\n                <div class=\"show-expand\">\n                    <h4>Create A New Deal</h4>\n\n                        <div class=\"form-group\">\n                            <label>New Price for Member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_member\">\n                        </div>\n                        <div class=\"form-group\">\n                            <label>New Price for Non member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_nonmember\">\n                        </div>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createMultiDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div class=\"days-in-month-wrap\">\n        <div class=\"days\">\n            <div v-for=\"(index,date) in dates\" @click=\"changeDay('cal_day'+index,date.dayFullFormat)\" id=\"cal_day{{index}}\" class=\"day-item {{date.status}}\" data-value=\"{{ date.dayFullFormat}}\" style=\"width: {{width_day_item}}px\">\n                {{ days[date.day_of_week] }} <br>\n                <span>{{ months[date.month] + \" \" + date.day + \" \" + \" \" + date.year % 100 }} </span>\n            </div>\n        </div>\n        <div class=\"days-in-month-control\">\n            <div id=\"next-day-in-month\"> &gt; </div>\n            <div id=\"prev-day-in-month\"> &lt; </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div id=\"day-view-content\" class=\"day-view-content\">\n        <div class=\"cld-wrapper\">\n            <div class=\"grid-row col-hour\">\n                <div class=\"grid grid-null\"></div>\n                <div v-for=\"item in hours\" class=\"grid court-name row-hour-name\" @click.prevent=\"rowHourClick(item.key)\">{{item.value}}</div>\n            </div>\n            <div class=\"grid-content-box\">\n                <div class=\"grid-wrap\">\n                    <div class=\"court-name-wrap\">\n                        <div v-for=\"(index,court) in dataOfClub\" class=\"grid court-name col-court-name\" @click.prevent=\"colCourtClick(court['id'])\">{{court['name']}}</div>\n                    </div>\n                    <div class=\"clearfix\"></div>\n                    <div class=\"grid-content-wap\">\n                        <template v-for=\"(index,court) in dataOfClub\">\n                            <div class=\"grid-row court{{court['id']}}\" data-court=\"{{court['id']}}\">\n                                <template v-for=\"(index,grid) in court['hours']\">\n                                    <div v-if=\"grid.g_start || grid.g_end\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" class=\"day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\">\n                                        <div v-if=\" !grid.g_end\">\n                                            <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                                ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status == 'day_close' ? \"Closed\" : grid.status == 'unavailable' ? \"Unavailable\" : grid.status}}\n                                                <template v-if=\"grid.status == 'unavailable'\">\n                                                    <br> {{grid.content}}\n                                                </template>\n                                            </span>\n\n                                        </div>\n                                        <div v-else=\"\">{{grid.content}}</div>\n                                    </div>\n                                    <div v-else=\"\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\" class=\"day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\">\n                                        <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                             ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status == 'day_close' ? \"Closed\" : grid.status == 'unavailable' ? \"Unavailable \\n\" : grid.status}}\n                                        </span>\n                                        <div v-if=\"grid.status != 'available'\" class=\"content-unavailable\">{{grid.content}}</div>\n                                    </div>\n                                </template>\n                            </div>\n                        </template>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"md-expand\">\n            <div id=\"md-booking-content-expand\" style=\"display: none\">\n                <!-- court booking-expanded -->\n                <div class=\"court-booking-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div v-if=\"booking\">\n                        <div class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Customer Details</h3>\n                            <table v-if=\"booking['billing_info']\">\n                                <tbody><tr>\n                                    <td align=\"right\">Name</td>\n                                    <td>\n                                        <div class=\"editable_\">{{booking['billing_info']['first_name']}}</div>\n                                        <div class=\"editable_\">{{booking['billing_info']['last_name']}}</div>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Email</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['email']}}</div></td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Phone</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['phone']}}</div></td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Address</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['address1']}}</div></td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div v-if=\"booking['court']\" class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Booking Details</h3>\n                            <table>\n                                <tbody><tr>\n                                    <td align=\"right\">Booking Type</td>\n                                    <td>{{booking['type']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Court:</td>\n                                    <td>{{booking['court']['name']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Start Time</td>\n                                    <td>{{booking['hour']}} | {{booking['date']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Length</td>\n                                    <td>{{booking['hour_length']}} Hour</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Players</td>\n                                    <td>{{booking['num_player']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Create Time</td>\n                                    <td>{{booking['created_at']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Booking By</td>\n                                    <td>{{booking['source'] == 1 ? \"Player Booking\" : \"Court-Connect.com\" }}</td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Payment Details</h3>\n                            <table>\n                                <tbody><tr>\n                                    <td align=\"right\">Status</td>\n                                    <td v-if=\"booking['status'] == 'required'\" style=\"text-transform: capitalize\"><span style=\"color:red\">Payment Required</span></td>\n                                    <td v-else=\"\" style=\"text-transform: capitalize\">{{booking['status']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Tender</td>\n                                    <td style=\"text-transform: capitalize\">{{booking['type']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Total Due</td>\n                                    <td>${{booking['total_price_order']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Notes</td>\n                                    <td>{{booking['notes']}}</td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div class=\"col-xs-3\">\n                            <div id=\"mb-print-receipt\" class=\"btn btn-primary btn-mb-ex icon-fa-print\" @click=\"printReceipt(booking['id'])\">Print Receipt</div>\n                            <div v-if=\"booking['status'] == 'required'\" @click=\"acceptPayment(booking['id'])\" id=\"mb-accept-payment\" class=\"btn btn-primary btn-mb-ex icon-fa-accept\">Accept Payment</div>\n                            <div v-if=\"booking['is_checkIn']\" id=\"mb-check-players-in\" class=\"btn btn-primary btn-mb-ex icon-fa-accept\">Check Players In</div>\n                            <div v-else=\"\" @click=\"checkInBooking(booking['id'])\" id=\"mb-check-players-in\" class=\"btn btn-primary btn-mb-ex icon-fa-cancel\">Check Players In</div>\n                            <div id=\"mb-edit-booking\" @click=\"editBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex icon-fa-edit\">Edit Booking</div>\n                            <div id=\"mb-cancel-booking\" @click=\"cancelBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex btn-custom icon-fa-cancel\">Cancel Booking</div>\n                        </div>\n                    </div>\n                </div>\n                <!-- end court booking-expanded -->\n            </div>\n            <div id=\"md-available-content-expand\" style=\"display: none\">\n                <!-- available-slot-expanded -->\n                <div v-if=\"info_grid_available\" class=\"available-slot-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div class=\"col-xs-8\">\n                        <table class=\"table\">\n                            <thead>\n                                <tr>\n                                    <th>Quick Quotes</th>\n                                    <td v-for=\"item in info_grid_available.lb_hour\"><strong>{{ item.text }}</strong> <br> ({{ item.value }}) hours</td>\n                                </tr>\n                            </thead>\n                            <tbody>\n                            <tr>\n                                <td>Member: </td>\n                                <td v-for=\"itemmember in info_grid_available.price_member\">{{itemmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Non Member: </td>\n                                <td v-for=\"itemnonmember in info_grid_available.price_nonmember\">{{itemnonmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Lesson: </td>\n                            </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <div id=\"mb-make-time-unavailable\">\n                            <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\" id=\"form_make_unavailable\" enctype=\"multipart/form-data\">\n                                <div class=\"btn btn-primary btn-mb-ex btn-in-expand icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                                <div class=\"show-expand\">\n                                    <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                                    <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" id=\"input-reason\" v-model=\"make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                                    <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"makeTimeUnavailable()\">\n                                </div>\n                            </form>\n                        </div>\n\n                        <div id=\"mb-create-deal\" @click.prevent=\"openModalDeal()\" style=\"margin-left: 20px\" class=\"btn btn-primary btn-mb-ex icon-fa-star\">Create Deal</div>\n                    </div>\n                </div>\n                <!-- end available-slot-expanded -->\n            </div>\n        </div>\n    </div>\n</section>\n\n<div id=\"confirm-booking-delete\" class=\"modal fade\">\n    <div class=\"modal-body\">\n        Are you sure delete?\n    </div>\n    <div class=\"modal-footer\">\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn btn-primary\" id=\"booking-delete\">Delete</button>\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn\">Cancel</button>\n    </div>\n</div>\n\n<div id=\"md-new-deal\" class=\"modal fade mb-modal\" role=\"dialog\" aria-labelledby=\"myModalLabel\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Create A New Deal</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div>\n                    <table>\n                        <tbody><tr>\n                            <td>Date Selected: </td>\n                            <td> {{deal.date_text}}</td>\n                        </tr>\n                        <tr>\n                            <td>Time Selected: </td>\n                            <td>{{deal.time}}</td>\n                        </tr>\n                        <tr>\n                            <td>Court Selected: </td>\n                            <td> {{deal.court_name}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Member): </td>\n                            <td>{{deal.price_member}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Non member): </td>\n                            <td>{{deal.price_nonmember}}</td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_member\"><br></td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Non member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_nonmember\"></td>\n                        </tr>\n                    </tbody></table>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<style>\n    .pay-cash{\n        background: red;\n        color: #fff;\n        font-size: 16px;\n        font-weight: bold;\n        text-align: center;\n        position: absolute;\n        width: 20px;\n        height: 25px;\n        top: 0px;\n        z-index: 9;\n    }\n</style>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<section class=\"col-xs-12 col-md-12\" id=\"calendar_bookings\">\n\n    <div id=\"manageMultiTimes\" class=\"hide text-center\">\n        <button type=\"button\" class=\"close-md close\" @click.prevent=\"closeMultiTimes()\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n        <h2>Multi-Day Management</h2>\n        <p>Select the day from the grid below you want to manage and choose and option below to update all\n        the selected times.</p>\n        <div class=\"col-xs-12\">\n            <div id=\"mb-multi-make-time-unavailable\" class=\"col-md-6\">\n                <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\">\n                    <div class=\"btn btn-primary btn-mb-ex btn-in-expand fright icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                    <div class=\"show-expand\">\n                        <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                        <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" v-model=\"multi_make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                        <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"multiMakeTimeUnavailable()\">\n                    </div>\n                </form>\n            </div>\n\n            <div id=\"mb-multi-create-deal\" style=\"float: left\" class=\"col-md-6\">\n                <div class=\"btn btn-primary btn-mb-ex icon-fa-star btn-in-expand icon-fa-angle-down\">Create Deal</div>\n                <div class=\"show-expand\">\n                    <h4>Create A New Deal</h4>\n                        <div class=\"form-group\">\n                            <label>New Price for Member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_member\">\n                        </div>\n                        <div class=\"form-group\">\n                            <label>New Price for Non member</label>\n                            <input type=\"text\" v-model=\"multi_deal.new_price_nonmember\">\n                        </div>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createMultiDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div class=\"days-in-month-wrap\">\n        <div class=\"days\">\n            <div v-for=\"(index,date) in dates\" @click=\"changeDay('cal_day'+index,date.dayFullFormat)\" id=\"cal_day{{index}}\" class=\"day-item {{date.status}}\" data-value=\"{{ date.dayFullFormat}}\" style=\"width: {{width_day_item}}px\">\n                {{ days[date.day_of_week] }} <br>\n                <span>{{ months[date.month] + \" \" + date.day + \" \" + \" \" + date.year % 100 }} </span>\n            </div>\n        </div>\n        <div class=\"days-in-month-control\">\n            <div id=\"next-day-in-month\"> &gt; </div>\n            <div id=\"prev-day-in-month\"> &lt; </div>\n        </div>\n    </div>\n    <div class=\"clearfix\"></div>\n    <div id=\"day-view-content\" class=\"day-view-content\">\n        <div class=\"cld-wrapper\">\n            <div class=\"grid-row col-hour\">\n                <div class=\"grid grid-null\"></div>\n                <div v-for=\"item in hours\" class=\"grid court-name row-hour-name\" @click.prevent=\"rowHourClick(item.key)\">{{item.value}}</div>\n            </div>\n            <div class=\"grid-content-box\">\n                <div class=\"grid-wrap\">\n                    <div class=\"court-name-wrap\">\n                        <div v-for=\"(index,court) in dataOfClub\" class=\"grid court-name col-court-name\" @click.prevent=\"colCourtClick(court['id'])\">{{court['name']}}</div>\n                    </div>\n                    <div class=\"clearfix\"></div>\n                    <div class=\"grid-content-wap\">\n                        <template v-for=\"(index,court) in dataOfClub\">\n                            <div class=\"grid-row court{{court['id']}}\" data-court=\"{{court['id']}}\">\n                                <template v-for=\"(index,grid) in court['hours']\">\n                                    <div v-if=\"grid.g_start || grid.g_end\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" class=\"day-grid grid {{grid.status}} {{grid.g_start ? 'gstart' : grid.g_end ? 'gend' : ''}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\">\n                                        <div v-if=\" !grid.g_end\">\n                                            <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                                ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status == 'day_close' ? \"Closed\" : grid.status == 'unavailable' ? \"Unavailable\" : grid.status}}\n                                                <template v-if=\"grid.status == 'unavailable'\">\n                                                    <br> {{grid.content}}\n                                                </template>\n                                                <div v-if=\"grid.unavailable_id != null\" class=\"cancelUnavailable\" @click=\"removeUnavailable(grid.unavailable_id)\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div>\n                                            </span>\n                                        </div>\n                                        <div v-else=\"\">{{grid.content}}</div>\n                                    </div>\n                                    <div v-else=\"\" data-court=\"{{court['id']}}\" data-hour=\"{{grid.hour}}\" @click=\"openModalGridExpand(court['id'], grid.status, grid.booking_id, grid.hour)\" class=\"day-grid grid {{grid.status}} g{{index%2 ==0 ? 2 : 0}} {{index%2 == 0 &amp;&amp; court['hours'][index+1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index+1].status ? 'gn' : ''}} {{index%2 == 1 &amp;&amp; court['hours'][index-1] &amp;&amp; grid.status == 'available' &amp;&amp; grid.status != court['hours'][index-1].status ? 'gn' : ''}}\">\n                                        <span class=\"title-grid\">{{grid.status == \"open\" ? \"Open Time Booking\" : grid.status == \"contract\"\n                                             ? \"Contract Time\" :  grid.status == \"lesson\" ? \"Lesson\" : grid.status == 'day_close' ? \"Closed\" : grid.status == 'unavailable' ? \"Unavailable \\n\" : grid.status}}\n                                            <div v-if=\"grid.unavailable_id != null\" class=\"cancelUnavailable\" @click=\"removeUnavailable(grid.unavailable_id)\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div>\n                                        </span>\n                                        <div v-if=\"grid.status != 'available'\" class=\"content-unavailable\">{{grid.content}}</div>\n                                        </div>\n                                </template>\n                            </div>\n                        </template>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"md-expand\">\n            <div id=\"md-booking-content-expand\" style=\"display: none\">\n                <!-- court booking-expanded -->\n                <div class=\"court-booking-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div v-if=\"booking\">\n                        <div class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Customer Details</h3>\n                            <table v-if=\"booking['billing_info']\">\n                                <tbody><tr>\n                                    <td align=\"right\">Name</td>\n                                    <td>\n                                        <div class=\"editable_\">{{booking['billing_info']['first_name']}}</div>\n                                        <div class=\"editable_\">{{booking['billing_info']['last_name']}}</div>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Email</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['email']}}</div></td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Phone</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['phone']}}</div></td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Address</td>\n                                    <td><div class=\"editable_\">{{booking['billing_info']['address1']}}</div></td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div v-if=\"booking['court']\" class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Booking Details</h3>\n                            <table>\n                                <tbody><tr>\n                                    <td align=\"right\">Booking Type</td>\n                                    <td>{{booking['type']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Court:</td>\n                                    <td>{{booking['court']['name']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Start Time</td>\n                                    <td>{{booking['hour']}} | {{booking['date']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Length</td>\n                                    <td>{{booking['hour_length']}} Hour</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Players</td>\n                                    <td>{{booking['num_player']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Create Time</td>\n                                    <td>{{booking['created_at']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Booking By</td>\n                                    <td>{{booking['source'] == 1 ? \"Player Booking\" : \"Court-Connect.com\" }}</td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div class=\"col-xs-3\">\n                            <h3 class=\"title-part\">Payment Details</h3>\n                            <table>\n                                <tbody><tr>\n                                    <td align=\"right\">Status</td>\n                                    <td v-if=\"booking['status'] == 'required'\" style=\"text-transform: capitalize\"><span style=\"color:red\">Payment Required</span></td>\n                                    <td v-else=\"\" style=\"text-transform: capitalize\">{{booking['status']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Tender</td>\n                                    <td style=\"text-transform: capitalize\">{{booking['type']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Total Due</td>\n                                    <td>${{booking['total_price_order']}}</td>\n                                </tr>\n                                <tr>\n                                    <td align=\"right\">Notes</td>\n                                    <td>{{booking['notes']}}</td>\n                                </tr>\n                            </tbody></table>\n                        </div>\n                        <div class=\"col-xs-3\">\n                            <div id=\"mb-print-receipt\" class=\"btn btn-primary btn-mb-ex icon-fa-print\" @click=\"printReceipt(booking['id'])\">Print Receipt</div>\n                            <div v-if=\"booking['status'] == 'required'\" @click=\"acceptPayment(booking['id'])\" id=\"mb-accept-payment\" class=\"btn btn-primary btn-mb-ex icon-fa-accept\">Accept Payment</div>\n                            <div v-if=\"booking['is_checkIn']\" id=\"mb-check-players-in\" class=\"btn btn-primary btn-mb-ex icon-fa-accept\">Check Players In</div>\n                            <div v-else=\"\" @click=\"checkInBooking(booking['id'])\" id=\"mb-check-players-in\" class=\"btn btn-primary btn-mb-ex icon-fa-cancel\">Check Players In</div>\n                            <div id=\"mb-edit-booking\" @click=\"editBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex icon-fa-edit\">Edit Booking</div>\n                            <div id=\"mb-cancel-booking\" @click=\"cancelBooking(booking['id'])\" class=\"btn btn-primary btn-mb-ex btn-custom icon-fa-cancel\">Cancel Booking</div>\n                        </div>\n                    </div>\n                </div>\n                <!-- end court booking-expanded -->\n            </div>\n            <div id=\"md-available-content-expand\" style=\"display: none\">\n                <!-- available-slot-expanded -->\n                <div v-if=\"info_grid_available\" class=\"available-slot-expanded\">\n                    <button type=\"button\" class=\"close-md close\" aria-label=\"Close\"><span aria-hidden=\"true\">X</span></button>\n                    <div class=\"col-xs-8\">\n                        <table class=\"table\">\n                            <thead>\n                                <tr>\n                                    <th>Quick Quotes</th>\n                                    <td v-for=\"item in info_grid_available.lb_hour\"><strong>{{ item.text }}</strong> <br> ({{ item.value }}) hours</td>\n                                </tr>\n                            </thead>\n                            <tbody>\n                            <tr>\n                                <td>Member: </td>\n                                <td v-for=\"itemmember in info_grid_available.price_member\">{{itemmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Non Member: </td>\n                                <td v-for=\"itemnonmember in info_grid_available.price_nonmember\">{{itemnonmember}}</td>\n                            </tr>\n                            <tr>\n                                <td>Lesson: </td>\n                            </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <div id=\"mb-make-time-unavailable\">\n                            <form method=\"POST\" action=\"\" accept-charset=\"UTF-8\" class=\"form-center\" id=\"form_make_unavailable\" enctype=\"multipart/form-data\">\n                                <div class=\"btn btn-primary btn-mb-ex btn-in-expand icon-fa-angle-down icon-fa-make-unavailable\">Make Time Unavailable</div>\n                                <div class=\"show-expand\">\n                                    <label for=\"input-reason\" class=\"text-center\">Enter Reason</label>\n                                    <input placeholder=\"eg.Court Maintainance\" class=\"form-control\" id=\"input-reason\" v-model=\"make_time_unavailable.reason\" name=\"input-reason\" type=\"text\" value=\"\">\n                                    <input class=\"btn btn-primary\" type=\"submit\" value=\"Submit\" @click.prevent=\"makeTimeUnavailable()\">\n                                </div>\n                            </form>\n                        </div>\n\n                        <div id=\"mb-create-deal\" @click.prevent=\"openModalDeal()\" style=\"margin-left: 20px\" class=\"btn btn-primary btn-mb-ex icon-fa-star\">Create Deal</div>\n                    </div>\n                </div>\n                <!-- end available-slot-expanded -->\n            </div>\n        </div>\n    </div>\n</section>\n\n<div id=\"confirm-booking-delete\" class=\"modal fade\">\n    <div class=\"modal-body\">\n        Are you sure delete?\n    </div>\n    <div class=\"modal-footer\">\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn btn-primary\" id=\"booking-delete\">Delete</button>\n        <button type=\"button\" data-dismiss=\"modal\" class=\"btn\">Cancel</button>\n    </div>\n</div>\n\n<div id=\"md-new-deal\" class=\"modal fade mb-modal\" role=\"dialog\" aria-labelledby=\"myModalLabel\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Create A New Deal</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div>\n                    <table>\n                        <tbody><tr>\n                            <td>Date Selected: </td>\n                            <td> {{deal.date_text}}</td>\n                        </tr>\n                        <tr>\n                            <td>Time Selected: </td>\n                            <td>{{deal.time}}</td>\n                        </tr>\n                        <tr>\n                            <td>Court Selected: </td>\n                            <td> {{deal.court_name}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Member): </td>\n                            <td>{{deal.price_member}}</td>\n                        </tr>\n                        <tr>\n                            <td>Orginal Price (Non member): </td>\n                            <td>{{deal.price_nonmember}}</td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_member\"><br></td>\n                        </tr>\n                        <tr>\n                            <td>New Price for Non member</td>\n                            <td><input type=\"text\" v-model=\"deal.new_price_nonmember\"></td>\n                        </tr>\n                    </tbody></table>\n                    <div class=\"form-group text-center\">\n                        <input type=\"button\" @click.prevent=\"createDeal()\" class=\"btn btn-primary\" value=\"Publish Deal\">\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<style>\n    .pay-cash{\n        background: red;\n        color: #fff;\n        font-size: 16px;\n        font-weight: bold;\n        text-align: center;\n        position: absolute;\n        width: 20px;\n        height: 25px;\n        top: 0px;\n        z-index: 9;\n    }\n    .cancelUnavailable{\n        color: red;\n        font-size: 16px;\n        font-weight: bold;\n        text-align: center;\n        position: absolute;\n        width: 20px;\n        height: 25px;\n        top: 0px;\n        right: 0px;\n        z-index: 9;\n    }\n</style>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -33406,6 +33432,70 @@ if (module.hot) {(function () {  module.hot.accept()
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _ListCustomer = require('./ListCustomer.vue');
+
+var _ListCustomer2 = _interopRequireDefault(_ListCustomer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _ = require('lodash'),
+    deferred = require('deferred');
+exports.default = {
+    props: ['clubSettingId', 'clubs'],
+    data: function data() {
+        return {
+            dataRates: [],
+            users_choice: [],
+            surface: null,
+            users: [],
+            reloadUsers: 1
+        };
+    },
+
+    watch: {
+        users_choice: function users_choice() {
+            if (this.users_choice.length > 0) {
+                this.dataRates = [];
+                for (var index in this.users_choice) {
+                    // don't actually do this
+
+                    for (var i in this.users_choice[index].rates) {
+                        var temp = _.cloneDeep(this.users_choice[index].rates[i]);
+                        this.dataRates.push(temp);
+                    }
+                }
+            } else {
+                this.dataRates = [];
+            }
+        }
+    },
+    methods: {},
+    ready: function ready() {},
+
+    components: {
+        ListCustomer: _ListCustomer2.default
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"box-body\">\n    <div class=\"user-clubs\">\n        <div class=\"row\">\n            <div class=\"col-xs-12 col-md-7\">\n                <div class=\"court_list courtbox\">\n                    <h3 class=\"title-box pull-left\">Customer list</h3>\n                    <list-customer :club-setting-id=\"clubSettingId\" :users_choice.sync=\"users_choice\" :users.sync=\"users\" :reload-users.sync=\"reloadUsers\">\n                    </list-customer>\n                </div>\n            </div>\n        </div>\n    </div>\n    <!-- end user club -->\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "F:\\htdocs\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\CustomerSetting.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./ListCustomer.vue":151,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],147:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.default = {
     props: ['teachers_choice', 'clubSettingId', 'reloadTeachers'],
     data: function data() {
@@ -33476,7 +33566,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":119,"vue-hot-reload-api":94}],147:[function(require,module,exports){
+},{"vue":119,"vue-hot-reload-api":94}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33582,7 +33672,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":119,"vue-hot-reload-api":94}],148:[function(require,module,exports){
+},{"vue":119,"vue-hot-reload-api":94}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33648,7 +33738,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":119,"vue-hot-reload-api":94}],149:[function(require,module,exports){
+},{"vue":119,"vue-hot-reload-api":94}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33737,7 +33827,90 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":119,"vue-hot-reload-api":94}],150:[function(require,module,exports){
+},{"vue":119,"vue-hot-reload-api":94}],151:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\ntr td[_v-fafd9706]{\n    text-align: left;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _Filter = require('../globals/Filter.vue');
+
+var _Filter2 = _interopRequireDefault(_Filter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _ = require('lodash'),
+    deferred = require('deferred');
+var tmp_choice = null;
+exports.default = {
+    props: ['clubSettingId', 'teachers_choice', 'teachers', 'reloadTeachers'],
+    data: function data() {
+        return {
+            data: {
+                per_page: "10"
+            },
+            api: laroute.route('customer.listdata')
+        };
+    },
+
+    watch: {
+        clubSettingId: 'reloadAsyncData',
+        reloadTeachers: 'reloadAsyncData'
+    },
+    asyncData: function asyncData(resolve, reject) {
+        this.fetchTeachers(this.api).done(function (data) {
+            resolve({ data: data });
+        }, function (error) {
+            console.log(error);
+        });
+    },
+
+    methods: {
+        fetchTeachers: function fetchTeachers(api) {
+            var clubid = arguments.length <= 1 || arguments[1] === undefined ? this.clubSettingId : arguments[1];
+            var take = arguments.length <= 2 || arguments[2] === undefined ? this.data.per_page : arguments[2];
+
+            var def = deferred();
+            this.$http.get(api, { clubid: clubid, take: take }).then(function (res) {
+                var data = res.data;
+
+                def.resolve(data);
+            }, function (res) {
+                def.reject(res);
+            });
+            return def.promise;
+        }
+    },
+    events: {
+        'go-to-page': function goToPage(api) {
+            console.log(api);
+            this.api = api;
+            this.reloadAsyncData();
+        }
+    },
+
+    components: { Filter: _Filter2.default }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<table id=\"tbl-listteacher\" class=\"table table-bordered table-hover table-th\" _v-fafd9706=\"\">\n    <thead _v-fafd9706=\"\">\n    <tr _v-fafd9706=\"\">\n        <th _v-fafd9706=\"\"></th>\n        <th _v-fafd9706=\"\">Full Name</th>\n        <th _v-fafd9706=\"\">Email</th>\n    </tr>\n    </thead>\n    <tbody _v-fafd9706=\"\">\n    <tr v-for=\"(index,teacher) in data.data\" _v-fafd9706=\"\">\n        <td _v-fafd9706=\"\"><input type=\"checkbox\" class=\"court-item-check\" name=\"court-item-check\" value=\"{{index}}\" @click=\"addTeacher(index)\" _v-fafd9706=\"\"></td>\n        <td _v-fafd9706=\"\">{{ teacher.fullname }}</td>\n        <td _v-fafd9706=\"\">{{ teacher.email }} </td>\n    </tr>\n    </tbody>\n</table>\n<filter :data.sync=\"data\" _v-fafd9706=\"\"></filter>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "F:\\htdocs\\courtconnect\\resources\\assets\\admin\\js\\app_modules\\vuejs\\components\\user\\ListCustomer.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["\ntr td[_v-fafd9706]{\n    text-align: left;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../globals/Filter.vue":138,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94,"vueify-insert-css":120}],152:[function(require,module,exports){
 var __vueify_style__ = require("vueify-insert-css").insert("\ntr td[_v-2d1040da]{\n    text-align: left;\n}\n")
 'use strict';
 
@@ -33835,7 +34008,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../globals/Filter.vue":138,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94,"vueify-insert-css":120}],151:[function(require,module,exports){
+},{"../globals/Filter.vue":138,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94,"vueify-insert-css":120}],153:[function(require,module,exports){
 var __vueify_style__ = require("vueify-insert-css").insert("\ntr td[_v-e077052c]{\n    text-align: left;\n}\n")
 'use strict';
 
@@ -33938,7 +34111,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../globals/Filter.vue":138,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94,"vueify-insert-css":120}],152:[function(require,module,exports){
+},{"../globals/Filter.vue":138,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94,"vueify-insert-css":120}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34014,7 +34187,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./FormEditTeacher.vue":146,"./FormNewTeacher.vue":148,"./ListTeacher.vue":150,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],153:[function(require,module,exports){
+},{"./FormEditTeacher.vue":147,"./FormNewTeacher.vue":149,"./ListTeacher.vue":152,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34088,6 +34261,6 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./FormEditUser.vue":147,"./FormNewUser.vue":149,"./ListUser.vue":151,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}]},{},[121]);
+},{"./FormEditUser.vue":148,"./FormNewUser.vue":150,"./ListUser.vue":153,"deferred":29,"lodash":88,"vue":119,"vue-hot-reload-api":94}]},{},[121]);
 
 //# sourceMappingURL=app.js.map

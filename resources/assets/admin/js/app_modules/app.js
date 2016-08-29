@@ -11,6 +11,7 @@ import TeacherSetting from './vuejs/components/user/TeacherSetting.vue';
 import ManageBooking from './vuejs/components/booking/ManageBooking.vue';
 import NewBooking from './vuejs/components/booking/NewBooking.vue';
 import ReportSetting from './vuejs/components/report/ReportSetting.vue';
+import CustomerSetting from './vuejs/components/user/CustomerSetting.vue';
  var _ = require('lodash'),
      deferred = require('deferred');
 new Vue({
@@ -29,6 +30,7 @@ new Vue({
         HeaderMain,
 		UserSetting,
 		TeacherSetting,
+		CustomerSetting,
 		ManageBooking,
 		NewBooking,
 		ReportSetting

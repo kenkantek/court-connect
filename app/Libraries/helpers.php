@@ -31,7 +31,9 @@ function date_from_database($time, $format = 'Y-m-d')
 function format_hour($hour)
 {
     $hour = number_format($hour,2);
-    return $hour <=12 ? str_replace(".50",":30",str_replace(".00",":00",$hour))."am" : str_replace(".50",":30",str_replace(".00",":00",number_format($hour - 12,2)))."pm";
+    $intpart = floor($hour);
+    return $hour < 12 ? str_replace(".50",":30",str_replace(".00",":00",$hour))."am" :
+        ($intpart == 12 ? str_replace(".50",":30",str_replace(".00",":00",number_format($hour,2))) : str_replace(".50",":30",str_replace(".00",":00",number_format($hour - 12,2))))."pm";
 }
 
 function datediffInWeeks($date1, $date2)
@@ -273,29 +275,31 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
         $court = Court::where('id',$input['court_id'])->first();
         $date = Carbon::createFromTimestamp(strtotime($input['date']))->format("Y-m-d");
         $check_open_close_date = SetOpenDay::where(['date' => $date, 'club_id' => $court->club_id])->first();
-        $clone_open_close_date = clone $check_open_close_date;
-        if(isset($check_open_close_date)) {
-            if($check_open_close_date['open_time'] == "12:00 AM")
-                $check_open_close_date['open_time'] = "0:00";
-            else
-                $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
+        if($check_open_close_date) {
+            $clone_open_close_date = clone $check_open_close_date;
+            if (isset($check_open_close_date)) {
+                if ($check_open_close_date['open_time'] == "12:00 AM")
+                    $check_open_close_date['open_time'] = "0:00";
+                else
+                    $check_open_close_date['open_time'] = date("G:i", strtotime($check_open_close_date['open_time']));
 
-            if($check_open_close_date['close_time'] == "12:00 AM")
-                $check_open_close_date['close_time'] = "24:00";
-            else
-                $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
+                if ($check_open_close_date['close_time'] == "12:00 AM")
+                    $check_open_close_date['close_time'] = "24:00";
+                else
+                    $check_open_close_date['close_time'] = date("G:i", strtotime($check_open_close_date['close_time']));
 
-            $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
-            $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
+                $open_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['open_time'])))));
+                $close_time_date = floatval(str_replace(":00", ".0", str_replace(":15", ".25", str_replace(":30", ".5", str_replace(":45", ".75", $check_open_close_date['close_time'])))));
 
-            if($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] > $close_time_date){
-                //$text = " ".$check_open_close_date['open_time']." ".($input['hour_start'] + $input['hour_length']);
-                return [
-                    'error' => true,
-                    "messages"=>['Club Hours:  '.$clone_open_close_date['open_time'].' - '.$clone_open_close_date['close_time']]
-                ];
+                if ($input['hour_start'] < $open_time_date || $input['hour_start'] + $input['hour_length'] > $close_time_date) {
+                    //$text = " ".$check_open_close_date['open_time']." ".($input['hour_start'] + $input['hour_length']);
+                    return [
+                        'error' => true,
+                        "messages" => ['Club Hours:  ' . $clone_open_close_date['open_time'] . ' - ' . $clone_open_close_date['close_time']]
+                    ];
+                }
+
             }
-
         }
 
 //        if(isset($check_open_close_date)) {

@@ -65,8 +65,7 @@ class ManageBookingController extends Controller
         $tmp_inc_hour = 1;
 
         for($i=$hour; $i< $hour + $limit_hour; $i++) {
-            $lb_hour['text'] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
-                ($hour + $tmp_inc_hour <=12 ? str_replace(".5",":30",$hour + $tmp_inc_hour)."am" : str_replace(".5",":30",$hour + $tmp_inc_hour - 12)."pm");
+            $lb_hour['text'] = format_hour($hour). "-" . format_hour($hour + $tmp_inc_hour);
             $lb_hour['value'] = $tmp_inc_hour;
             $arr_lb_hour[] = $lb_hour;
             $tmp_inc_hour+=0.5;
@@ -159,6 +158,21 @@ class ManageBookingController extends Controller
         }
     }
 
+    //cancelUnavailable
+    public function getCancelUnavailable($id){
+        $unavailable_db = TimeUnavailable::find($id);
+        if($unavailable_db) {
+            $unavailable_db->delete();
+            return [
+                'error' => false
+            ];
+        }
+        return [
+            'error' => true
+        ];
+    }
+
+
     //getInfoGridAvailable
     public function getInfoGridForDeal(Request $request){
         $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("Y-m-d");
@@ -177,8 +191,8 @@ class ManageBookingController extends Controller
         $data['price_nonmember']= !$price_nonmember['error'] ? $price_nonmember['price']: $price_member['message'];
 
         $data['date_text'] = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format("l jS \of F Y");
-        $data['time'] = ($hour <=12 ? str_replace(".5",":30",$hour)."am" : str_replace(".5",":30",($hour - 12))."pm") . "-" .
-            ($hour + $hour_length <=12 ? str_replace(".5",":30",$hour + $hour_length)."am" : str_replace(".5",":30",$hour + $hour_length - 12)."pm");
+
+        $data['time'] = format_hour($hour) . "-" . format_hour($hour + $hour_length);
 
         return [
             'error' => false,
@@ -214,8 +228,8 @@ class ManageBookingController extends Controller
             return [
                 'error' => false,
             ];
-        }else
-        {
+        }
+        else {
             $v = Validator::make($request->all(), [
                 'date' => 'required',
                 'new_price_member' => 'required | numeric ',
@@ -325,7 +339,7 @@ class ManageBookingController extends Controller
                         $arr_hour["h_" . $hour]['status'] = 'unavailable';
                     }
                 }else{
-                    $arr_hour["h_" . $hour]['status'] = 'closed';
+                    $arr_hour["h_" . $hour]['status'] = 'unavailable';//'unavailable/closed';
                 }
             }
 
@@ -360,6 +374,7 @@ class ManageBookingController extends Controller
                     $index = str_replace("_00","",str_replace(".","_",$i));
                     $arr_hour["h_".$index]['status'] = 'unavailable';
                     $arr_hour["h_".$index]['content'] = $unavailable['reason'];
+                    $arr_hour["h_".$index]['unavailable_id'] = $unavailable['id'];
                     $tmp_i++;
                 }
             }
@@ -654,12 +669,8 @@ class ManageBookingController extends Controller
                 }
             }
             if($tmp_refund_sucess){
-                if($booking['type'] == 'contract') {
-                    $bookingContracts = Booking::where(['payment_id' => $booking['payment_id'], 'player_id' => Auth::user()->id])
-                        ->update(['status_booking'=>'cancel']);
-                }else{
-                    $booking->update(['status_booking'=>'cancel']);
-                }
+                Booking::where(['token_booking' => $booking->token_booking])
+                    ->update(['status_booking'=>'cancel']);
                 return response()->json([
                     'error' => false,
                     'message' => 'Cancel success.'

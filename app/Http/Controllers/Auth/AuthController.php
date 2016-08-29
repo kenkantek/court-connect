@@ -94,7 +94,6 @@ class AuthController extends Controller
     }
 
     //Social
-
     public function redirectToProvider($driver)
     {
         return Socialite::driver($driver)->redirect();
@@ -133,5 +132,4 @@ class AuthController extends Controller
         }
         return redirect()->route('home.index');
     }
-
 }

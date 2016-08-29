@@ -26,6 +26,12 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'postUpdateTeacher' => 'teacher.update',
     ]);
 
+    Route::controller('customer', CustomerController::class, [
+        'getList' => 'customer.listAll',
+        'getCustomers' => 'customer.listdata',
+    ]);
+
+
     Route::controller('dashboard', DashboardController::class, [
         'getAddContext' => 'dashboard.context',
         'getClubs' => 'dashboard.clubs.list',
@@ -46,6 +52,7 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getCustomerLookup' =>'booking.customer_lookup',
         'getInfoGridAvailable' =>'booking.infoGridAvailable',
         'postMakeTimeUnavailable' =>'booking.makeTimeUnavailable',
+        'getCancelUnavailable' =>'booking.cancelUnavailable',
         'getInfoGridForDeal' => 'booking.getInfoGridForDeal',
         'postNewDeal' => 'booking.newDeal',
         'getSearch' => 'booking.search',

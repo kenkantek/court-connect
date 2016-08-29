@@ -589,6 +589,12 @@ form.form-court{
 .grid-content-wap .grid-row .grid.g0.unavailable .content-unavailable{
     font-size: 14px;
 }
+.grid-content-wap .grid-row .unavailable .cancelUnavailable{
+    cursor: pointer;
+}
+.grid-content-wap .grid-row .grid.g0.unavailable .cancelUnavailable{
+    display: none;
+}
 .grid-content-wap .grid-row .grid.g0.gn{
     display: block;
 }
