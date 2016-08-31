@@ -28,6 +28,7 @@ class Deal extends Model
     * @var array
     */
     protected $dates    = ['created_at', 'updated_at'];
+    //protected $fillable = ['date', 'court_id', 'hour', 'hour_length', 'price_member', 'price_nonmember'];
 
     protected $guarded = array();
 
@@ -47,4 +48,15 @@ class Deal extends Model
     {
         return floatval($value);
     }
+    public function getDate1(){
+        return $this->id;
+    }
+
+    public function scopeCheckBooking($query)
+    {
+        //$deal = Property::join('neighbourhoods', 'neighbourhoods.id', '=', 'properties.neighbourhood_id')
+        //print_r($this);
+        //return $query->where('hour_length', $this->hour_length);
+    }
+
 }

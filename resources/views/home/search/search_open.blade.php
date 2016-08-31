@@ -8,12 +8,16 @@
                     <div class="caption">
                         @if(isset($club->court) > 0)
                             <div class="col-md-6 col-xs-6">
+                                @if($request->court == 1)
                                 Indoor/Outdoor<br/>
                                 <b>{{$club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                                @endif
                             </div>
                             <div class="col-md-6 col-xs-6">
+                                @if($request->court == 1)
                                 Court Type<br/>
                                 <b>{{$club->court->surface->label}}</b>
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -28,14 +32,12 @@
                     <div class="col-md-2 col-xs-3 text-center distance">
                         <p>
                             Distance <br>
-                            <b>1 mile</b>
+                            <b>{{isset($club->distance) ? $club->distance : ''}} miles</b>
                         </p>
                     </div>
                     @if(isset($club->data_date_open->is_close) && $club->data_date_open->is_close == 1)
                         <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; font-size: 1.2em; color: #63ac1e;">Date closed</div>
-                    @endif
-
-                    @if(isset($club->alert_error))
+                    @elseif(isset($club->alert_error))
                         <div class="text-center" style="clear: both; font-weight: bold; padding: 10px 0px; font-size: 1.2em; color: #63ac1e;">{{$club->alert_error}}</div>
                     @endif
                 </div>
@@ -44,21 +46,6 @@
                         <div class="col-md-12">
                             <div class="club-time text-center club-time-wrap">
                                 <div class="first-court">
-                                    <div class="intro-court clearfix">
-                                        <div class="court-io-door pull-right">
-                                            Indoor/Outdoor:
-                                            @if($request->court == 1)
-                                            <b>{{ $club->court->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
-                                            @endif
-                                        </div>
-                                        <div class="court-type pull-left">
-                                            Court Type:
-                                            @if($request->court == 1)
-                                            <b>{{$club->court->surface->label}}</b>
-                                            <span class="hidden"><b>{{$club->court->name}}</b></span>
-                                            @endif
-                                        </div>
-                                    </div>
                                     <div class="club-time text-center club-time-wrap clearfix">
                                         @if(isset($club->price_main))
                                             @foreach ($club->price_main as $item)

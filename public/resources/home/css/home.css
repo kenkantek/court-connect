@@ -1243,6 +1243,10 @@ a.ui-state-default.ui-state-highlight {
     margin: 0px auto;
     outline: none;
     max-width: 100%;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
 }
 .city-autocomplete{
     padding: 10px;

@@ -5,11 +5,7 @@
 			<h5 class="clearfix">To generate financial reports you can download to Excel, please enter the time period below.</h5>
 
 			<br>
-			<div class="club-balance form-group col-md-2">
-				<strong>Club balance: <span style="border: 1px solid #d8d8d8; padding: 5px 20px">${{parseFloat(total_balance)}}</span></strong>
-			</div>
-			<div class="form-group col-md-5">
-				<label class="col-sm-2">Date range:</label>
+			<div class="form-group col-md-3">
 				<div class="input-group col-md-10">
 					<div class="input-group-addon">
 						<i class="fa fa-calendar"></i>
@@ -22,7 +18,7 @@
 
 			<div class="form-group col-md-2">
 				<div class="input-group">
-					<input type="submit" @click="onSubmit()" class="form-control pull-right btn btn-block btn-info btn-flat">
+					<input type="submit" @click="onSubmit()" value="Search" class="form-control pull-right btn btn-block btn-info btn-flat">
 				</div>
 				<!-- /.input group -->
 			</div>
@@ -31,52 +27,56 @@
 			<!-- checkbox -->
 			<div class="form-group col-md-3">
 				<label>
-					<input type="checkbox" class="minimal" id="onlycc" v-model="filter_data.only_cc">
-					Court-Connect only?
+					<input type="checkbox" class="minimal" id="input-only-cc" v-model="filter_data.only_cc" v-on:change="changeOnlyCC">
+					Show Court-Connect Bookings Only?
 				</label>
+			</div>
+
+			<div class="form-group col-md-2 pull-right">
+				<button type="button" @click.prevent="downloadData()" id="cc-btn-download-file" class="btn btn-block btn-primary btn-lg">
+					<i class="fa fa-circle-o-notch fa-spin hidden" style="text-align: left; float: left; line-height: 25px; margin-right: 20px"></i>
+					Download as .csv
+				</button>
 			</div>
 
 		</div>
 
 		<table class="table table-bordered table-hover table-th" id="datatables">
 			<thead>
-			<tr>
-				<th v-for="column in gridColumns" @click="sortBy(column.key)" :class="{active: sortKey == column.key}">{{column.value}}
-					<span class="arrow" :class="sortOrders[column.key] > 0 ? 'asc' : 'desc'"></span>
-				</th>
-			</tr>
+				<tr>
+					<th v-for="column in gridColumns" @click="sortBy(column.key)" :class="{active: sortKey == column.key}">{{column.value}}
+						<span class="arrow" :class="sortOrders[column.key] > 0 ? 'asc' : 'desc'"></span>
+					</th>
+				</tr>
 			</thead>
 			<tbody>
-			<tr v-for="booking in data.data | filterBy filterKey | orderBy sortKey sortOrders[sortKey]">
-				<td>{{ booking.id }}</td>
-				<td>
-					{{ booking.type == "contract" ? (dateOfWeek[booking.day_of_week]+ ", " + booking.date_range_of_contract.from + " - " + booking.date_range_of_contract.to): booking.date }}
-					<div>
-						at {{ booking.hour }}
-						for {{ booking.hour_length }}Hour
-					</div>
-				</td>
-				<td>{{ booking.cart_type == null || booking.cart_type == '' ? "Debit / Cash" : "Credit / " + booking.cart_type}}</td>
-				<td>{{ booking.billing_info.first_name + " " + booking.billing_info.last_name }}</td>
-				<td>{{ booking.source == 1 ? "Court Connect" : "Player booking" }}</td>
-				<td>{{ booking.booked_by.fullname }}</td>
-				<td>{{ booking.type }}</td>
-				<td>{{ booking.created_at }}</td>
-				<td>${{ booking.total_price_order }}</td>
+				<tr v-for="booking in data.data | filterBy filterKey | orderBy sortKey sortOrders[sortKey]">
+					<td>{{ booking.id }}</td>
+					<td>
+						{{ booking.type == "contract" ? (dateOfWeek[booking.day_of_week]+ ", " + booking.date_range_of_contract.from + " - " + booking.date_range_of_contract.to): booking.date }}
+						<div>
+							at {{ booking.hour }}
+							for {{ booking.hour_length }}Hour
+						</div>
+					</td>
+					<td>{{ booking.cart_type == null || booking.cart_type == '' ? "Debit / Cash" : "Credit / " + booking.cart_type}}</td>
+					<td>{{ booking.source == 1 ? "Court Connect" : (booking.source == 2 ? "Club" : "Other") }}</td>
+					<td>{{ booking.booked_by.fullname }}</td>
+					<td>{{ booking.billing_info.first_name + " " + booking.billing_info.last_name }}</td>
+					<td>{{ booking.type }}</td>
+					<td>{{ booking.created_at }}</td>
+					<td>${{ booking.total_price_order }}</td>
+				</tr>
+			<tr>
+				<th style="background: #333; color: #fff; padding: 15px 10px;" colspan="8">Total</th>
+				<th style="background: #333; color: #fff; padding: 15px 10px;">${{parseFloat(total_balance)}}</th>
 			</tr>
 			</tbody>
 		</table>
 		<div class="pull-left col-md-8">
 			<filter
 					:data.sync="data"
-					></filter>
-		</div>
-
-		<div class="pull-right">
-			<button type="button" @click.prevent="downloadData()" id="cc-btn-download-file" class="btn btn-block btn-primary btn-lg">
-				<i class="fa fa-circle-o-notch fa-spin hidden" style="text-align: left; float: left; line-height: 25px; margin-right: 20px"></i>
-				Download as .csv
-			</button>
+			></filter>
 		</div>
 	</div>
 </template>
@@ -89,18 +89,19 @@
 		props:['clubSettingId'],
 		watch: {
 			clubSettingId: 'reloadAsyncData',
+			filter_data: 'onSubmit'
 		},
 		data:function(){
 			var columns = [
 				{key:"id", value:"Txn Id"},
 				{key:"date",value:"Txn Date/Time"},
-				{key:"debit",value:"Debit/Credit"},
-				{key:"customer",value:"Customer Name"},
+				{key:"debit",value:"Tender"},
 				{key:"source",value:"Source"},
 				{key:"booked_by",value:"Booked By"},
+				{key:"customer",value:"Customer Name"},
 				{key:"type",value:"Type"},
 				{key:"created_at",value:"Day Trading"},
-				{key:"total_price",value:"Amount"}
+				{key:"total_price",value:"Gross"}
 			];
 			var sortOrders = {};
 			$.each(columns,function(k,v){
@@ -131,6 +132,12 @@
 	});
 	},
 	methods: {
+		changeOnlyCC(){
+			if($('#input-only-cc').is(":checked"))
+					this.filter_data.only_cc = 1;
+			else this.filter_data.only_cc = 0;
+			this.onSubmit();
+		},
 		fetchBookings(){
 			let def = deferred();
 			this.$http.get(this.api ,{ clubid: this.clubSettingId, take: this.data.per_page}).then(res => {
@@ -152,8 +159,10 @@
 			this.sortOrders[key] = this.sortOrders[key] * -1
 		},
 		onSubmit(){
-			if($('#onlycc').is(":checked"))
+			if($('#input-only-cc').is(":checked"))
 				this.filter_data.only_cc = 1;
+			else this.filter_data.only_cc = 0;
+
 			var end_date =  $("#reservation").data('daterangepicker').endDate.format('YYYY/MM/DD');
 			var start_date =  $("#reservation").data('daterangepicker').startDate.format('YYYY/MM/DD');
 			let def = deferred();
@@ -170,8 +179,10 @@
 			});
 		},
 		downloadData(){
-			if($('#onlycc').is(":checked"))
+			if($('#input-only-cc').is(":checked"))
 				this.filter_data.only_cc = 1;
+			else this.filter_data.only_cc = 0;
+
 			var end_date =  $("#reservation").data('daterangepicker').endDate.format('YYYY/MM/DD');
 			var start_date =  $("#reservation").data('daterangepicker').startDate.format('YYYY/MM/DD');
 			let def = deferred();

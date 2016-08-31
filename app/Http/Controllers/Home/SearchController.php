@@ -76,20 +76,27 @@ class SearchController extends Controller {
         if ($request->input('date') && $keyword_hour < 0 || $keyword_hour > 24) {
             $msg_errors[] = "Sorry. Playing time can not start before 5am and ends in 22h!";
         }else if (!empty($keyword_clubs)){
+            $keyword_clubs = strtolower($keyword_clubs);
+
+            $clubs = Club::whereRaw("lower(clubs.name) like '%". $keyword_clubs. "%'")
+                ->orWhereRaw("lower(clubs.state) like '%". $keyword_clubs. "%'")
+                ->orWhereRaw("lower(clubs.address) like '%". $keyword_clubs. "%'")
+                ->orWhereRaw("lower(clubs.zipcode) like '%". $keyword_clubs. "%'")
+                ->orWhereRaw("lower(clubs.city) like '%". $keyword_clubs. "%'")
+                ->join('courts','courts.club_id','=','clubs.id')
+                ->where(function ($q) use ($keyword_surface) {
+                    if ($keyword_surface != null) {
+                        $q->where('courts.surface_id', '=', $keyword_surface);
+                    }})
+                ->with(['courts' => function ($q) use ($keyword_surface) {
+                    if ($keyword_surface != null) {
+                        $q->where('surface_id', '=', $keyword_surface);
+                    }
+                }]);
+
             //contract
             if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
-                $clubs = Club::search($keyword_clubs)
-                    ->join('courts','courts.club_id','=','clubs.id')
-                    ->join('contracts_club','contracts_club.club_id','=','clubs.id')
-                    ->where(function ($q) use ($keyword_surface) {
-                        if ($keyword_surface != null) {
-                            $q->where('courts.surface_id', '=', $keyword_surface);
-                        }})
-                    ->with(['courts' => function ($q) use ($keyword_surface) {
-                        if ($keyword_surface != null) {
-                            $q->where('surface_id', '=', $keyword_surface);
-                        }
-                    }])
+                $clubs->join('contracts_club','contracts_club.club_id','=','clubs.id')
                     ->where(function ($q) use ($request) {
                         if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
                             $q->where('contracts_club.is_member',0);
@@ -99,22 +106,11 @@ class SearchController extends Controller {
                     ->select(['clubs.*'])
                     ->paginate(5);
             }else { //open time
-                $clubs = Club::search($keyword_clubs)
-                    ->join('courts', 'courts.club_id', '=', 'clubs.id')
-                    ->where(function ($q) use ($keyword_surface) {
-                        if ($keyword_surface != null) {
-                            $q->where('courts.surface_id', '=', $keyword_surface);
-                        }
-                    })
-                    ->with(['courts' => function ($q) use ($keyword_surface) {
-                        if ($keyword_surface != null) {
-                            $q->where('surface_id', '=', $keyword_surface);
-                        }
-                    }])
-                    ->groupBy('clubs.id')
+                $clubs = $clubs->groupBy('clubs.id')
                     ->select(['clubs.*'])
                     ->paginate(5);
             }
+
             if ($clubs->count() == 0 ) {
 
             } else {
@@ -224,7 +220,11 @@ class SearchController extends Controller {
                             $get_price = getPriceForBooking($input);
 
                             if($get_price['error'] == 'true'){
-                                $club->alert_error = implode(", ", $get_price['messages']);
+                                if(isset($get_price['messages']))
+                                    $club->alert_error = implode(", ", $get_price['messages']);
+                                else if(isset($get_price['status']))
+                                    $club->alert_error = $get_price['status'];
+                                else $club->alert_error = "error";
                             }
                             $club->courts[$p]['price'] = $get_price;
                             $club->courts[$p]['prices'] = $this->getListPriceOfCourt($input);
@@ -255,7 +255,7 @@ class SearchController extends Controller {
                         foreach ($club->courts as $p => $court) {
                             if($p != 0){
                                 foreach ($court->prices as $k=> $price) {
-                                    if($price['error'] == false) {
+                                    if($price['error'] == false && isset($price_main[$k]['total_price'])) {
                                         $price_main[$k]['total_price'] += $price['total_price'];
                                         $price_main[$k]['price_teacher'] += $price['price_teacher'];
                                     }
@@ -272,6 +272,13 @@ class SearchController extends Controller {
                         unset($club->courts);
                     }
                 }
+            }
+        }
+        if(isset($request->lat) && isset($request->lat)) {
+            foreach ($clubs as $club) {
+                $club->distance = $this->haversineGreatCircleDistance($club->latitude, $club->longitude, $request->lat, $request->lon);
+                $club->distance = number_format($club->distance / 1.609344, 5);
+                $club->distance1 = $club->latitude . ", " . $club->longitude . ", " . $request->lat . ", " . $request->lon;
             }
         }
         //return $clubs;
@@ -313,27 +320,42 @@ class SearchController extends Controller {
     }
 
     public function checkPrice(){
-//        $input = [
-//            'date' => "07/07/2016",
-//            'type' => 'open',
-//            'hour_start' => 8,
-//            'hour_length' => 1,
-//            'member' => 0,
-//            'court_id' => '218'
-//        ];
-
         $input = [
-            'date' => "07/07/2016",
-            'dayOfWeek' => 1,
-            'type' => 'contract',
-            'contract_id' => 13,
-            'court_id' => 218,
-            'club_id' => 1,
+            'date' => "08/31/2016",
+            'type' => 'open',
             'hour_start' => 7,
             'hour_length' => 1,
             'member' => 0,
+            'court_id' => '230'
         ];
+
+//        $input = [
+//            'date' => "07/07/2016",
+//            'dayOfWeek' => 1,
+//            'type' => 'contract',
+//            'contract_id' => 13,
+//            'court_id' => 218,
+//            'club_id' => 1,
+//            'hour_start' => 7,
+//            'hour_length' => 1,
+//            'member' => 0,
+//        ];
         $price = getPriceForBooking($input);
         dd($price);
+    }
+
+    public function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000){
+        // convert from degrees to radians
+        $latFrom = deg2rad($latitudeFrom);
+        $lonFrom = deg2rad($longitudeFrom);
+        $latTo = deg2rad($latitudeTo);
+        $lonTo = deg2rad($longitudeTo);
+
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+        return $angle * $earthRadius;
     }
 }

@@ -32,7 +32,17 @@ class UserEventListener
     public function onUserBooking($event)
     {
         $booking_id = $event->booking_id;
-        $booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$booking_id])->first();
+        $check_booking = Booking::where(['bookings.id'=>$booking_id,'bookings.player_id'=>Auth::user()->id])->first();
+        $booking = Booking::join('courts', 'courts.id', '=', 'bookings.court_id')
+            ->join('clubs', 'clubs.id', '=', 'courts.club_id')
+            ->where('player_id', Auth::user()->id)
+            ->where('bookings.token_booking', $check_booking->token_booking)
+            ->orderBy('created_at', 'desc')
+            ->groupBy('token_booking')
+            ->selectRaw('bookings.*, group_concat(DISTINCT courts.name SEPARATOR \', \') as court_name, clubs.id as club_id, 
+            clubs.image as club_image, clubs.name as club_name, clubs.address as club_address')
+            ->first();
+
         //$booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$booking_id,'bookings.player_id'=>$event->user_id])->first();
         $data['booking'] = $booking;
         Mail::send('home.bookings.print_confirmation',$data, function($message) use ($booking)
@@ -58,6 +68,7 @@ class UserEventListener
             $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
             $message->to(env('MAIL_support'));
             $message->cc(env('MAIL_CC1'));
+            $message->cc(env('MAIL_CC2'));
             $message->cc(env('MAIL_test'));
             $message->setBody($text);
         });

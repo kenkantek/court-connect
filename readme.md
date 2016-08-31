@@ -29,3 +29,5 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 ## Info accout cpanel court-connect
 user: courtconnect
 pass: Cc123qwe123
+
+## Project kéo dài từ tháng 2/2016 - chưa xác định

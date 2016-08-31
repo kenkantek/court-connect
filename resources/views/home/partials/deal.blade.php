@@ -18,7 +18,6 @@
                 @endif
                 <div class="col-md-4">
                     <a class="deal-link" href="{{route('home.checkout',['date'=>$deal->date,http_build_query(['courts'=>[$deal->court_id]]),'hour_start'=>$deal->hour,'hour_length'=>$deal->hour_length])}}">
-
                         <div class="img-carousel">
                             <img src="{!! url("/").$deal->image !!}" width="205" height="205" alt="Chania">
                         </div>
@@ -30,10 +29,14 @@
                         </div>
                         <hr>
                         <div class="datetime-carousel">
-                            <i class="glyphicon glyphicon-calendar"></i> {{date('F jS Y', strtotime($deal->date))}} &nbsp;
-                            <i class="glyphicon glyphicon-time"></i>
-                            {{format_hour($deal->hour)}} -
-                            {{format_hour($deal->hour + $deal->hour_length)}}
+                            <div class="left">
+                                <i class="glyphicon glyphicon-calendar"></i> {{date('F jS Y', strtotime($deal->date))}} &nbsp;
+                            </div>
+                            <div class="right">
+                                <i class="glyphicon glyphicon-time"></i>
+                                {{format_hour($deal->hour)}} - {{format_hour($deal->hour + $deal->hour_length)}}
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                         <div class="caoption price-carousel">
                             ${{number_format($deal->price_nonmember,2)}}

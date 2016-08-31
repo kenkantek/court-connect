@@ -14,6 +14,7 @@ class HomeController extends Controller
     public function getIndex()
     {
         $deals = getDeals();
+        //return $deals;
         return view('home.pages.index',compact('deals'));
     }
 
@@ -24,6 +25,26 @@ class HomeController extends Controller
                 $query->select(DB::raw("MAX(created_at)"))
                     ->from('deals')
                     ->groupBy("date", "court_id", "hour", "hour_length");
+            })
+            ->where(function($query){
+                $query_clone = clone $query;
+                $data = $query_clone->where('deals.date', '>=', date("Y-m-d"))->get();
+                $arr_book = [];
+                foreach ($data as $item){
+                    $input = [
+                        'date' => $item->date,
+                        'type' => 'open',
+                        'hour_start' => $item->hour,
+                        'hour_length' => $item->hour_length,
+                        'member' => 0,
+                        'court_id' => $item->court_id
+                    ];
+                    $price = getPriceForBooking($input);
+                    if($price['error'] == false)
+                        $arr_book[] = $item->id;
+                }
+                //print_r($arr_book);
+                $query->whereIn('deals.id', $arr_book);
             })
             ->join('courts','courts.id','=','deals.court_id')
             ->join('clubs','clubs.id','=','courts.club_id')

@@ -535,9 +535,10 @@ class ManageBookingController extends Controller
                 ]);
             }
             $get_price_multi_court = getPriceOfMultiCourt([0=>$inputBookingDetail->court_id], $type = 'contract', $inputBookingDetail->date,
-                $inputBookingDetail->hour_start, $inputBookingDetail->hour_length, $inputBookingDetail->dayOfWeek, $inputBookingDetail->contract_id);
+                $inputBookingDetail->hour_start, $inputBookingDetail->hour_length, $inputBookingDetail->dayOfWeek, $inputBookingDetail->contract_id, $inputBookingDetail->member);
 
-        }else{
+        }
+        else{
             $get_price_multi_court = getPriceOfMultiCourt([0=>$inputBookingDetail->court_id], $type = 'open', $inputBookingDetail->date,
                 $inputBookingDetail->hour_start, $inputBookingDetail->hour_length);
         }
@@ -553,7 +554,7 @@ class ManageBookingController extends Controller
 //            $data_order['players']['names'] = $request->input('player_name') ? $request->input('player_name') : [];
 //            $data_order['players']['emails'] = $request->input('player_email') ? $request->input('player_email') : [];
 //            $data_order['players']['player_num'] = $request->input('player_num');
-        $data_order['players']['source'] = 0;
+        $data_order['players']['source'] = 1;
 
         //call booking from helper
         $booking = booking($data_order, [0=>$inputBookingDetail->court_id], $get_price_multi_court);

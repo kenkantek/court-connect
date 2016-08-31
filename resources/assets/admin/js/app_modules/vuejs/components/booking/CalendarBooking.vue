@@ -243,6 +243,16 @@
 
     <div id="confirm-booking-delete" class="modal fade">
         <div class="modal-body">
+            Are you sure cancel booking?
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="booking-delete">Cancel Booking</button>
+            <button type="button" data-dismiss="modal" class="btn">Ignore</button>
+        </div>
+    </div>
+
+    <div id="confirm-action-delete" class="modal fade">
+        <div class="modal-body">
             Are you sure delete?
         </div>
         <div class="modal-footer">
@@ -579,7 +589,7 @@
         },
         removeUnavailable(unavailable_id){
             var parent = this;
-            $('#confirm-booking-delete').modal({ backdrop: 'static', keyboard: false })
+            $('#confirm-action-delete').modal({ backdrop: 'static', keyboard: false })
                     .one('click', '#booking-delete', function (e) {
                         $("body").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
                         parent.$http.get(laroute.route('booking.cancelUnavailable', {one: unavailable_id}),(data) => {

@@ -117,6 +117,8 @@
                     <button type="submit" class="btn btn-search">SEARCH</button>
                 </div>
 
+                <div id="capa"></div>
+
                 {!! Form::close() !!}
             </div>
         </div>
@@ -128,7 +130,7 @@
 <div class="app-bar" style="padding: 11px 0 11px 0;">
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-xs-12 divine-appbar-r">
+            <div class="col-md-4 col-xs-12 col-md-push-4 divine-appbar-r text-center" style="border-right: 0px">
                 <a href="{!! route("home.deals") !!}" style="text-decoration: none; color: #fff"><span>Click here to find the best deals</span></a>
             </div>
             <div class="col-md-8 col-xs-12 divine-appbar-l" style="display: none !important;">

@@ -202,7 +202,7 @@ class BookingController extends Controller{
             $data_order['bookingDetail']['court_id'] = $request->input('court');
 
             //call booking from helper
-            $booking = booking($data_order, $request->courts, $get_price_multi_court);
+            $booking = booking($data_order, $request->courts, $get_price_multi_court, 2);
 
             if(!$booking['error']) {
                 if (isset($booking['list_booking'][0]['player_id']))
@@ -383,7 +383,7 @@ class BookingController extends Controller{
         }catch(Exception $e){
             return response()->json([
                 'error' => true,
-                'message' => 'Error. Can"t send email. Mail not exist'
+                'message' => 'Error. Can"t send an email. Mail not exist'
             ]);
         }
     }

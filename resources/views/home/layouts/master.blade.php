@@ -16,29 +16,29 @@
             {!! HTML::script($script['url']) !!}
             @if ($script['fallback'])
                 <script>window.{!! $script['fallback'] !!} || document.write('<script src="{{ $script['fallbackURL'] }}"><\/script>')</script>
-                @endif
-                @else
-                {!! HTML::script($script) !!}
-                @endif
-                @endforeach
+        @endif
+    @else
+        {!! HTML::script($script) !!}
+    @endif
+@endforeach
 
 
-                        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-                <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-                <!--[if lt IE 9]>
-                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-                <![endif]-->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-                <meta name="csrf-token" content="{!! csrf_token() !!}" />
-                <script >
-                    var base_url = "{{url('/')}}";
-                    //        $.ajaxSetup({
-                    //            headers: {
-                    //                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    //            }
-                    //        });
-                </script>
+    <meta name="csrf-token" content="{!! csrf_token() !!}" />
+    <script >
+        var base_url = "{{url('/')}}";
+        //        $.ajaxSetup({
+        //            headers: {
+        //                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //            }
+        //        });
+    </script>
 
 </head>
 <body>
@@ -128,7 +128,24 @@
     @foreach ($bodyScripts as $script)
         {!! HTML::script($script) !!}
     @endforeach
+    <script type="application/javascript">
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(function(position)
+            {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var capa = document.getElementById("capa");
 
+                capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude*10000)/10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude*10000)/10000 + "'/>";
+
+            },function error(msg){alert('Please enable your GPS position future.');
+            }, {maximumAge:600000, timeout:5000, enableHighAccuracy: true});
+        }else
+        {
+            alert("Geolocation API is not supported in your browser.");
+        }
+    </script>
     @yield('javascript')
 </div>
 <div class="loader hidden">

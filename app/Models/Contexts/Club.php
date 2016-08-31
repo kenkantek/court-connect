@@ -29,7 +29,7 @@ class Club extends Model
     protected $fillable = ['name', 'phone', 'address', 'city', 'state', 'zipcode'];
     protected $searchable = [
         'columns' => [
-            'clubs.name' => 20,
+            'clubs.name' => 40,
             'clubs.state' => 10,
             'clubs.address' => 20,
             'clubs.zipcode' => 6,

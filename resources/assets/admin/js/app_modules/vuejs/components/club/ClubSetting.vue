@@ -3,7 +3,8 @@
 		<div id="clubSetting-wrapper" style="position: relative; overflow: hidden">
 			<section class="col-xs-12 col-md-5">
 				<div class="court_list courtbox clearfix">
-					<h3 class="title-box pull-left">Courts</h3>
+					<h3 class="title-box pull-left">Courts
+					</h3>
 				</div>
 
 				<list-court
@@ -123,13 +124,12 @@
 			if(this.courts_choice.length > 0) {
 				//this.dataRates = _.cloneDeep(this.courts_choice[0].rates);
 				this.dataRates = [];
-				for (var index in this.courts_choice) {    // don't actually do this
-					for (var i in this.courts_choice[index].rates) {
+				for (var index =0; index <this.courts_choice.length; index ++) {    // don't actually do this
+					for (var i =0; i< this.courts_choice[index].rates.length; i++) {
 						const datarate = _.cloneDeep(this.courts_choice[index].rates[i]);
 						const nameCourt = _.cloneDeep(this.courts_choice[index].name);
-						this.dataRates.push({datarate,nameCourt});
+						this.dataRates.push({datarate, nameCourt});
 					}
-
 				}
 			}else{
 				this.dataRates = [];

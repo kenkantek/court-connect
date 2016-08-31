@@ -63,8 +63,8 @@ class CourtController extends Controller
         $inputRates = $request->input('dataRates');
         $cal_fl_price_of_member = $request->input('cal_fl_price_of_member');
         foreach ($courts as $k => $court) {
-            CourtRate::where('court_id', $court['id'])->delete();
-            $this->updateTableRates($court, $inputRates, $cal_fl_price_of_member);
+            //CourtRate::where('court_id', $court['id'])->delete();
+            $this->updateTableRates($court, $inputRates);
         }
         return response([
             'success_msg' => 'Courts has been updated!',
@@ -75,28 +75,39 @@ class CourtController extends Controller
     protected function updateTableRates($court, $dataRates)
     {
         ini_set('max_execution_time', 3000);
-
+        $all_court_rate = CourtRate::where('court_id', $court['id'])->lists('id');
         //set rate
+        $all_court_rate_save = [];
         foreach ($dataRates as $key => $inputRate) {
-            $rate = new CourtRate;
-            if($inputRate['datarate']['is_same_price'] == 1) {
+            if(isset($inputRate['datarate']['id'])) {
+                $rate = CourtRate::where(['id' => $inputRate['datarate']['id'], 'court_id' => $court['id']])->first();
+            }
+
+            if(!isset($rate)){
+                if(isset($inputRate['datarate']['id']))
+                    $rate_db = CourtRate::where(['id'=>$inputRate['datarate']['id']])->first();
+                $rate = new CourtRate;
+                $rate->name = isset($rate_db->id) ? "* Copy from court #".$rate_db->id." *  ".$inputRate['datarate']['name']: $inputRate['datarate']['name'];
+                $rate->court_id = $court['id'];
+                $rate->end_date = $inputRate['datarate']['end_date'];
+                $rate->start_date = $inputRate['datarate']['start_date'];
+            }
+            if ($inputRate['datarate']['is_same_price'] == 1) {
                 $rate->rates_member = json_encode($inputRate['datarate']['rates_nonmember']);
                 $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
                 $rate->is_same_price = 1;
-            }else{
+            } else {
                 $rate->rates_member = json_encode($inputRate['datarate']['rates_member']);
                 $rate->rates_nonmember = json_encode($inputRate['datarate']['rates_nonmember']);
                 $rate->is_same_price = 0;
             }
-            
-            $rate->end_date = $inputRate['datarate']['end_date'];
-            $rate->start_date = $inputRate['datarate']['start_date'];
-            $rate->name = $inputRate['datarate']['name'];
-            $rate->court_id = $court['id'];
             $rate->save();
+
+            $all_court_rate_save[] = $rate['id'];
             //$this->setDateRateOfCourt($rate['id'],$court, $inputRate);
         }
-
+        CourtRate::where('court_id', $court['id'])
+                ->whereNotIn('id', $all_court_rate_save)->delete();
     }
     // create date from range date
     function setDateRateOfCourt($court_rate_id,$court, $dataRate)

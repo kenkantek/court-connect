@@ -515,7 +515,6 @@ form.form-court{
     top: 50%;
     position: ABSOLUTE;
 }
-
 @media print {
     .notprint{
         display: none;
@@ -769,7 +768,7 @@ form.form-court{
 #md-new-deal input{
     margin-bottom: 10px;
 }
-#confirm-booking-delete{
+#confirm-booking-delete, #confirm-action-delete{
     z-index: 3000000;
     display: none;
     height: 150px;

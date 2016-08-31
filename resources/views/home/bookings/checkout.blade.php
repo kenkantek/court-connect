@@ -135,12 +135,12 @@
                                 <div id="cc-form-booking-info">
                                     <fieldset>
                                         <legend class="text-left">Customer Details</legend>
-                                        <div class="form-group">
-                                            <label for="title" class="control-label col-lg-2 col-md-3">Title</label>
-                                            <div class="col-lg-3 col-md-3">
-                                                <input class="form-control" name="customer[title]" type="text" id="title" placeholder="Enter Title"/>
-                                            </div>
-                                        </div>
+                                        {{--<div class="form-group">--}}
+                                            {{--<label for="title" class="control-label col-lg-2 col-md-3">Title</label>--}}
+                                            {{--<div class="col-lg-3 col-md-3">--}}
+                                                {{--<input class="form-control" name="customer[title]" type="text" id="title" placeholder="Enter Title"/>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
                                         <div class="form-group">
                                             <label for="firstname" class="control-label col-lg-2 col-md-3">First Name *</label>
                                             <div class="col-lg-10 col-md-9">

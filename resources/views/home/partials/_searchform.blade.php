@@ -137,6 +137,7 @@
                     </div>
                 </div>
             </div>
+            <div id="capa"></div>
             {!! Form::close() !!}
         </div>
     </div>

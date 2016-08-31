@@ -3,7 +3,7 @@
 		<h3 class="title-box pull-left">Rates For
 			<span v-if="courts_choice.length == 0"><strong>New Court</strong></span>
 		<span v-else v-for="c in courts_choice">
-		<strong>{{ c.name }}</strong>
+		<strong>{{ c.name }} {{state_check}}</strong>
 		</span>
 
 		</h3>
@@ -11,7 +11,10 @@
 			<div id="offer-price-court-rate" class="overlight">
 				<label>
 					<span>Offer member price</span>
-					<input type="checkbox" id="lch-same_price" data-check="false" @click="checkSamePrice()" style="width: 100%; height: 100%;">
+					<input id="radio50" class="css-checkbox" type="radio" name="lch-same_price" value="0" v-on:change="checkSamePrice">
+					<label for="radio50" class="lbl-radio">Off</label>
+					<input id="radio51" class="css-checkbox" type="radio" name="lch-same_price" value="1" v-on:change="checkSamePrice">
+					<label for="radio51" class="lbl-radio">On</label>
 				</label>
 				<ul id="tabRate" class="h">
 					<li :class="{'active': is_member == 1}"  @click="setMember(1)">Members</li>
@@ -246,6 +249,31 @@
 	#lch-same_price{
 		display: inline-block;
 	}
+	input[type=radio].css-checkbox {
+		display: none;
+	}
+	input[type=radio].css-checkbox + label.lbl-radio {
+		padding-left: 25px;
+		margin-left: 15px;
+		height: 20px;
+		display: inline-block;
+		line-height: 23px;
+		background-repeat: no-repeat;
+		background-position: 0 0;
+		vertical-align: middle;
+		cursor: pointer;
+		background-image: url(http://csscheckbox.com/checkboxes/u/csscheckbox_db90a821b8d1c3cc963948854fe8ce92.png);
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		background-size: 20px;
+	}
+	input[type=radio].css-checkbox:checked + label.lbl-radio{
+		background-position: 0 -20px;
+	}
 </style>
 <script>
 	var _ = require('lodash'),
@@ -327,7 +355,8 @@
 				rateIndex:null,
 				is_member: 0,
 				text: null,
-				same_price: 1
+				same_price: 1,
+				state_check:null
 			}
 		},
 		filters: {
@@ -349,11 +378,11 @@
 					if(this.dataRate.is_same_price == 0){
 						this.same_price = 0;
 						$("#tabRate").removeClass('h');
-						$('#lch-same_price').bootstrapSwitch('state',true);
+						$("input[name=lch-same_price][value='1']").prop("checked","true");
 					}else{
 						this.same_price = 1;
 						$("#tabRate").addClass('h');
-						$('#lch-same_price').bootstrapSwitch('state',false);
+						$("input[name=lch-same_price][value='0']").prop("checked","true");
 					}
 				}
 				if(this.indexDataRates != null){
@@ -466,12 +495,16 @@
 				this.removeSelect();
 			},
 			checkSamePrice(){
-				if($(".bootstrap-switch-id-lch-same_price").hasClass('bootstrap-switch-off')){
+				console.log("abc");
+				console.log($("input[name=lch-same_price]:checked").val());
+				//if($(".bootstrap-switch-id-lch-same_price").hasClass('bootstrap-switch-off')){
+				if($("input[name=lch-same_price]:checked").val() == 0){
 					$("#tabRate").addClass('h');
 					this.dataRates[this.indexDataRates].datarate.is_same_price = 1;
 					this.same_price = 1;
 					this.is_member = 0;
-				}else if($(".bootstrap-switch-id-lch-same_price").hasClass('bootstrap-switch-on')){
+				}
+				else {
 					$("#tabRate").removeClass('h');
 					this.same_price = 0;
 					this.dataRates[this.indexDataRates].datarate.is_same_price = 0;
@@ -480,7 +513,7 @@
 			resetSamePrice(){
 				this.same_price = true;
 				$("#tabRate").addClass('h');
-				$('#lch-same_price').bootstrapSwitch('state',false);
+				$("input[name=lch-same_price][value='0']").prop("checked","true");
 			},
 			addNewCourtRate(){
 				this.defaultRate.rates_member = [

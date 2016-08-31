@@ -94,6 +94,26 @@ function getDeals(){
             ->from('deals')
             ->groupBy("date", "court_id", "hour", "hour_length");
         })
+        ->where(function($query){
+            $query_clone = clone $query;
+            $data = $query_clone->where('deals.date', '>=', date("Y-m-d"))->get();
+            $arr_book = [];
+            foreach ($data as $item){
+                $input = [
+                    'date' => $item->date,
+                    'type' => 'open',
+                    'hour_start' => $item->hour,
+                    'hour_length' => $item->hour_length,
+                    'member' => 0,
+                    'court_id' => $item->court_id
+                ];
+                $price = getPriceForBooking($input);
+                if($price['error'] == false)
+                    $arr_book[] = $item->id;
+            }
+            //print_r($arr_book);
+            $query->whereIn('deals.id', $arr_book);
+        })
         ->join('courts','courts.id','=','deals.court_id')
         ->join('clubs','clubs.id','=','courts.club_id')
         ->orderBy('date','asc')
@@ -187,11 +207,12 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
     $index_json = "A".strval($dayOfWeek == 0 ? 7 : $dayOfWeek);
     $total_price = 0;
 
+
     foreach($deals as $deal){
         for($i=$deal['hour']; $i< $deal['hour'] + $deal['hour_length']; $i++) {
             if($is_member)
-                $rates[$i - 5][$index_json] = $deal['price_member'];
-            else $rates[$i - 5][$index_json] = $deal['price_nonmember'];
+                $rates[$i][$index_json] = $deal['price_member'];
+            else $rates[$i][$index_json] = $deal['price_nonmember'];
         }
     }
     $rates_full = [];
@@ -387,8 +408,6 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
             return ['error' => true,"messages"=>"Data invalid"];
         }
 
-
-
         $range_date = createRangeDate($contract['start_date'],$contract['end_date'],$input['dayOfWeek']);
         
         //check time open and close of club
@@ -504,8 +523,9 @@ function createRangeDate($s,$e,$dayOfWeek){
 }
 
 //order
-function booking($input, $courts, $get_price_multi_court){ //$input['bookingDetail'], $input['paymentDetail'], $input['customerDetail']
-
+function booking($input, $courts, $get_price_multi_court, $source_by = 1){
+//$input['bookingDetail'], $input['paymentDetail'], $input['customerDetail']
+// source by: 1-Court Connect ; 2-Club
     $token_booking = md5(str_random(50));
 
     $payment = null;
@@ -517,6 +537,11 @@ function booking($input, $courts, $get_price_multi_court){ //$input['bookingDeta
             ]);
 
             if ($transaction->success || !is_null($transaction->transaction)) {
+                //try{
+                    //Braintree\Transaction::submitForSettlement($transaction->transaction->id, $get_price_multi_court['total_price']);
+                //}catch(Exception $e){
+
+                //}
                 //save payment
                 $payment = Payment::create([
                     'amount' => $transaction->transaction->amount, //$result_prices['total_price'],
@@ -536,7 +561,8 @@ function booking($input, $courts, $get_price_multi_court){ //$input['bookingDeta
                 return ['error' => true, "messages" => [$errorString.$input['nonce']], "error_code" => $error_code];
             }
         }
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
         \Log::info("Exception ".$e->getMessage());
         \Log::info(" File ".$e->getFile()." Line ".$e->getLine());
         \Log::info(" Trace ".$e->getTraceAsString()." Line ".$e->getLine());
@@ -594,7 +620,7 @@ function booking($input, $courts, $get_price_multi_court){ //$input['bookingDeta
                     'billing_info' => json_encode($billing_info),
                     'payment_info' => json_encode($input['paymentDetail']),
                     'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [], 'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
-                    'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
+                    'source' => $source_by,// isset($input['players']['source']) ? $input['players']['source'] : 0,
                     'notes' => isset($text_notes) ? $text_notes : null,
                     'token_booking' => $token_booking,
                     'booked_by' => Auth::user()->id
@@ -664,7 +690,7 @@ function booking($input, $courts, $get_price_multi_court){ //$input['bookingDeta
 }
 
 //get price of multi court
-function getPriceOfMultiCourt($courts, $type, $date, $hour_start, $hour_length, $dayOfWeek = null, $contract_id = null){
+function getPriceOfMultiCourt($courts, $type, $date, $hour_start, $hour_length, $dayOfWeek = null, $contract_id = null, $is_member = 0){
     $msg_errors = null;
     $total_price = 0;
     $list_court = [];
@@ -677,7 +703,7 @@ function getPriceOfMultiCourt($courts, $type, $date, $hour_start, $hour_length, 
                 'type' => 'open',
                 'hour_start' => $hour_start,
                 'hour_length' => $hour_length,
-                'member' => 0,
+                'member' => $is_member,
                 'court_id' => $court['id']
             ];
 
@@ -706,7 +732,7 @@ function getPriceOfMultiCourt($courts, $type, $date, $hour_start, $hour_length, 
 
             if ($get_price['error'] || $get_price['total_price'] <= 0) {
                 $error = true;
-                $msg = "Data invalid. Not found data";
+                $msg = "Data invalid. Not found data".implode(", ", $get_price);
                 if (isset($get_price['messages'])) {
                     if(is_array($get_price['messages'])) {
                         foreach ($get_price['messages'] as $msgg)
@@ -716,7 +742,7 @@ function getPriceOfMultiCourt($courts, $type, $date, $hour_start, $hour_length, 
                 }else {
                     if(isset($get_price['status'])) {
                         switch ($get_price['status']) {
-                            case 'booking': $msg = "This is is booked"; break;
+                            case 'booking': $msg = "That time cannot be booked due to having been booked or not exist. Please select another day/time"; break;
                         }
                     }
 
@@ -753,12 +779,14 @@ function getTotalWeekFromPeriod($start_date, $last_date, $club_id){
         $temp_date = date("Y-m-d", $start_date);
         //check date holiday or close
         $open_day = SetOpenDay::where(['club_id' => $club_id, 'date' => $temp_date])->first();
-        if(!isset($open_day) || (isset($open_day) && $open_day->is_holiday == 0)){
+        if(!isset($open_day) || (isset($open_day) && $open_day->is_holiday == 0 && $open_day->is_close == 0)){
             if(!isset($get_weekdaysBetween[$isoWeekday])) {
                 $get_weekdaysBetween[$isoWeekday]['count'] = 0;
+                //$get_weekdaysBetween[$isoWeekday]['list-date'] = [];
                 $get_weekdaysBetween[$isoWeekday]['date_first'] = date("m/d", $start_date);
             }
             $get_weekdaysBetween[$isoWeekday]['count'] ++;
+            //$get_weekdaysBetween[$isoWeekday]['list-date'][] = $temp_date;
         }
         $start_date += 86400;
     }

@@ -376,7 +376,9 @@
                                         </div>
                                         <section class="">
                                             <div v-show="!payment_is_cash" class="bt-drop-in-wrapper">
-                                                <div id="bt-dropin"></div>
+                                                <div id="bt-dropin-wrap">
+                                                    <div id="bt-dropin"></div>
+                                                </div>
                                             </div>
                                         </section>
 
@@ -549,13 +551,13 @@
                 {key: 6, value: "6am"}, {key: 6.50, value: "6:30am"},
                 {key: 7, value: "7am"}, {key: 7.50, value: "7:30am"}, {key: 8, value: "8am"}, {key: 8.50, value: "8:30am"},
                 {key: 9, value: "9am"}, {key: 9.50, value: "9:30am"}, {key: 10, value: "10am"}, {key: 10.50, value: "10:30am"},
-                {key: 11, value: "11am"}, {key: 11.50, value: "11:30am"}, {key: 12, value: "12am"}, {key: 12.50, value: "12:30pm"},
+                {key: 11, value: "11am"}, {key: 11.50, value: "11:30am"}, {key: 12, value: "12pm"}, {key: 12.50, value: "12:30pm"},
                 {key: 13, value: "1pm"}, {key: 13.50, value: "1:30pm"}, {key: 14, value: "2pm"}, {key: 14.50, value: "2:30pm"},
                 {key: 15, value: "3pm"}, {key: 15.50, value: "3:30pm"}, {key: 16, value: "4pm"}, {key: 16.50, value: "4:30pm"},
                 {key: 17, value: "5pm"}, {key: 17.50, value: "5:30pm"}, {key: 18, value: "6pm"}, {key: 18.50, value: "6:30pm"},
                 {key: 19, value: "7pm"}, {key: 19.50, value: "7:30pm"}, {key: 20, value: "8pm"}, {key: 20.50, value: "8:30pm"},
                 {key: 21, value: "9pm"}, {key: 21.50, value: "9:30pm"}, {key: 22, value: "10pm"}, {key: 22.50, value: "10:30pm"},
-                {key: 23, value: "11pm"}, {key: 23.50, value: "11:30pm"}, {key: 0, value: "12pm"}, {key: 0.50, value: "0:30am"},
+                {key: 23, value: "11pm"}, {key: 23.50, value: "11:30pm"}, {key: 0, value: "12am"}, {key: 0.50, value: "12:30am"},
                 {key: 1, value: "1am"}, {key: 1.50, value: "1:30am"}, {key: 2, value: "2am"}, {key: 2.50, value: "2:30am"},
                 {key: 3, value: "3am"}, {key: 3.50, value: "3:30am"}, {key: 4, value: "4am"}, {key: 4.50, value: "4:30am"},
                 {key: 5, value: "5am"}, {key: 5.50, value: "5:30am"}
@@ -645,10 +647,14 @@
                     var msg = "";
                     if(res.data.status){
                         switch(res.data.status){
-                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'booking':
+                            case 'booked': msg = "This was book. Please select another time or date"; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
                             case 'close': msg = "Day Close. Please select another time or date"; break;
                             default: msg = res.data.status
+                        }
+                        if(res.data.status == 'booked' && this.inputBookingDetail.type == 'contract'){
+                            msg = "Error: That contract time cannot be booked due to a conflict. Please select another day/time.";
                         }
                     }
                     else
@@ -668,7 +674,8 @@
                 });
         },
         nextCustomerDetail(){
-
+            //$("#bt-dropin-wrap #bt-dropin").remove();
+            //$("#bt-dropin-wrap").html('<div id="#bt-dropin"></div>');
             this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
             this.$set('inputBookingDetail.date',$("#mb-book-day-open").val());
             this.$set('inputBookingDetail.club_id',this.clubSettingId);
@@ -685,17 +692,16 @@
                 if(res.data.error)
                 {
                     var msg = "";
-                    if(res.data.status){
-                        switch(res.data.status){
-                            case 'booking': msg = "This was book. Please select another time or date"; break;
-                            case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
-                            case 'close': msg = "Close. Please select another time or date"; break;
-                            default: msg = res.data.status
-                        }
+                    switch(res.data.status){
+                        case 'booking':
+                        case 'booked': msg = "This was book. Please select another time or date"; break;
+                        case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
+                        case 'close': msg = "Day Close. Please select another time or date"; break;
+                        default: msg = res.data.status
                     }
-                    else $.each(res.data.messages,function(k,v){
-                        msg += "<div>"+v+"</div>";
-                    });
+                    if(res.data.status == 'booked' && this.inputBookingDetail.type == 'contract'){
+                        msg = "Error: That contract time cannot be booked due to a conflict. Please select another day/time.";
+                    }
                     this.total_price = "NaN";
                     showNotice('error', msg, 'Error!');
                 }else{
@@ -732,17 +738,26 @@
                     this.tabClick("mb-payment-details-content");
                 }else{
                     var msg = "";
+
                     if(res.data.status){
                         switch(res.data.status){
-                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'booking':
+                            case 'booked': msg = "This was book. Please select another time or date"; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
-                            case 'close': msg = "Close. Please select another time or date"; break;
+                            case 'close': msg = "Day Close. Please select another time or date"; break;
                             default: msg = res.data.status
                         }
+                        if(res.data.status == 'booked' && this.inputBookingDetail.type == 'contract'){
+                            msg = "Error: That contract time cannot be booked due to a conflict. Please select another day/time.";
+                        }
                     }
-                    else $.each(res.data.messages,function(k,v){
-                        msg += "<div>"+v+"</div>";
-                    });
+                    else {
+                        if($.isArray(res.data.messages))
+                            $.each(res.data.messages, function (k, v) {
+                                msg += "<div>" + v + "</div>";
+                            });
+                        else msg = res.data.messages;
+                    }
                     showNotice('error', msg, 'Error!');
                 }
             }, res => {
@@ -762,15 +777,23 @@
                     var msg = "";
                     if(res.data.status){
                         switch(res.data.status){
-                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'booking':
+                            case 'booked': msg = "This was book. Please select another time or date"; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
-                            case 'close': msg = "Close. Please select another time or date"; break;
+                            case 'close': msg = "Day Close. Please select another time or date"; break;
                             default: msg = res.data.status
                         }
+                        if(res.data.status == 'booked' && this.inputBookingDetail.type == 'contract'){
+                            msg = "Error: That contract time cannot be booked due to a conflict. Please select another day/time.";
+                        }
                     }
-                    else $.each(res.data.messages,function(k,v){
-                        msg += "<div>"+v+"</div>";
-                    });
+                    else {
+                        if($.isArray(res.data.messages))
+                            $.each(res.data.messages, function (k, v) {
+                                msg += "<div>" + v + "</div>";
+                            });
+                        else msg = res.data.messages;
+                    }
                     showNotice('error', msg, 'Error!');
                 }else{
                     this.tabClick("mb-payment-details-content");
@@ -805,9 +828,13 @@
                             default: msg = res.data.status
                         }
                     }
-                    else $.each(res.data.messages,function(k,v){
-                        msg += "<div>"+v+"</div>";
-                    });
+                    else{
+                        if($.isArray(res.data.messages))
+                            $.each(res.data.messages, function (k, v) {
+                                msg += "<div>" + v + "</div>";
+                            });
+                        else msg = res.data.messages;
+                    }
                     showNotice('error', msg, 'Error!');
                 }else{
                     this.booking_reference = res.data.booking_reference;
@@ -959,7 +986,7 @@
             }
 
             var _this = this;
-
+            //$("#bt-dropin").html('');
             braintree.setup(this.client_token, "dropin", {
                 container: "bt-dropin",
                 onReady: function (integration) {

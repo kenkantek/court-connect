@@ -43,7 +43,7 @@ $dayOfWeek = [
                     <div class="col-md-2 col-xs-3 text-center distance">
                         <p>
                             Distance <br>
-                            <b>1 mile</b>
+                            <b>{{isset($club->distance) ? $club->distance : ''}} miles</b>
                         </p>
                     </div>
                 </div>
@@ -54,21 +54,6 @@ $dayOfWeek = [
                                 <div class="club-time text-center club-time-wrap">
                                     <div class="first-court">
                                         <hr style="width: 100%">
-                                        <div class="intro-court clearfix">
-                                            <div class="court-io-door pull-right">
-                                                @if($request->court == 1)
-                                                Indoor/Outdoor:
-                                                <b>{{$club->contracts[0]['court']->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
-                                                @endif
-                                            </div>
-                                            <div class="court-type pull-left">
-                                                @if($request->court == 1)
-                                                Court Type:
-                                                <b>{{$club->contracts[0]['court']->surface->label}}</b>
-                                                <div class="hidden">{{$club->contracts[0]['court']->name}}</div>
-                                                @endif
-                                            </div>
-                                        </div>
                                         <div class="club-time text-center club-time-wrap clearfix">
                                             @foreach ($item_price_main as $k=>$price)
                                                 <div class="row-day clearfix">

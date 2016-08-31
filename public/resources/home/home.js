@@ -170,7 +170,7 @@ $(function () {
         this.unselectable = "on";
         $(this).css('-moz-user-select', 'none');
         $(this).css('-webkit-user-select', 'none');
-
+        
         $(".search-tooltip").toggleClass('hidden');
         if(!$(".search-tooltip").hasClass('hidden')){
             $("#cc-input-search-time").focus();
@@ -222,7 +222,7 @@ $(function () {
     });
 
     $("#mb-book-distance").ionRangeSlider({
-        min: 0,
+        min: 1,
         max: 20,
         type: 'single',
         step: 1,
