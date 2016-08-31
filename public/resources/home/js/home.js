@@ -163,7 +163,7 @@ $(function () {
         $("#datepicker").datepicker( "show" );
     });
     $("input#datepicker").click(function() {
-        $(".search-tooltip").toggleClass('hidden');
+        $(".search-tooltip").addClass('hidden');
     });
     $("#search-timepicker-text").click(function(){
         this.onselectstart = function() { return false; };

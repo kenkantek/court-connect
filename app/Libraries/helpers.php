@@ -214,6 +214,7 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             $i_temp = intval($i);
             if($is_member)
                 $rates[$i_temp][$index_json] = $deal['price_member'];
+            else $rates[$i_temp][$index_json] = $deal['price_nonmember'];
         }
     }
 
@@ -365,7 +366,7 @@ function getPriceForBooking($input){//[date,type,hour_start,hour_length,court_id
                 $price_teacher = $teacher->teacher->rate;
             }
         }
-        
+      
         if($r['error']){
             return ['error' => true,"status"=>$r['status']];
         }else {
