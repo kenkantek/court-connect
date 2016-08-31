@@ -60,6 +60,29 @@
         <!-- end deal -->
         </div>
     </div>
+
+@stop
+
+@section('javascript')
+    <script type="application/javascript">
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(function(position)
+            {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var capa = document.getElementById("capa");
+
+                capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude*10000)/10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude*10000)/10000 + "'/>";
+
+            },function error(msg){alert('Please enable your GPS position future.');
+            }, {maximumAge:600000, timeout:5000, enableHighAccuracy: true});
+        }else
+        {
+            alert("Geolocation API is not supported in your browser.");
+        }
+    </script>
+
     <script src="http://maps.googleapis.com/maps/api/js"></script>
     {!! HTML::script("resources/home/js/infobox.js") !!}
     <script>
@@ -124,29 +147,29 @@
             @if( is_null($msg_errors) && $clubs)
                     @foreach($clubs as $k=>$club)
                     markers[{{$k}}] = new google.maps.Marker({
-                        //icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{$k+1}}|FF7B6F",
-                        title: "{{$club['name']}}",
-                        label: "{{$club['name']}}",
-                        position: new google.maps.LatLng({{$club['latitude']}},{{$club['longitude']}}),
-                        map: map
-                    });
-                    var infowindow = new google.maps.InfoWindow({
-                        id: markers[{{$k}}],
-                        content:markers[{{$k}}].title,
-                        position:markers[{{$k}}].getPosition()
-                    });
-                    google.maps.event.addListenerOnce(infowindow, 'closeclick', function(){
-                        markers[{{$k}}].setVisible(true);
-                    });
-                    markers[{{$k}}].setVisible(false);
-                    infowindow.open(map);
+                //icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={{$k+1}}|FF7B6F",
+                title: "{{$club['name']}}",
+                label: "{{$club['name']}}",
+                position: new google.maps.LatLng({{$club['latitude']}},{{$club['longitude']}}),
+                map: map
+            });
+            var infowindow = new google.maps.InfoWindow({
+                id: markers[{{$k}}],
+                content:markers[{{$k}}].title,
+                position:markers[{{$k}}].getPosition()
+            });
+            google.maps.event.addListenerOnce(infowindow, 'closeclick', function(){
+                markers[{{$k}}].setVisible(true);
+            });
+            markers[{{$k}}].setVisible(false);
+            infowindow.open(map);
 
-                    google.maps.event.addListener(map, "click", function(event){
-                        this.setOptions({scrollwheel:true,draggable:true})
-                    })
+            google.maps.event.addListener(map, "click", function(event){
+                this.setOptions({scrollwheel:true,draggable:true})
+            })
 
-                    @endforeach
-                            gmarkers = markers;
+            @endforeach
+                    gmarkers = markers;
                     @endif
 
             var latlngbounds = new google.maps.LatLngBounds();
@@ -194,14 +217,14 @@
         }
         @if(count($clubs) == 1)
             $(document).ready(function(){
-                setTimeout(function(){
-                    var z = map.getZoom();
-                    console.log(z);
-                    map.setZoom(17);
-                    var z = map.getZoom();
-                    console.log(z);
-                },1000);
-            });
+            setTimeout(function(){
+                var z = map.getZoom();
+                console.log(z);
+                map.setZoom(17);
+                var z = map.getZoom();
+                console.log(z);
+            },1000);
+        });
         @endif
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>

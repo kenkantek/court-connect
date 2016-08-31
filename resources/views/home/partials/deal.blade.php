@@ -29,10 +29,10 @@
                         </div>
                         <hr>
                         <div class="datetime-carousel">
-                            <div class="left">
+                            <div class="">
                                 <i class="glyphicon glyphicon-calendar"></i> {{date('F jS Y', strtotime($deal->date))}} &nbsp;
                             </div>
-                            <div class="right">
+                            <div class="">
                                 <i class="glyphicon glyphicon-time"></i>
                                 {{format_hour($deal->hour)}} - {{format_hour($deal->hour + $deal->hour_length)}}
                             </div>

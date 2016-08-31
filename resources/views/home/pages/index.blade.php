@@ -73,3 +73,24 @@
     </article>
 
 @stop
+
+@section('javascript')
+    <script type="application/javascript">
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(function(position)
+            {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var capa = document.getElementById("capa");
+
+                capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude*10000)/10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude*10000)/10000 + "'/>";
+
+            },function error(msg){alert('Please enable your GPS position future.');
+            }, {maximumAge:600000, timeout:5000, enableHighAccuracy: true});
+        }else
+        {
+            alert("Geolocation API is not supported in your browser.");
+        }
+    </script>
+@stop
