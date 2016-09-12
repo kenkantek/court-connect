@@ -69,7 +69,7 @@
                                         <div class="active col-lg-6 col-md-6">
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="is_customer" checked="checked" value="0">I'm A New Customer
+                                                    <input type="radio" name="is_customer" checked="checked" value="0">I am a new customer
                                                     <a data-toggle="tab" href="#new-customer" id="a-new-customer"></a>
                                                 </label>
                                             </div>
@@ -79,7 +79,7 @@
                                             <div class="radio">
                                                 <label>
                                                     <input type="radio" name="is_customer" value="1">
-                                                    I'm A Exist Customer. Sign In<a data-toggle="tab" href="#exist-customer" id="a-exist-customer"></a>
+                                                    I am an existing customer<a data-toggle="tab" href="#exist-customer" id="a-exist-customer"></a>
                                                 </label>
                                             </div>
                                         </div>

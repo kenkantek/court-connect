@@ -54,29 +54,25 @@
 					<td>{{ booking.id }}</td>
 					<td>
 						{{ booking.type == "contract" ? (dateOfWeek[booking.day_of_week]+ ", " + booking.date_range_of_contract.from + " - " + booking.date_range_of_contract.to): booking.date }}
-						<div>
 							at {{ booking.hour }}
-							for {{ booking.hour_length }}Hour
-						</div>
 					</td>
-					<td>{{ booking.cart_type == null || booking.cart_type == '' ? "Debit / Cash" : "Credit / " + booking.cart_type}}</td>
+					<td>{{ booking.cart_type == null || booking.cart_type == '' ? "Debit / Cash" : "Credit / " + booking.payment.card_type}}</td>
 					<td>{{ booking.source == 1 ? "Court Connect" : (booking.source == 2 ? "Club" : "Other") }}</td>
 					<td>{{ booking.booked_by.fullname }}</td>
 					<td>{{ booking.billing_info.first_name + " " + booking.billing_info.last_name }}</td>
 					<td>{{ booking.type }}</td>
-					<td>{{ booking.created_at }}</td>
-					<td>${{ booking.total_price_order }}</td>
+					<td>{{ formatCurrency(booking.total_price_order) }}</td>
 				</tr>
 			<tr>
-				<th style="background: #333; color: #fff; padding: 15px 10px;" colspan="8">Total</th>
-				<th style="background: #333; color: #fff; padding: 15px 10px;">${{parseFloat(total_balance)}}</th>
+				<th style="background: #333; color: #fff; padding: 15px 10px;" colspan="7">Total</th>
+				<th style="background: #333; color: #fff; padding: 15px 10px;">{{formatCurrency(total_balance)}}</th>
 			</tr>
 			</tbody>
 		</table>
 		<div class="pull-left col-md-8">
-			<filter
-					:data.sync="data"
-			></filter>
+			<!--<filter-->
+					<!--:data.sync="data"-->
+			<!--&gt;</filter>-->
 		</div>
 	</div>
 </template>
@@ -100,7 +96,6 @@
 				{key:"booked_by",value:"Booked By"},
 				{key:"customer",value:"Customer Name"},
 				{key:"type",value:"Type"},
-				{key:"created_at",value:"Day Trading"},
 				{key:"total_price",value:"Gross"}
 			];
 			var sortOrders = {};
@@ -125,11 +120,11 @@
 			}
 		},
 		asyncData(resolve, reject) {
-		this.fetchBookings().done((data) => {
-			resolve({data});
-	}, (error) => {
-		console.log(error);
-	});
+//		this.fetchBookings().done((data) => {
+//			resolve({data});
+//		}, (error) => {
+//			console.log(error);
+//		});
 	},
 	methods: {
 		changeOnlyCC(){
@@ -140,13 +135,15 @@
 		},
 		fetchBookings(){
 			let def = deferred();
-			this.$http.get(this.api ,{ clubid: this.clubSettingId, take: this.data.per_page}).then(res => {
+			var end_date =  $("#reservation").data('daterangepicker').endDate.format('YYYY/MM/DD');
+			var start_date =  $("#reservation").data('daterangepicker').startDate.format('YYYY/MM/DD');
+			this.$http.get(this.api ,{start_date: start_date, end_date: end_date, clubid: this.clubSettingId, take: this.data.per_page}).then(res => {
 				const { data } = res;
 				def.resolve(data);
 				var _this = this;
 				_this.total_balance = 0;
 				$.each(this.data.data,function(k,v){
-					_this.total_balance += v.total_price;
+					_this.total_balance += parseFloat(v.total_price_order);
 				});
 
 			}, res => {
@@ -171,7 +168,7 @@
 				var _this = this;
 				_this.total_balance = 0;
 				$.each(this.data.data,function(k,v){
-					_this.total_balance += v.total_price;
+					_this.total_balance += parseFloat(v.total_price_order);
 				});
 
 			}, res => {
@@ -201,6 +198,14 @@
 			} else {
 				this.idown = $('<iframe>', { id:'idown', src:url }).hide().appendTo('body');
 			}
+		},
+		formatCurrency(total) {
+			var neg = false;
+			if(total < 0) {
+				neg = true;
+				total = Math.abs(total);
+			}
+			return (neg ? "-$" : '$') + parseFloat(total, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
 		}
 	},
 	events: {
@@ -216,6 +221,7 @@
 		$('#reservation').daterangepicker({
 			startDate: moment().subtract('days', 29),
 		});
+
 		//$('table').bootstrapTable({locale:'en-US'});
 	}
 	}

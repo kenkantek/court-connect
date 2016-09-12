@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Events\UserBookingEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
 use App\Models\Booking;
@@ -566,6 +567,9 @@ class ManageBookingController extends Controller
                 $payment = Payment::whereId($booking['list_booking'][0]['payment_id'])->first();
                 $payment_type = $payment['card_type'] != null ? "Credit Card | " . $payment['card_type'] : "Paypal";
                 $last4 = $payment['card_type'] != null ? "****-****-****-".$payment['last_4']: '';
+
+                //send mail
+                event(new UserBookingEvent(0, $booking['list_booking'][0]['id'], true));
             }
             return response()->json([
                 'error' => false,

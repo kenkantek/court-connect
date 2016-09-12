@@ -33,7 +33,7 @@ function format_hour($hour)
     $hour = number_format($hour,2);
     $intpart = floor($hour);
     return $hour < 12 ? str_replace(".50",":30",str_replace(".00",":00",$hour))."am" :
-        ($intpart == 12 ? str_replace(".50",":30",str_replace(".00",":00",number_format($hour,2))) : str_replace(".50",":30",str_replace(".00",":00",number_format($hour - 12,2))))."pm";
+        ( $intpart == 12 ? str_replace(".50",":30",str_replace(".00",":00",number_format($hour,2))) : str_replace(".50",":30",str_replace(".00",":00",number_format($hour - 12,2))))."pm";
 }
 
 function datediffInWeeks($date1, $date2)

@@ -50,7 +50,8 @@
 		props: ['clubSettingId','clubs','delete_club','title','user'],
 		data(){
 			return {
-				'club_image': null
+				'club_image': null,
+				'pageReload': true
 			}
 		},
 		asyncData(resolve, reject) {
@@ -60,6 +61,28 @@
 					idx= 0;
 				this.clubSettingId = clubs[idx].id;
 				this.club_image = clubs[idx].image;
+
+				if (!localStorage.clubSettingId) {
+					localStorage.setItem('clubSettingId', -1);
+				}else{
+					if(localStorage.clubSettingId !=  this.clubSettingId && this.clubSettingId != 0) {
+						if (expires == undefined || expires == 'null') {
+							var expires = 3600;
+						} // default: 1h
+						var date = new Date();
+						var schedule = Math.round((date.setSeconds(date.getSeconds() + expires)) / 1000);
+
+						if(this.pageReload) {
+							this.clubSettingId = localStorage.clubSettingId;
+						}else{
+							 localStorage.clubSettingId = this.clubSettingId;
+						}
+						localStorage.setItem('clubSettingId', this.clubSettingId);
+					}
+
+					this.pageReload = false;
+				}
+
 			resolve({clubs});
 		}, (error) => {
 				console.log(error);

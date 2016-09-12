@@ -12,11 +12,10 @@ use App\User;
 use Caffeinated\Flash\Facades\Flash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Exception;
 
 class UserEventListener
 {
-
-
     public function onUserCreated($event)
     {
         $user = $event->user->toArray();
@@ -24,19 +23,24 @@ class UserEventListener
             $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
             $message->to($user['email'])
                 ->subject('Verify your email address');
-            $message->cc(env('MAIL_CC1'));
-            $message->cc(env('MAIL_CC2'));
         });
     }
 
     public function onUserBooking($event)
     {
         $booking_id = $event->booking_id;
-        $check_booking = Booking::where(['bookings.id'=>$booking_id,'bookings.player_id'=>Auth::user()->id])->first();
+        $user_id = $event->user_id;
+        if($event->admin_book)
+            $check_booking = Booking::where(['id'=>$booking_id])->first();
+        else
+            $check_booking = Booking::where(['id'=>$booking_id, 'player_id' => Auth::user()->id])->first();
         $booking = Booking::join('courts', 'courts.id', '=', 'bookings.court_id')
-            ->join('clubs', 'clubs.id', '=', 'courts.club_id')
-            ->where('player_id', Auth::user()->id)
-            ->where('bookings.token_booking', $check_booking->token_booking)
+            ->join('clubs', 'clubs.id', '=', 'courts.club_id');
+
+        if(!$event->admin_book)
+            $booking = $booking->where('player_id', Auth::user()->id);
+
+        $booking = $booking->where('bookings.token_booking', $check_booking->token_booking)
             ->orderBy('created_at', 'desc')
             ->groupBy('token_booking')
             ->selectRaw('bookings.*, group_concat(DISTINCT courts.name SEPARATOR \', \') as court_name, clubs.id as club_id, 
@@ -45,32 +49,29 @@ class UserEventListener
 
         //$booking = Booking::with('court','court.club','court.surface')->where(['bookings.id'=>$booking_id,'bookings.player_id'=>$event->user_id])->first();
         $data['booking'] = $booking;
-        Mail::send('home.bookings.print_confirmation',$data, function($message) use ($booking)
-        {
-            $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
-            $message->to($booking['billing_info']['email'])->subject('Court Connect: Order#'.$booking['id']);
-            $message->cc(env('MAIL_CC1'));
-            $message->cc(env('MAIL_CC2'));
-        });
+        try {
+            Mail::send('home.bookings.send_mail', $data, function ($message) use ($booking) {
+                $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
+                $message->to($booking['billing_info']['email'])->subject('Court Connect: Order#' . $booking['id']);
+                $message->cc(env('MAIL_CC1'));
+                $message->cc(env('MAIL_CC2'));
+            });
+        }catch(Exception $e){}
     }
 
     public function onContactEvent($event)
     {
         $contact_id = $event->contact_id;
         $contact = Contact::where('id',$contact_id)->first();
-        $text = 'Name: '.$contact->name."\n";
-        $text .= 'Email: '.$contact->email."\n";
-        $text .= 'Phone: '.$contact->phone."\n";
-        $text .= 'Message: '.$contact->messages."\n";
-        Mail::queue([],[], function($message) use($text)
-        {
-            $message->subject('Message Contact form Court-Connect');
+        
+        Mail::send('home.users.emails.contact', ['contact' => $contact], function ($message) use ($contact) {
+            $message->subject('Message Contact from Court Connect');
             $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
-            $message->to(env('MAIL_support'));
-            $message->cc(env('MAIL_CC1'));
+            $message->to(env('MAIL_CC1'));
             $message->cc(env('MAIL_CC2'));
-            $message->cc(env('MAIL_test'));
-            $message->setBody($text);
+            $message->bcc(env('MAIL_test'));
+            //$message->cc('support@court-connect.com');
+            //$message->cc(env('raykap@yahoo.com'));
         });
     }
 

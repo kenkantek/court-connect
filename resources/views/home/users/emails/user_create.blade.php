@@ -4,16 +4,10 @@
     <meta charset="utf-8">
 </head>
 <body>
-	<h2>Create Account Player in CourtConnect</h2>
 	<div>
-		Thank you for signing up to Page "Court Connect".
-		Please follow the link below to verify your email address
-		<a href='{{ route("verify",["code"=>$data["verify_code"]]) }}'>Confirm</a>
-		Thanks,
+		Thank you for signing up for Court Connect. Please confirm your email address by clicking <a href='{{ route("verify",["code"=>$data["verify_code"]]) }}'>here</a>.
 		<br>
-		Page "Court Connect"
-
-		P.S. Need help? <a href="{{url("/contact")}}">Contact us</a> anytime with your questions and/or feedback.
+		If you have any questions, please <a href="{{url("/contact")}}">contact us</a>
 	</div>
 
 </body>

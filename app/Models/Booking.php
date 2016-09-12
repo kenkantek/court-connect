@@ -32,6 +32,11 @@ class Booking extends Model
         return $this->belongsTo(User::class,'booked_by');
     }
 
+    public function user_book()
+    {
+        return $this->belongsTo(User::class,'booked_by');
+    }
+
     public function getBillingInfoAttribute($value)
     {
         return json_decode($value,true);

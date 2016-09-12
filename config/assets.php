@@ -323,7 +323,7 @@ return [
                 'location' => 'bottom',
                 'src' => [
                     'local' => '',
-                    'cdn' => 'http://maps.googleapis.com/maps/api/js?sensor=false&language=us&libraries=places',
+                    'cdn' => 'https://maps.googleapis.com/maps/api/js?sensor=false&language=us&libraries=places',
                 ],
             ],
             'geocomplete' => [

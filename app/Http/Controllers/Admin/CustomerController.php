@@ -20,6 +20,9 @@ class CustomerController extends Controller
 
     public function getList()
     {
+        \Assets::addJavascript(['multiple-select']);
+        \Assets::addStylesheets(['multiple-select']);
+        \Assets::addAppModule(['app']);
         $title = 'Manage Customer';
         return view('admin.users.list-customer', compact('title'));
     }
@@ -27,9 +30,16 @@ class CustomerController extends Controller
     public function getCustomers(Request $request)
     {
         $take = $request->take ?: 10;
-        $data = User::with('teacher','roles')->whereHas('roles', function($query) use ($request) {
-            $query->where('role_id',3);
-        })->orderBy('created_at','desc')->paginate($take);
+        $data = User::where(function($query) use ($request) {
+                    $query->orWhere('first_name', 'like', '%' . $request->search_text . '%')
+                    ->orWhere('last_name', 'like', '%' . $request->search_text . '%')
+                    ->orWhere('email', 'like', '%' . $request->search_text . '%');
+                })
+                ->whereHas('roles', function($query) use ($request) {
+                    $query->where('role_id',3);
+                })
+            ->orderBy('created_at','desc')->paginate($take);
+
         foreach($data as $user){
             if($user->hasRole('admin')){
                 $user['is_admin'] = true;

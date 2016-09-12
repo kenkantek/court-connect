@@ -361,6 +361,9 @@ class BookingController extends Controller{
                 ->selectRaw('bookings.*, group_concat(DISTINCT courts.name SEPARATOR \', \') as court_name, clubs.id as club_id, 
             clubs.image as club_image, clubs.name as club_name, clubs.address as club_address')
                 ->first();
+
+            event(new UserBookingEvent(Auth::user()->id, $check_booking->id));
+
             return view('home.bookings.print_confirmation', compact('booking'));
         }
         return false;

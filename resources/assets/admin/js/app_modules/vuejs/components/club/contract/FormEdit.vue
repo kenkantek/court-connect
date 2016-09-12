@@ -17,7 +17,7 @@
 		</tr>
 		<tr>
 			<td width="30%"><label for="notes">Notes *</label></td>
-			<td><input class="form-control" placeholder="Some test notes can go here" name="notes" type="text" id="notes"></td>
+			<td><input class="form-control" placeholder="Notes can go here." name="notes" type="text" id="notes"></td>
 		</tr>
 		<tr>
 			<td></td>

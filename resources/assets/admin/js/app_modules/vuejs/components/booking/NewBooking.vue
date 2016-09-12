@@ -66,14 +66,7 @@
                                                     <option v-for="item in contracts" value="{{item.id}}">{{item.start_date + " - " + item.end_date}}</option>
                                                 </select>
                                                 <h4 class="mb-title-h4-modal text-center">Start Day</h4>
-                                                <select name="mb-book-start-day-contract" class="form-control" v-model="inputBookingDetail.dayOfWeek">
-                                                    <option value="1">Monday</option>
-                                                    <option value="2">Tuesday</option>
-                                                    <option value="3">Wednesday</option>
-                                                    <option value="4">Thursday</option>
-                                                    <option value="5">Friday</option>
-                                                    <option value="6">Saturday</option>
-                                                    <option value="7">Sunday</option>
+                                                <select name="mb-book-start-day-contract" class="form-control" v-model="inputBookingDetail.dayOfWeek" v-on:change="changeStartDayContract">
                                                 </select>
                                             </div>
                                         </div>
@@ -90,7 +83,7 @@
                                     <div class="clearfix"></div>
                                     <div class="mb-group-sl slc-type-contract slc-type-group">
                                         <div class="col-xs-12 col-md-12">
-                                            <span>Total day: {{info_contract.total_week}}</span>
+                                            <span>Total day: {{start_day_total_week}}</span>
                                         </div>
                                     </div>
 
@@ -124,8 +117,8 @@
                                     <div class="clearfix"></div>
                                     <div class="mb-group-sl">
                                         <div class="col-xs-12 col-md-12">
-                                            <h4 class="mb-title-h4-modal text-center">Order Total: <strong class="price" style="">${{total_price}} </strong></h4>
                                             <div id="viewPriceOrder" class="btn" @click.prevent="viewPriceOrder()">Check price</div>
+                                            <h4 class="mb-title-h4-modal text-center">Order Total: <strong class="price" style="">${{total_price}} </strong></h4>
                                         </div>
                                     </div>
 
@@ -562,6 +555,7 @@
                 {key: 3, value: "3am"}, {key: 3.50, value: "3:30am"}, {key: 4, value: "4am"}, {key: 4.50, value: "4:30am"},
                 {key: 5, value: "5am"}, {key: 5.50, value: "5:30am"}
             ],
+            start_day_total_week: null,
         }
     },
     watch: {
@@ -620,6 +614,9 @@
                 if(res.data.error == false)
                 {
                     this.info_contract = res.data.data;
+                    this.start_day_total_week = '';
+                    $("select[name=mb-book-start-day-contract]").html('<option value="">--Select--</option><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option>');
+                    $("select[name=mb-book-start-day-contract]").append('<option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option><option value="7">Sunday</option>');
                 }else{
                     var msg = "";
                     $.each(res.data.messages,function(k,v){
@@ -630,6 +627,19 @@
             }, res => {
 
             });
+        },
+        changeStartDayContract(){
+            if(this.inputBookingDetail.contract_id == '' || this.inputBookingDetail.contract_id == null){
+                showNotice('error', "Please, select a date period", 'Error!');
+                return;
+            }
+            var arr_day_of_week = {1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat", 7: "Sun"};
+            for(var i=0; i<this.contracts.length; i++){
+                if(this.contracts[i]['id'] == this.inputBookingDetail.contract_id){
+                    this.start_day_total_week = this.contracts[i]['daysOfWeek'][arr_day_of_week[this.inputBookingDetail.dayOfWeek]]['count'];
+                    return;
+                }
+            }
         },
         viewPriceOrder(){
             this.$set('inputBookingDetail.hour_length',$("#mb-book-in-hour").val());
@@ -657,10 +667,13 @@
                             msg = "Error: That contract time cannot be booked due to a conflict. Please select another day/time.";
                         }
                     }
-                    else
-                        $.each(res.data.messages,function(k,v){
-                            msg += "<div>"+v+"</div>";
-                        });
+                    else{
+                        if($.isArray(res.data.messages))
+                            $.each(res.data.messages, function (k, v) {
+                                msg += "<div>" + v + "</div>";
+                            });
+                        else msg = res.data.messages;
+                    }
                     this.total_price = "NaN";
                     showNotice('error', msg, 'Error!');
                 }else
@@ -692,16 +705,32 @@
                 if(res.data.error)
                 {
                     var msg = "";
-                    switch(res.data.status){
-                        case 'booking':
-                        case 'booked': msg = "This was book. Please select another time or date"; break;
-                        case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
-                        case 'close': msg = "Day Close. Please select another time or date"; break;
-                        default: msg = res.data.status
+                    if(res.data.status) {
+                        switch (res.data.status) {
+                            case 'booking':
+                            case 'booked':
+                                msg = "This was book. Please select another time or date";
+                                break;
+                            case 'unavailable':
+                                msg = "Unavailable. Please select another time or date";
+                                break;
+                            case 'close':
+                                msg = "Day Close. Please select another time or date";
+                                break;
+                            default:
+                                msg = res.data.status
+                        }
+                        if (res.data.status == 'booked' && this.inputBookingDetail.type == 'contract') {
+                            msg = "Error: That contract time cannot be booked due to a conflict. Please select another day/time.";
+                        }
+                    }else {
+                        if ($.isArray(res.data.messages))
+                            $.each(res.data.messages, function (k, v) {
+                                msg += "<div>" + v + "</div>";
+                            });
+                        else msg = res.data.messages;
                     }
-                    if(res.data.status == 'booked' && this.inputBookingDetail.type == 'contract'){
-                        msg = "Error: That contract time cannot be booked due to a conflict. Please select another day/time.";
-                    }
+
                     this.total_price = "NaN";
                     showNotice('error', msg, 'Error!');
                 }else{

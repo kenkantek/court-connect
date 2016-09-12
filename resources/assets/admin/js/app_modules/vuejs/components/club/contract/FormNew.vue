@@ -23,7 +23,7 @@
 		<div class="form-group" :class=" {'has-error' : (note == '' && error == true)}">
 			<label for="name" class="col-sm-4 control-label">Notes *</label>
 			<div class="col-sm-8">
-				<input v-model="note" class="form-control" placeholder="Some test notes can go here" name="notes" type="text" id="notes">	
+				<input v-model="note" class="form-control" placeholder="Notes can go here." name="notes" type="text" id="notes">
 			</div>
 		</div>
 		<div>

@@ -6,14 +6,14 @@
     <div class="row">
         <div class="container content">
             <div class="instruction">
-                <h2 style="margin-top: 50px; margin-bottom: -50px;"><span>Forgot Password</span></h2>
+                <h2 style="margin-top: 50px; margin-bottom: 0px;"><span>Forgot Password</span></h2>
             </div>
 
-            <div class="col-sm-12" style="margin-top: 5%">
+            <div class="col-sm-12">
                 @include('home.blocks.error')
             </div>
 
-            <div class="login-box">
+            <div class="login-box" style="margin-top: 10px">
                 <form class="form-horizontal" role="form" method="POST" action="{{ route('auth.password.email') }}">
                     {!! csrf_field() !!}
                     @if (session('status'))

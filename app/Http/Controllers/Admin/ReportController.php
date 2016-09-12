@@ -25,18 +25,18 @@ class ReportController extends Controller
     public function getData(Request $request)
     {
         $take = $request->take ?: 10;
-        $data = Booking::join('courts','courts.id','=','bookings.court_id')
+        $data = Booking::with('payment')->join('courts','courts.id','=','bookings.court_id')
             ->leftJoin('payments','bookings.payment_id','=','payments.id')
             ->where('courts.club_id',$request->clubid)
             ->where('bookings.status_booking',"!=",'cancel')
             ->where(function($query) use ($request){
                 if(isset($request->start_date)) {
                     $request->start_date = $dayAfter = (new DateTime($request->start_date))->modify('+1 day')->format('Y-m-d');
-                    $query->where('bookings.created_at', '>=', $request->start_date);
+                    $query->where('bookings.date', '>=', $request->start_date);
                 }
                 if(isset($request->end_date)) {
                     $request->end_date = $dayAfter = (new DateTime($request->end_date))->modify('+1 day')->format('Y-m-d');
-                    $query->where('bookings.created_at', '<=', $request->end_date);
+                    $query->where('bookings.date', '<=', $request->end_date);
                 }
                 if(isset($request->source) && $request->source == 1)
                     $query->where('bookings.source',1);
@@ -45,48 +45,51 @@ class ReportController extends Controller
             ->selectRaw("bookings.*, courts.club_id, payments.card_type as cart_type")
             ->orderBy('created_at','desc')
             ->groupBy('bookings.token_booking')
-            ->paginate($take);
+            ->paginate(100000000000000000);
+            //->paginate($take);
+        foreach ($data as $item)
+            $item->hour = format_hour($item->hour);
         return $data;
     }
 
     public function getDownload(Request $request)
     {
-        $data = Booking::join('courts','courts.id','=','bookings.court_id')
+        $data = Booking::with('payment', 'user_book')->join('courts','courts.id','=','bookings.court_id')
+            ->leftJoin('payments','bookings.payment_id','=','payments.id')
             ->where('courts.club_id',$request->clubid)
             ->where('bookings.status_booking',"!=",'cancel')
             ->where(function($query) use ($request){
                 if(isset($request->start_date)) {
                     $request->start_date = $dayAfter = (new DateTime($request->start_date))->modify('+1 day')->format('Y-m-d');
-                    $query->where('bookings.created_at', '>=', $request->start_date);
+                    $query->where('bookings.date', '>=', $request->start_date);
                 }
                 if(isset($request->end_date)) {
                     $request->end_date = $dayAfter = (new DateTime($request->end_date))->modify('+1 day')->format('Y-m-d');
-                    $query->where('bookings.created_at', '<=', $request->end_date);
+                    $query->where('bookings.date', '<=', $request->end_date);
                 }
                 if(isset($request->source) && $request->source == 1)
                     $query->where('bookings.source',1);
             })
-            ->select(["bookings.*",'courts.club_id'])
+            ->with('user_book')
+            ->selectRaw("bookings.*, courts.club_id, payments.card_type as cart_type")
             ->orderBy('created_at','desc')
-            ->groupBy('bookings.payment_id')
+            ->groupBy('bookings.token_booking')
             ->get();
-
         $filename = "resources/admin/files/data.csv";
         $fp = fopen($filename, 'w');
-        $fields[] = ["Txn Id","Txn Date/Time","Debit/Credit","Customer Name","Source","Booked By","Type","Day Trading","Amount($)"];
+        $fields[] = ["Txn Id","Txn Date/Time","Tender","Source","Booked By","Customer Name","Type","Amount($)"];
         $dateOfWeek = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         foreach($data as $item){
             $tmp = [];
             $tmp[] = $item['id'];
             $tmp[] = ($item['type'] == "contract" ? $dateOfWeek[$item['day_of_week']].", ".$item['date_range_of_contract']['from']." - ".$item['date_range_of_contract']['to'] : $item['date'])
-					." at ".$item['hour']." for ".$item['hour_length']."Hour";
-            $tmp[] = "";
-            $tmp[] = $item['billing_info']['first_name']. " ". $item['billing_info']['last_name'];
+					." at ".format_hour($item['hour']); //" for ".$item['hour_length']."Hour";
+            $tmp[] = $item['cart_type'] == null || $item['cart_type'] == '' ? "Debit / Cash" : "Credit / " . $item['payment']->card_type;
             $tmp[] = $item['source'] == 1 ? "Court Connect" : "Player booking";
-            $tmp[] = $item['booked_by'];
+            $tmp[] = $item->user_book->fullname;
+            $tmp[] = $item['billing_info']['first_name']. " ". $item['billing_info']['last_name'];
             $tmp[] = $item['type'];
-            $tmp[] = $item['created_at'];
-            $tmp[] = $item['total_price'];
+            $tmp[] = $item['total_price_order'];
             $fields[] = $tmp;
         }
         foreach ($fields as $field) {

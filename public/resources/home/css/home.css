@@ -194,12 +194,17 @@ div.modal-body {
     color: red;
 }
 
-.app-bar .col-md-4 {
+.app-bar .col-md-4, .app-bar-col{
     min-height: 49px;
-    color: #fff;
+    color: #63ac1e;
     font-size: 25px;
     font-family: RobotoLight, Helvetica Neue, Helvetica, Arial, sans-serif;
-    line-height: 2em
+    line-height: 2em;
+}
+
+.app-bar-col span {
+    font-family: RobotoRegular, Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #63ac1e;
 }
 
 .app-bar .col-md-4 span {
@@ -1560,7 +1565,7 @@ a.ui-state-default.ui-state-highlight {
     height: 35px;
     line-height: 35px;
 }
-#cc-search-form select[name="court"] ~ .select2{
+#cc-search-form select[name="court"] ~ .select2, #cc-input-search-time ~ .select2{
     width: 100% !important;
 }
 
@@ -1617,6 +1622,12 @@ a.ui-state-default.ui-state-highlight {
     color:#fff;
     margin: 20px 0 10px 0;
 }
+@media screen and (max-width: 1200px){
+    .line-content:before {
+        width: 40%;
+        left: 30%;
+    }
+}
 @media screen and (max-width: 992px){
     .h1-mobile{
         margin: 15px auto;
@@ -1647,6 +1658,15 @@ a.ui-state-default.ui-state-highlight {
     }
     .md-fright{
         float: right;
+    }
+    .line-content:before {
+        width: 30%;
+        left: 35%;
+    }
+    .line-content .thumbnail ~ .caption.title{
+        margin: 0px 35px;
+        padding: 0px;
+        width: auto;
     }
 }
 .header .navbar-ex1-collapse{
@@ -1679,6 +1699,9 @@ a.ui-state-default.ui-state-highlight {
     margin-top: 30px
 }
 @media screen and (max-width: 600px){
+    .footer{
+        background-size: auto 100%;
+    }
     .frm-g-distance-search{
         margin: 0px -15px;
     }

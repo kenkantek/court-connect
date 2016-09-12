@@ -65,25 +65,52 @@
 
 @section('javascript')
     <script type="application/javascript">
-        if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(function(position)
-            {
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-                var capa = document.getElementById("capa");
+        $(document).ready(function(){
+            var count_max_get_geo = 3;
+            function getGeolocation(){
+                if(count_max_get_geo <= 0 ) {
+                    alert("Geolocation API is not supported in your browser.");
+                    return ;
+                }
+                count_max_get_geo --;
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                                var latitude = position.coords.latitude;
+                                var longitude = position.coords.longitude;
+                                var capa = document.getElementById("capa");
+                                capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude*10000)/10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude*10000)/10000 + "'/>";
 
-                capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude*10000)/10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude*10000)/10000 + "'/>";
-
-            },function error(msg){alert('Please enable your GPS position future.');
-            }, {maximumAge:600000, timeout:5000, enableHighAccuracy: true});
-        }else
-        {
-            alert("Geolocation API is not supported in your browser.");
-        }
+                            },function error(msg){
+                                switch(error.code) {
+                                    case error.PERMISSION_DENIED:
+                                        alert("User denied the request for Geolocation.");
+                                        break;
+                                    case error.POSITION_UNAVAILABLE:
+                                        alert("Location information is unavailable.");
+                                        break;
+                                    case error.TIMEOUT:
+                                        alert("The request to get user location timed out.");
+                                        break;
+                                    case error.UNKNOWN_ERROR:
+                                        alert("An unknown error occurred.");
+                                        break;
+                                }
+                            },{
+                                maximumAge:600000,
+                                timeout:5000,
+                                enableHighAccuracy: true
+                            }
+                    );
+                }else {
+                    count_max_get_geo --;
+                    setTimeout(getGeolocation, 1000);
+                }
+            }
+            //getGeolocation();
+        })
     </script>
 
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
     {!! HTML::script("resources/home/js/infobox.js") !!}
     <script>
         $( ".viewmore" ).click(function() {

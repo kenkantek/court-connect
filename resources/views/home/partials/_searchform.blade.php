@@ -112,9 +112,9 @@
                 <div class="form-group col-md-2 col-xs-6 form-icon time-kicker md-clearfix">
                     <input id="mb-book-in-hour" class="ionslider" type="text" name="mb-book-in-hour" data-from="{!! $request->input('mb-book-in-hour') !!}">
                 </div>
-                <div class="form-group col-md-2 col-xs-6 form-icon">
+                <div class="form-group col-md-2 col-xs-6 form-icon form-group-of-court">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::selectRange('court',1,4,$request->court,['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# Courts']) !!}
+                    {!! Form::selectRange('court',1,4,$request->court,['id'=>'inputID','class' => 'form-control placeholder-single','placeholder'=>'# of Courts']) !!}
                 </div>
                 <div class="form-group col-md-1 col-xs-12 md-clearfix">
                     <button type="submit" class="btn btn-search">SEARCH</button>

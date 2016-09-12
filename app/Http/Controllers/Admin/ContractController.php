@@ -36,6 +36,9 @@ class ContractController extends Controller
     {
         $contracts = Contract::where(['club_id' => $request->input('club_id'), 'is_member' => $request->input('member')])
             ->orderBy('updated_at', 'desc')->get(['id','start_date','end_date','is_member','total_week']);
+        foreach ($contracts as $contract){
+            $contract->daysOfWeek = getTotalWeekFromPeriod(strtotime($contract->start_date), strtotime($contract->end_date) , $request->input('club_id'));
+        }
         return response([
             'data' => $contracts,
         ]);

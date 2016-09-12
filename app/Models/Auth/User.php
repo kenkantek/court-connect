@@ -96,12 +96,12 @@ class User extends Authenticatable
         return null;
     }
 
-    public function assignRole($role, $context = NULL, $context_id = NULL)
+    public function assignRole($role, $context = null, $context_id = null)
     {
         $pivot = array();
-        if($pivot != NULL)
+        if($context != null)
             $pivot['context'] = $context;
-        if($context_id != NULL)
+        if($context_id != null)
             $pivot['context_id'] = $context_id;
         $this->roles()->attach($this->getStoredRole($role), $pivot);
     }

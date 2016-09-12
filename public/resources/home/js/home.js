@@ -162,7 +162,10 @@ $(function () {
         $("#calendar-switch").fadeOut("slow");
         $("#datepicker").datepicker( "show" );
     });
-    $("input#datepicker").click(function() {
+    $("input#datepicker, input#q").click(function() {
+        $(".search-tooltip").addClass('hidden');
+    });
+    $("body").on('click', '#cc-search-form .form-group-of-court .select2',function() {
         $(".search-tooltip").addClass('hidden');
     });
     $("#search-timepicker-text").click(function(){
@@ -173,7 +176,7 @@ $(function () {
 
         $(".search-tooltip").toggleClass('hidden');
         if(!$(".search-tooltip").hasClass('hidden')){
-            $("#cc-input-search-time").focus();
+            //$("#cc-input-search-time").focus();
             if($("#search-timepicker-text").val() == null || $("#search-timepicker-text").val() == '') {
                 $("#search-timepicker-text").val($("#cc-input-search-time option:selected").text());
                 $("#search-timepicker").val($("#cc-input-search-time option:selected").val());
@@ -182,21 +185,21 @@ $(function () {
     });
 
     $(".group-search-home-timepicker").mouseleave(function() {
-        if (!$('.group-search-home-timepicker .select2-container').hasClass('select2-container--open')) {
-            $(".search-tooltip").addClass('hidden');
-        }
+        // if (!$('.group-search-home-timepicker .select2-container').hasClass('select2-container--open')) {
+        //     $(".search-tooltip").addClass('hidden');
+        // }
     });
 
     //for safari
     $('.group-search-home-timepicker').on('touchstart', function (e) {
         "use strict";
-        if (!$('.group-search-home-timepicker .select2-container').hasClass('select2-container--open')) {
-            $(".search-tooltip").addClass('hidden');
-        }
+        // if (!$('.group-search-home-timepicker .select2-container').hasClass('select2-container--open')) {
+        //     $(".search-tooltip").addClass('hidden');
+        // }
     });
 
     $(".placeholder-single").select2({
-        placeholder: "# Courts",
+        placeholder: "# of Courts",
         allowClear: true,
         containerCss: 'wrap',
         templateResult: function(result){
@@ -332,7 +335,7 @@ $(function () {
             zipcode = $("#input-zip_code").val();
         else zipcode = $("input[name=zipcode]").val();
         $.ajax({
-            url : "http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode,
+            url : "https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:"+zipcode,
             method: "post",
             success:function(data){
                 $("#input-address1").val('');

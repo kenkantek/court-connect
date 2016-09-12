@@ -42,7 +42,8 @@ class PlayerController extends Controller
         $user->remember_token = $request->_token;
         $user->verify_code = str_random(30);
         $user->save();
-
+        $user->assignRole('player', 'players', 0);
+        
         $user_id = $user->id;
 
         $player = new Player();

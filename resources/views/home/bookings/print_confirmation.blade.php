@@ -6,7 +6,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <img src="{{url("/")}}/uploads/images/logo.png" width="166" height="96" alt="logo court connect" class="CToWUd"></td>
+                            <img src="{{url("/")}}/resources/home/images/logo-color_05.png" width="166" height="96" alt="logo court connect" class="CToWUd"></td>
                         <td align="right" valign="top"><span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#333333;line-height:18px">Court Connect<br></td>
                     </tr>
                 </tbody>

@@ -119,7 +119,8 @@ class AuthController extends Controller
             $user->avatar = $usersocial->avatar;
             $user->verify_code = str_random(30);
             $user->save();
-
+            $user->assignRole('player', 'players', 0);
+            
             $player = new Player();
             $player->user_id = $user->id;
             $player->save();

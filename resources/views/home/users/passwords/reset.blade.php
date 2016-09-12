@@ -3,11 +3,10 @@
     <div class="row">
         <div class="container content">
             <div class="instruction">
-                <h2 style="margin-top: 50px; margin-bottom: -50px;"><span>Forgot Password</span></h2>
+                <h2 style="margin-top: 50px; margin-bottom: 0px;"><span>Forgot Password</span></h2>
             </div>
 
-
-            <div class="login-box">
+            <div class="login-box" style="margin-top: 20px">
                 <div>
                     <form role="form" method="POST" action="{{ route('auth.password.reset') }}">
                         {!! csrf_field() !!}

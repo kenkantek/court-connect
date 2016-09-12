@@ -76,21 +76,65 @@
 
 @section('javascript')
     <script type="application/javascript">
-        if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(function(position)
-            {
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-                var capa = document.getElementById("capa");
+        $(document).ready(function(){
+            var count_max_get_geo = 3;
 
-                capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude*10000)/10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude*10000)/10000 + "'/>";
+            function getCurrentAddress(location) {
+                currgeocoder.geocode({
+                    'location': location
+                }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        console.log(results[0]);
+                        $("#address").html(results[0].formatted_address);
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
 
-            },function error(msg){alert('Please enable your GPS position future.');
-            }, {maximumAge:600000, timeout:5000, enableHighAccuracy: true});
-        }else
-        {
-            alert("Geolocation API is not supported in your browser.");
-        }
+            function getGeolocation(){
+                if(count_max_get_geo <= 0 ) {
+                    alert("Geolocation API is not supported in your browser.");
+                    return ;
+                }
+                count_max_get_geo --;
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                                var latitude = position.coords.latitude;
+                                var longitude = position.coords.longitude;
+                                var capa = document.getElementById("capa");
+                                capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude * 10000) / 10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude * 10000) / 10000 + "'/>";
+                                var GEOCODING = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + '%2C' + longitude + '&language=en';
+                                $.getJSON(GEOCODING).done(function (location) {
+                                    $('#cc-search-form input[name=s_name]').val(location.results[0].address_components[2].long_name + ", " + location.results[0].address_components[5].long_name);
+                                });
+
+
+                            },function error(msg){
+                            switch(error.code) {
+                                case error.PERMISSION_DENIED:
+                                    alert("User denied the request for Geolocation.");
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    alert("Location information is unavailable.");
+                                    break;
+                                case error.TIMEOUT:
+                                    alert("The request to get user location timed out.");
+                                    break;
+                                case error.UNKNOWN_ERROR:
+                                    alert("An unknown error occurred.");
+                                    break;
+                            }
+                        },{
+                            maximumAge:600000, timeout:5000, enableHighAccuracy: true
+                        }
+                    );
+                }else {
+                    count_max_get_geo --;
+                    setTimeout(getGeolocation, 1000);
+                }
+            }
+            getGeolocation();
+        })
     </script>
 @stop

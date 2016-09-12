@@ -90,6 +90,7 @@ class UserController extends Controller
         if (\Auth::user()->id == $request->id) {
             return response()->json(['error' => true, 'message' => 'Can\'t delete this employee. This employee is logged on!']);
         }
+        $this->userRepository->findById($request->id)->roles()->detach();
         $response = $this->userRepository->delete($request->id);
         return response()->json([
             'error' => false, 'message' => 'Deleted employee successfully!',
@@ -113,11 +114,16 @@ class UserController extends Controller
         $request['password'] = bcrypt($request['password']);
         $user->fill($request->all());
         $user = $this->userRepository->createOrUpdate($user);
-        if ($request->input('is_admin') == '1') {
-            foreach ($request->input('clubs') as $club_id)
-                $user->assignRole('admin', 'clubs', $club_id);
-        } else {
-            $user->assignRole('user', 'clubs', $request->input('club_id'));
+
+        if(isset($request->create_player)) {
+            $user->assignRole('player', 'players', 0);
+        }else{
+            if ($request->input('is_admin') == '1') {
+                foreach ($request->input('clubs') as $club_id)
+                    $user->assignRole('admin', 'clubs', $club_id);
+            } else {
+                $user->assignRole('user', 'clubs', $request->input('club_id'));
+            }
         }
 
         return response()->json([
@@ -130,7 +136,7 @@ class UserController extends Controller
     {
         $v = Validator::make($request->all(), [
             'fullname' => 'required|max:60',
-            'email' => 'email|required|max:60|min:6',
+//            'email' => 'email|required|max:60|min:6',
             'password' => 'required|min:8',
         ]);
 
@@ -142,12 +148,18 @@ class UserController extends Controller
         if(!isset($user))
             return response()->json(['error' => true,"messages"=>['Data invalid']]);
         $tmp_err = null;
-        if($user['email'] != $request->input('email')){
-            $tmp = User::whereEmail($request->input('email'))->first();
-            if(isset($tmp)){
-                $tmp_err = "The email has already been taken.";
-            }
 
+        if(!isset($request->create_player)) {
+            if(isset($request->email))
+                $request->merge(array('email' => $user->email));
+        }else {
+            if ($user['email'] != $request->input('email')) {
+                $tmp = User::whereEmail($request->input('email'))->first();
+                if (isset($tmp)) {
+                    $tmp_err = "The email has already been taken.";
+                }
+
+            }
         }
         if(!is_null($tmp_err)){
             return response()->json(['error' => true,"messages"=>[$tmp_err]]);
@@ -157,21 +169,23 @@ class UserController extends Controller
         $user->password = bcrypt($request->input('password'));
         $user = $this->userRepository->createOrUpdate($user);
 
-        if ($request->input('is_admin') == 1) {
-            $user->removeRole('user');
-            $user->removeRole('admin');
-            $clubs_id = array_unique($request->input('clubs'));
-            $roles = RoleUser::where('context','clubs')->where('user_id',$user->id)->delete();
-            foreach ($clubs_id as $club_id) {
-                $user->assignRole('admin', 'clubs', $club_id);
-            }
+        if(!isset($request->create_player)){
+            if ($request->input('is_admin') == 1) {
+                $user->removeRole('user');
+                $user->removeRole('admin');
+                $clubs_id = array_unique($request->input('clubs'));
+                $roles = RoleUser::where('context', 'clubs')->where('user_id', $user->id)->delete();
+                foreach ($clubs_id as $club_id) {
+                    $user->assignRole('admin', 'clubs', $club_id);
+                }
 
-            //$user->assignRole('admin',$user->InfoClub['context'],$user->InfoClub['context_id']);
-        }
-        if ($request->input('is_admin') == 0 && !$user->hasRole('user')) {
-            $user_infoClub = $user->InfoClub;
-            $user->removeRole('admin');
-            $user->assignRole('user',$user_infoClub['context'],$user_infoClub['context_id']);
+                //$user->assignRole('admin',$user->InfoClub['context'],$user->InfoClub['context_id']);
+            }
+            if ($request->input('is_admin') == 0 && !$user->hasRole('user')) {
+                $user_infoClub = $user->InfoClub;
+                $user->removeRole('admin');
+                $user->assignRole('user', $user_infoClub['context'], $user_infoClub['context_id']);
+            }
         }
         return response()->json([
             'error' => false,

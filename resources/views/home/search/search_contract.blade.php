@@ -43,7 +43,7 @@ $dayOfWeek = [
                     <div class="col-md-2 col-xs-3 text-center distance">
                         <p>
                             Distance <br>
-                            <b>{{isset($club->distance) ? $club->distance : ''}} miles</b>
+                            <b>{{isset($club->distance_in_miles) ? number_format($club->distance_in_miles, 2) : ''}} miles</b>
                         </p>
                     </div>
                 </div>
@@ -66,9 +66,9 @@ $dayOfWeek = [
 
                                                         @else
                                                             <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
-                                                                    <span>{{$item['hour_start'] <=12 ? str_replace(".5",":30",$item['hour_start']): str_replace(".5",":30",($item['hour_start'] - 12))}} -
-                                                                        {{$item['hour_start'] + $item['hour_length'] <=12 ? str_replace(".5",":30",$item['hour_start'] + $item['hour_length'])."am" : str_replace(".5",":30",($item['hour_start'] + $item['hour_length']- 12))."pm"}}
-                                                                    </span>
+                                                                     <span>{{str_replace(":00","",str_replace("pm","",str_replace("am","",format_hour($item['hour_start']))))}} -
+                                                                         {{str_replace(":00","",format_hour($item['hour_start'] + $item['hour_length']))}}
+                                                                     </span>
                                                                 <a href="{{route('home.checkout',['date'=>$request->input('date'),'dayOfWeek'=>$request->input('dayOfWeek')[$k], 'contract_id' => $contract['contract_id'], http_build_query(['courts' => $contract['arr_count']]), 'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
                                                                     @if(isset($item['total_price']) && $item['total_price'] == 'N/A' )
                                                                         <span>N/A</span>

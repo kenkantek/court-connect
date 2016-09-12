@@ -9,6 +9,7 @@ use App\Models\Contexts\Club;
 use App\Models\Contract;
 use App\Models\SetOpenDay;
 use App\Models\State;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -78,12 +79,14 @@ class SearchController extends Controller {
         }else if (!empty($keyword_clubs)){
             $keyword_clubs = strtolower($keyword_clubs);
 
-            $clubs = Club::whereRaw("lower(clubs.name) like '%". $keyword_clubs. "%'")
+            //get geo from address search
+            $club_db = Club::whereRaw("lower(clubs.name) like '%". $keyword_clubs. "%'")
                 ->orWhereRaw("lower(clubs.state) like '%". $keyword_clubs. "%'")
                 ->orWhereRaw("lower(clubs.address) like '%". $keyword_clubs. "%'")
                 ->orWhereRaw("lower(clubs.zipcode) like '%". $keyword_clubs. "%'")
-                ->orWhereRaw("lower(clubs.city) like '%". $keyword_clubs. "%'")
-                ->join('courts','courts.club_id','=','clubs.id')
+                ->orWhereRaw("lower(clubs.city) like '%". $keyword_clubs. "%'");
+
+            $clubs = Club::join('courts','courts.club_id','=','clubs.id')
                 ->where(function ($q) use ($keyword_surface) {
                     if ($keyword_surface != null) {
                         $q->where('courts.surface_id', '=', $keyword_surface);
@@ -93,7 +96,22 @@ class SearchController extends Controller {
                         $q->where('surface_id', '=', $keyword_surface);
                     }
                 }]);
+            
+            if($club_db->count() > 0){
+                $geo = get_lat_long($club_db->first()->address);
+//                $clubs = $clubs->whereRaw("lower(clubs.name) like '%". $keyword_clubs. "%'")
+//                    ->orWhereRaw("lower(clubs.state) like '%". $keyword_clubs. "%'")
+//                    ->orWhereRaw("lower(clubs.address) like '%". $keyword_clubs. "%'")
+//                    ->orWhereRaw("lower(clubs.zipcode) like '%". $keyword_clubs. "%'")
+//                    ->orWhereRaw("lower(clubs.city) like '%". $keyword_clubs. "%'");
+            }else{
+                $geo = get_lat_long($keyword_clubs);
+            }
 
+            $request->merge(array('lat' => $geo['lat']));
+            $request->merge(array('lon' => $geo['lng']));
+
+            
             //contract
             if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
                 $clubs->join('contracts_club','contracts_club.club_id','=','clubs.id')
@@ -101,19 +119,52 @@ class SearchController extends Controller {
                         if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
                             $q->where('contracts_club.is_member',0);
                         }
-                    })
-                    ->groupBy('clubs.id')
-                    ->select(['clubs.*'])
-                    ->paginate(5);
-            }else { //open time
-                $clubs = $clubs->groupBy('clubs.id')
-                    ->select(['clubs.*'])
-                    ->paginate(5);
+                    });
+            }
+            else { //open time
+
             }
 
+            if(isset($request->lat) && isset($request->lon)) {
+                $clubs = $clubs->selectRaw("3959 * acos( cos( radians(clubs.latitude) ) * cos( radians(" . $request->lat . ") ) 
+                      * cos( radians(" . $request->lon . ") - radians(clubs.longitude)) + sin(radians(clubs.latitude))
+                      * sin( radians(" . $request->lat . ") )) AS distance_in_miles, clubs.*")
+                    ->orderBy('distance_in_miles');
+                if($request->get('mb-book-distance') == null) {
+                    $request->merge(array('mb-book-distance' => 20));
+                }
+                if($request->get('mb-book-distance') >= 0)
+                    $clubs = $clubs->having('distance_in_miles', '<=',  $request->get('mb-book-distance'));
+            }
+            else{
+                $clubs = $clubs->groupBy('clubs.id')
+                    ->selectRaw("clubs.*");
+            }
+
+            $clubs = $clubs->groupBy('clubs.id')
+                ->get();
+
+            // Items per page
+            $perPage = 5;
+            $totalItems = count($clubs);
+            $totalPages = ceil($totalItems / $perPage);
+
+            $page = $request->get('page', 1);
+
+            if ($page > $totalPages or $page < 1) {
+                $page = 1;
+            }
+
+            $offset = ($page * $perPage) - $perPage;
+
+            $clubs = $clubs->slice($offset, $perPage);
+
+            $clubs = new \Illuminate\Pagination\LengthAwarePaginator($clubs, $totalItems, $perPage);
+            $clubs->setPath('/search');
             if ($clubs->count() == 0 ) {
 
-            } else {
+            }
+            else {
                 $input = [
                     'date' => $request->input('date'),
                     'type' => 'open',
@@ -274,13 +325,7 @@ class SearchController extends Controller {
                 }
             }
         }
-        if(isset($request->lat) && isset($request->lat)) {
-            foreach ($clubs as $club) {
-                $club->distance = $this->haversineGreatCircleDistance($club->latitude, $club->longitude, $request->lat, $request->lon);
-                $club->distance = number_format($club->distance / 1.609344, 5);
-                $club->distance1 = $club->latitude . ", " . $club->longitude . ", " . $request->lat . ", " . $request->lon;
-            }
-        }
+
         //return $clubs;
         $deals = getDeals();
         return view('home.search.index', compact('request', 'deals', 'clubs', 'keyword_hour','msg_errors'));
@@ -333,7 +378,6 @@ class SearchController extends Controller {
                 cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
         return $angle * $earthRadius;
     }
-
 
     public function checkPrice(){
         $input = [

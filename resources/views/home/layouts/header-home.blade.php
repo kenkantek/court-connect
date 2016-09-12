@@ -108,10 +108,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-2 col-xs-6 form-icon">
+                <div class="form-group col-md-2 col-xs-6 form-icon form-group-of-court">
                     <i style="background-image: url('resources/home/images/racket_05.png');width: 28px; height: 18px;"></i>
-                    {!! Form::selectRange('court',1,4,1,['id'=>'inputID','class' => 'form-control placeholder-single select2','placeholder'=>'# Courts', 'required'=> 'required']) !!}
-                            <!-- <input type="text" class="form-control" name="" id="" placeholder="# Courts"> -->
+                    {!! Form::selectRange('court',1,4,0,['id'=>'inputID','class' => 'form-control placeholder-single select2','placeholder'=>'# of Courts', 'required'=> 'required']) !!}
+                            <!-- <input type="text" class="form-control" name="" id="" placeholder="# of Courts"> -->
                 </div>
                 <div class="form-group col-md-2 col-xs-6">
                     <button type="submit" class="btn btn-search">SEARCH</button>
@@ -130,7 +130,7 @@
 <div class="app-bar" style="padding: 11px 0 11px 0;">
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-xs-12 col-md-push-4 divine-appbar-r text-center" style="border-right: 0px">
+            <div class="col-md-12 app-bar-col col-xs-12 divine-appbar-r text-center" style="border-right: 0px">
                 <a href="{!! route("home.deals") !!}" style="text-decoration: none; color: #fff"><span>Click here to find the best deals</span></a>
             </div>
             <div class="col-md-8 col-xs-12 divine-appbar-l" style="display: none !important;">
