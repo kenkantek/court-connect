@@ -1,5 +1,67 @@
 <template>
-    <div class="court_new courtbox">
+    <div class="form-clubs col-xs-12 col-md-7">
+        <h3 class="title-box">Commission</h3>
+        <form v-show="club.flat_fee == false" class="form-horizontal" id="form-newClub1">
+            <div class="form-group">
+                <label for="name" class="col-sm-4 control-label">Open time booked on the front end</label>
+                <div class="col-sm-4 placeholder" data-placeholder="%">
+                    <input type="number" min="0" class="form-control" placeholder="percentage" v-model="club.otb_front_per">
+                </div>
+                <div class="col-sm-4 placeholder" data-placeholder="$">
+                    <input type="number" min="0" class="form-control" placeholder="$" v-model="club.otb_front_mon">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-4 control-label">Open time booked on the back end</label>
+                <div class="col-sm-4 placeholder" data-placeholder="%">
+                    <input type="number" min="0" class="form-control" placeholder="percentage" v-model="club.otb_back_per">
+                </div>
+                <div class="col-sm-4 placeholder" data-placeholder="$">
+                    <input type="number" min="0" class="form-control" placeholder="$" v-model="club.otb_back_mon">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-4 control-label">Contract time booked on the front end</label>
+                <div class="col-sm-4 placeholder" data-placeholder="%">
+                    <input type="number" min="0" class="form-control" placeholder="percentage" v-model="club.ctb_front_per">
+                </div>
+                <div class="col-sm-4 placeholder" data-placeholder="$">
+                    <input type="number" min="0" class="form-control" placeholder="$" v-model="club.ctb_front_mon">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name" class="col-sm-4 control-label">Contract time booked on the back end</label>
+                <div class="col-sm-4 placeholder" data-placeholder="%">
+                    <input type="number" min="0" class="form-control" placeholder="percentage" v-model="club.ctb_back_per">
+                </div>
+                <div class="col-sm-4 placeholder" data-placeholder="$">
+                    <input type="number" min="0" class="form-control" placeholder="$" v-model="club.ctb_back_mon">
+                </div>
+            </div>
+        </form>
+        <label>
+            <input type="checkbox" v-model="club.flat_fee">
+            <span><h4 style="display: inline;" class="title-box">Flat fee</h4></span>
+        </label>
+        <div class="from-group" v-show="club.flat_fee == true">
+            <div class="col-md-6">
+                <input type="number" v-model="club.price_flat_fee" required min="0" class="form-control left" placeholder="$">
+            </div>
+            <div class="col-md-6">
+                <select name="" class="form-control left" v-model="club.down_box_flat_fee">
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="lch-form-new-club" class="form-clubs col-xs-12 col-md-5">
+        <div class="court_new courtbox">
         <h3 class="title-box">Add New Clubs</h3>
         <form class="form-horizontal" @submit.prevent="onSubmit" id="form-newClub">
             <div class="form-group">
@@ -45,7 +107,7 @@
                 <label for="image" class="col-sm-2 control-label">Photo</label>
 
                 <div class="col-sm-10">
-                    <img :src="club.image" width="400" @click="getFilePathFromDialog($event)">
+                    <img :src="club.image" width="200" @click="getFilePathFromDialog($event)">
                     <input type="file" @change="onChangeImage($event)" accept="image/*" v-el:input-image class="hidden" />
                 </div>
             </div>
@@ -60,7 +122,39 @@
             <input id="find" type="button" value="find" />
         </form> -->
     </div>
+    </div>
 </template>
+
+<style scoped>
+    .placeholder
+    {
+        position: relative;
+        width: 200px;
+        padding-right: 0px;
+        line-height: 30px;
+    }
+    .placeholder input{
+        position: relative;
+        width: 100%;
+    }
+
+    .placeholder::before
+    {
+        position: absolute;
+        right: 5px;
+        top: 3px;
+        content: attr(data-placeholder);
+        pointer-events: none;
+        opacity: 0.6;
+        z-index: 10000;
+    }
+    #lch-form-new-club{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+</style>
+
 <script>
     var _ = require('lodash'),
         deferred = require('deferred');
@@ -79,6 +173,17 @@
                 country:null,
                 longitude:null,
                 latitude:null,
+                otb_front_per: 0,
+                otb_front_mon: 0,
+                otb_back_per: 0,
+                otb_back_mon: 0,
+                ctb_front_per: 0,
+                ctb_front_mon: 0,
+                ctb_back_per: 0,
+                ctb_back_mon: 0,
+                flat_fee: false,
+                price_flat_fee: 0,
+                down_box_flat_fee: 'monthly'
             },
             submiting:false,
             formErrors: {},
@@ -199,7 +304,9 @@
             this.$set('club.city', null);
             this.$set('club.state', null);
             this.$set('club.zipcode', null);
-
+            this.club.flat_fee =  false;
+            this.club.price_flat_fee = 0;
+            this.club.down_box_flat_fee = 'monthly'
             this.reloadClubs = Math.floor(Math.random() * 10000);
 
             showNotice('success', res.data.success_msg, 'Success!');

@@ -47,11 +47,11 @@
 	var _ = require('lodash'),
 			deferred = require('deferred');
 	export default {
-		props: ['clubSettingId','clubs','delete_club','title','user'],
+		props: ['clubSettingId','clubs','delete_club','title','user', 'clubSettingIndex'],
 		data(){
 			return {
 				'club_image': null,
-				'pageReload': true
+				'pageReload': true,
 			}
 		},
 		asyncData(resolve, reject) {
@@ -61,6 +61,7 @@
 					idx= 0;
 				this.clubSettingId = clubs[idx].id;
 				this.club_image = clubs[idx].image;
+				this.clubSettingIndex = idx;
 
 				if (!localStorage.clubSettingId) {
 					localStorage.setItem('clubSettingId', -1);

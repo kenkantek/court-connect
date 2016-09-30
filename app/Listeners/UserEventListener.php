@@ -53,8 +53,6 @@ class UserEventListener
             Mail::send('home.bookings.send_mail', $data, function ($message) use ($booking) {
                 $message->from(env('MAIL_FROM'), env('MAIL_FROM_NAME'));
                 $message->to($booking['billing_info']['email'])->subject('Court Connect: Order#' . $booking['id']);
-                $message->cc(env('MAIL_CC1'));
-                $message->cc(env('MAIL_CC2'));
             });
         }catch(Exception $e){}
     }

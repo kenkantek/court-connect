@@ -53,6 +53,7 @@
 				<tr v-for="booking in data.data | filterBy filterKey | orderBy sortKey sortOrders[sortKey]">
 					<td>{{ booking.id }}</td>
 					<td>
+						Created: {{ booking.created_at }} <br>
 						{{ booking.type == "contract" ? (dateOfWeek[booking.day_of_week]+ ", " + booking.date_range_of_contract.from + " - " + booking.date_range_of_contract.to): booking.date }}
 							at {{ booking.hour }}
 					</td>
@@ -62,11 +63,19 @@
 					<td>{{ booking.billing_info.first_name + " " + booking.billing_info.last_name }}</td>
 					<td>{{ booking.type }}</td>
 					<td>{{ formatCurrency(booking.total_price_order) }}</td>
+					<td>{{ formatCurrency(booking.fee) }}</td>
+					<td>{{ formatCurrency(booking.total_price_order - booking.fee) }}</td>
 				</tr>
-			<tr>
-				<th style="background: #333; color: #fff; padding: 15px 10px;" colspan="7">Total</th>
-				<th style="background: #333; color: #fff; padding: 15px 10px;">{{formatCurrency(total_balance)}}</th>
-			</tr>
+				<tr v-show="clubCurrent.price_flat_fee == true">
+					<th style="background: #d9edf7; color: #000; padding: 15px 10px; text-align: right" colspan="9">Flat fee</th>
+					<th style="background: #d9edf7; color: #000; padding: 15px 10px;">{{clubCurrent.price_flat_fee }}$ / {{ clubCurrent.down_box_flat_fee}}</th>
+				</tr>
+				<tr>
+					<th style="background: #333; color: #fff; padding: 15px 10px;" colspan="7">Total</th>
+					<th style="background: #333; color: #fff; padding: 15px 10px;">{{formatCurrency(statistics.gross)}}</th>
+					<th style="background: #333; color: #fff; padding: 15px 10px;">{{formatCurrency(statistics.fee)}}</th>
+					<th style="background: #333; color: #fff; padding: 15px 10px;">{{formatCurrency(statistics.net)}}</th>
+				</tr>
 			</tbody>
 		</table>
 		<div class="pull-left col-md-8">
@@ -82,10 +91,14 @@
 	var _ = require('lodash'),
 			deferred = require('deferred');
 	export default {
-		props:['clubSettingId'],
+		props:['clubSettingId', 'clubSettingIndex', 'clubs'],
 		watch: {
 			clubSettingId: 'reloadAsyncData',
-			filter_data: 'onSubmit'
+			filter_data: 'onSubmit',
+			clubSettingIndex: function(){
+				this.clubCurrent = this.clubs[this.clubSettingIndex];
+				this.onSubmit();
+			}
 		},
 		data:function(){
 			var columns = [
@@ -96,7 +109,9 @@
 				{key:"booked_by",value:"Booked By"},
 				{key:"customer",value:"Customer Name"},
 				{key:"type",value:"Type"},
-				{key:"total_price",value:"Gross"}
+				{key:"total_price",value:"Gross"},
+				{key:"amount_fee",value:"Fee"},
+				{key:"amount_net",value:"Net"}
 			];
 			var sortOrders = {};
 			$.each(columns,function(k,v){
@@ -106,13 +121,18 @@
 				data: {
 					per_page: "10",
 				},
+				clubCurrent: null,
 				dateOfWeek: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
 				idown: null,
 				filter_data:{
 					date_range: null,
 					only_cc: 0
 				},
-				total_balance: 0,
+				statistics: {
+					gross: 0,
+					fee: 0,
+					net: 0
+				},
 				gridColumns: columns ,
 				sortKey: '',
 				sortOrders: sortOrders,
@@ -141,9 +161,11 @@
 				const { data } = res;
 				def.resolve(data);
 				var _this = this;
-				_this.total_balance = 0;
+				_this.statistics.gross = _this.statistics.fee = _this.statistics.net= 0;
 				$.each(this.data.data,function(k,v){
-					_this.total_balance += parseFloat(v.total_price_order);
+					_this.statistics.gross += parseFloat(v.total_price_order);
+					_this.statistics.fee += parseFloat(v.fee);
+					_this.statistics.net += parseFloat(v.total_price_order - v.fee);
 				});
 
 			}, res => {
@@ -166,9 +188,12 @@
 			this.$http.get(this.api ,{start_date: start_date, end_date: end_date,source: this.filter_data.only_cc, clubid: this.clubSettingId, take: this.data.per_page}).then(res => {
 				this.data = res.data;
 				var _this = this;
-				_this.total_balance = 0;
+
+				_this.statistics.gross = _this.statistics.fee = _this.statistics.net= 0;
 				$.each(this.data.data,function(k,v){
-					_this.total_balance += parseFloat(v.total_price_order);
+					_this.statistics.gross += parseFloat(v.total_price_order);
+					_this.statistics.fee += parseFloat(v.fee);
+					_this.statistics.net += parseFloat(v.total_price_order - v.fee);
 				});
 
 			}, res => {

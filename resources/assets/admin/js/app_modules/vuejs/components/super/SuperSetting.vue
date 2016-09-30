@@ -1,7 +1,7 @@
 <template>
 
 	<section>
-		<div class="court_list courtbox col-xs-12 col-md-7">
+		<div class="court_list courtbox col-xs-12 col-md-7" style="border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">
 			<h3 class="title-box pull-left">Clubs</h3>
 			<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Add New Club</a>
 			<list-club
@@ -11,13 +11,15 @@
 				:reload-clubs.sync="reloadClubs"
 				></list-club>
 		</div>
-		<div class="form-clubs col-xs-12 col-md-5">
+
+		<section style="position: relative; padding-bottom: 20px;">
 				<form-new-club
 				v-if="clubs_choice == null"
 				:clubs.sync="clubs",
 				:reload-clubs.sync="reloadClubs"
 				>
 				</form-new-club>
+
 				<form-edit-club
 				v-if="clubs_choice != null"
 				:clubs.sync="clubs"
@@ -26,7 +28,7 @@
 				:reload-clubs.sync="reloadClubs"
 				>
 				</form-edit-club>
-		</div>
+		</section>
 	</section>
 </template>
 <script>

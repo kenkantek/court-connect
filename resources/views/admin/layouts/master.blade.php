@@ -41,8 +41,9 @@
         <header-main
                 :club-setting-id.sync="clubSettingId"
                 :clubs.sync="clubs"
+                :club-setting-index.sync="clubSettingIndex"
                 :delete_club.sync = "delete_club"
-                :title="'{!! $title !!}'"
+                :title="'{{ $title }}'"
                 :user="user"
         ></header-main>
 
@@ -66,14 +67,14 @@
                     <li>
                         <a href="{{ route('reports.index') }}" data-toggle="tooltip" data-placement="right" title="Reports"><i class="fa fa-area-chart"></i></a>
                     </li>
-                @endif
 
-                <li>
-                    <a href="{{ route('users.list') }}" data-toggle="tooltip" data-placement="right" title="Employees"><i class="fa fa-users"></i></a>
-                </li>
-                <li>
-                    <a href="{{ route('teacher.listAll') }}" data-toggle="tooltip" data-placement="right" title="Pros"><i class="fa fa-user-plus"></i></a>
-                </li>
+                    <li>
+                        <a href="{{ route('users.list') }}" data-toggle="tooltip" data-placement="right" title="Employees"><i class="fa fa-users"></i></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('teacher.listAll') }}" data-toggle="tooltip" data-placement="right" title="Pros"><i class="fa fa-user-plus"></i></a>
+                    </li>
+                @endif
 
                 @if (Auth::user()->is_super)
                     <li>
@@ -153,10 +154,10 @@
 
 <script type="text/javascript">
     var userLogin = {
-        fullname: '{!! $userLogin->fullname !!}',
-        email: '{!! $userLogin->email !!}',
-        avatar: '{!! $userLogin->avatar !!}',
-        id: {!! $userLogin->id !!},
+        fullname: "{{ $userLogin->fullname }}",
+        email: "{{ $userLogin->email }}",
+        avatar: "{{ $userLogin->avatar }}",
+        id: {{ $userLogin->id }},
     };
     jQuery(document).ready(function($) {
         $('#club').change(function(event) {

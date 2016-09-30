@@ -37,117 +37,118 @@
 		props: ['clubSettingId','reloadContracts'],
 		data() {
 			return {
-							startDate:"",
-							endDate:"",
-							totalWeek:"",
-							note:"",
-							error:false,
-							rates :[
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-								{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-							],
-							extras:[{ name:'Balls', value : 10}],
-							submit:false
-						}
-			},
-			watch: {
-				startDate: function () {
-					var a = moment(this.startDate, 'MM/DD/YYYY');
-					var b = moment(this.endDate, 'MM/DD/YYYY');
-					var days = b.diff(a, 'days');
-					this.totalWeek = b.diff(a,'weeks');
-					if(days < 30) {
-						this.error = true;
-						showNotice('error', 'Error', 'End date must be greater than start date 30 days!');
-					}else{
-						this.error = false;
-					}
-				},
-				endDate: function () {
-						var a = moment(this.startDate, 'MM/DD/YYYY');
-						var b = moment(this.endDate, 'MM/DD/YYYY');
-					 	var days = b.diff(a, 'days');
-					 	this.totalWeek = b.diff(a,'weeks');
-					 	if(days < 30) {
-					 		this.error = true;
-					 		showNotice('error', 'Error', 'End date must be greater than start date 30 days!');
-					 	}else{
-					 		this.error = false;
-					 	}
+				startDate:"",
+				endDate:"",
+				totalWeek:"",
+				note:"",
+				error:false,
+				rates :[
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+				],
+				extras:[{ name:'Balls', value : 10}],
+				submit:false
+			}
+		},
+		watch: {
+			startDate: function () {
+				var a = moment(this.startDate, 'MM/DD/YYYY');
+				var b = moment(this.endDate, 'MM/DD/YYYY');
+				var days = b.diff(a, 'days');
+				this.totalWeek = b.diff(a,'weeks');
+				if(days < 30) {
+					this.error = true;
+					showNotice('error', 'Error', 'End date must be greater than start date 30 days!');
+				}else{
+					this.error = false;
 				}
 			},
-			ready() {
-				 $('.datepicker-contract').daterangepicker({
-			        singleDatePicker: true,
-			        showDropdowns: true
-			    });
-				 $('#start_date').daterangepicker({
-				 		singleDatePicker: true,
-			      showDropdowns: true,
-			      startDate: moment({month: '8'}).endOf('month').format('MM/DD/YYYY'),
-				 });
-				 $('#end_date').daterangepicker({
-				 		singleDatePicker: true,
-			      showDropdowns: true,
-			      startDate: moment({month: '4'}).add(1, 'year').endOf('month').format('MM/DD/YYYY'),
-			      minDate: moment(this.startDate, 'MM/DD/YYYY').add(1, 'months'),
-				 });
-			},
-			methods: {
-				addContract(){
-					this.submit = true;
-					var valid = this.validform();
-					if (valid) {
-						var contract = {};
-						contract.start_date = this.startDate ;
-						contract.end_date = this.endDate ;
-						contract.total_week = this.totalWeek ;
-						contract.note = this.note ;
-						contract.club_id = this.clubSettingId ;
-						contract.rates = this.rates ;
-						contract.extras = this.extras ;
-						this.$http.post(laroute.route('contracts.create'),contract).then(res => {
-							this.note = '';
-							showNotice('success','Create contract success! ','Success!');
-							this.reloadContracts =  Math.floor(Math.random() * 10000);
-						},(res)=> {
-							showNotice('error','Please Enter Note ','Error!');
-						})
-					}
-					this.submit = false;
-				},
-				validform(){
-					if (this.startDate == "" ||	this.endDate == "" ||	this.totalWeek == "" ||	this.note == "" ||	this.endDate == "") {
-						this.error = true;
-						return false;
-					}else{
-						this.error = false;
-						return true;
-					}
+			endDate: function () {
+				var a = moment(this.startDate, 'MM/DD/YYYY');
+				var b = moment(this.endDate, 'MM/DD/YYYY');
+				var days = b.diff(a, 'days');
+				this.totalWeek = b.diff(a,'weeks');
+				if(days < 30) {
+					this.error = true;
+					showNotice('error', 'Error', 'End date must be greater than start date 30 days!');
+				}else{
+					this.error = false;
 				}
-				
+			}
+		},
+		ready() {
+			$('.datepicker-contract').daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: true
+			});
+			$('#start_date').daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: true,
+				startDate: moment({month: '8'}).endOf('month').format('MM/DD/YYYY'),
+			});
+			$('#end_date').daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: true,
+				startDate: moment({month: '4'}).add(1, 'year').endOf('month').format('MM/DD/YYYY'),
+				minDate: moment(this.startDate, 'MM/DD/YYYY').add(1, 'months'),
+			});
+		},
+		methods: {
+			addContract(){
+				this.submit = true;
+				var valid = this.validform();
+				if (valid) {
+					var contract = {};
+					contract.start_date = this.startDate ;
+					contract.end_date = this.endDate ;
+					contract.total_week = this.totalWeek ;
+					contract.note = this.note ;
+					contract.club_id = this.clubSettingId ;
+					contract.rates_member = this.rates ;
+					contract.rates_nonmember = this.rates ;
+					contract.extras = this.extras ;
+					this.$http.post(laroute.route('contracts.create'),contract).then(res => {
+						this.note = '';
+					showNotice('success','Create contract success! ','Success!');
+					this.reloadContracts =  Math.floor(Math.random() * 10000);
+				},(res)=> {
+						showNotice('error','Please Enter Note ','Error!');
+					})
+				}
+				this.submit = false;
 			},
+			validform(){
+				if (this.startDate == "" ||	this.endDate == "" ||	this.totalWeek == "" ||	this.note == "" ||	this.endDate == "") {
+					this.error = true;
+					return false;
+				}else{
+					this.error = false;
+					return true;
+				}
+			}
+
+		},
 	}
 </script>

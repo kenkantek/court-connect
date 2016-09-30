@@ -130,12 +130,14 @@ class ClubController extends Controller
 
         return $range;
     }
+    
     public function getManagerBookings()
     {
         \Assets::addJavascript(['select2', 'uniform', 'monthly', 'moment', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
         \Assets::addStylesheets(['select2', 'uniform', 'monthly', 'ionslider', 'timepicker', 'datetimepicker', 'daterangepicker', 'bootstrap-multiselect']);
         return view('admin.clubs.manager_bookings');
     }
+    
     public function getStates(){
         $data = DB::table('states')->get();
         return response()->json([

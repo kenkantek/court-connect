@@ -19,6 +19,7 @@ new Vue({
 	data() {
 		return {
 			clubSettingId:null,
+			clubSettingIndex: null,
 			clubs:[],
 			delete_club:1,
 			user:userLogin,

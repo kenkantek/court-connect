@@ -105,6 +105,15 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'otb_front_per' => 'Open time booked on the front end - Percentage',
+        'otb_front_mon' => 'Open time booked on the front end',
+        'otb_back_per' => 'Open time booked on the back end - Percentage',
+        'otb_back_mon' => 'Open time booked on the back end',
+        'ctb_front_per' => 'Contract  time booked on the front end - Percentage',
+        'ctb_front_mon' => 'Contract time booked on the front end',
+        'ctb_back_per' => 'Contract time booked on the back end - Percentage',
+        'ctb_back_mon' => 'Contract time booked on the back end',
+    ],
 
 ];

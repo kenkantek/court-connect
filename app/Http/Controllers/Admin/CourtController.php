@@ -87,7 +87,8 @@ class CourtController extends Controller
                 if(isset($inputRate['datarate']['id']))
                     $rate_db = CourtRate::where(['id'=>$inputRate['datarate']['id']])->first();
                 $rate = new CourtRate;
-                $rate->name = isset($rate_db->id) ? "* Copy from court #".$rate_db->id." *  ".$inputRate['datarate']['name']: $inputRate['datarate']['name'];
+                //$rate->name = isset($rate_db->id) ? "* Copy from court #".$rate_db->id." *  ".$inputRate['datarate']['name']: $inputRate['datarate']['name'];
+                $rate->name = isset($rate_db->id) ? "(Copy from court: ".$rate_db->court->name.")    " : $inputRate['datarate']['name'];
                 $rate->court_id = $court['id'];
                 $rate->end_date = $inputRate['datarate']['end_date'];
                 $rate->start_date = $inputRate['datarate']['start_date'];

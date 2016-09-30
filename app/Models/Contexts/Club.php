@@ -26,7 +26,8 @@ class Club extends Model
      */
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $fillable = ['name', 'phone', 'address', 'city', 'state', 'zipcode'];
+    protected $fillable = ['commission_prices', 'name', 'phone', 'address', 'city', 'state', 'zipcode'];
+    
     protected $searchable = [
         'columns' => [
             'clubs.name' => 40,

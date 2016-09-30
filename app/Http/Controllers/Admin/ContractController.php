@@ -29,9 +29,7 @@ class ContractController extends Controller
         }
         return $contracts;
     }
-
-
-
+    
     public function getList(Request $request)
     {
         $contracts = Contract::where(['club_id' => $request->input('club_id'), 'is_member' => $request->input('member')])

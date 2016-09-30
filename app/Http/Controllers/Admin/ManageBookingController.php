@@ -555,10 +555,10 @@ class ManageBookingController extends Controller
 //            $data_order['players']['names'] = $request->input('player_name') ? $request->input('player_name') : [];
 //            $data_order['players']['emails'] = $request->input('player_email') ? $request->input('player_email') : [];
 //            $data_order['players']['player_num'] = $request->input('player_num');
-        $data_order['players']['source'] = 1;
+        $data_order['players']['source'] = 2;
 
         //call booking from helper
-        $booking = booking($data_order, [0=>$inputBookingDetail->court_id], $get_price_multi_court);
+        $booking = booking($data_order, [0=>$inputBookingDetail->court_id], $get_price_multi_court, 2, true);
 
         if(!$booking['error']) {
             $payment_type = "Cash";
@@ -567,9 +567,6 @@ class ManageBookingController extends Controller
                 $payment = Payment::whereId($booking['list_booking'][0]['payment_id'])->first();
                 $payment_type = $payment['card_type'] != null ? "Credit Card | " . $payment['card_type'] : "Paypal";
                 $last4 = $payment['card_type'] != null ? "****-****-****-".$payment['last_4']: '';
-
-                //send mail
-                event(new UserBookingEvent(0, $booking['list_booking'][0]['id'], true));
             }
             return response()->json([
                 'error' => false,
@@ -639,6 +636,31 @@ class ManageBookingController extends Controller
         $booking->update();
         return response()->json([
             'error' => false,
+        ]);
+    }
+
+    //send mail order
+    public function getSendMailOrder(Request $request){
+        if($request->id) {
+            try {
+                $booking = Booking::where(['bookings.id'=>$request->id])->first();
+                if($booking) {
+                    event(new UserBookingEvent(0, $request->id, true));
+                    return response()->json([
+                        'error' => false,
+                        'message' => 'Order detail has been sent to email "' . $booking['billing_info']['email'] . '" please check your email.'
+                    ]);
+                }
+            }catch(Exception $e){
+                return response()->json([
+                    'error' => true,
+                    'messages' => ['Error. Can"t send an email. Mail not exist']
+                ]);
+            }
+        }
+        return response()->json([
+            'error' => true,
+            "messages" => ["Can't send mail"]
         ]);
     }
 

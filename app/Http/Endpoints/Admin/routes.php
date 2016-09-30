@@ -58,7 +58,8 @@ Route::group(['prefix' => config('app.admin_dir'), 'middleware' => ['web', 'auth
         'getSearch' => 'booking.search',
         'getCheckIn' => 'booking.check-in',
         'postPrintReceipt' => 'booking.printReceipt',
-        'getClientToken' => 'booking.getClientToken'
+        'getClientToken' => 'booking.getClientToken',
+        'getSendMailOrder' => 'booking.getSendMailOrder',
     ]);
 
     

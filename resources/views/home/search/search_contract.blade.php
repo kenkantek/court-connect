@@ -10,6 +10,7 @@ $dayOfWeek = [
 ];
 ?>
 @foreach ($clubs as $club)
+
     {{-- Club block     --}}
     <div class="club-block">
         <div class="club-intro clearfix">
@@ -17,24 +18,25 @@ $dayOfWeek = [
                 <div class="row thumbnail text-center">
                     <img src="{{ asset($club['image']) }}" alt="" class="img-responsive col-md-12 img-clubs">
                     <div class="caption">
-                        <div class="col-md-6 col-xs-6">
-                            Indoor/Outdoor<br/>
-                            @if($request->court == 1)
-                            <b>{{$club->contracts[0]['court']->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
-                            @endif
-                        </div>
-                        <div class="col-md-6 col-xs-6">
-                            Court Type<br/>
-                            @if($request->court == 1)
-                            <b>{{$club->contracts[0]['court']->surface->label}}</b>
-                            @endif
-                        </div>
+                        @if(isset($club->contracts[0]))
+                            <div class="col-md-6 col-xs-6">
+                                Indoor/Outdoor<br/>
+                                @if($request->court == 1)
+                                    <b>{{$club->contracts[0]['court']->indoor_outdoor == 1 ? "Indoor" : "Outdoor"}}</b>
+                                @endif
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                Court Type<br/>
+                                @if($request->court == 1)
+                                    <b>{{$club->contracts[0]['court']->surface->label}}</b>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
 
             <div class="col-md-8">
-
                 <div class="row information">
                     <div class="col-md-10 col-xs-9">
                         <h4 class="club-name">{!! $club->name !!}</h4>
@@ -93,6 +95,10 @@ $dayOfWeek = [
                         <br style="background: #fff">
                     @endforeach
                 @endforeach
+
+                @if(isset($club->alert_error))
+                    <div class="text-center bold-text">{{$club->alert_error}}</div>
+                @endif
             </div>
 
         </div>

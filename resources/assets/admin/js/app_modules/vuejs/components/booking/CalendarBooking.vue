@@ -186,7 +186,7 @@
                                 <div v-if="booking['status'] == 'required'" @click="acceptPayment(booking['id'])" id="mb-accept-payment" class="btn btn-primary btn-mb-ex icon-fa-accept">Accept Payment</div>
                                 <div v-if="booking['is_checkIn']" id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-accept">Check Players In</div>
                                 <div v-else @click="checkInBooking(booking['id'])" id="mb-check-players-in" class="btn btn-primary btn-mb-ex icon-fa-cancel">Check Players In</div>
-                                <div id="mb-edit-booking" @click="editBooking(booking['id'])" class="btn btn-primary btn-mb-ex icon-fa-edit">Edit Booking</div>
+                                <!--<div id="mb-edit-booking" @click="editBooking(booking['id'])" class="btn btn-primary btn-mb-ex icon-fa-edit">Edit Booking</div>-->
                                 <div id="mb-cancel-booking" @click="cancelBooking(booking['id'])"class="btn btn-primary btn-mb-ex btn-custom icon-fa-cancel">Cancel Booking</div>
                             </div>
                         </div>

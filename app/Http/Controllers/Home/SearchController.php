@@ -114,12 +114,7 @@ class SearchController extends Controller {
             
             //contract
             if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
-                $clubs->join('contracts_club','contracts_club.club_id','=','clubs.id')
-                    ->where(function ($q) use ($request) {
-                        if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
-                            $q->where('contracts_club.is_member',0);
-                        }
-                    });
+                $clubs->join('contracts_club','contracts_club.club_id','=','clubs.id');
             }
             else { //open time
 
@@ -179,7 +174,7 @@ class SearchController extends Controller {
                 //contract
                 if(isset($request->dayOfWeek) && is_array($request->dayOfWeek) && count($request->dayOfWeek) > 0){
                     foreach ($clubs as $k => $club) {
-                        $contracts = Contract::where(['club_id' => $club['id'], 'is_member' => 0])
+                        $contracts = Contract::where(['club_id' => $club['id']])
                             ->limit(5)->orderBy('updated_at', 'desc')->get(['id', 'club_id', 'start_date','end_date','is_member','total_week']);
                         $clubs[$k]['data_date_open'] = SetOpenDay::where(['date'=>$keyword_day, 'club_id' => $club->id])->first();
                         if($contracts && count($contracts)  > 0) {
@@ -243,9 +238,20 @@ class SearchController extends Controller {
                                 $tmp_contract['price_main'] = $price_main;
                                 $tmp_contract['arr_count'] = $arr_count;
 
-                                $arr_tmp_contract[] = $tmp_contract;
+
+                                if(isset($tmp_contract['price_main'][0][0][0]['error']) && $tmp_contract['price_main'][0][0][0]['error'] == true) {
+                                    if(isset($tmp_contract['price_main'][0][0][0]['messages']))
+                                        try {
+                                            $club->alert_error = implode(',', $tmp_contract['price_main'][0][0][0]['messages']);
+                                        }catch(Exception $e){
+                                            $club->alert_error = $tmp_contract['price_main'][0][0][0]['messages'];
+                                        }
+                                    else $club->alert_error = "The time/date you selected is unavailable. Please try again.";
+                                }else
+                                    $arr_tmp_contract[] = $tmp_contract;
                                 unset($club->courts);
                             }
+
                             usort($arr_tmp_contract, function($a,$b){
                                 return $a['price_main'][0][0][0]['total_price'] > $b['price_main'][0][0][0]['total_price'];
                             });
@@ -273,9 +279,7 @@ class SearchController extends Controller {
                             if($get_price['error'] == 'true'){
                                 if(isset($get_price['messages']))
                                     $club->alert_error = implode(", ", $get_price['messages']);
-                                else if(isset($get_price['status']))
-                                    $club->alert_error = $get_price['status'];
-                                else $club->alert_error = "error";
+
                             }
                             $club->courts[$p]['price'] = $get_price;
                             $club->courts[$p]['prices'] = $this->getListPriceOfCourt($input);

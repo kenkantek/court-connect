@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Contexts\Club;
 use DateTime;
 use Illuminate\Http\Request;
 use ZipArchive;
@@ -20,7 +21,8 @@ class ReportController extends Controller
     {
         \Assets::addJavascript(['moment','daterangepicker']);
         \Assets::addStylesheets(['daterangepicker']);
-        return view('admin.reports.index');
+        $title = 'Report';
+        return view('admin.reports.index', compact('title'));
     }
     public function getData(Request $request)
     {
@@ -77,8 +79,12 @@ class ReportController extends Controller
             ->get();
         $filename = "resources/admin/files/data.csv";
         $fp = fopen($filename, 'w');
-        $fields[] = ["Txn Id","Txn Date/Time","Tender","Source","Booked By","Customer Name","Type","Amount($)"];
+        $fields[] = ["Txn Id","Txn Date/Time","Tender","Source","Booked By","Customer Name","Type","Gross($)","Fee($)","Net($)"];
         $dateOfWeek = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+        $statistics['gross'] = 0;
+        $statistics['fee'] = 0;
+        $statistics['net'] = 0;
         foreach($data as $item){
             $tmp = [];
             $tmp[] = $item['id'];
@@ -90,8 +96,16 @@ class ReportController extends Controller
             $tmp[] = $item['billing_info']['first_name']. " ". $item['billing_info']['last_name'];
             $tmp[] = $item['type'];
             $tmp[] = $item['total_price_order'];
+            $tmp[] = $item['fee'];
+            $tmp[] = $item['total_price_order'] - $item['fee'];
             $fields[] = $tmp;
+
+            $statistics['gross'] += $item['total_price_order'];
+            $statistics['fee'] += $item['fee'];
+            $statistics['net'] += $item['total_price_order'] - $item['fee'];
         }
+        $fields[] = [];
+        $fields[] = ['','','','','','','', $statistics['gross'], $statistics['fee'], $statistics['net']];
         foreach ($fields as $field) {
             fputcsv($fp, $field);
         }

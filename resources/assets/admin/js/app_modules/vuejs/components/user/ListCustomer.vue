@@ -1,7 +1,7 @@
 <template>
     <div id="confirm-action-delete" class="modal fade">
         <div class="modal-body">
-            Are you sure delete?
+            Are you sure you want to delete this user?
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-primary" id="booking-delete">Delete</button>

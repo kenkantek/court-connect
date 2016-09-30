@@ -14,10 +14,17 @@ use Illuminate\Http\Request;
 use Validator;
 use Datatables;
 use Exception;
+use View;
 
 class FaqController extends Controller
 {
+    public function __construct()
+    {
+        $title = 'Content Management | Question&Answer';
+        View::share(compact('title'));
+    }
     public function getIndex(){
+
         return View('admin.settings.faqs.index');
     }
 

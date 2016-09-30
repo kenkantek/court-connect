@@ -3,7 +3,7 @@
 	Super Admin
 @stop
 @section('content')
-	<div class="box box-primary">
+	<div class="box box-primary" style="box-shadow: none">
 		<div class="box-body">
 		<super-setting
 				:clubs.sync="clubs"
@@ -13,4 +13,10 @@
 		</div>
 	</div>
 
+	<script type="text/javascript">
+
+		jQuery(document).ready(function($) {
+			$(".box.box-primary").css('min-height', $("#lch-form-new-club").height() + 70)
+		});
+	</script>
 @stop

@@ -658,7 +658,7 @@
                     if(res.data.status){
                         switch(res.data.status){
                             case 'booking':
-                            case 'booked': msg = "This was book. Please select another time or date"; break;
+                            case 'booked': msg = "This court is booked at this time. Please select another court or time."; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
                             case 'close': msg = "Day Close. Please select another time or date"; break;
                             default: msg = res.data.status
@@ -709,7 +709,7 @@
                         switch (res.data.status) {
                             case 'booking':
                             case 'booked':
-                                msg = "This was book. Please select another time or date";
+                                msg = "This court is booked at this time. Please select another court or time.";
                                 break;
                             case 'unavailable':
                                 msg = "Unavailable. Please select another time or date";
@@ -771,7 +771,7 @@
                     if(res.data.status){
                         switch(res.data.status){
                             case 'booking':
-                            case 'booked': msg = "This was book. Please select another time or date"; break;
+                            case 'booked': msg = "This court is booked at this time. Please select another court or time."; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
                             case 'close': msg = "Day Close. Please select another time or date"; break;
                             default: msg = res.data.status
@@ -807,7 +807,7 @@
                     if(res.data.status){
                         switch(res.data.status){
                             case 'booking':
-                            case 'booked': msg = "This was book. Please select another time or date"; break;
+                            case 'booked': msg = "This court is booked at this time. Please select another court or time."; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
                             case 'close': msg = "Day Close. Please select another time or date"; break;
                             default: msg = res.data.status
@@ -851,7 +851,7 @@
                     var msg = "";
                     if(res.data.status){
                         switch(res.data.status){
-                            case 'booking': msg = "This was book. Please select another time or date"; break;
+                            case 'booking': msg = "This court is booked at this time. Please select another court or time."; break;
                             case 'unavailable': msg = "Unavailable. Please select another time or date"; break;
                             case 'close': msg = "Close. Please select another time or date"; break;
                             default: msg = res.data.status
@@ -888,22 +888,22 @@
         },
         emailReceipt(){
             var id_booking = this.booking_reference;
-            $.ajax({
-                url: base_url +"/send-mail",
-                type: 'post',
-                data: {id: id_booking},
-                beforeSend: function(){
-                    $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
-                },
-                success: function(res){
-                    $("#mb-create-new-booking .loading").remove();
-                    alert(res.message);
-                    $(".loader").addClass('hidden');
-                },
-                error: function(request, status, error){
-                    console.log(request.responseText);
-                }
-            })
+            $("#mb-create-new-booking").append('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
+            this.$http.get(laroute.route('booking.getSendMailOrder', {id: id_booking})).then(res => {
+                $("#mb-create-new-booking .loading").remove();
+                if(res.data.error)
+                {
+                    var msg = "";
+                    $.each(res.data.messages,function(k,v){
+                        msg += "<div>"+v+"</div>";
+                    });
+                    showNotice('error', msg, 'Error!');
+                }else
+                    showNotice('success', res.data.message, 'Success!');
+                $(".loader").addClass('hidden');
+            }, res => {
+                $("#mb-create-new-booking .loading").remove();
+            });
         },
         tabClick(element){
             $("#mb-create-new-booking .mb-tabs li").removeClass('active').addClass('tab-disabled');

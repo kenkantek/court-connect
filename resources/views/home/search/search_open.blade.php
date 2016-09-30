@@ -36,7 +36,7 @@
                         </p>
                     </div>
                     @if(isset($club->data_date_open->is_close) && $club->data_date_open->is_close == 1)
-                        <div class="text-center bold-text" >Date closed</div>
+                        <div class="text-center bold-text" >Club Closed</div>
                     @elseif(isset($club->alert_error))
                         <div class="text-center bold-text">{{$club->alert_error}}</div>
                     @endif

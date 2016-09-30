@@ -166,13 +166,13 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             ->where('start_date', '<=', $date)
             ->where('end_date', '>=', $date)
             ->where('club_id', $court['club_id'])
-            ->where('is_member', $is_member)
             ->orderBy('updated_at', 'DESC')
             ->first();
         if(!$table_rate)
             return [
                 'error' => true,
-                'status' => "Contract invalid"
+                'status' => "Contract invalid",
+                'messages' => ["Contract invalid"],
             ];
     }
     $deals = Deal::where('date',$date)->where('court_id',$court_id)
@@ -194,13 +194,9 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
             $rates[$i]['A7'] = "N/A";
         }
     }else {
-        if($type == "contract"){
-            $rates = $table_rate['rates'];
-        }else {
-            if ($is_member)
-                $rates = $table_rate['rates_member'];
-            else $rates = $table_rate['rates_nonmember'];
-        }
+        if ($is_member)
+            $rates = $table_rate['rates_member'];
+        else $rates = $table_rate['rates_nonmember'];
     }
 
     $dayOfWeek = date('w', strtotime($date));
@@ -249,14 +245,20 @@ function calPriceForBooking($court_id, $date, $hour_start, $hour_length, $is_mem
                 return [
                     'error' => true,
                     'price' => "N/A",
-                    "messages"=>'Club Hours:  '.$open_time_date.' - '.$close_time_date
+                    "messages"=> 'Club Hours:  '.$open_time_date.' - '.$close_time_date
                 ];
             }
         }
         $tmp_index = ($i) *2;
 
         if($type == "open" && isset($court) && $rates_full[$tmp_index][$index_json] == "N/A"){ //price default of book open
-            $total_price += $court['default_rate'] / 2;
+            //$total_price += $court['default_rate'] / 2;
+            return [
+                'error' => true,
+                'price' => "N/A",
+                'status' => 'unavailable',
+                'messages' => 'The time/date you selected is unavailable. Please try again.'
+            ];
         }
         else if(isset($rates_full[$tmp_index][$index_json]) && $rates_full[$tmp_index][$index_json] != "N/A")
             $total_price += $rates_full[$tmp_index][$index_json] / 2;
@@ -527,7 +529,7 @@ function createRangeDate($s,$e,$dayOfWeek){
 }
 
 //order
-function booking($input, $courts, $get_price_multi_court, $source_by = 1){
+function booking($input, $courts, $get_price_multi_court, $source_by = 1, $booked_backend = false){
 //$input['bookingDetail'], $input['paymentDetail'], $input['customerDetail']
 // source by: 1-Court Connect ; 2-Club
     $token_booking = md5(str_random(50));
@@ -599,9 +601,34 @@ function booking($input, $courts, $get_price_multi_court, $source_by = 1){
 
     $list_booking = [];
     foreach ($get_price_multi_court['list_court'] as $k=>$court){
+
+        try{
+            $commission_prices = json_decode($court->club->commission_prices);
+        } catch (Exception $e) {
+
+        }
+
         try {
+            $fee = 0;
+
             //save with type open
             if ($input['bookingDetail']['type'] == 'open' || $input['bookingDetail']['type'] == 'lesson') {
+                //fee
+                if($booked_backend) {
+                    if (isset($commission_prices->otb_back_per) && isset($commission_prices->otb_back_mon)) {
+                        if ($commission_prices->otb_back_mon < $get_price_multi_court['total_price'])
+                            $fee = $get_price_multi_court['total_price'] * $commission_prices->otb_back_per / 100
+                            > $commission_prices->otb_back_mon ? $get_price_multi_court['total_price'] * $commission_prices->otb_back_per / 100
+                                : $commission_prices->otb_back_mon;
+                    }
+                }else{
+                    if (isset($commission_prices->otb_front_per) && isset($commission_prices->otb_front_mon)) {
+                        if ($commission_prices->otb_front_mon < $get_price_multi_court['total_price'])
+                            $fee = $get_price_multi_court['total_price'] * $commission_prices->otb_front_per / 100
+                            > $commission_prices->otb_front_mon ? $get_price_multi_court['total_price'] * $commission_prices->otb_front_per / 100
+                                : $commission_prices->otb_front_mon;
+                    }
+                }
                 $booking = Booking::create([
                     'payment_id' => isset($payment['id']) ? $payment['id'] : null,
                     'type' => $input['bookingDetail']['type'],
@@ -617,6 +644,7 @@ function booking($input, $courts, $get_price_multi_court, $source_by = 1){
                     'total_price' => $get_price_multi_court['list_price'][$k],
                     'list_court' => json_encode($courts),
                     'total_price_order' => $get_price_multi_court['total_price'],
+                    'fee' => $fee,
                     'hour' => $input['bookingDetail']['hour_start'],
                     'hour_length' => $input['bookingDetail']['hour_length'],
                     'player_id' => $input['customerDetail']['player_id'],
@@ -631,16 +659,32 @@ function booking($input, $courts, $get_price_multi_court, $source_by = 1){
                 ]);
 
                 $list_booking[] = $booking;
-
             }
             else if ($input['bookingDetail']['type'] == 'contract') { //save with type contract
+
+                //fee
+                if($booked_backend) {
+                    if (isset($commission_prices->ctb_back_per) && isset($commission_prices->ctb_back_mon)) {
+                        if ($commission_prices->ctb_back_mon < $get_price_multi_court['total_price'])
+                            $fee = $get_price_multi_court['total_price'] * $commission_prices->ctb_back_per / 100
+                            > $commission_prices->ctb_back_mon ? $get_price_multi_court['total_price'] * $commission_prices->ctb_back_per / 100
+                                : $commission_prices->ctb_back_mon;
+                    }
+                }else{
+                    if (isset($commission_prices->ctb_front_per) && isset($commission_prices->ctb_front_mon)) {
+                        if ($commission_prices->ctb_front_mon < $get_price_multi_court['total_price'])
+                            $fee = $get_price_multi_court['total_price'] * $commission_prices->ctb_front_per / 100
+                            > $commission_prices->ctb_front_mon ? $get_price_multi_court['total_price'] * $commission_prices->ctb_front_per / 100
+                                : $commission_prices->ctb_front_mon;
+                    }
+                }
 
                 $contract = Contract::where('id', $input['bookingDetail']['contract_id'])->first();
                 $range_date = createRangeDate($contract['start_date'], $contract['end_date'], $input['bookingDetail']['dayOfWeek']);
 
                 $booking = null;
                 $str_random = str_random(50);
-                foreach ($range_date as $date) {
+                foreach ($range_date as $date){
                     $temp_date = Carbon::createFromTimestamp(strtotime($date))->format("Y-m-d");
                     $open_day = SetOpenDay::where(['club_id' => $contract->club_id, 'date' => $temp_date])->first();
                     if(!isset($open_day) || (isset($open_day) && $open_day->is_holiday == 0)) {
@@ -659,8 +703,9 @@ function booking($input, $courts, $get_price_multi_court, $source_by = 1){
                             'is_member' => $input['bookingDetail']['member'],
                             'price_teacher' => isset($result_prices['price_teacher']) ? $result_prices['price_teacher'] : 0,
                             'total_price' => $get_price_multi_court['list_price'][$k],
-                            'list_court' => json_encode($courts),
                             'total_price_order' => $get_price_multi_court['total_price'],
+                            'fee' => $fee,
+                            'list_court' => json_encode($courts),
                             'hour' => $input['bookingDetail']['hour_start'],
                             'hour_length' => $input['bookingDetail']['hour_length'],
                             'player_id' => $input['customerDetail']['player_id'],
@@ -669,7 +714,7 @@ function booking($input, $courts, $get_price_multi_court, $source_by = 1){
                             'payment_info' => json_encode($input['paymentDetail']),
                             'players_info' => json_encode(['name' => isset($input['players']['names']) ? $input['players']['names'] : [],
                                 'email' => isset($input['players']['emails']) ? $input['players']['emails'] : []]),
-                            'source' => isset($input['players']['source']) ? $input['players']['source'] : 0,
+                            'source' => $source_by,
                             'notes' => isset($text_notes) ? $text_notes : null,
                             'token_booking' => $str_random,
                             'booked_by' => Auth::user()->id
@@ -724,7 +769,6 @@ function getPriceOfMultiCourt($courts, $type, $date, $hour_start, $hour_length, 
                     $court['booking_type'] = "contract";
                     $court['contract'] = $contract;
                     $court['contract']['daysOfWeek'] = getTotalWeekFromPeriod(strtotime($contract->start_date), strtotime($contract->end_date) , $contract->club_id);
-
                 } else {
                     return [
                         'msg_errors' => 'Contract not exist'
@@ -776,15 +820,15 @@ function getTotalWeekFromPeriod($start_date, $last_date, $club_id){
     if($start_date > $last_date)
         return 0;
     $no_of_days = ($last_date - $start_date) / 86400; //the diff will be in timestamp hence dividing by timestamp for one day = 86400
-    $get_weekdaysBetween = [];
-
+    $get_weekdaysBetween = ['Mon' => [], 'Tue' => [], 'Wed' => [], 'Thu' => [], 'Fri' => [], 'Sat' => [], 'Sun' => []];
+    
     for($i = 0; $i < $no_of_days; $i++) {
         $isoWeekday = date("D", $start_date);
         $temp_date = date("Y-m-d", $start_date);
         //check date holiday or close
         $open_day = SetOpenDay::where(['club_id' => $club_id, 'date' => $temp_date])->first();
         if(!isset($open_day) || (isset($open_day) && $open_day->is_holiday == 0 && $open_day->is_close == 0)){
-            if(!isset($get_weekdaysBetween[$isoWeekday])) {
+            if(!isset($get_weekdaysBetween[$isoWeekday]['count'])) {
                 $get_weekdaysBetween[$isoWeekday]['count'] = 0;
                 //$get_weekdaysBetween[$isoWeekday]['list-date'] = [];
                 $get_weekdaysBetween[$isoWeekday]['date_first'] = date("m/d", $start_date);

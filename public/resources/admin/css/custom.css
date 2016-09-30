@@ -509,6 +509,8 @@ form.form-court{
     display: block;
     font-size: 3em;
     color: #fff;
+    z-index: 9999;
+    overflow: hidden;
 }
 .loading i{
     text-align: Center;
@@ -870,4 +872,16 @@ table .arrow{
 }
 .btn-primary.focus, .btn-primary:focus{
     background: #082e31 !important;
+}
+#mb-create-new-booking .mb-tabs > li:not(.active) a:hover, #mb-create-new-booking .mb-tabs > li:not(.active) a:focus{
+    background: #0f484d;
+    color: #fff;
+    border: 1px solid transparent;
+    cursor: text;
+}
+#mb-create-new-booking .mb-tabs > li.active a:hover, #mb-create-new-booking .mb-tabs > li.active a:focus{
+    background: #082e31;
+    color: #fff;
+    border: 0px solid transparent;
+    border-bottom: 4px solid #63ac1d;
 }

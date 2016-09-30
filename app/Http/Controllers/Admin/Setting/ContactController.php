@@ -13,9 +13,15 @@ use App\Models\Setting\Contact;
 use Illuminate\Http\Request;
 use Datatables;
 use Exception;
+use View;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $title = 'Content Management | Contacts';
+        View::share(compact('title'));
+    }
     public function getIndex(){
         return View('admin.settings.contacts.index');
     }

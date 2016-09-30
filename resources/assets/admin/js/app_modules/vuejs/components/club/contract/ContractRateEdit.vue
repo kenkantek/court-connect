@@ -5,7 +5,7 @@
 			<div class="clearfix">
 				Note: Before setting rates, ensure that all holiday and closed days are entered into the calendar to ensure that the total days figure is calculated correctly
 			</div>
-			<form>
+			<div>
 
 				<strong>Enter Price</strong>
 				<div class="no-padding col-md-12">
@@ -16,7 +16,7 @@
 					</div>
 				</div>
 				<p>Select hours from grid and press apply to adjust hours</p>
-			</form>
+			</div>
 			<div class="clearfix"></div>
 			<div id="table-contract-rate-edit" class="table table-bordered table-hover table-th clearfix" style="position: relative; padding-bottom: 210px;; margin-top: 20px"  >
 				<div class="th" style="text-align: right; font-size: 11px;">
@@ -30,10 +30,19 @@
 					<div class="db-tb-day">{{item.count + "-days"}}</div>
 				</div>
 
-				<div v-for="(index,time) in contractSelect.rates" class="{{index < 6 ? 'clearfix row-edit row-edit'+index : 'clearfix' }}" track-by="$index">
+				<template v-if="this.contractSelect.is_member == 1">
+				<div v-for="(index,time) in contractSelect.rates_member" class="{{index < 6 ? 'clearfix row-edit row-edit'+index : 'clearfix' }}" track-by="$index">
 					<div class="td_field_label">{{index == 0 ? "12 am" : (index < 12 ? index + "am" : (index == 12 ? index + "pm" : (index -12) + "pm") )}}</div>
 					<div v-for="(key,rate) in time" class="price_hours box-price" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</div>
 				</div>
+				</template>
+
+				<template v-if="this.contractSelect.is_member == 0">
+					<div v-for="(index,time) in contractSelect.rates_nonmember" class="{{index < 6 ? 'clearfix row-edit row-edit'+index : 'clearfix' }}" track-by="$index">
+						<div class="td_field_label">{{index == 0 ? "12 am" : (index < 12 ? index + "am" : (index == 12 ? index + "pm" : (index -12) + "pm") )}}</div>
+						<div v-for="(key,rate) in time" class="price_hours box-price" data-x="{{ index }}" data-y="{{key}}" track-by="$index" >${{rate}}</div>
+					</div>
+				</template>
 			</div>
 
 		</div>
@@ -66,11 +75,11 @@
 				<h3 class="title-box">Price of</h3>
 				<div class="form-group">
 					<label>
-						<input v-model="contractSelect.is_member" type="radio" name="is_member" value="1">
+						<input v-model="contractSelect.is_member" @click="removeSelect()" type="radio" name="is_member" value="1">
 						Member
 					</label>
 					<label>
-						<input v-model="contractSelect.is_member" type="radio" name="is_member" value="0">
+						<input v-model="contractSelect.is_member" @click="removeSelect()" type="radio" name="is_member" value="0">
 						Non member
 					</label>
 				</div>
@@ -149,29 +158,57 @@
 		props:   ['clubSettingId','contractSelect','reloadContracts','ifContractEdit','showContract'],
 		data() {
 			return {
-				rates :[
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
-					{ A1: 1200 , A2: 1200, A3: 1200, A4: 1200, A5: 1200, A6: 1200, A7: 1200 },
+				rates_member :[
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+				],
+				rates_nonmember :[
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
 				],
 				selected:  [],
 				priceSet: 1200,
@@ -261,10 +298,17 @@
 				return weeksBetween + 1;
 			},
 			setPrice(){
-				this.selected.forEach(s => {
-					const {x, y} = s;
-				this.contractSelect.rates[x][y] = this.priceSet;
-			});
+				if(this.contractSelect.is_member == 1) {
+					this.selected.forEach(s => {
+						const {x, y} = s;
+						this.contractSelect.rates_member[x][y] = this.priceSet;
+					});
+				}else{
+					this.selected.forEach(s => {
+						const {x, y} = s;
+						this.contractSelect.rates_nonmember[x][y] = this.priceSet;
+					});
+				}
 			},
 			updateContractRate(){
 				const contractSelect = this.contractSelect;
@@ -283,24 +327,53 @@
 			},
 			resetContractRate(){
 				this.contractSelect = null;
-				this.rates = [
-					{ _5_1: 1200 , _5_2: 1200, _5_3: 1200, _5_4: 1200, _5_5: 1200, _5_6: 1500, _5_7: 1500 },
-					{ _6_1: 1200 , _6_2: 1200, _6_3: 1200, _6_4: 1200, _6_5: 1200, _6_6: 1500, _6_7: 1500 },
-					{ _7_1: 1200 , _7_2: 1200, _7_3: 1200, _7_4: 1200, _7_5: 1200, _7_6: 1500, _7_7: 1500 },
-					{ _8_1: 1200 , _8_2: 1200, _8_3: 1200, _8_4: 1200, _8_5: 1200, _8_6: 1500, _8_7: 1500 },
-					{ _9_1: 1200 , _9_2: 1200, _9_3: 1200, _9_4: 1200, _9_5: 1200, _9_6: 1500, _9_7: 1500 },
-					{ _10_1: 1200 , _10_2: 1200, _10_3: 1200, _10_4: 1200, _10_5: 1200, _10_6: 1500, _10_7: 1500 },
-					{ _12_1: 1200 , _12_2: 1200, _12_3: 1200, _12_4: 1200, _12_5: 1200, _12_11: 1500, _12_7: 1500 },
-					{ _13_1: 1200 , _13_2: 1200, _13_3: 1200, _13_4: 1200, _13_5: 1200, _13_11: 1500, _13_7: 1500 },
-					{ _14_1: 1200 , _14_2: 1200, _14_3: 1200, _14_4: 1200, _14_5: 1200, _14_11: 1500, _14_7: 1500 },
-					{ _15_1: 1200 , _15_2: 1200, _15_3: 1200, _15_4: 1200, _15_5: 1200, _15_11: 1500, _15_7: 1500 },
-					{ _16_1: 1200 , _16_2: 1200, _16_3: 1200, _16_4: 1200, _16_5: 1200, _16_11: 1500, _16_7: 1500 },
-					{ _17_1: 1200 , _17_2: 1200, _17_3: 1200, _17_4: 1200, _17_5: 1200, _17_11: 1500, _17_7: 1500 },
-					{ _18_1: 1200 , _18_2: 1200, _18_3: 1200, _18_4: 1200, _18_5: 1200, _18_11: 1500, _18_7: 1500 },
-					{ _20_1: 1200 , _20_2: 1200, _20_3: 1200, _20_4: 1200, _20_5: 1200, _20_11: 1500, _20_7: 1500 },
-					{ _21_1: 1200 , _21_2: 1200, _21_3: 1200, _21_4: 1200, _21_5: 1200, _21_11: 1500, _21_7: 1500 },
-					{ _22_1: 1200 , _22_2: 1200, _22_3: 1200, _22_4: 1200, _22_5: 1200, _22_11: 1500, _22_7: 1500 },
-
+				this.rates_member = [
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+				];
+				this.rates_nonmember = [
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
+					{ A1: 0 , A2: 0, A3: 0, A4: 0, A5: 0, A6: 0, A7: 0 },
 				];
 				this.selected =  [];
 				this.priceSet  =  1200;
@@ -308,7 +381,6 @@
 				this.valueExtra  = null;
 			},
 			deteteExtra(index){
-				console.log(index);
 				this.contractSelect.extras.splice(index,1);
 			}
 		}

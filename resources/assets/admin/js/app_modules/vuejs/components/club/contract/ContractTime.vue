@@ -51,16 +51,16 @@
 		props: ['clubSettingId'],
 		data() {
 			return {
-						addnew:true,
-						contracts:[],
-						reloadContracts:1,
-						contractSelect:null,
-						contractEdit:false,
-						
-						ifContract:true,
-						showContract:true,
-						ifContractEdit:false,
-						showContractEdit:false,						
+				addnew:true,
+				contracts:[],
+				reloadContracts:1,
+				contractSelect:null,
+				contractEdit:false,
+
+				ifContract:true,
+				showContract:true,
+				ifContractEdit:false,
+				showContractEdit:false,
 			}
 		},
 		watch: {

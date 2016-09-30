@@ -14,9 +14,16 @@ use Illuminate\Http\Request;
 use Validator;
 use Datatables;
 use Exception;
+use View;
 
 class PageController extends Controller
 {
+    public function __construct()
+    {
+        $title = 'Content Management | Pages';
+        View::share(compact('title'));
+    }
+
     public function getIndex(){
         return View('admin.settings.pages.index');
     }

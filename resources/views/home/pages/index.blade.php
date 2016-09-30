@@ -104,9 +104,10 @@
                                 var longitude = position.coords.longitude;
                                 var capa = document.getElementById("capa");
                                 capa.innerHTML = "<input type='hidden' name='lat' value='" + Math.round(latitude * 10000) / 10000 + "'/><input type='hidden' name='lon' value='" + Math.round(longitude * 10000) / 10000 + "'/>";
+
                                 var GEOCODING = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + '%2C' + longitude + '&language=en';
-                                $.getJSON(GEOCODING).done(function (location) {
-                                    $('#cc-search-form input[name=s_name]').val(location.results[0].address_components[2].long_name + ", " + location.results[0].address_components[5].long_name);
+                                $.getJSON(GEOCODING).done(function (location) { console.log(location);
+                                    $('#cc-search-form input[name=s_name]').val(location.results[0].address_components[2].long_name + ", " + location.results[0].address_components[4].long_name);
                                 });
 
 

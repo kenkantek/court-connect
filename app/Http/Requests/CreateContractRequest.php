@@ -27,6 +27,8 @@ class CreateContractRequest extends Request
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'total_week' => 'required|numeric',
+            'rates_member' => 'required',
+            'rates_nonmember' => 'required',
             'note' => 'required',
         ];
     }
