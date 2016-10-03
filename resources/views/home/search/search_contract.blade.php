@@ -68,20 +68,18 @@ $dayOfWeek = [
 
                                                         @else
                                                             <div class="col-price {!! $item['hour_start'] == $keyword_hour ? "active" : ""!!}">
+                                                                @if(isset($item['total_price']) && $item['total_price'] != 'N/A' )
                                                                      <span>{{str_replace(":00","",str_replace("pm","",str_replace("am","",format_hour($item['hour_start']))))}} -
                                                                          {{str_replace(":00","",format_hour($item['hour_start'] + $item['hour_length']))}}
                                                                      </span>
-                                                                <a href="{{route('home.checkout',['date'=>$request->input('date'),'dayOfWeek'=>$request->input('dayOfWeek')[$k], 'contract_id' => $contract['contract_id'], http_build_query(['courts' => $contract['arr_count']]), 'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
-                                                                    @if(isset($item['total_price']) && $item['total_price'] == 'N/A' )
-                                                                        <span>N/A</span>
-                                                                    @else
+                                                                    <a href="{{route('home.checkout',['date'=>$request->input('date'),'dayOfWeek'=>$request->input('dayOfWeek')[$k], 'contract_id' => $contract['contract_id'], http_build_query(['courts' => $contract['arr_count']]), 'hour_start'=>$item['hour_start'],'hour_length'=>$item['hour_length']])}}" class="price btn-booking-tennis {{  isset($item['status']) ? "disabled": "" }}"  data-court="" data-hour_start="{{$item['hour_start']}}" data-hour_length="{{$item['hour_length']}}">
                                                                         @if(isset($item['total_price']))
                                                                             <span>${!! $item['total_price'] !!}</span>
                                                                         @else
                                                                             <span>{!! isset($item['status']) ? $item['status'] : "unavai" !!}</span>
                                                                         @endif
-                                                                    @endif
-                                                                </a>
+                                                                    </a>
+                                                                @endif
                                                             </div>
                                                         @endif
                                                     @endforeach

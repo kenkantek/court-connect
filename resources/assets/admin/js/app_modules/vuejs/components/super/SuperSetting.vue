@@ -1,7 +1,7 @@
 <template>
 
 	<section>
-		<div class="court_list courtbox col-xs-12 col-md-7" style="border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">
+		<div class="court_list courtbox col-xs-12 col-sm-7 col-md-7" style="border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">
 			<h3 class="title-box pull-left">Clubs</h3>
 			<a class="btn btn-primary pull-right btn-new-court" href=""><i class="fa fa-plus-circle"></i> Add New Club</a>
 			<list-club
@@ -31,6 +31,13 @@
 		</section>
 	</section>
 </template>
+<style scope>
+	@media screen and (max-width: 1131px) and (min-width: 500px){
+		.court_list.courtbox{
+			margin-left: -33.333% !important;
+		}
+	}
+</style>
 <script>
 	import ListClub from './ListClub.vue';
 	import FormNewClub from './FormNewClub.vue';

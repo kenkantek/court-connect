@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div id="lch-form-new-club" class="form-clubs col-xs-12 col-md-5">
+    <div id="lch-form-new-club" class="form-clubs col-xs-12 col-sm-5 col-md-5">
         <div class="court_new courtbox">
         <h3 class="title-box">Add New Clubs</h3>
         <form class="form-horizontal" @submit.prevent="onSubmit" id="form-newClub">
@@ -152,6 +152,11 @@
         position: absolute;
         top: 0px;
         right: 0px;
+    }
+    @media screen and (max-width: 768px) {
+        #lch-form-new-club {
+            position: relative;
+        }
     }
 </style>
 
